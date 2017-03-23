@@ -110,18 +110,20 @@ filepath = "S:/WORK/Best Start for Kids/Dashboard/Interim dashboard materials/Ta
 
 #### Set up labels for each variable ####
 # Make a data frame that can merge with created tables to label values
+# Make a data frame that can merge with created tables to label values
 labels <- rbind.data.frame(
   cbind(Category1 = "King County", Group = "King County", Label = "King County"),
+  cbind(Category1 = "Overall", Group = "Overall", Label = "Overall"),
   cbind(Category1 = c(rep("Mother's race/ethnicity", times = 17)),
-                Group = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H"),
-                  Label = c("White", "Black", "Native American", "Chinese", "Japanese", "Other Non-White", 
-                    "Filipino", "Refused to State", "Unknown/Not Stated", "Hawaiian", 
-                    "Other Asian/Pacific Islander", "Mexican/Chicano/Hispanic", "Asian Indian",
-                    "Korean", "Samoan", "Vietnamese", "Guamanian")),
+        Group = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H"),
+        Label = c("White", "Black", "American Indian/Alaskan Native", "Chinese", "Japanese", "Other Non-White", 
+                  "Filipino", "Refused to State", "Unknown/Not Stated", "Hawaiian", 
+                  "Other Asian/Pacific Islander", "Hispanic", "Asian Indian",
+                  "Korean", "Samoan", "Vietnamese", "Guamanian")),
   cbind(Category1 = c(rep("Mother's race/ethnicity (grouped)", times = 9)),
         Group = c("1", "2", "3", "4", "5", "6", "7", "8", "9"),
-        Label = c("White", "Black", "Native American", "Asian", "Pacific Islander",
-                  "Mexican/Chicano/Hispanic", "Other Asian/Pacific Islander",
+        Label = c("White", "Black", "American Indian/Alaskan Native", "Asian", "Pacific Islander",
+                  "Hispanic", "Other Asian/Pacific Islander",
                   "Other Non-White", "Unknown/refused to state")),
   cbind(Category1 = c(rep("Mother's education", times = 9)),
         Group = c("0", "1", "2", "3", "4", "5", "6", "7", "8"),
@@ -153,6 +155,7 @@ labels <- rbind.data.frame(
         Group = c("11153", "21151", "31152", "41154"),
         Label = c("East", "North", "Seattle", "South"))
 )
+# Change to character to avoid warning message about factors
 labels <- mutate(labels,
                  Category1 = as.character(Category1),
                  Group = as.character(Group),
@@ -401,9 +404,6 @@ indicator_smallgroup <-
         sublist = list()
         
         for (j in 1:length(subgroups)) {
-          # Make empty sublist to add data to
-          #sublist = list()
-          
           print(paste0("working on group: ", grplabels[i],  ", subgroup: ", subgrplabels[j]))
           
           data %>% 
@@ -521,7 +521,7 @@ indicator_smallgroup <-
 
 #### Look over time for JoinPoint ####
 # Calculates yearly averages for KC overall
-indicator_time_kc <- function(data, indicator, yrend = maxyr_b) {
+indicator_time_kc <- function(data, indicator, yrstart = minyr_b, yrend = maxyr_b) {
   data %>% 
     filter_(interp(~dob_yr <= var, var = as.numeric(yrend))) %>%
     filter_(interp(~!is.na(var), var = as.name(indicator))) %>%
@@ -561,7 +561,7 @@ indicator_time_kc <- function(data, indicator, yrend = maxyr_b) {
 
 # Calculates yearly averages for each value within a group (e.g., race)
 indicator_time_group <-
-  function(data, indicator, yrend = maxyr_b, group = "all", grprace = FALSE) {
+  function(data, indicator, yrstart = minyr_b, yrend = maxyr_b, group = "all", grprace = FALSE) {
     
     if (grprace == TRUE) {
       # List out subgroups to examine over
@@ -587,6 +587,12 @@ indicator_time_group <-
       for (i in 1:length(groups)) {
         print(paste0("working on ", grplabels[i]))
         
+        # Need to make a frame containing all possible years for each group 
+        # so that rolling averages combine properly
+        yearframe <- data.frame("Year" = rep(seq(yrstart, yrend), each = length(unique(data[,groups[i]]))),
+                                "Group" = rep(unique(data[,groups[i]]), yrend - yrstart + 1),
+                                stringsAsFactors = FALSE)
+        
         data %>%
           filter_(interp(~dob_yr <= var, var = as.numeric(yrend))) %>%
           filter_(interp(~!is.na(var), var = as.name(indicator))) %>%
@@ -596,6 +602,8 @@ indicator_time_group <-
             Numerator = interp( ~ sum(var, na.rm = TRUE), var = as.name(indicator)),
             `Sample Size` = ~ n()
           ) %>%
+          rename_(Year = ~dob_yr, Group = groups[i]) %>%
+          right_join(., yearframe, by = c("Year", "Group")) %>%
           mutate(
             Tab = "Trends_JP",
             Category1 = grplabels[i], 
@@ -608,13 +616,15 @@ indicator_time_group <-
             Suppress = ifelse(`Sample Size` < 50 |
                                 Numerator < 5, "Y", ifelse(rse >= 30, "N*", "N"))
           ) %>%
-          # need to use rowwise for poisson.test to work
+          # Need to set any missing numerator data to 0 for poisson.test to work
+          # Missing data occurs because there were no events that year so 0 is appropriate
+          mutate(naflag = ifelse(is.na(Numerator), 1, 0),
+                 Numerator = as.numeric(ifelse(is.na(Numerator), 0, Numerator))) %>%
           rowwise() %>%
           mutate(
             `Lower Bound` = poisson.test(Numerator, conf.level = 0.95)$conf.int[1] / `Sample Size`,
             `Upper Bound` = poisson.test(Numerator, conf.level = 0.95)$conf.int[2] / `Sample Size`) %>%
           ungroup() %>%
-          rename_(Year = ~dob_yr, Group = groups[i]) %>%
           select(
             Tab, Year, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, Percent, 
             `Lower Bound`, `Upper Bound`, se, rse, `Sample Size`, Numerator, Suppress) -> subgrplist[[i]]
@@ -632,47 +642,59 @@ indicator_time_group <-
       return(subgroups)
     }
 
-    data %>%
-      filter_(interp(~dob_yr <= var, var = as.numeric(yrend))) %>%
-      filter_(interp(~!is.na(var), var = as.name(indicator))) %>%
-      group_by_(~dob_yr, interp(~var, var = as.name(group))) %>%
-      summarise_(
-        Percent = interp( ~ mean(var, na.rm = TRUE), var = as.name(indicator)),
-        Numerator = interp( ~ sum(var, na.rm = TRUE), var = as.name(indicator)),
-        `Sample Size` = ~ n()
-      ) %>%
-      mutate(
-        Tab = "Trends_JP",
-        Category1 = grplabels[which(groups == group)],
-        Category1_grp = "",
-        Group_grp = "",
-        Category2 = "",
-        Subgroup = "",
-        se = sqrt(Numerator / (`Sample Size`^2)),
-        rse = ifelse(Numerator > 0, 1/sqrt(Numerator), NA),
-        Suppress = ifelse(`Sample Size` < 50 |
-                            Numerator < 5, "Y", ifelse(rse >= 30, "N*", "N"))
-      ) %>%
-      # need to use rowwise for poisson.test to work
-      rowwise() %>%
-      mutate(
-        `Lower Bound` = poisson.test(Numerator, conf.level = 0.95)$conf.int[1] / `Sample Size`,
-        `Upper Bound` = poisson.test(Numerator, conf.level = 0.95)$conf.int[2] / `Sample Size`) %>%
-      ungroup() %>%
-      rename_(Year = ~dob_yr, Group = group) %>%
-      select(
-        Tab, Year, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, Percent, 
-        `Lower Bound`, `Upper Bound`, se, rse, `Sample Size`, Numerator, Suppress) -> data
+    if (group %in% groups) {
+      # Need to make a frame containing all possible years for each group 
+      # so that rolling averages combine properly
+      yearframe <- data.frame("Year" = rep(seq(yrstart, yrend), each = length(unique(data[,group]))),
+                              "Group" = rep(unique(data[,group]), yrend - yrstart + 1),
+                              stringsAsFactors = FALSE)
+      
+      data %>%
+        filter_(interp(~dob_yr <= var, var = as.numeric(yrend))) %>%
+        filter_(interp(~!is.na(var), var = as.name(indicator))) %>%
+        group_by_(~dob_yr, interp(~var, var = as.name(group))) %>%
+        summarise_(
+          Percent = interp( ~ mean(var, na.rm = TRUE), var = as.name(indicator)),
+          Numerator = interp( ~ sum(var, na.rm = TRUE), var = as.name(indicator)),
+          `Sample Size` = ~ n()
+        ) %>%
+        rename_(Year = ~dob_yr, Group = group) %>%
+        right_join(., yearframe, by = c("Year", "Group")) %>%
+        mutate(
+          Tab = "Trends_JP",
+          Category1 = grplabels[which(groups == group)],
+          Category1_grp = "",
+          Group_grp = "",
+          Category2 = "",
+          Subgroup = "",
+          se = sqrt(Numerator / (`Sample Size`^2)),
+          rse = ifelse(Numerator > 0, 1/sqrt(Numerator), NA),
+         Suppress = ifelse(`Sample Size` < 50 |
+                             Numerator < 5, "Y", ifelse(rse >= 30, "N*", "N"))
+        ) %>%
+        # Need to set any missing numerator data to 0 for poisson.test to work
+        # Missing data occurs because there were no events that year so 0 is appropriate
+        mutate(naflag = ifelse(is.na(Numerator), 1, 0),
+               Numerator = as.numeric(ifelse(is.na(Numerator), 0, Numerator))) %>%
+        # need to use rowwise for poisson.test to work
+        rowwise() %>%
+        mutate(
+          `Lower Bound` = poisson.test(Numerator, conf.level = 0.95)$conf.int[1] / `Sample Size`,
+          `Upper Bound` = poisson.test(Numerator, conf.level = 0.95)$conf.int[2] / `Sample Size`) %>%
+        ungroup() %>%
+        select(
+          Tab, Year, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, Percent, 
+          `Lower Bound`, `Upper Bound`, se, rse, `Sample Size`, Numerator, Suppress) -> data
     
-    if (grprace == TRUE) {
-      data <- data %>%
-        mutate(Category1_grp = Category1,
-               Group_grp = Group,
-               Category1 = "",
-               Group = "")
-    }
-    
+      if (grprace == TRUE) {
+        data <- data %>%
+          mutate(Category1_grp = Category1,
+                 Group_grp = Group,
+                 Category1 = "",
+                 Group = "")
+      }
     return(data)
+    }
   }
 
 
@@ -786,6 +808,7 @@ indicator_rollyr_group <- function(data, indicator, yrstart = minyr_b, yrend = m
 }
 
 
+
 #### H1: Preterm birth ####
 preterm <- rbindlist(list(
   # KC overall
@@ -799,19 +822,19 @@ preterm <- rbindlist(list(
   indicator_smallgroup(data = births, indicator = "preterm", year = maxyr_b, yrcombine = 5, group = "all", grprace = FALSE),
   indicator_smallgroup(data = births, indicator = "preterm", year = maxyr_b, yrcombine = 5, group = "all", grprace = TRUE),
   # Time trend for KC overall
-  indicator_rollyr_kc(data = births, indicator = "preterm", yrend = maxyr_b, yrcombine = 3),
+  indicator_rollyr_kc(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3),
   # Time trend for each subgroup
-  indicator_rollyr_group(data = births, indicator = "preterm", yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = FALSE),
-  indicator_rollyr_group(data = births, indicator = "preterm", yrend = maxyr_b, yrcombine = 3, group = "race_mom", grprace = FALSE),
-  indicator_rollyr_group(data = births, indicator = "preterm", yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = TRUE),
-  indicator_rollyr_group(data = births, indicator = "preterm", yrend = maxyr_b, yrcombine = 3, group = "race_mom_grp", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "race_mom", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "race_mom_grp", grprace = TRUE),
     # Time trend for KC overall (JoinPoint data)
-  indicator_time_kc(data = births, indicator = "preterm", yrend = maxyr_b),
+  indicator_time_kc(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b),
   # Time trend for each subgroup (JoinPoint data)
-  indicator_time_group(data = births, indicator = "preterm", yrend = maxyr_b, group = "rgn_id", grprace = FALSE),
-  indicator_time_group(data = births, indicator = "preterm", yrend = maxyr_b, group = "race_mom", grprace = FALSE),
-  indicator_time_group(data = births, indicator = "preterm", yrend = maxyr_b, group = "rgn_id", grprace = TRUE),
-  indicator_time_group(data = births, indicator = "preterm", yrend = maxyr_b, group = "race_mom_grp", grprace = TRUE)
+  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "rgn_id", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "race_mom", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "rgn_id", grprace = TRUE),
+  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "race_mom_grp", grprace = TRUE)
 ))
 
 
@@ -878,26 +901,27 @@ rm(comparison, comparison_trend, kclb, kcub, kctrend)
 
 ### Export to an Excel file
 preterm %>% filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm.xlsx"), sheetName = "preterm")
 
 
 ### Apply suppression rules and export
 preterm %>% mutate_at(vars(Percent:rse, Numerator, `Comparison with KC`),
                       funs(ifelse(Suppress == "Y", NA, .))) %>%
+  mutate_at(vars(Proportion:rse), funs(round(., digits = 1))) %>%
   filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm - suppressed.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm - suppressed.xlsx"), sheetName = "preterm")
 
 
 ### Create data sets for Joinpoint
 preterm %>%
   filter(Tab == "Trends_JP" & Category1 != "") %>%
   select(Tab, Category1, Group, Year, Numerator, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm - JP.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm - JP.xlsx"), sheetName = "preterm")
 
 preterm %>%
   filter(Tab == "Trends_JP" & Category1_grp != "") %>%
   select(Tab, Category1_grp, Group_grp, Numerator, Year, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm grouped race - JP.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm grouped race - JP.xlsx"), sheetName = "preterm")
 
 
 
@@ -994,26 +1018,27 @@ rm(comparison, comparison_trend, kclb, kcub, kctrend)
 
 ### Export to an Excel file
 breastfed %>% filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding inititation.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation.xlsx"))
 
 
 ### Apply suppression rules and export
 breastfed %>% mutate_at(vars(Percent:rse, Numerator, `Comparison with KC`),
                       funs(ifelse(Suppress == "Y", NA, .))) %>%
+  mutate_at(vars(Proportion:rse), funs(round(., digits = 1))) %>%
   filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding inititation - suppressed.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation - suppressed.xlsx"))
 
 
 ### Create data sets for Joinpoint
 breastfed %>%
   filter(Tab == "Trends_JP" & Category1 != "") %>%
   select(Tab, Category1, Group, Year, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding inititation - JP.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation - JP.xlsx"))
 
 breastfed %>%
   filter(Tab == "Trends_JP" & Category1_grp != "") %>%
   select(Tab, Category1_grp, Group_grp, Year, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding inititation grouped race - JP.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation grouped race - JP.xlsx"))
 
 
 
@@ -1115,6 +1140,7 @@ prenatal %>% filter(Tab != "Trends_JP") %>%
 ### Apply suppression rules and export
 prenatal %>% mutate_at(vars(Percent:rse, Numerator, `Comparison with KC`),
                         funs(ifelse(Suppress == "Y", NA, .))) %>%
+  mutate_at(vars(Proportion:rse), funs(round(., digits = 1))) %>%
   filter(Tab != "Trends_JP") %>%
   write.xlsx(., file = paste0(filepath, "BSK dashboard - prenatal care - suppressed.xlsx"))
 
@@ -1136,120 +1162,4 @@ prenatal %>%
 
 ###### NB. Need to bring in pop data for denominator (adapt IM code to do this)
 
-teenbir <- rbindlist(list(
-  # KC overall
-  indicator_kc(data = births, indicator = "teenbir", year = maxyr_b),
-  # By each subgroup
-  indicator_subgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "all", grprace = FALSE),
-  indicator_subgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "all", grprace = TRUE),
-  # Crosstabs for each subgroup
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "race_mom", grprace = FALSE),
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "age_mom_grp", grprace = FALSE),
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "educ_mom", grprace = FALSE),
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "hra_id", grprace = FALSE),
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "rgn_id", grprace = FALSE),
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "race_mom", grprace = TRUE),
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "age_mom_grp", grprace = TRUE),
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "educ_mom", grprace = TRUE),
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "hra_id", grprace = TRUE),
-  indicator_smallgroup(data = births, indicator = "teenbir", year = maxyr_b, yrcombine = 5, group = "rgn_id", grprace = TRUE),
-  # Time trend for KC overall
-  indicator_rollyr_kc(data = births, indicator = "teenbir", yrend = maxyr_b, yrcombine = 3),
-  # Time trend for each subgroup
-  indicator_rollyr_group(data = births, indicator = "teenbir", yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = FALSE),
-  indicator_rollyr_group(data = births, indicator = "teenbir", yrend = maxyr_b, yrcombine = 3, group = "race_mom", grprace = FALSE),
-  indicator_rollyr_group(data = births, indicator = "teenbir", yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = TRUE),
-  indicator_rollyr_group(data = births, indicator = "teenbir", yrend = maxyr_b, yrcombine = 3, group = "race_mom_grp", grprace = TRUE),
-  # Time trend for KC overall (JoinPoint data)
-  indicator_time_kc(data = births, indicator = "teenbir", yrend = maxyr_b),
-  # Time trend for each subgroup (JoinPoint data)
-  indicator_time_group(data = births, indicator = "teenbir", yrend = maxyr_b, group = "rgn_id", grprace = FALSE),
-  indicator_time_group(data = births, indicator = "teenbir", yrend = maxyr_b, group = "race_mom", grprace = FALSE),
-  indicator_time_group(data = births, indicator = "teenbir", yrend = maxyr_b, group = "rgn_id", grprace = TRUE),
-  indicator_time_group(data = births, indicator = "teenbir", yrend = maxyr_b, group = "race_mom_grp", grprace = TRUE)
-))
 
-
-### Convert to a df
-teenbir <- as.data.frame(teenbir)
-
-### Apply labels
-teenbir <- left_join(teenbir, labels, by = c("Category1", "Group")) %>%
-  rename(Group.id = Group, Group = Label)
-teenbir <- left_join(teenbir, labels, by = c("Category1_grp" = "Category1", "Group_grp" = "Group")) %>%
-  rename(Group_grp.id = Group_grp, Group_grp = Label)
-teenbir <- left_join(teenbir, labels, by = c("Category2" = "Category1", "Subgroup" = "Group")) %>%
-  rename(Subgroup.id = Subgroup, Subgroup = Label)
-
-# Reorder and sort columns
-teenbir <- teenbir %>% select(Tab, Year, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, 
-                                Percent, `Lower Bound`, `Upper Bound`, se, rse, 
-                                `Sample Size`, Numerator, Suppress, Group.id, Subgroup.id) %>%
-  arrange(Tab, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, Year)
-
-### Clean up nulls and blanks
-teenbir <- teenbir %>%
-  filter(!((Category1 != "" & is.na(Group)) | 
-             (Category1_grp != "" & is.na(Group_grp)) |
-             (Category2 != "" & is.na(Subgroup))))
-
-
-### Add in comparisons with KC
-# Pull out KC values
-kclb <- as.numeric(teenbir %>%
-                     filter(Tab == "_King County") %>%
-                     select(`Lower Bound`))
-kcub <- as.numeric(teenbir %>%
-                     filter(Tab == "_King County") %>%
-                     select(`Upper Bound`))
-kctrend <- teenbir %>%
-  filter(Tab == "Trends" & Category1 == "King County") %>%
-  select(Year, `Lower Bound`, `Upper Bound`)
-
-# Do comparison for most recent year (i.e., not trends)
-comparison <- teenbir %>%
-  filter(Tab != "Trends") %>%
-  mutate(`Comparison with KC` = ifelse(`Upper Bound` < kclb, "lower",
-                                       ifelse(`Lower Bound` > kcub, "higher", "no different"))) %>%
-  select(Tab, Year, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, `Comparison with KC`)
-
-# Do comparison for trends (each year compared to KC that year, not that group's trend over time)
-comparison_trend <- teenbir %>%
-  filter(Tab == "Trends") %>%
-  left_join(., kctrend, by = "Year") %>%
-  mutate(`Comparison with KC` = ifelse(`Upper Bound.x` < `Lower Bound.y`, "lower",
-                                       ifelse(`Lower Bound.x` > `Upper Bound.y`, "higher", "no different"))) %>%
-  select(Tab, Year, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, `Comparison with KC`)
-
-# Bring both comparisons together
-comparison <- rbind(comparison, comparison_trend)
-
-# Merge with main data and add column for time trends
-teenbir <- left_join(teenbir, comparison, by = c("Tab", "Year", "Category1", "Group", "Category1_grp", 
-                                                   "Group_grp", "Category2", "Subgroup")) %>%
-  mutate(`Time Trends` = "")
-rm(comparison, comparison_trend, kclb, kcub, kctrend)
-
-
-### Export to an Excel file
-teenbir %>% filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - adolescent births.xlsx"))
-
-
-### Apply suppression rules and export
-teenbir %>% mutate_at(vars(Percent:rse, Numerator, `Comparison with KC`),
-                       funs(ifelse(Suppress == "Y", NA, .))) %>%
-  filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - adolescent births - suppressed.xlsx"))
-
-
-### Create data sets for Joinpoint
-teenbir %>%
-  filter(Tab == "Trends_JP" & Category1 != "") %>%
-  select(Tab, Category1, Group, Year, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - adolescent births - JP.xlsx"))
-
-teenbir %>%
-  filter(Tab == "Trends_JP" & Category1_grp != "") %>%
-  select(Tab, Category1_grp, Group_grp, Year, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - adolescent births grouped race - JP.xlsx"))
