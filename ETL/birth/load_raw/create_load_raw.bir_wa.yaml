@@ -1,0 +1,295 @@
+schema: load_raw
+table: bir_wa
+years:
+    - 2003
+    - 2004
+    - 2005
+    - 2006
+    - 2007
+    - 2008
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+vars:
+    certno_e: INTEGER
+    certype: VARCHAR(1)
+    dob_yr: INTEGER
+    dob_mo: VARCHAR(2)
+    birth_hr: VARCHAR(2)
+    sex: VARCHAR(1)
+    plural: INTEGER
+    city_occ: VARCHAR(4)
+    cnty_occ: VARCHAR(2)
+    facility: VARCHAR(3)
+    age_mom: INTEGER
+    birplmom: VARCHAR(2)
+    city_res: VARCHAR(4)
+    cnty_res: VARCHAR(2)
+    age_dad: INTEGER
+    birpldad: VARCHAR(2)
+    attclass: VARCHAR(2)
+    race_dad: VARCHAR(1)
+    race_mom: VARCHAR(1)
+    raceccal: VARCHAR(1)
+    educ_dad: INTEGER
+    educ_mom: INTEGER
+    lb_nl: INTEGER
+    priorprg: INTEGER
+    pnatalmo: INTEGER
+    pnatalvs: INTEGER
+    married: VARCHAR(1)
+    wt_grams: INTEGER
+    fac_type: INTEGER
+    occm_dad: VARCHAR(3)
+    occm_mom: VARCHAR(3)
+    lb_nd: INTEGER
+    fd_lt20: INTEGER
+    fd_ge20: INTEGER
+    apgar1: INTEGER
+    apgar5: INTEGER
+    # bir_order: INTEGER
+    order: INTEGER
+    crt_clas: VARCHAR(2)
+    ind_num: INTEGER
+    trnsferm: VARCHAR(1)
+    trnsferb: VARCHAR(1)
+    malf_sam: VARCHAR(3)
+    hisp_dad: INTEGER
+    hisp_mom: INTEGER
+    hispccal: INTEGER
+    # res_yymm: VARCHAR(4)
+    res_yprt: VARCHAR(2)
+    res_mprt: VARCHAR(2)
+    gest_est: INTEGER
+    zipcode: VARCHAR(5)
+    # mrf1_6: VARCHAR()
+    mrf1: VARCHAR(2)
+    mrf2: VARCHAR(2)
+    mrf3: VARCHAR(2)
+    mrf4: VARCHAR(2)
+    mrf5: VARCHAR(2)
+    mrf6: VARCHAR(2)
+    # mrf7: VARCHAR(2)
+    diabetes: VARCHAR(1)
+    herpes: VARCHAR(1)
+    smokenum: INTEGER
+    drinknum: INTEGER
+    wghtgain: INTEGER
+    # obproc1_4: VARCHAR(4)
+    obproc1: VARCHAR(1)
+    obproc2: VARCHAR(1)
+    obproc3: VARCHAR(1)
+    obproc4: VARCHAR(1)
+    amnio1: VARCHAR(1)
+    amnio2: VARCHAR(1)
+    amnio3: VARCHAR(1)
+    # dmeth1_4: VARCHAR(4)
+    dmeth1: VARCHAR(1)
+    dmeth2: VARCHAR(1)
+    dmeth3: VARCHAR(1)
+    dmeth4: VARCHAR(1)
+    # complab1_7: VARCHAR(14)
+    complab1: VARCHAR(2)
+    complab2: VARCHAR(2)
+    complab3: VARCHAR(2)
+    complab4: VARCHAR(2)
+    complab5: VARCHAR(2)
+    complab6: VARCHAR(2)
+    complab7: VARCHAR(2)
+    # abcond1_6: VARCHAR(12)
+    abcond1: VARCHAR(2)
+    abcond2: VARCHAR(2)
+    abcond3: VARCHAR(2)
+    abcond4: VARCHAR(2)
+    abcond5: VARCHAR(2)
+    abcond6: VARCHAR(2)
+    # malf1_7: VARCHAR(14)
+    malf1: VARCHAR(2)
+    malf2: VARCHAR(2)
+    malf3: VARCHAR(2)
+    malf4: VARCHAR(2)
+    malf5: VARCHAR(2)
+    malf6: VARCHAR(2)
+    malf7: VARCHAR(2)
+    st_occ: VARCHAR(2)
+    st_res: VARCHAR(2)
+    racecdes: VARCHAR(1)
+    hispcdes: INTEGER
+    carepay: INTEGER
+    wic: INTEGER
+    firsteps: INTEGER
+    afdc: INTEGER
+    localhd: INTEGER
+    wghtpre: INTEGER
+    ubleed1: INTEGER
+    ubleed2: INTEGER
+    ubleed3: INTEGER
+    smoking: VARCHAR(1)
+    drinking: VARCHAR(1)
+    lb_f_nl: INTEGER
+    lb_f84: INTEGER
+    lb_p_nl: INTEGER
+    lb_p84: INTEGER
+    lb_p_nd: INTEGER
+    lb_f_nd: INTEGER
+    fd_2036: INTEGER
+    fd_ge37: INTEGER
+    # malficd1_8: VARCHAR(32)
+    malficd1: VARCHAR(4)
+    malficd2: VARCHAR(4)
+    malficd3: VARCHAR(4)
+    malficd4: VARCHAR(4)
+    malficd5: VARCHAR(4)
+    malficd6: VARCHAR(4)
+    malficd7: VARCHAR(4)
+    malficd8: VARCHAR(4)
+    gestcalc: INTEGER
+    gestflag: INTEGER
+    # mrfnon1_9: VARCHAR(18)
+    mrfnon1: VARCHAR(2)
+    mrfnon2: VARCHAR(2)
+    mrfnon3: VARCHAR(2)
+    mrfnon4: VARCHAR(2)
+    mrfnon5: VARCHAR(2)
+    mrfnon6: VARCHAR(2)
+    mrfnon7: VARCHAR(2)
+    mrfnon8: VARCHAR(2)
+    mrfnon9: VARCHAR(2)
+    nchsnew: VARCHAR(1)
+    dthflg: VARCHAR(1)
+    ind_mo: VARCHAR(2)
+    ind_yr: VARCHAR(4)
+    # indmm4y: VARCHAR(6)
+    llb_mo: VARCHAR(2)
+    llb_yr: VARCHAR(4)
+    # llbmm4y: VARCHAR(6)
+    lfd_mo: VARCHAR(2)
+    lfd_yr: VARCHAR(4)
+    # lfdmm4y: VARCHAR(6)
+    mens_mo: VARCHAR(2)
+    mens_da: VARCHAR(2)
+    mens_yr: VARCHAR(4)
+    # mensmd4y: VARCHAR(8)
+    # mensdate: DATE
+    loth_mo: VARCHAR(2)
+    loth_yr: VARCHAR(4)
+    # lothmm4y: VARCHAR(6)
+    lpp_mo: VARCHAR(2)
+    lpp_yr: VARCHAR(4)
+    # lppmm4y: VARCHAR(6)
+    bctrymom: VARCHAR(3)
+    bctrydad: VARCHAR(3)
+    geozip: VARCHAR(5)
+    alive: VARCHAR(1)
+    fac_int: INTEGER
+    trib_res: VARCHAR(3)
+    momh_no: VARCHAR(1)
+    momh_mex: VARCHAR(1)
+    momh_pr: VARCHAR(1)
+    momh_cub: VARCHAR(1)
+    momh_oth: VARCHAR(1)
+    momr_wht: VARCHAR(1)
+    momr_blk: VARCHAR(1)
+    momr_ami: VARCHAR(1)
+    momr_asi: VARCHAR(1)
+    momr_chi: VARCHAR(1)
+    momr_fil: VARCHAR(1)
+    momr_jap: VARCHAR(1)
+    momr_kor: VARCHAR(1)
+    momr_vie: VARCHAR(1)
+    momr_oas: VARCHAR(1)
+    momr_haw: VARCHAR(1)
+    momr_gua: VARCHAR(1)
+    momr_sam: VARCHAR(1)
+    momr_opi: VARCHAR(1)
+    momr_oth: VARCHAR(1)
+    dadh_no: VARCHAR(1)
+    dadh_mex: VARCHAR(1)
+    dadh_pr: VARCHAR(1)
+    dadh_cub: VARCHAR(1)
+    dadh_oth: VARCHAR(1)
+    dadr_wht: VARCHAR(1)
+    dadr_blk: VARCHAR(1)
+    dadr_ami: VARCHAR(1)
+    dadr_asi: VARCHAR(1)
+    dadr_chi: VARCHAR(1)
+    dadr_fil: VARCHAR(1)
+    dadr_jap: VARCHAR(1)
+    dadr_kor: VARCHAR(1)
+    dadr_vie: VARCHAR(1)
+    dadr_oas: VARCHAR(1)
+    dadr_haw: VARCHAR(1)
+    dadr_gua: VARCHAR(1)
+    dadr_sam: VARCHAR(1)
+    dadr_opi: VARCHAR(1)
+    dadr_oth: VARCHAR(1)
+    momle8ed: INTEGER
+    dadle8ed: INTEGER
+    otherout: VARCHAR(1)
+    oth_mo: VARCHAR(2)
+    oth_yr: VARCHAR(4)
+    # othmm4y: VARCHAR(6)
+    delivpay: INTEGER
+    fpv_mo: VARCHAR(2)
+    fpv_da: VARCHAR(2)
+    fpv_yr: INTEGER
+    # fpvmd4y: DATE
+    lpv_mo: VARCHAR(2)
+    lpv_da: VARCHAR(2)
+    lpv_yr: INTEGER
+    # lpvmd4y: DATE
+    cigs_bef: INTEGER
+    cigs_1st: INTEGER
+    cigs_2nd: INTEGER
+    cigs_3rd: INTEGER
+    apgar10: INTEGER
+    circumf: INTEGER
+    wghtdelv: INTEGER
+    ht_ft: INTEGER
+    ht_in: INTEGER
+    breastfd: VARCHAR(1)
+    wic_new: VARCHAR(1)
+    hyperflg: VARCHAR(1)
+    cephaflg: VARCHAR(1)
+    prev_cno: INTEGER
+    forcfail: VARCHAR(1)
+    vacfail: VARCHAR(1)
+    fet_pres: VARCHAR(1)
+    dmethfin: INTEGER
+    # labchar1_7: VARCHAR(14)
+    labchar1: VARCHAR(2)
+    labchar2: VARCHAR(2)
+    labchar3: VARCHAR(2)
+    labchar4: VARCHAR(2)
+    labchar5: VARCHAR(2)
+    labchar6: VARCHAR(2)
+    labchar7: VARCHAR(2)
+    # minfect1_7: VARCHAR(14)
+    minfect1: VARCHAR(2)
+    minfect2: VARCHAR(2)
+    minfect3: VARCHAR(2)
+    minfect4: VARCHAR(2)
+    minfect5: VARCHAR(2)
+    minfect6: VARCHAR(2)
+    minfect7: VARCHAR(2)
+    # mmorbid1_5: VARCHAR(10)
+    mmorbid1: VARCHAR(2)
+    mmorbid2: VARCHAR(2)
+    mmorbid3: VARCHAR(2)
+    mmorbid4: VARCHAR(2)
+    mmorbid5: VARCHAR(2)
+    # labons1_3: VARCHAR(6)
+    labons1: VARCHAR(2)
+    labons2: VARCHAR(2)
+    labons3: VARCHAR(2)
+    downsflg: VARCHAR(1)
+    chromflg: VARCHAR(1)
+    moracsum: INTEGER
+    faracsum: INTEGER
+    bmi: NUMERIC
+    pnatfed: VARCHAR(2)
