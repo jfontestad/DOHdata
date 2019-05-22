@@ -291,5 +291,5 @@ vars:
     chromflg: VARCHAR(1)
     moracsum: INTEGER
     faracsum: INTEGER
-    bmi: NUMERIC
+    BMI: NUMERIC
     pnatfed: VARCHAR(2)
