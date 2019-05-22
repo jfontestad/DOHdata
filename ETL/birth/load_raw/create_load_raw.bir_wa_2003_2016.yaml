@@ -24,12 +24,12 @@ vars:
     sex: VARCHAR(1)
     plural: INTEGER
     city_occ: VARCHAR(4)
-    cnty_occ: VARCHAR(2)
+    # cnty_occ: VARCHAR(2)
     facility: VARCHAR(3)
     age_mom: INTEGER
     birplmom: VARCHAR(2)
     city_res: VARCHAR(4)
-    cnty_res: VARCHAR(2)
+    # cnty_res: VARCHAR(2)
     age_dad: INTEGER
     birpldad: VARCHAR(2)
     attclass: VARCHAR(2)
@@ -292,4 +292,15 @@ vars:
     moracsum: INTEGER
     faracsum: INTEGER
     bmi: NUMERIC
+vars_2011:
+    pnatfed: VARCHAR(2)
+vars_2012:
+    pnatfed: VARCHAR(2)
+vars_2013:
+    pnatfed: VARCHAR(2)
+vars_2014:
+    pnatfed: VARCHAR(2)
+vars_2015:
+    pnatfed: VARCHAR(2)
+vars_2016:
     pnatfed: VARCHAR(2)
