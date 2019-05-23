@@ -1,0 +1,373 @@
+schema: load_raw
+table: bir_wa
+index_name: idx_cl_load_raw_bir_wa_certno_e
+index:
+    - certno_e
+vars:
+    - certno_e
+    - certype
+    - dob_yr
+    - dob_mo
+    - birth_hr
+    - sex
+    - plural
+    - city_occ
+    - cnty_occ
+    - facility
+    - age_mom
+    - birplmom
+    - city_res
+    - cnty_res
+    - age_dad
+    - birpldad
+    - attclass
+    - race_dad
+    - race_mom
+    - raceccal
+    - educ_dad
+    - educ_mom
+    - lb_nl
+    - priorprg
+    - pnatalmo
+    - pnatalvs
+    - married
+    - wt_grams
+    - fac_type
+    - occm_dad
+    - occm_mom
+    - lb_nd
+    - fd_lt20
+    - fd_ge20
+    - apgar1
+    - apgar5
+    # - bir_order
+    - order
+    - crt_clas
+    - ind_num
+    - trnsferm
+    - trnsferb
+    - malf_sam
+    - hisp_dad
+    - hisp_mom
+    - hispccal
+    # - res_yymm
+    - res_yprt
+    - res_mprt
+    - gest_est
+    - zipcode
+    # - mrf1_6
+    - mrf1
+    - mrf2
+    - mrf3
+    - mrf4
+    - mrf5
+    - mrf6
+    # - mrf7
+    - diabetes
+    - herpes
+    - smokenum
+    - drinknum
+    - wghtgain
+    # - obproc1_4
+    - obproc1
+    - obproc2
+    - obproc3
+    - obproc4
+    - amnio1
+    - amnio2
+    - amnio3
+    # - dmeth1_4
+    - dmeth1
+    - dmeth2
+    - dmeth3
+    - dmeth4
+    # - complab1_7
+    - complab1
+    - complab2
+    - complab3
+    - complab4
+    - complab5
+    - complab6
+    - complab7
+    # - abcond1_6
+    - abcond1
+    - abcond2
+    - abcond3
+    - abcond4
+    - abcond5
+    - abcond6
+    # - malf1_7
+    - malf1
+    - malf2
+    - malf3
+    - malf4
+    - malf5
+    - malf6
+    - malf7
+    - st_occ
+    - st_res
+    - racecdes
+    - hispcdes
+    - carepay
+    - wic
+    - firsteps
+    - afdc
+    - localhd
+    - wghtpre
+    - ubleed1
+    - ubleed2
+    - ubleed3
+    - smoking
+    - drinking
+    - lb_f_nl
+    - lb_f84
+    - lb_p_nl
+    - lb_p84
+    - lb_p_nd
+    - lb_f_nd
+    - fd_2036
+    - fd_ge37
+    # - malficd1_8
+    - malficd1
+    - malficd2
+    - malficd3
+    - malficd4
+    - malficd5
+    - malficd6
+    - malficd7
+    - malficd8
+    - gestcalc
+    - gestflag
+    # - mrfnon1_9
+    - mrfnon1
+    - mrfnon2
+    - mrfnon3
+    - mrfnon4
+    - mrfnon5
+    - mrfnon6
+    - mrfnon7
+    - mrfnon8
+    - mrfnon9
+    - nchsnew
+    - dthflg
+    - ind_mo
+    - ind_yr
+    # - indmm4y
+    - llb_mo
+    - llb_yr
+    # - llbmm4y
+    - lfd_mo
+    - lfd_yr
+    # - lfdmm4y
+    - mens_mo
+    - mens_da
+    - mens_yr
+    # - mensmd4y
+    # - mensdate
+    - loth_mo
+    - loth_yr
+    # - lothmm4y
+    - lpp_mo
+    - lpp_yr
+    # - lppmm4y
+    - bctrymom
+    - bctrydad
+    - geozip
+    - alive
+    - fac_int
+    - trib_res
+    - momh_no
+    - momh_mex
+    - momh_pr
+    - momh_cub
+    - momh_oth
+    - momr_wht
+    - momr_blk
+    - momr_ami
+    - momr_asi
+    - momr_chi
+    - momr_fil
+    - momr_jap
+    - momr_kor
+    - momr_vie
+    - momr_oas
+    - momr_haw
+    - momr_gua
+    - momr_sam
+    - momr_opi
+    - momr_oth
+    - dadh_no
+    - dadh_mex
+    - dadh_pr
+    - dadh_cub
+    - dadh_oth
+    - dadr_wht
+    - dadr_blk
+    - dadr_ami
+    - dadr_asi
+    - dadr_chi
+    - dadr_fil
+    - dadr_jap
+    - dadr_kor
+    - dadr_vie
+    - dadr_oas
+    - dadr_haw
+    - dadr_gua
+    - dadr_sam
+    - dadr_opi
+    - dadr_oth
+    - momle8ed
+    - dadle8ed
+    - otherout
+    - oth_mo
+    - oth_yr
+    # - othmm4y
+    - delivpay
+    - fpv_mo
+    - fpv_da
+    - fpv_yr
+    # - fpvmd4y
+    - lpv_mo
+    - lpv_da
+    - lpv_yr
+    # - lpvmd4y
+    - cigs_bef
+    - cigs_1st
+    - cigs_2nd
+    - cigs_3rd
+    - apgar10
+    - circumf
+    - wghtdelv
+    - ht_ft
+    - ht_in
+    - breastfd
+    - wic_new
+    - hyperflg
+    - cephaflg
+    - prev_cno
+    - forcfail
+    - vacfail
+    - fet_pres
+    - dmethfin
+    # - labchar1_7
+    - labchar1
+    - labchar2
+    - labchar3
+    - labchar4
+    - labchar5
+    - labchar6
+    - labchar7
+    # - minfect1_7
+    - minfect1
+    - minfect2
+    - minfect3
+    - minfect4
+    - minfect5
+    - minfect6
+    - minfect7
+    # - mmorbid1_5
+    - mmorbid1
+    - mmorbid2
+    - mmorbid3
+    - mmorbid4
+    - mmorbid5
+    # - labons1_3
+    - labons1
+    - labons2
+    - labons3
+    - downsflg
+    - chromflg
+    - moracsum
+    - faracsum
+    - bmi
+table_2003:
+    vars_2003: null
+    date_min: 2003-01-01
+    date_max: 2003-12-31
+    date_issue: 2015-07-28
+    date_received: 2015-08-05
+table_2004:
+    vars_2004: null
+    date_min: 2004-01-01
+    date_max: 2004-12-31
+    date_issue: 2015-07-28
+    date_received: 2015-08-05
+table_2005:
+    vars_2005: null
+    date_min: 2005-01-01
+    date_max: 2005-12-31
+    date_issue: 2015-07-28
+    date_received: 2015-08-05
+table_2006:
+    vars_2006: null
+    date_min: 2006-01-01
+    date_max: 2006-12-31
+    date_issue: 2015-07-28
+    date_received: 2015-08-05
+table_2007:
+    vars_2007: null
+    date_min: 2007-01-01
+    date_max: 2007-12-31
+    date_issue: 2015-07-28
+    date_received: 2015-08-05
+table_2008:
+    vars_2008: null
+    date_min: 2008-01-01
+    date_max: 2008-12-31
+    date_issue: 2015-07-28
+    date_received: 2015-08-05
+table_2009:
+    vars_2009: null
+    date_min: 2009-01-01
+    date_max: 2009-12-31
+    date_issue: 2015-01-27
+    date_received: 2016-08-24
+table_2010:
+    vars_2012: null
+    date_min: 2010-01-01
+    date_max: 2010-12-31
+    date_issue: 2015-01-27
+    date_received: 2017-10-16
+table_2011:
+    vars_2011:
+        - pnatfed
+    date_min: 2011-01-01
+    date_max: 2011-12-31
+    date_issue: 2016-02-10
+    date_received: 2016-08-24
+table_2012:
+    vars_2012:
+        - pnatfed
+    date_min: 2012-01-01
+    date_max: 2012-12-31
+    date_issue: 2016-02-10
+    date_received: 2017-10-16
+table_2013:
+    vars_2013:
+        - pnatfed
+    date_min: 2013-01-01
+    date_max: 2013-12-31
+    date_issue: 2016-08-29
+    date_received: 2016-11-04
+table_2014:
+    vars_2014:
+        - pnatfed
+    date_min: 2014-01-01
+    date_max: 2014-12-31
+    date_issue: 2016-02-10
+    date_received: 2016-03-02
+table_2015:
+    vars_2015:
+        - pnatfed
+    date_min: 2015-01-01
+    date_max: 2015-12-31
+    date_issue: 2016-07-13
+    date_received: 2016-07-28
+table_2016:
+    vars_2016:
+        - pnatfed
+    date_min: 2016-01-01
+    date_max: 2016-12-31
+    date_issue: 2017-06-22
+    date_received: 2018-07-17
+combine_years: 
