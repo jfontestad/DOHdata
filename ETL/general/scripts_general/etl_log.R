@@ -65,6 +65,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
                               glue::glue_sql(
                                 "SELECT * FROM metadata.etl_log
                                 WHERE data_source = {data_source} AND 
+                                date_max = {date_max} AND 
                                 date_issue = {date_issue} AND
                                 date_delivery = {date_delivery}
                                 ORDER BY etl_batch_id DESC",
