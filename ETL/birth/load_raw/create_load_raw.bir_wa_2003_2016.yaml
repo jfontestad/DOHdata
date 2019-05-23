@@ -292,6 +292,8 @@ vars:
     moracsum: INTEGER
     faracsum: INTEGER
     bmi: NUMERIC
+    pnatfed: VARCHAR(2)
+    etl_batch_id: INTEGER
 vars_2011:
     pnatfed: VARCHAR(2)
 vars_2012:
