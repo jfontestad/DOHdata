@@ -39,53 +39,53 @@ db.apde50 <- odbcConnect("PH_APDEStore")
 
 #### Bring in each year's data and combine ####
 im03 <- read.fwf(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/inf_2003.asc", 
-                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -560, 4, -24, 2, -2, 2, -63, 2, -312),
-                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", 
-                               "educ_mom", "dth_yr", "dbstate", "dcntyres", "dst_res"))
+                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -97, 1, -407, 2, -53, 4, -24, 2, -2, 2, -63, 2, -312),
+                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", "educ_mom",
+                               "hisp_mom", "moracsum", "dth_yr", "dbstate", "dcntyres", "dst_res"))
 im04 <- read.fwf(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/inf_2004.asc", 
-                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -560, 4, -24, 2, -2, 2, -63, 2, -312),
-                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", 
-                               "educ_mom", "dth_yr", "dbstate", "dcntyres", "dst_res"))
+                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -97, 1, -407, 2, -53, 4, -24, 2, -2, 2, -63, 2, -312),
+                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", "educ_mom",
+                               "hisp_mom", "moracsum", "dth_yr", "dbstate", "dcntyres", "dst_res"))
 im05 <- read.fwf(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/inf_2005.asc", 
-                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -560, 4, -24, 2, -2, 2, -63, 2, -312),
-                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", 
-                               "educ_mom", "dth_yr", "dbstate", "dcntyres", "dst_res"))
+                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -97, 1, -407, 2, -53, 4, -24, 2, -2, 2, -63, 2, -312),
+                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", "educ_mom",
+                               "hisp_mom", "moracsum", "dth_yr", "dbstate", "dcntyres", "dst_res"))
 im06 <- read.fwf(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/inf_2006.asc", 
-                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -560, 4, -24, 2, -2, 2, -63, 2, -312),
-                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", 
-                               "educ_mom", "dth_yr", "dbstate", "dcntyres", "dst_res"))
+                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -97, 1, -407, 2, -53, 4, -24, 2, -2, 2, -63, 2, -312),
+                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", "educ_mom",
+                               "hisp_mom", "moracsum", "dth_yr", "dbstate", "dcntyres", "dst_res"))
 im07 <- read.fwf(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/inf_2007.asc", 
-                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -560, 4, -24, 2, -2, 2, -63, 2, -312),
-                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", 
-                               "educ_mom", "dth_yr", "dbstate", "dcntyres", "dst_res"))
+                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -97, 1, -407, 2, -53, 4, -24, 2, -2, 2, -63, 2, -312),
+                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", "educ_mom",
+                               "hisp_mom", "moracsum", "dth_yr", "dbstate", "dcntyres", "dst_res"))
 im08 <- read.fwf(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/inf_2008.asc", 
-                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -560, 4, -24, 2, -2, 2, -63, 2, -312),
-                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", 
-                               "educ_mom", "dth_yr", "dbstate", "dcntyres", "dst_res"))
+                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -97, 1, -407, 2, -53, 4, -24, 2, -2, 2, -63, 2, -312),
+                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", "educ_mom",
+                               "hisp_mom", "moracsum", "dth_yr", "dbstate", "dcntyres", "dst_res"))
 im09 <- read.fwf(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/inf_2009.asc", 
-                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -560, 4, -24, 2, -2, 2, -63, 2, -312),
-                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", 
-                               "educ_mom", "dth_yr", "dbstate", "dcntyres", "dst_res"))
+                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -97, 1, -407, 2, -53, 4, -24, 2, -2, 2, -63, 2, -312),
+                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", "educ_mom",
+                               "hisp_mom", "moracsum", "dth_yr", "dbstate", "dcntyres", "dst_res"))
 im10 <- read.fwf(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/inf_2010.asc", 
-                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -560, 4, -24, 2, -2, 2, -63, 2, -312),
-                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", 
-                               "educ_mom", "dth_yr", "dbstate", "dcntyres", "dst_res"))
+                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -97, 1, -407, 2, -53, 4, -24, 2, -2, 2, -63, 2, -312),
+                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", "educ_mom",
+                               "hisp_mom", "moracsum", "dth_yr", "dbstate", "dcntyres", "dst_res"))
 im11 <- read.fwf(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/inf_2011.asc", 
-                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -560, 4, -24, 2, -2, 2, -63, 2),
-                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", 
-                               "educ_mom", "dth_yr", "dbstate", "dcntyres", "dst_res"))
+                 width = c(10, -1, 4, -15, 2, -2, 2, -9, 1, -3, 2, -97, 1, -407, 2, -53, 4, -24, 2, -2, 2, -63, 2, -312),
+                 col.names = c("certno_e", "dob_yr", "age_mom", "cnty_res", "race_mom", "educ_mom",
+                               "hisp_mom", "moracsum", "dth_yr", "dbstate", "dcntyres", "dst_res"))
 im12 <- read.csv(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/Infant2012.csv",
                    header = TRUE)
-im12 <- select(im12, certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom, dth_yr, dbstate, dcntyres, dst_res)
+im12 <- select(im12, certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom, hisp_mom, moracsum, dth_yr, dbstate, dcntyres, dst_res)
 im13 <- read.csv(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/InfantDeathF2013.csv",
                  header = TRUE)
-im13 <- select(im13, certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom, dth_yr, dbstate, dcntyres, dst_res)
+im13 <- select(im13, certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom, hisp_mom, moracsum, dth_yr, dbstate, dcntyres, dst_res)
 im14 <- read.csv(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/InfantDeathF2014.csv",
                  header = TRUE)
-im14 <- select(im14, certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom, dth_yr, dbstate, dcntyres, dst_res)
+im14 <- select(im14, certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom, hisp_mom, moracsum, dth_yr, dbstate, dcntyres, dst_res)
 im15 <- read.csv(file = "//phdata01/DROF_DATA/DOH DATA/InfDeath/Data/InfantDeathF2015.csv",
                  header = TRUE)
-im15 <- select(im15, certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom, dth_yr, dbstate, dcntyres, dst_res)
+im15 <- select(im15, certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom, hisp_mom, moracsum, dth_yr, dbstate, dcntyres, dst_res)
 
 
 im03_15 <- bind_rows(im03, im04, im05, im06, im07, im08, im09, im10, im11, im12, im13, im14, im15)
@@ -96,7 +96,7 @@ rm(im03, im04, im05, im06, im07, im08, im09, im10, im11, im12, im13, im14, im15)
 births_denom <-
   sqlQuery(
     db.apde50,
-    "SELECT certno_e, dob_yr, age_mom, cnty_res, moracsum, educ_mom
+    "SELECT certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom, hisp_mom, moracsum
     FROM dbo.wabir2003_2015
     ",
     stringsAsFactors = FALSE
@@ -141,6 +141,21 @@ im03_15$age_mom_grp <- as.character(car::recode(im03_15$age_mom, "10:17 = 1; 18:
 births_denom$age_mom_grp <- as.character(car::recode(births_denom$age_mom, "10:17 = 1; 18:24 = 2; 25:34 = 3;
                             35:44 = 4; 45:hi = 5; else = NA"))
 
+# Mother's race/ethnicity
+im03_15 <- im03_15 %>%
+  mutate(moracsum = as.character(ifelse(!is.na(moracsum) & moracsum >= 20 & moracsum < 99, 20, 
+                           ifelse(moracsum %in% c(0, 99), NA, moracsum))),
+         hisp_mom = as.character(ifelse(!is.na(hisp_mom) & hisp_mom %in% c(1, 2, 3, 4, 5), 1, 
+                           ifelse(hisp_mom == 9, NA, hisp_mom)))
+  )
+
+births_denom <- births_denom %>%
+  mutate(moracsum = as.character(ifelse(!is.na(moracsum) & moracsum >= 20 & moracsum < 99, 20, 
+                           ifelse(moracsum %in% c(0, 99), NA, moracsum))),
+         hisp_mom = as.character(ifelse(!is.na(hisp_mom) & hisp_mom %in% c(1, 2, 3, 4, 5), 1, 
+                           ifelse(hisp_mom == 9, NA, hisp_mom)))
+  )
+
 # Mother's grouped race/ethnicity
 im03_15$race_mom_grp <- as.character(car::recode(im03_15$race_mom, "'1' = 1; '2' = 2; 
                                    '3' = 3; c('4', '5', '7', 'D', 'E', 'G') = 4;
@@ -177,6 +192,10 @@ filepath = "S:/WORK/Best Start for Kids/Dashboard/Interim dashboard materials/Ta
 labels <- rbind.data.frame(
   cbind(Category1 = "King County", Group = "King County", Label = "King County"),
   cbind(Category1 = "Overall", Group = "Overall", Label = "Overall"),
+  cbind(Category1 = c(rep("Mother's race/ethnicity (summary)", times = 8)),
+        Group = c("0", "1", "10", "11", "12", "13", "14", "20"),
+        Label = c("Non-Hispanic", "Hispanic", "White", "Black", "American Indian/Alaskan Native", 
+                  "Asian", "Native Hawaiian/Pacific Islander", "Multiple")),
   cbind(Category1 = c(rep("Mother's race/ethnicity", times = 17)),
                 Group = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H"),
                   Label = c("White", "Black", "American Indian/Alaskan Native", "Chinese", "Japanese", "Other Non-White", 
@@ -272,16 +291,11 @@ f_denom_grp <-
     # Make empty list to add data to
     denomlist = list()
     
-    # List out groups to examine over
-    groups <-
-      c("race_mom", "race_mom_grp", "age_mom_grp", "educ_mom",
-        "hra_id", "rgn_id")
-    
-    grplabels <-
-      c(
-        "Mother's race/ethnicity", "Mother's race/ethnicity (grouped)",
-        "Mother's age", "Mother's education", "HRA", "Region"
-      )
+    # List out subgroups to examine over
+    groups <- c("moracsum", "race_mom", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+    # List out group labels
+    grplabels <- c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (expanded)", "Mother's race/ethnicity (summary)", 
+                   "Mother's age", "Mother's education", "HRA", "Region")
     
     if (trend == TRUE) {
       for (i in 1:length(groups)) {
@@ -332,16 +346,11 @@ f_denom_subgrp <-
     # Make range of years to look over
     years <- seq(yrend - yrcombine + 1, yrend)
     
-    # List out groups to examine over
-    groups <-
-      c("race_mom", "race_mom_grp", "age_mom_grp", "educ_mom",
-        "hra_id", "rgn_id")
-    
-    grplabels <-
-      c(
-        "Mother's race/ethnicity", "Mother's race/ethnicity (grouped)",
-        "Mother's age", "Mother's education", "HRA", "Region"
-      )
+    # List out subgroups to examine over
+    groups <- c("moracsum", "race_mom", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+    # List out group labels
+    grplabels <- c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (expanded)", "Mother's race/ethnicity (summary)", 
+                   "Mother's age", "Mother's education", "HRA", "Region")
     
     # Make empty list to add data to
     denomlist = list()
@@ -433,14 +442,16 @@ infmort_subgroup <-
     
     if (grprace == TRUE) {
       # List out subgroups to examine over
-      groups <- c("race_mom_grp", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+      groups <- c("moracsum", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
-      grplabels <- c("Mother's race/ethnicity (grouped)", "Mother's age", "Mother's education", "HRA", "Region")
+      grplabels <- c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (summary)", 
+                     "Mother's age", "Mother's education", "HRA", "Region")
     } else {
       # List out subgroups to examine over
-      groups <- c("race_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+      groups <- c("moracsum", "race_mom", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
-      grplabels <- c("Mother's race/ethnicity", "Mother's age", "Mother's education", "HRA", "Region")
+      grplabels <- c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (expanded)", "Mother's race/ethnicity (summary)", 
+                     "Mother's age", "Mother's education", "HRA", "Region")
     }
 
     
@@ -563,14 +574,16 @@ infmort_smallgroup <-
     
     if (grprace == TRUE) {
       # List out subgroups to examine over
-      groups <- c("race_mom_grp", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+      groups <- c("moracsum", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
-      grplabels <- c("Mother's race/ethnicity (grouped)", "Mother's age", "Mother's education", "HRA", "Region")
+      grplabels <- c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (summary)", 
+                     "Mother's age", "Mother's education", "HRA", "Region")
     } else {
       # List out subgroups to examine over
-      groups <- c("race_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+      groups <- c("moracsum", "race_mom", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
-      grplabels <- c("Mother's race/ethnicity", "Mother's age", "Mother's education", "HRA", "Region")
+      grplabels <- c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (expanded)", "Mother's race/ethnicity (summary)", 
+                     "Mother's age", "Mother's education", "HRA", "Region")
     }
     
     if (group == "all") {
@@ -752,14 +765,16 @@ infmort_time_subgroup <-
 
     if (grprace == TRUE) {
       # List out subgroups to examine over
-      groups <- c("race_mom_grp", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+      groups <-  c("moracsum", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
-      grplabels <- c("Mother's race/ethnicity (grouped)", "Mother's age", "Mother's education", "HRA", "Region")
+      grplabels <- c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (summary)", 
+                     "Mother's age", "Mother's education", "HRA", "Region")
     } else {
       # List out subgroups to examine over
-      groups <- c("race_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+      groups <- c("moracsum", "race_mom", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
-      grplabels <- c("Mother's race/ethnicity", "Mother's age", "Mother's education", "HRA", "Region")
+      grplabels <- c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (expanded)", "Mother's race/ethnicity (summary)", 
+                     "Mother's age", "Mother's education", "HRA", "Region")
     }
     
     if (group == "all") {
@@ -1012,16 +1027,20 @@ infmort<- rbindlist(list(
   infmort_rollyr_kc(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, yrcombine = 5),
   # Time trend for each subgroup
   infmort_rollyr_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, yrcombine = 5, group = "rgn_id", grprace = FALSE),
-  infmort_rollyr_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, yrcombine = 5, group = "race_mom", grprace = FALSE),
+  infmort_rollyr_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, yrcombine = 5, group = "moracsum", grprace = FALSE),
+  infmort_rollyr_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, yrcombine = 5, group = "hisp_mom", grprace = FALSE),
   infmort_rollyr_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, yrcombine = 5, group = "rgn_id", grprace = TRUE),
-  infmort_rollyr_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, yrcombine = 5, group = "race_mom_grp", grprace = TRUE),
+  infmort_rollyr_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, yrcombine = 5, group = "moracsum", grprace = TRUE),
+  infmort_rollyr_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, yrcombine = 5, group = "hisp_mom", grprace = TRUE),
   # Time trend for KC overall (JoinPoint data)
   infmort_time_kc(imdata = im03_15, birdata = births_denom, yrend = maxyr_im),
   # Time trend for each subgroup (JoinPoint data)
   infmort_time_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, group = "rgn_id", grprace = FALSE),
-  infmort_time_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, group = "race_mom", grprace = FALSE),
+  infmort_time_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, group = "moracsum", grprace = FALSE),
+  infmort_time_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, group = "hisp_mom", grprace = FALSE),
   infmort_time_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, group = "rgn_id", grprace = TRUE),
-  infmort_time_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, group = "race_mom_grp", grprace = TRUE)
+  infmort_time_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, group = "moracsum", grprace = TRUE),
+  infmort_time_subgroup(imdata = im03_15, birdata = births_denom, yrend = maxyr_im, group = "hisp_mom", grprace = TRUE)
 ))
 
 
@@ -1091,26 +1110,34 @@ rm(comparison, comparison_trend, kclb, kcub, kctrend)
 infmort <- arrange(infmort, Tab, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, Year)
 
 ### Export to an Excel file
-infmort %>% filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - infmort.xlsx"), sheetName = "infmort")
+infmort %>% filter(Tab != "Trends_JP" & Category1 != "Mother's race/ethnicity (grouped)" &
+                     Category1_grp != "Mother's race/ethnicity (grouped)" &
+                     Category2 != "Mother's race/ethnicity (grouped)") %>%
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - infant mortality.xlsx"), sheetName = "infmort")
 
 
 ### Apply suppression rules and export
 infmort %>% mutate_at(vars(Proportion:rse, Numerator, `Comparison with KC`),
                       funs(ifelse(Suppress == "Y", NA, .))) %>%
   mutate_at(vars(Proportion:rse), funs(round(., digits = 1))) %>%
-  filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - infmort - suppressed.xlsx"), sheetName = "infmort")
+  filter(Tab != "Trends_JP" & Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - infant mortality - suppressed.xlsx"), sheetName = "infmort")
 
 
 ### Create data sets for Joinpoint
 infmort %>%
-  filter(Tab == "Trends_JP" & Category1 != "") %>%
+  filter(Tab == "Trends_JP" & Category1 != "" &  Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
   select(Tab, Category1, Group, Year, Numerator, `Sample Size`, Proportion, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - infmort - JP.xlsx"), sheetName = "infmort")
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - infant mortality - JP.xlsx"), sheetName = "infmort")
 
 infmort %>%
-  filter(Tab == "Trends_JP" & Category1_grp != "") %>%
+  filter(Tab == "Trends_JP" & Category1 != "" &  Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
   select(Tab, Category1_grp, Group_grp, Numerator, `Sample Size`, Year, Proportion, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - infmort grouped race - JP.xlsx"), sheetName = "infmort")
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - infant mortality grouped race - JP.xlsx"), sheetName = "infmort")
 

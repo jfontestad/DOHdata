@@ -41,7 +41,7 @@ db.apde50 <- odbcConnect("PH_APDEStore")
 births <-
   sqlQuery(
     db.apde50,
-    "SELECT b1.certno_e, dob_yr, age_mom, cnty_res, race_mom, educ_mom,
+    "SELECT b1.certno_e, dob_yr, age_mom, cnty_res, race_mom, moracsum, hisp_mom, educ_mom,
       pnatalmo, gestcalc, breastfd, pnatalvs, cigs_bef, 
       cigs_1st, cigs_2nd, cigs_3rd, g1.year, g1.geo_id_blk10, g1.cnty_res2,
       g1.match_score, g2.hra_id, g2.hra_id, g2.rgn_id, g2.rgn_name
@@ -72,6 +72,14 @@ births$gestcalc[births$gestcalc == 99] <- NA
 # Mother's age groupings
 births$age_mom_grp <- car::recode(births$age_mom, "10:17 = 1; 18:24 = 2; 25:34 = 3;
                             35:44 = 4; 45:hi = 5; else = NA")
+
+# Recode race/ethnicity
+births <- births %>%
+  mutate(moracsum = ifelse(!is.na(moracsum) & moracsum >= 20 & moracsum < 99, 20, 
+                           ifelse(moracsum %in% c(0, 99), NA, moracsum)),
+         hisp_mom = ifelse(!is.na(hisp_mom) & hisp_mom %in% c(1, 2, 3, 4, 5), 1, 
+                           ifelse(hisp_mom == 9, NA, hisp_mom))
+  )
 
 # Mother's grouped race/ethnicity
 births$race_mom_grp <- as.character(car::recode(births$race_mom, "'1' = 1; '2' = 2; 
@@ -114,7 +122,11 @@ filepath = "S:/WORK/Best Start for Kids/Dashboard/Interim dashboard materials/Ta
 labels <- rbind.data.frame(
   cbind(Category1 = "King County", Group = "King County", Label = "King County"),
   cbind(Category1 = "Overall", Group = "Overall", Label = "Overall"),
-  cbind(Category1 = c(rep("Mother's race/ethnicity", times = 17)),
+  cbind(Category1 = c(rep("Mother's race/ethnicity (summary)", times = 8)),
+        Group = c("0", "1", "10", "11", "12", "13", "14", "20"),
+        Label = c("Non-Hispanic", "Hispanic", "White", "Black", "American Indian/Alaskan Native", 
+                  "Asian", "Native Hawaiian/Pacific Islander", "Multiple")),
+  cbind(Category1 = c(rep("Mother's race/ethnicity (expanded)", times = 17)),
         Group = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H"),
         Label = c("White", "Black", "American Indian/Alaskan Native", "Chinese", "Japanese", "Other Non-White", 
                   "Filipino", "Refused to State", "Unknown/Not Stated", "Hawaiian", 
@@ -172,6 +184,9 @@ labels <- mutate(labels,
 # S1) Breatfeeding initiation
 # S2) Early and adequate prenatal care
 # S3) Adolescent birth rate (15-17) (needs pop data for denominator)
+
+# Other analyses
+# E1) Smoked during pregnancy
 
 
 births <- births %>%
@@ -238,17 +253,19 @@ indicator_subgroup <-
     if (grprace == TRUE) {
     # List out subgroups to examine over
     groups <-
-      c("race_mom_grp", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+      c("moracsum", "race_mom_grp", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
     # List out group labels
     grplabels <-
-      c("Mother's race/ethnicity (grouped)", "Mother's age", "Mother's education", "HRA", "Region")
+      c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (grouped)", "Mother's race/ethnicity (summary)", 
+        "Mother's age", "Mother's education", "HRA", "Region")
     } else {
     # List out subgroups to examine over
     groups <-
-      c("race_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+      c("moracsum", "race_mom", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
     # List out group labels
     grplabels <-
-      c("Mother's race/ethnicity", "Mother's age", "Mother's education", "HRA", "Region")
+      c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (expanded)", "Mother's race/ethnicity (summary)", 
+        "Mother's age", "Mother's education", "HRA", "Region")
     }
 
     if (group == "all") {
@@ -374,17 +391,19 @@ indicator_smallgroup <-
     if (grprace == TRUE) {
       # List out subgroups to examine over
       groups <-
-        c("race_mom_grp", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+        c("moracsum", "race_mom_grp", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
       grplabels <-
-        c("Mother's race/ethnicity (grouped)", "Mother's age", "Mother's education", "HRA", "Region")
+        c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (grouped)", "Mother's race/ethnicity (summary)", 
+          "Mother's age", "Mother's education", "HRA", "Region")
     } else {
       # List out subgroups to examine over
       groups <-
-        c("race_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+        c("moracsum", "race_mom", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
       grplabels <-
-        c("Mother's race/ethnicity", "Mother's age", "Mother's education", "HRA", "Region")
+        c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (expanded)", "Mother's race/ethnicity (summary)", 
+          "Mother's age", "Mother's education", "HRA", "Region")
     }
     
     
@@ -566,17 +585,19 @@ indicator_time_group <-
     if (grprace == TRUE) {
       # List out subgroups to examine over
       groups <-
-        c("race_mom_grp", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+        c("moracsum", "race_mom_grp", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
       grplabels <-
-        c("Mother's race/ethnicity (grouped)", "Mother's age", "Mother's education", "HRA", "Region")
+        c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (grouped)", "Mother's race/ethnicity (summary)", 
+          "Mother's age", "Mother's education", "HRA", "Region")
     } else {
       # List out subgroups to examine over
       groups <-
-        c("race_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
+        c("moracsum", "race_mom", "hisp_mom", "age_mom_grp", "educ_mom", "hra_id", "rgn_id")
       # List out group labels
       grplabels <-
-        c("Mother's race/ethnicity", "Mother's age", "Mother's education", "HRA", "Region")
+        c("Mother's race/ethnicity (summary)", "Mother's race/ethnicity (expanded)", "Mother's race/ethnicity (summary)", 
+          "Mother's age", "Mother's education", "HRA", "Region")
     }
     
     
@@ -698,6 +719,9 @@ indicator_time_group <-
   }
 
 
+# Call JP and collect results
+# Work in progress, need to obtain most recent command line version of JP
+
 
 #### Look over time with rolling averages ####
 # Calculates rolling averages for KC overall
@@ -810,6 +834,7 @@ indicator_rollyr_group <- function(data, indicator, yrstart = minyr_b, yrend = m
 
 
 #### H1: Preterm birth ####
+# Not currently using the grouped race variable but keep them in so the Tableau template works
 preterm <- rbindlist(list(
   # KC overall
   indicator_kc(data = births, indicator = "preterm", year = maxyr_b, yrcombine = 5),
@@ -825,16 +850,20 @@ preterm <- rbindlist(list(
   indicator_rollyr_kc(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3),
   # Time trend for each subgroup
   indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = FALSE),
-  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "race_mom", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "moracsum", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "hisp_mom", grprace = FALSE),
   indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = TRUE),
-  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "race_mom_grp", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "moracsum", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "hisp_mom", grprace = TRUE),
     # Time trend for KC overall (JoinPoint data)
   indicator_time_kc(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b),
   # Time trend for each subgroup (JoinPoint data)
   indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "rgn_id", grprace = FALSE),
-  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "race_mom", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "moracsum", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "hisp_mom", grprace = FALSE),
   indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "rgn_id", grprace = TRUE),
-  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "race_mom_grp", grprace = TRUE)
+  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "moracsum", grprace = TRUE),
+  indicator_time_group(data = births, indicator = "preterm", yrstart = minyr_b, yrend = maxyr_b, group = "hisp_mom", grprace = TRUE)
 ))
 
 
@@ -850,10 +879,12 @@ preterm <- left_join(preterm, labels, by = c("Category2" = "Category1", "Subgrou
   rename(Subgroup.id = Subgroup, Subgroup = Label)
 
 # Reorder and sort columns
-preterm <- preterm %>% select(Tab, Year, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, 
+preterm <- preterm %>% select(Tab, Year, Category1, Group, Category1_grp, Group_grp, 
+                              Category2, Subgroup, 
                               Percent, `Lower Bound`, `Upper Bound`, se, rse, 
                               `Sample Size`, Numerator, Suppress, Group.id, Subgroup.id) %>%
-  arrange(Tab, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, Year)
+  arrange(Tab, Category1, Group, Category1_grp, Group_grp, 
+          Category2, Subgroup, Year)
 
 ### Clean up nulls and blanks
 preterm <- preterm %>%
@@ -879,7 +910,8 @@ comparison <- preterm %>%
   filter(Tab != "Trends") %>%
   mutate(`Comparison with KC` = ifelse(`Upper Bound` < kclb, "lower",
                                        ifelse(`Lower Bound` > kcub, "higher", "no different"))) %>%
-    select(Tab, Year, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, `Comparison with KC`)
+    select(Tab, Year, Category1, Group, Category1_grp, Group_grp, 
+           Category2, Subgroup, `Comparison with KC`)
 
 # Do comparison for trends (each year compared to KC that year, not that group's trend over time)
 comparison_trend <- preterm %>%
@@ -887,39 +919,48 @@ comparison_trend <- preterm %>%
   left_join(., kctrend, by = "Year") %>%
   mutate(`Comparison with KC` = ifelse(`Upper Bound.x` < `Lower Bound.y`, "lower",
                                        ifelse(`Lower Bound.x` > `Upper Bound.y`, "higher", "no different"))) %>%
-  select(Tab, Year, Category1, Group, Category1_grp, Group_grp, Category2, Subgroup, `Comparison with KC`)
+  select(Tab, Year, Category1, Group, Category1_grp, Group_grp, 
+         Category2, Subgroup, `Comparison with KC`)
 
 # Bring both comparisons together
 comparison <- rbind(comparison, comparison_trend)
 
 # Merge with main data and add column for time trends
-preterm <- left_join(preterm, comparison, by = c("Tab", "Year", "Category1", "Group", "Category1_grp", 
-                                                 "Group_grp", "Category2", "Subgroup")) %>%
+preterm <- left_join(preterm, comparison, by = c("Tab", "Year", "Category1", "Group", "Category1_grp", "Group_grp", 
+                                                 "Category2", "Subgroup")) %>%
   mutate(`Time Trends` = "")
 rm(comparison, comparison_trend, kclb, kcub, kctrend)
 
 
 ### Export to an Excel file
-preterm %>% filter(Tab != "Trends_JP") %>%
+preterm %>% filter(Tab != "Trends_JP" & Category1 != "Mother's race/ethnicity (grouped)" &
+                     Category1_grp != "Mother's race/ethnicity (grouped)" &
+                     Category2 != "Mother's race/ethnicity (grouped)") %>%
   write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm.xlsx"), sheetName = "preterm")
 
 
 ### Apply suppression rules and export
 preterm %>% mutate_at(vars(Percent:rse, Numerator, `Comparison with KC`),
                       funs(ifelse(Suppress == "Y", NA, .))) %>%
-  mutate_at(vars(Proportion:rse), funs(round(., digits = 1))) %>%
-  filter(Tab != "Trends_JP") %>%
+  mutate_at(vars(Percent:rse), funs(round(., digits = 3))) %>%
+  filter(Tab != "Trends_JP" & Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
   write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm - suppressed.xlsx"), sheetName = "preterm")
 
 
 ### Create data sets for Joinpoint
 preterm %>%
-  filter(Tab == "Trends_JP" & Category1 != "") %>%
+  filter(Tab == "Trends_JP" & Category1 != "" &  Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
   select(Tab, Category1, Group, Year, Numerator, Percent, se) %>%
   write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm - JP.xlsx"), sheetName = "preterm")
 
 preterm %>%
-  filter(Tab == "Trends_JP" & Category1_grp != "") %>%
+  filter(Tab == "Trends_JP" & Category1_grp != "" & Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
   select(Tab, Category1_grp, Group_grp, Numerator, Year, Percent, se) %>%
   write.xlsx(., file = paste0(filepath, "BSK dashboard - preterm grouped race - JP.xlsx"), sheetName = "preterm")
 
@@ -929,7 +970,7 @@ preterm %>%
 #### S1: Breastfeeding initiation ####
 breastfed <- rbindlist(list(
   # KC overall
-  indicator_kc(data = births, indicator = "breastfed", year = maxyr_b),
+  indicator_kc(data = births, indicator = "breastfed", year = maxyr_b, yrcombine = 5),
   # By each subgroup
   indicator_subgroup(data = births, indicator = "breastfed", year = maxyr_b, yrcombine = 5, group = "all", grprace = FALSE, smlgrp = FALSE),
   indicator_subgroup(data = births, indicator = "breastfed", year = maxyr_b, yrcombine = 5, group = "all", grprace = TRUE, smlgrp = FALSE),
@@ -939,19 +980,23 @@ breastfed <- rbindlist(list(
   indicator_smallgroup(data = births, indicator = "breastfed", year = maxyr_b, yrcombine = 5, group = "all", grprace = FALSE),
   indicator_smallgroup(data = births, indicator = "breastfed", year = maxyr_b, yrcombine = 5, group = "all", grprace = TRUE),
   # Time trend for KC overall
-  indicator_rollyr_kc(data = births, indicator = "breastfed", yrend = maxyr_b, yrcombine = 3),
+  indicator_rollyr_kc(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3),
   # Time trend for each subgroup
-  indicator_rollyr_group(data = births, indicator = "breastfed", yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = FALSE),
-  indicator_rollyr_group(data = births, indicator = "breastfed", yrend = maxyr_b, yrcombine = 3, group = "race_mom", grprace = FALSE),
-  indicator_rollyr_group(data = births, indicator = "breastfed", yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = TRUE),
-  indicator_rollyr_group(data = births, indicator = "breastfed", yrend = maxyr_b, yrcombine = 3, group = "race_mom_grp", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "moracsum", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "hisp_mom", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "moracsum", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "hisp_mom", grprace = TRUE),
   # Time trend for KC overall (JoinPoint data)
-  indicator_time_kc(data = births, indicator = "breastfed", yrend = maxyr_b),
+  indicator_time_kc(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b),
   # Time trend for each subgroup (JoinPoint data)
-  indicator_time_group(data = births, indicator = "breastfed", yrend = maxyr_b, group = "rgn_id", grprace = FALSE),
-  indicator_time_group(data = births, indicator = "breastfed", yrend = maxyr_b, group = "race_mom", grprace = FALSE),
-  indicator_time_group(data = births, indicator = "breastfed", yrend = maxyr_b, group = "rgn_id", grprace = TRUE),
-  indicator_time_group(data = births, indicator = "breastfed", yrend = maxyr_b, group = "race_mom_grp", grprace = TRUE)
+  indicator_time_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, group = "rgn_id", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, group = "moracsum", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, group = "hisp_mom", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, group = "rgn_id", grprace = TRUE),
+  indicator_time_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, group = "moracsum", grprace = TRUE),
+  indicator_time_group(data = births, indicator = "breastfed", yrstart = minyr_b, yrend = maxyr_b, group = "hisp_mom", grprace = TRUE)
 ))
 
 
@@ -1017,35 +1062,45 @@ rm(comparison, comparison_trend, kclb, kcub, kctrend)
 
 
 ### Export to an Excel file
-breastfed %>% filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation.xlsx"))
+breastfed %>% filter(Tab != "Trends_JP" & Category1 != "Mother's race/ethnicity (grouped)" &
+                       Category1_grp != "Mother's race/ethnicity (grouped)" &
+                       Category2 != "Mother's race/ethnicity (grouped)") %>%
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation.xlsx"), sheetName = "breast_init")
 
 
 ### Apply suppression rules and export
 breastfed %>% mutate_at(vars(Percent:rse, Numerator, `Comparison with KC`),
                       funs(ifelse(Suppress == "Y", NA, .))) %>%
-  mutate_at(vars(Proportion:rse), funs(round(., digits = 1))) %>%
-  filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation - suppressed.xlsx"))
+  mutate_at(vars(Percent:rse), funs(round(., digits = 3))) %>%
+  filter(Tab != "Trends_JP" & Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation - suppressed.xlsx"),
+             sheetName = "breast_init")
 
 
 ### Create data sets for Joinpoint
 breastfed %>%
-  filter(Tab == "Trends_JP" & Category1 != "") %>%
+  filter(Tab == "Trends_JP" & Category1 != "" &  Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
   select(Tab, Category1, Group, Year, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation - JP.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation - JP.xlsx"), sheetName = "breast_init")
 
 breastfed %>%
-  filter(Tab == "Trends_JP" & Category1_grp != "") %>%
+  filter(Tab == "Trends_JP" & Category1 != "" &  Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
   select(Tab, Category1_grp, Group_grp, Year, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation grouped race - JP.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - breastfeeding initiation grouped race - JP.xlsx"), 
+             sheetName = "breast_init")
 
 
 
 #### S2: Early and adequate prenatal care ####
 prenatal <- rbindlist(list(
   # KC overall
-  indicator_kc(data = births, indicator = "prenatal", year = maxyr_b),
+  indicator_kc(data = births, indicator = "prenatal", year = maxyr_b, yrcombine = 5),
   # By each subgroup
   indicator_subgroup(data = births, indicator = "prenatal", year = maxyr_b, yrcombine = 5, group = "all", grprace = FALSE, smlgrp = FALSE),
   indicator_subgroup(data = births, indicator = "prenatal", year = maxyr_b, yrcombine = 5, group = "all", grprace = TRUE, smlgrp = FALSE),
@@ -1055,19 +1110,23 @@ prenatal <- rbindlist(list(
   indicator_smallgroup(data = births, indicator = "prenatal", year = maxyr_b, yrcombine = 5, group = "all", grprace = FALSE),
   indicator_smallgroup(data = births, indicator = "prenatal", year = maxyr_b, yrcombine = 5, group = "all", grprace = TRUE),
   # Time trend for KC overall
-  indicator_rollyr_kc(data = births, indicator = "prenatal", yrend = maxyr_b, yrcombine = 3),
+  indicator_rollyr_kc(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3),
   # Time trend for each subgroup
-  indicator_rollyr_group(data = births, indicator = "prenatal", yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = FALSE),
-  indicator_rollyr_group(data = births, indicator = "prenatal", yrend = maxyr_b, yrcombine = 3, group = "race_mom", grprace = FALSE),
-  indicator_rollyr_group(data = births, indicator = "prenatal", yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = TRUE),
-  indicator_rollyr_group(data = births, indicator = "prenatal", yrend = maxyr_b, yrcombine = 3, group = "race_mom_grp", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "moracsum", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "hisp_mom", grprace = FALSE),
+  indicator_rollyr_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "rgn_id", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "moracsum", grprace = TRUE),
+  indicator_rollyr_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, yrcombine = 3, group = "hisp_mom", grprace = TRUE),
   # Time trend for KC overall (JoinPoint data)
-  indicator_time_kc(data = births, indicator = "prenatal", yrend = maxyr_b),
+  indicator_time_kc(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b),
   # Time trend for each subgroup (JoinPoint data)
-  indicator_time_group(data = births, indicator = "prenatal", yrend = maxyr_b, group = "rgn_id", grprace = FALSE),
-  indicator_time_group(data = births, indicator = "prenatal", yrend = maxyr_b, group = "race_mom", grprace = FALSE),
-  indicator_time_group(data = births, indicator = "prenatal", yrend = maxyr_b, group = "rgn_id", grprace = TRUE),
-  indicator_time_group(data = births, indicator = "prenatal", yrend = maxyr_b, group = "race_mom_grp", grprace = TRUE)
+  indicator_time_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, group = "rgn_id", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, group = "moracsum", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, group = "hisp_mom", grprace = FALSE),
+  indicator_time_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, group = "rgn_id", grprace = TRUE),
+  indicator_time_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, group = "moracsum", grprace = TRUE),
+  indicator_time_group(data = births, indicator = "prenatal", yrstart = minyr_b, yrend = maxyr_b, group = "hisp_mom", grprace = TRUE)
 ))
 
 
@@ -1133,28 +1192,36 @@ rm(comparison, comparison_trend, kclb, kcub, kctrend)
 
 
 ### Export to an Excel file
-prenatal %>% filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - prenatal care.xlsx"))
+prenatal %>% filter(Tab != "Trends_JP" & Category1 != "Mother's race/ethnicity (grouped)" &
+                      Category1_grp != "Mother's race/ethnicity (grouped)" &
+                      Category2 != "Mother's race/ethnicity (grouped)") %>%
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - prenatal care.xlsx"), sheetName = "prenatal")
 
 
 ### Apply suppression rules and export
 prenatal %>% mutate_at(vars(Percent:rse, Numerator, `Comparison with KC`),
                         funs(ifelse(Suppress == "Y", NA, .))) %>%
-  mutate_at(vars(Proportion:rse), funs(round(., digits = 1))) %>%
-  filter(Tab != "Trends_JP") %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - prenatal care - suppressed.xlsx"))
+  mutate_at(vars(Percent:rse), funs(round(., digits = 3))) %>%
+  filter(Tab != "Trends_JP" & Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - prenatal care - suppressed.xlsx"), sheetName = "prenatal")
 
 
 ### Create data sets for Joinpoint
 prenatal %>%
-  filter(Tab == "Trends_JP" & Category1 != "") %>%
+  filter(Tab == "Trends_JP" & Category1 != "" &  Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
   select(Tab, Category1, Group, Year, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - prenatal care - JP.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - prenatal care - JP.xlsx"), sheetName = "prenatal")
 
 prenatal %>%
-  filter(Tab == "Trends_JP" & Category1_grp != "") %>%
+  filter(Tab == "Trends_JP" & Category1 != "" &  Category1 != "Mother's race/ethnicity (grouped)" &
+           Category1_grp != "Mother's race/ethnicity (grouped)" &
+           Category2 != "Mother's race/ethnicity (grouped)") %>%
   select(Tab, Category1_grp, Group_grp, Year, Percent, se) %>%
-  write.xlsx(., file = paste0(filepath, "BSK dashboard - prenatal care grouped race - JP.xlsx"))
+  write.xlsx(., file = paste0(filepath, "BSK dashboard - prenatal care grouped race - JP.xlsx"), sheetName = "prenatal")
 
 
 
