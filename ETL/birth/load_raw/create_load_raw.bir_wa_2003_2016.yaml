@@ -1,20 +1,6 @@
 schema: load_raw
-table: bir_wa
+table: bir_wa_2003_2016
 years:
-    - 2003
-    - 2004
-    - 2005
-    - 2006
-    - 2007
-    - 2008
-    - 2009
-    - 2010
-    - 2011
-    - 2012
-    - 2013
-    - 2014
-    - 2015
-    - 2016
 vars:
     certno_e: INTEGER
     certype: VARCHAR(1)
@@ -24,12 +10,12 @@ vars:
     sex: VARCHAR(1)
     plural: INTEGER
     city_occ: VARCHAR(4)
-    # cnty_occ: VARCHAR(2)
+    cnty_occ: VARCHAR(2)
     facility: VARCHAR(3)
     age_mom: INTEGER
     birplmom: VARCHAR(2)
     city_res: VARCHAR(4)
-    # cnty_res: VARCHAR(2)
+    cnty_res: VARCHAR(2)
     age_dad: INTEGER
     birpldad: VARCHAR(2)
     attclass: VARCHAR(2)
@@ -52,7 +38,6 @@ vars:
     fd_ge20: INTEGER
     apgar1: INTEGER
     apgar5: INTEGER
-    # bir_order: INTEGER
     order: INTEGER
     crt_clas: VARCHAR(2)
     ind_num: INTEGER
@@ -62,25 +47,21 @@ vars:
     hisp_dad: INTEGER
     hisp_mom: INTEGER
     hispccal: INTEGER
-    # res_yymm: VARCHAR(4)
     res_yprt: VARCHAR(2)
     res_mprt: VARCHAR(2)
     gest_est: INTEGER
     zipcode: VARCHAR(5)
-    # mrf1_6: VARCHAR()
     mrf1: VARCHAR(2)
     mrf2: VARCHAR(2)
     mrf3: VARCHAR(2)
     mrf4: VARCHAR(2)
     mrf5: VARCHAR(2)
     mrf6: VARCHAR(2)
-    # mrf7: VARCHAR(2)
     diabetes: VARCHAR(1)
     herpes: VARCHAR(1)
     smokenum: INTEGER
     drinknum: INTEGER
     wghtgain: INTEGER
-    # obproc1_4: VARCHAR(4)
     obproc1: VARCHAR(1)
     obproc2: VARCHAR(1)
     obproc3: VARCHAR(1)
@@ -88,12 +69,10 @@ vars:
     amnio1: VARCHAR(1)
     amnio2: VARCHAR(1)
     amnio3: VARCHAR(1)
-    # dmeth1_4: VARCHAR(4)
     dmeth1: VARCHAR(1)
     dmeth2: VARCHAR(1)
     dmeth3: VARCHAR(1)
     dmeth4: VARCHAR(1)
-    # complab1_7: VARCHAR(14)
     complab1: VARCHAR(2)
     complab2: VARCHAR(2)
     complab3: VARCHAR(2)
@@ -101,14 +80,12 @@ vars:
     complab5: VARCHAR(2)
     complab6: VARCHAR(2)
     complab7: VARCHAR(2)
-    # abcond1_6: VARCHAR(12)
     abcond1: VARCHAR(2)
     abcond2: VARCHAR(2)
     abcond3: VARCHAR(2)
     abcond4: VARCHAR(2)
     abcond5: VARCHAR(2)
     abcond6: VARCHAR(2)
-    # malf1_7: VARCHAR(14)
     malf1: VARCHAR(2)
     malf2: VARCHAR(2)
     malf3: VARCHAR(2)
@@ -139,7 +116,6 @@ vars:
     lb_f_nd: INTEGER
     fd_2036: INTEGER
     fd_ge37: INTEGER
-    # malficd1_8: VARCHAR(32)
     malficd1: VARCHAR(4)
     malficd2: VARCHAR(4)
     malficd3: VARCHAR(4)
@@ -150,7 +126,6 @@ vars:
     malficd8: VARCHAR(4)
     gestcalc: INTEGER
     gestflag: INTEGER
-    # mrfnon1_9: VARCHAR(18)
     mrfnon1: VARCHAR(2)
     mrfnon2: VARCHAR(2)
     mrfnon3: VARCHAR(2)
@@ -164,24 +139,18 @@ vars:
     dthflg: VARCHAR(1)
     ind_mo: VARCHAR(2)
     ind_yr: VARCHAR(4)
-    # indmm4y: VARCHAR(6)
     llb_mo: VARCHAR(2)
     llb_yr: VARCHAR(4)
-    # llbmm4y: VARCHAR(6)
     lfd_mo: VARCHAR(2)
     lfd_yr: VARCHAR(4)
-    # lfdmm4y: VARCHAR(6)
     mens_mo: VARCHAR(2)
     mens_da: VARCHAR(2)
     mens_yr: VARCHAR(4)
-    # mensmd4y: VARCHAR(8)
-    # mensdate: DATE
+    mensmd4y: DATE
     loth_mo: VARCHAR(2)
     loth_yr: VARCHAR(4)
-    # lothmm4y: VARCHAR(6)
     lpp_mo: VARCHAR(2)
     lpp_yr: VARCHAR(4)
-    # lppmm4y: VARCHAR(6)
     bctrymom: VARCHAR(3)
     bctrydad: VARCHAR(3)
     geozip: VARCHAR(5)
@@ -233,16 +202,15 @@ vars:
     otherout: VARCHAR(1)
     oth_mo: VARCHAR(2)
     oth_yr: VARCHAR(4)
-    # othmm4y: VARCHAR(6)
     delivpay: INTEGER
     fpv_mo: VARCHAR(2)
     fpv_da: VARCHAR(2)
     fpv_yr: INTEGER
-    # fpvmd4y: DATE
+    fpvmd4y: DATE
     lpv_mo: VARCHAR(2)
     lpv_da: VARCHAR(2)
     lpv_yr: INTEGER
-    # lpvmd4y: DATE
+    lpvmd4y: DATE
     cigs_bef: INTEGER
     cigs_1st: INTEGER
     cigs_2nd: INTEGER
@@ -261,7 +229,6 @@ vars:
     vacfail: VARCHAR(1)
     fet_pres: VARCHAR(1)
     dmethfin: INTEGER
-    # labchar1_7: VARCHAR(14)
     labchar1: VARCHAR(2)
     labchar2: VARCHAR(2)
     labchar3: VARCHAR(2)
@@ -269,7 +236,6 @@ vars:
     labchar5: VARCHAR(2)
     labchar6: VARCHAR(2)
     labchar7: VARCHAR(2)
-    # minfect1_7: VARCHAR(14)
     minfect1: VARCHAR(2)
     minfect2: VARCHAR(2)
     minfect3: VARCHAR(2)
@@ -277,13 +243,11 @@ vars:
     minfect5: VARCHAR(2)
     minfect6: VARCHAR(2)
     minfect7: VARCHAR(2)
-    # mmorbid1_5: VARCHAR(10)
     mmorbid1: VARCHAR(2)
     mmorbid2: VARCHAR(2)
     mmorbid3: VARCHAR(2)
     mmorbid4: VARCHAR(2)
     mmorbid5: VARCHAR(2)
-    # labons1_3: VARCHAR(6)
     labons1: VARCHAR(2)
     labons2: VARCHAR(2)
     labons3: VARCHAR(2)
