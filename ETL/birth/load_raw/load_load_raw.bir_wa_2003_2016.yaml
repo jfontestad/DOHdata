@@ -1,5 +1,5 @@
 schema: load_raw
-table: bir_wa
+table: bir_wa_2003_2016
 index_name: idx_cl_load_raw_bir_wa_certno_e
 index:
     - certno_e
@@ -40,7 +40,6 @@ vars:
     - fd_ge20
     - apgar1
     - apgar5
-    # - bir_order
     - order
     - crt_clas
     - ind_num
@@ -50,25 +49,21 @@ vars:
     - hisp_dad
     - hisp_mom
     - hispccal
-    # - res_yymm
     - res_yprt
     - res_mprt
     - gest_est
     - zipcode
-    # - mrf1_6
     - mrf1
     - mrf2
     - mrf3
     - mrf4
     - mrf5
     - mrf6
-    # - mrf7
     - diabetes
     - herpes
     - smokenum
     - drinknum
     - wghtgain
-    # - obproc1_4
     - obproc1
     - obproc2
     - obproc3
@@ -76,12 +71,10 @@ vars:
     - amnio1
     - amnio2
     - amnio3
-    # - dmeth1_4
     - dmeth1
     - dmeth2
     - dmeth3
     - dmeth4
-    # - complab1_7
     - complab1
     - complab2
     - complab3
@@ -89,14 +82,12 @@ vars:
     - complab5
     - complab6
     - complab7
-    # - abcond1_6
     - abcond1
     - abcond2
     - abcond3
     - abcond4
     - abcond5
     - abcond6
-    # - malf1_7
     - malf1
     - malf2
     - malf3
@@ -127,7 +118,6 @@ vars:
     - lb_f_nd
     - fd_2036
     - fd_ge37
-    # - malficd1_8
     - malficd1
     - malficd2
     - malficd3
@@ -138,7 +128,6 @@ vars:
     - malficd8
     - gestcalc
     - gestflag
-    # - mrfnon1_9
     - mrfnon1
     - mrfnon2
     - mrfnon3
@@ -152,24 +141,18 @@ vars:
     - dthflg
     - ind_mo
     - ind_yr
-    # - indmm4y
     - llb_mo
     - llb_yr
-    # - llbmm4y
     - lfd_mo
     - lfd_yr
-    # - lfdmm4y
     - mens_mo
     - mens_da
     - mens_yr
-    # - mensmd4y
-    # - mensdate
+    - mensmd4y
     - loth_mo
     - loth_yr
-    # - lothmm4y
     - lpp_mo
     - lpp_yr
-    # - lppmm4y
     - bctrymom
     - bctrydad
     - geozip
@@ -221,16 +204,15 @@ vars:
     - otherout
     - oth_mo
     - oth_yr
-    # - othmm4y
     - delivpay
     - fpv_mo
     - fpv_da
     - fpv_yr
-    # - fpvmd4y
+    - fpvmd4y
     - lpv_mo
     - lpv_da
     - lpv_yr
-    # - lpvmd4y
+    - lpvmd4y
     - cigs_bef
     - cigs_1st
     - cigs_2nd
@@ -249,7 +231,6 @@ vars:
     - vacfail
     - fet_pres
     - dmethfin
-    # - labchar1_7
     - labchar1
     - labchar2
     - labchar3
@@ -257,7 +238,6 @@ vars:
     - labchar5
     - labchar6
     - labchar7
-    # - minfect1_7
     - minfect1
     - minfect2
     - minfect3
@@ -265,13 +245,11 @@ vars:
     - minfect5
     - minfect6
     - minfect7
-    # - mmorbid1_5
     - mmorbid1
     - mmorbid2
     - mmorbid3
     - mmorbid4
     - mmorbid5
-    # - labons1_3
     - labons1
     - labons2
     - labons3
@@ -370,4 +348,3 @@ table_2016:
     date_max: 2016-12-31
     date_issue: 2017-06-22
     date_delivery: 2018-07-17
-combine_years: 
