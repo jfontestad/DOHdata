@@ -7,6 +7,10 @@
 # Use https://github.com/PHSKC-APDE/claims_data/blob/master/claims_db/db_loader/scripts_general/etl_log.R
 #  for claims data
 
+# auto_proceed = T allows skipping of checks against existing ETL entries. 
+# Use with caution to avoid creating duplicate entries.
+# Note that this will not overwrite checking for near-exact matches. 
+
 
 load_metadata_etl_log_f <- function(conn = NULL,
                                     data_source = NULL,
@@ -14,7 +18,8 @@ load_metadata_etl_log_f <- function(conn = NULL,
                                     date_max = NULL,
                                     date_issue = NULL,
                                     date_delivery = NULL,
-                                    note = NULL) {
+                                    note = NULL,
+                                    auto_proceed = F) {
   
   #### ERROR CHECKS ####
   if (is.null(conn)) {
@@ -92,7 +97,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
                               Do you still want to make a new entry?")
     proceed <- askYesNo(msg = proceed_msg)
   } else {
-    if (nrow(latest) > 0 & nrow(latest_source) > 0) {
+    if (nrow(latest) > 0 & nrow(latest_source) > 0 & auto_proceed == F) {
       proceed_msg <- glue::glue("
                                 The most recent entry in the etl_log is as follows:
                                 etl_batch_id: {latest[1]}
@@ -136,7 +141,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
       print("ETL log load cancelled at user request")
     }
     
-  } else {
+  } else if (proceed == T) {
     sql_load <- glue::glue_sql(
       "INSERT INTO metadata.etl_log 
       (etl_batch_id, data_source, date_min, date_max, date_issue, date_delivery, note) 
