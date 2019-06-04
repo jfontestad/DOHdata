@@ -1,0 +1,12 @@
+schema: metadata
+table: qa_bir
+vars:
+  etl_batch_id: INTEGER
+  last_run: DATETIME
+  date_min: DATE
+  date_max: DATE
+  table_name: VARCHAR(200)
+  qa_item: VARCHAR(500)
+  qa_result: VARCHAR(200)
+  qa_date: DATETIME
+  note: VARCHAR(2000)
