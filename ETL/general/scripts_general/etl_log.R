@@ -87,7 +87,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
     
     proceed_msg <- glue::glue("There are already entries in the table that \\
                               look similar to what you are attempting to enter. \\
-                              See the console window.
+                              See the console window. \n
                               
                               Do you still want to make a new entry?")
     proceed <- askYesNo(msg = proceed_msg)
@@ -119,9 +119,23 @@ load_metadata_etl_log_f <- function(conn = NULL,
       
     }
   }
+
   
-  if (proceed == F | is.na(proceed)) {
+  if (is.na(proceed)) {
     print("ETL log load cancelled at user request")
+  } else if (proceed == F & nrow(matches) > 0) {
+    reuse <- askYesNo(msg = "Would you like to reuse the most recent existing entry that matches?")
+    
+    if (reuse == T) {
+      etl_batch_id <- matches$etl_batch_id[1]
+      
+      print(glue::glue("Reusing ETL batch #{etl_batch_id}"))
+      return(etl_batch_id)
+      
+    } else {
+      print("ETL log load cancelled at user request")
+    }
+    
   } else {
     sql_load <- glue::glue_sql(
       "INSERT INTO metadata.etl_log 
@@ -138,6 +152,9 @@ load_metadata_etl_log_f <- function(conn = NULL,
     print(glue::glue("ETL batch #{etl_batch_id} loaded"))
     return(etl_batch_id)
   }
+  
+
+  
 }
 
 
