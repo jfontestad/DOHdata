@@ -2,6 +2,8 @@ schema: metadata
 table: qa_bir_values
 vars:
   table_name: VARCHAR(200)
+  date_min: DATE
+  date_max: DATE
   qa_item: VARCHAR(500)
   qa_value: VARCHAR(200)
   qa_date: DATETIME
