@@ -242,9 +242,60 @@ load_load_raw.bir_wa_2003_2016_f <- function(table_config_create = NULL,
   
   #### LOAD 2003-2016 DATA TO SQL ####
   tbl_id <- DBI::Id(schema = table_config_load$schema, table = table_config_load$table) 
-  dbWriteTable(db_apde, tbl_id, value = as.data.frame(bir_2003_2016), overwrite = T)
+  dbWriteTable(db_conn, tbl_id, value = as.data.frame(bir_2003_2016), overwrite = T)
   
-  print("load_raw.bir_wa_2003_2016 loaded to SQL, now QA")
+  
+  #### COLLATE OUTPUT TO RETURN ####
+  rows_to_load <- nrow(bir_2003_2016)
+  batch_etl_id_min <- min(bir_2003_2016$etl_batch_id)
+  batch_etl_id_max <- max(bir_2003_2016$etl_batch_id)
+  
+  
+  #### ADD INDEX TO DATA ####
+  if (!is.null(table_config_load$index) & !is.null(table_config_load$index_name)) {
+    # Remove index from table if it exists
+    # This code pulls out the clustered index name
+    index_name <- dbGetQuery(db_conn, 
+                             glue::glue_sql("SELECT DISTINCT a.index_name
+                                                FROM
+                                                (SELECT ind.name AS index_name
+                                                  FROM
+                                                  (SELECT object_id, name, type_desc FROM sys.indexes
+                                                    WHERE type_desc = 'CLUSTERED') ind
+                                                  INNER JOIN
+                                                  (SELECT name, schema_id, object_id FROM sys.tables
+                                                    WHERE name = {`table`}) t
+                                                  ON ind.object_id = t.object_id
+                                                  INNER JOIN
+                                                  (SELECT name, schema_id FROM sys.schemas
+                                                    WHERE name = {`schema`}) s
+                                                  ON t.schema_id = s.schema_id) a",
+                                            .con = db_conn,
+                                            table = dbQuoteString(db_conn, table_config_load$table),
+                                            schema = dbQuoteString(db_conn, table_config_load$schema)))[[1]]
+    
+    if (length(index_name) != 0) {
+      dbGetQuery(db_conn,
+                 glue::glue_sql("DROP INDEX {`index_name`} ON 
+                                  {`table_config_load$schema`}.{`table_config_load$table`}", .con = db_conn))
+    }
+    
+    index_sql <- glue::glue_sql("CREATE CLUSTERED INDEX [{`table_config_load$index_name`}] ON 
+                              {`table_config_load$schema`}.{`table_config_load$table`}({index_vars*})",
+                                index_vars = dbQuoteIdentifier(db_conn, table_config_load$index),
+                                .con = db_conn)
+    dbGetQuery(db_conn, index_sql)
+  }
+  
+  
+  output <- list(
+    rows_to_load = rows_to_load,
+    batch_etl_id_min = batch_etl_id_min,
+    batch_etl_id_max = batch_etl_id_max
+  )
+  
+  print(glue::glue("load_raw.bir_wa_2003_2016 loaded to SQL ({rows_to_load} rows)"))
+  return(output)
   
 }
 

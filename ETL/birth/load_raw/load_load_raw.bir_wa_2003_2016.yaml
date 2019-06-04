@@ -1,7 +1,8 @@
 schema: load_raw
 table: bir_wa_2003_2016
-index_name: idx_cl_load_raw_bir_wa_certno_e
+index_name: idx_cl_load_raw_bir_wa_dob_yr_certno_e
 index:
+    - dob_yr
     - certno_e
 vars:
     - certno_e
