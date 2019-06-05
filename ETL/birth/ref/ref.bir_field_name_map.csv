@@ -82,7 +82,7 @@ Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes fo
 76,mother_hispanic_puerto_rican,Mother Hispanic Puerto Rican,momh_pr,"Mother's Hispanic Origin, Puerto Rican ",CHAR(1)
 77,mother_hispanic_cuban,Mother Hispanic Cuban,momh_cub,"Mother's Hispanic Origin, Cuban",CHAR(1)
 78,mother_hispanic_other,Mother Hispanic Other,momh_oth,"Mother's Hispanic Origin, Other Hispanic",CHAR(1)
-79,mother_hispanic_other_specify,Mother Hispanic Other Specify,,"Mother's Hispanic Origin, Other Hispanic Literal",VARCHAR(21)
+79,mother_hispanic_other_specify,Mother Hispanic Other - Specify,,"Mother's Hispanic Origin, Other Hispanic Literal",VARCHAR(21)
 80,mother_hispanic_nchs_ecodes,Mother Hispanic NCHS Ecodes,,Mother's Hispanic Tabulation from Checkboxes,INTEGER
 81,mother_hispanic_nchs_ccodes,Mother Hispanic NCHS Ccodes,,Mother's Hispanic Tabulation from Literal,INTEGER
 82,mother_hispanic,Mother Hispanic,hisp_mom,"Mother's Hispanic Origin
@@ -147,12 +147,12 @@ Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes fo
 136,father_hispanic_puerto_rican,Father Hispanic Puerto Rican,dadh_pr,"Father's Hispanic Origin, Puerto Rican ",CHAR(1)
 137,father_hispanic_cuban,Father Hispanic Cuban,dadh_cub,"Father's Hispanic Origin, Cuban",CHAR(1)
 138,father_hispanic_other,Father Hispanic Other,dadh_oth,"Father's Hispanic Origin, Other Hispanic",CHAR(1)
-139,father_hispanic_other_specify,Father Hispanic Other Specify,,"Father's Hispanic Origin, Other Hispanic Literal",VARCHAR(20)
-140,father_hispanic_nchs_ecodes,Father Hispanic NCHS Ecode,,Father's Hispanic Tabulation from Checkboxes,INTEGER
-141,father_hispanic_nchs_ccodes,Father Hispanic NCHS Ccode,,Father's Hispanic Tabulation from Literal,INTEGER
+139,father_hispanic_other_specify,Father Hispanic Other - Specify,,"Father's Hispanic Origin, Other Hispanic Literal",VARCHAR(20)
+140,father_hispanic_nchs_ecodes,Father Hispanic NCHS Ecodes,,Father's Hispanic Tabulation from Checkboxes,INTEGER
+141,father_hispanic_nchs_ccodes,Father Hispanic NCHS Ccodes,,Father's Hispanic Tabulation from Literal,INTEGER
 142,father_hispanic,Father Hispanic,hisp_dad,"Father's Hispanic Origin
 Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
-143,father_occupation_milham,Father Occup Milham,occm_dad,"Father's Occupation - Milham
+143,father_occupation_milham,Father Occupation Milham,occm_dad,"Father's Occupation - Milham
 Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 records. For further information please see the “Data Quality Technical Notes - Occupation (Milham Codes - Mother, Father).” For code table see ASCII file “occmil.asc”. Note: there are codes on the file which are invalid.",CHAR(3)
 144,father_education,Father Education,educ_dad,"Father's Education Level
 Highest grade completed by the father.",INTEGER
@@ -222,9 +222,9 @@ Calculated and Clinical Estimate.”
 187,gestation_calculated_flag,Gestation Calculated Flag,gestflag,"Gestation, Calculated Flag
 Indicates whether the calculated Gestation (gestcalc) field was calculated based on last menses date or estimated based on birth weight.",INTEGER
 188,prepreg_diabetes,Prepreg Diabetes,"mrf1 - mrf6, diabetes","Medical Risk Factor, Diabetes, Prepregnancy",CHAR(1)
-189,gestational_diabetes,Gest Diabetes,"mrf1 - mrf6, diabetes","Medical Risk Factor, Diabetes, Gestational",CHAR(1)
+189,gestational_diabetes,Gestational Diabetes,"mrf1 - mrf6, diabetes","Medical Risk Factor, Diabetes, Gestational",CHAR(1)
 190,prepreg_hypertension,Prepreg Hypertension,"mrf1 - mrf6, hyperflg ","Medical Risk Factor, Hypertension, Prepregnancy",CHAR(1)
-191,gestational_hypertention,Gestational Hypertension,"mrf1 - mrf6, hyperflg ","Medical Risk Factor, Hypertension, Gestational",CHAR(1)
+191,gestational_hypertention,Gestational Hypertention,"mrf1 - mrf6, hyperflg ","Medical Risk Factor, Hypertension, Gestational",CHAR(1)
 192,hypertension_eclampsia,Hypertension Eclampsia,mrf1 - mrf6,"Medical Risk Factor, Hypertension, Eclampsia",CHAR(1)
 193,preterm_births,Preterm Births,mrf1 - mrf6,"Medical Risk Factor, Previous Preterm Birth",CHAR(1)
 194,poor_preg_outcomes,Poor Preg Outcomes,mrf1 - mrf6,"Medical Risk Factor, Other Previous Poor Pregnancy Outcomes",CHAR(1)
@@ -246,7 +246,7 @@ Indicates whether the calculated Gestation (gestcalc) field was calculated based
 210,infections_other,Infections Other,minfect1 - minfect7,"Maternal Infections, Other",CHAR(1)
 211,infections_other_specify,Infections Other Specify,,"Maternal Infections, Other Literal Specify",VARCHAR(60)
 212,infections_none,Infections None,minfect1 - minfect7,"Maternal Infections, None of the Above",CHAR(1)
-213,infections_unknown,Infect Unknown,minfect1 - minfect7,"Maternal Infections, Unknown",CHAR(1)
+213,infections_unknown,Infections Unknown,minfect1 - minfect7,"Maternal Infections, Unknown",CHAR(1)
 214,cervical_cerclage,Cervical Cerclage,obproc1 - obproc4,"Obstetric Procedure, Cervical Cerclage",CHAR(1)
 215,tocolysis,Tocolysis,obproc1 - obproc4,"Obstetric Procedure, Tocolysis",CHAR(1)
 216,ecv_success,ECV Success,"obproc1 - obproc4, cephaflg","Obstetric Procedure, External Cephalic Version, Successful",CHAR(1)
@@ -268,7 +268,7 @@ Indicates whether the calculated Gestation (gestcalc) field was calculated based
 232,meconium_stain,Meconium Stain,labchar1 - labchar7,"Characteristics of Labor and Delivery, Meconium Staining",CHAR(1)
 233,fetal_intolerance,Fetal Intolerance,labchar1 - labchar7,"Characteristics of Labor and Delivery, Fetal Intolerance of Labor",CHAR(1)
 234,mat_labor_characteristics_none,Mat Labor Characteristics None,labchar1 - labchar7,"Characteristics of Labor and Delivery, None of the Above",CHAR(1)
-235,mat_labor_characteristics_unknow,Mat Labor Characteristics Unknown,labchar1 - labchar7,"Characteristics of Labor and Delivery, Unknown",CHAR(1)
+235,mat_labor_characteristics_unknow,Mat Labor Characteristics Unknow,labchar1 - labchar7,"Characteristics of Labor and Delivery, Unknown",CHAR(1)
 236,maternal_transfusion,Maternal Transfusion,mmorbid1 - mmorbid5,"Maternal Morbidity, Maternal Transfusion",CHAR(1)
 237,perineal_laceration,Perineal Laceration,mmorbid1 - mmorbid5,"Maternal Morbidity, Perineal Laceration",CHAR(1)
 238,ruptured_uterus,Ruptured Uterus,mmorbid1 - mmorbid5,"Maternal Morbidity, Ruptured Uterus",CHAR(1)
