@@ -2,7 +2,8 @@ schema: load_raw
 table: bir_wa_2017_20xx
 index_name: idx_cl_load_raw_bir_wa_date_of_birth_year_birth_cert_encrypt
 index:
-    - date_of_birth_year, birth_cert_encrypt
+    - date_of_birth_year
+    - birth_cert_encrypt
 vars:
     - birth_cert_encrypt
     - birth_cert_type
