@@ -256,17 +256,17 @@ vars:
     moracsum: INTEGER
     faracsum: INTEGER
     bmi: NUMERIC
-    pnatfed: CHAR(2)
+    pnatfed: INTEGER
     etl_batch_id: INTEGER
 vars_2011:
-    pnatfed: CHAR(2)
+    pnatfed: INTEGER
 vars_2012:
-    pnatfed: CHAR(2)
+    pnatfed: INTEGER
 vars_2013:
-    pnatfed: CHAR(2)
+    pnatfed: INTEGER
 vars_2014:
-    pnatfed: CHAR(2)
+    pnatfed: INTEGER
 vars_2015:
-    pnatfed: CHAR(2)
+    pnatfed: INTEGER
 vars_2016:
-    pnatfed: CHAR(2)
+    pnatfed: INTEGER
