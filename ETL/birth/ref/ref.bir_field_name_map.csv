@@ -1,5 +1,5 @@
 field_number,field_name_apde,field_name_whales,field_name_bedrock,description,sql_format
-1,birth_cert_encrypt,Birth Cert Encrypt (External),certno_e,Certificate Number,INTEGER
+1,birth_cert_encrypt,Birth Cert Encrypt,certno_e,Certificate Number,INTEGER
 2,birth_cert_type,Birth Cert Type,certype,Certificate Type,CHAR(1)
 3,sex,Sex,sex,Sex of Child ,CHAR(1)
 4,date_of_birth_month,Date of Birth Month,dob_mo,Date of Birth Month,CHAR(2)
