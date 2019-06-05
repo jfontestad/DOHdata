@@ -199,7 +199,7 @@ vars:
     dadr_oth: CHAR(1)
     momle8ed: INTEGER
     dadle8ed: INTEGER
-    otherout: CHAR(1)
+    otherout: INTEGER
     oth_mo: CHAR(2)
     oth_yr: CHAR(4)
     delivpay: INTEGER
