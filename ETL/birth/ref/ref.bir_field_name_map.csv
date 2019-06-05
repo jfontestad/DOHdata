@@ -5,7 +5,7 @@ field_number,field_name_apde,field_name_whales,field_name_bedrock,description,sq
 4,date_of_birth_month,Date of Birth Month,dob_mo,Date of Birth Month,CHAR(2)
 5,date_of_birth_year,Date of Birth Year,dob_yr,Date of Birth Year,INTEGER
 6,time_of_birth,Time of Birth,birth_hr,"Time of Birth
-Time of birth in 24-hour format. Midnight has a value of ‘24’, any time after midnight but before 1 am has a value of ‘00’. Prior to mid-1992, out of state occurrences were not coded.",VARCHAR(5)
+Time of birth in 24-hour format. Midnight has a value of '24', any time after midnight but before 1 am has a value of '00'. Prior to mid-1992, out of state occurrences were not coded.",VARCHAR(5)
 7,mother_marital_status,Mother Marital Status,married,Marital Status of Mother ,CHAR(1)
 8,facility_type,Facility Type,fac_type,,INTEGER
 9,facility,Facility,facility,Facility ID Number,CHAR(4)
@@ -27,36 +27,36 @@ Time of birth in 24-hour format. Midnight has a value of ‘24’, any time after mi
 25,mother_calculated_age,Mother Calculated Age,age_mom,Mother's Age,INTEGER
 26,mother_birthplace_state,Mother Birthplace State,,Mother's Birth State - Literal,VARCHAR(112)
 27,mother_birthplace_state_fips,Mother Birthplace State FIPS,,Mother's Birthplace State FIPS code,CHAR(2)
-28,mother_birthplace_country,Mother Birthplace Country,,Mother’s Birth Country - Literal,VARCHAR(64)
+28,mother_birthplace_country,Mother Birthplace Country,,Mother's Birth Country - Literal,VARCHAR(64)
 29,mother_birthplace_cntry_wa_code,Mother Birthplace Cntry WA Code,bctrymom,Mother's Birthplace Country WA Code,CHAR(3)
 30,child_calculated_race,Child Calculated Race,raceccal,,CHAR(1)
 31,child_calculated_ethnicity,Child Calculated Ethnicity,hispccal,"Infant's Calculated Ethnicity
-The ethnicity code given here is from the NCHS algorithm which uses mother’s and father’s Hispanic ethnicity to derive a code for the child’s Hispanic ethnicity.
+The ethnicity code given here is from the NCHS algorithm which uses mother's and father's Hispanic ethnicity to derive a code for the child's Hispanic ethnicity.
 
 Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
 32,mother_race_white,Mother Race White,momr_wht,"Mother's Race, White",CHAR(1)
-33,mother_race_black,Mother Race Black,momr_blk,"Mother’s Race, Black",CHAR(1)
-34,mother_race_amer_indian_alaskan,Mother Race Amer Indian Alaskan,momr_ami,"Mother’s Race, American Indian/Alaska Native ",CHAR(1)
-35,mother_race_asian_indian,Mother Race Asian Indian,momr_asi,"Mother’s Race, Asian Indian",CHAR(1)
-36,mother_race_chinese,Mother Race Chinese,momr_chi,"Mother’s Race, Chinese",CHAR(1)
-37,mother_race_filipino,Mother Race Filipino,momr_fil,"Mother’s Race, Filipino",CHAR(1)
-38,mother_race_japanese,Mother Race Japanese,momr_jap,"Mother’s Race, Japanese",CHAR(1)
-39,mother_race_korean,Mother Race Korean,momr_kor,"Mother’s Race, Korean",CHAR(1)
-40,mother_race_vietnamese,Mother Race Vietnamese,momr_vie,"Mother’s Race, Vietnamese",CHAR(1)
-41,mother_race_other_asian,Mother Race Other Asian,momr_oas,"Mother’s Race, Other Asian",CHAR(1)
-42,mother_race_hawaiian,Mother Race Hawaiian,momr_haw,"Mother’s Race, Native Hawaiian",CHAR(1)
-43,mother_race_guam_or_chamorro,Mother Race Guam or Chamorro,momr_gua,"Mother’s Race, Guamanian or Chamorro",CHAR(1)
-44,mother_race_samoan,Mother Race Samoan,momr_sam,"Mother’s Race, Samoan",CHAR(1)
-45,mother_race_other_pi,Mother Race Other PI,momr_opi,"Mother’s Race, Other Pacific Islander",CHAR(1)
-46,mother_race_other,Mother Race Other,momr_oth,"Mother’s Race, Other",CHAR(1)
-47,mother_race_tribe_1,Mother Race Tribe 1,,"Mother’s Race Literal 1, American Indian/Alaska Native ",VARCHAR(120)
-48,mother_race_tribe_2,Mother Race Tribe 2,,"Mother’s Race Literal 2, American Indian/Alaska Native ",VARCHAR(120)
-49,mother_race_other_asian_1,Mother Race Other Asian 1,,"Mother’s Race Literal 1, Other Asian ",VARCHAR(120)
-50,mother_race_other_asian_2,Mother Race Other Asian 2,,"Mother’s Race Literal 2, Other Asian",VARCHAR(120)
-51,mother_race_other_pi_1,Mother Race Other PI 1,,"Mother’s Race Literal 1, Other Pacific Islander ",VARCHAR(120)
-52,mother_race_other_pi_2,Mother Race Other PI 2,,"Mother’s Race Literal 2, Other Pacific Islander ",VARCHAR(120)
-53,mother_race_other_1,Mother Race Other 1,,"Mother’s Race Literal 1, Other",VARCHAR(120)
-54,mother_race_other_2,Mother Race Other 2,,"Mother’s Race Literal 2, Other ",VARCHAR(120)
+33,mother_race_black,Mother Race Black,momr_blk,"Mother's Race, Black",CHAR(1)
+34,mother_race_amer_indian_alaskan,Mother Race Amer Indian Alaskan,momr_ami,"Mother's Race, American Indian/Alaska Native ",CHAR(1)
+35,mother_race_asian_indian,Mother Race Asian Indian,momr_asi,"Mother's Race, Asian Indian",CHAR(1)
+36,mother_race_chinese,Mother Race Chinese,momr_chi,"Mother's Race, Chinese",CHAR(1)
+37,mother_race_filipino,Mother Race Filipino,momr_fil,"Mother's Race, Filipino",CHAR(1)
+38,mother_race_japanese,Mother Race Japanese,momr_jap,"Mother's Race, Japanese",CHAR(1)
+39,mother_race_korean,Mother Race Korean,momr_kor,"Mother's Race, Korean",CHAR(1)
+40,mother_race_vietnamese,Mother Race Vietnamese,momr_vie,"Mother's Race, Vietnamese",CHAR(1)
+41,mother_race_other_asian,Mother Race Other Asian,momr_oas,"Mother's Race, Other Asian",CHAR(1)
+42,mother_race_hawaiian,Mother Race Hawaiian,momr_haw,"Mother's Race, Native Hawaiian",CHAR(1)
+43,mother_race_guam_or_chamorro,Mother Race Guam or Chamorro,momr_gua,"Mother's Race, Guamanian or Chamorro",CHAR(1)
+44,mother_race_samoan,Mother Race Samoan,momr_sam,"Mother's Race, Samoan",CHAR(1)
+45,mother_race_other_pi,Mother Race Other PI,momr_opi,"Mother's Race, Other Pacific Islander",CHAR(1)
+46,mother_race_other,Mother Race Other,momr_oth,"Mother's Race, Other",CHAR(1)
+47,mother_race_tribe_1,Mother Race Tribe 1,,"Mother's Race Literal 1, American Indian/Alaska Native ",VARCHAR(120)
+48,mother_race_tribe_2,Mother Race Tribe 2,,"Mother's Race Literal 2, American Indian/Alaska Native ",VARCHAR(120)
+49,mother_race_other_asian_1,Mother Race Other Asian 1,,"Mother's Race Literal 1, Other Asian ",VARCHAR(120)
+50,mother_race_other_asian_2,Mother Race Other Asian 2,,"Mother's Race Literal 2, Other Asian",VARCHAR(120)
+51,mother_race_other_pi_1,Mother Race Other PI 1,,"Mother's Race Literal 1, Other Pacific Islander ",VARCHAR(120)
+52,mother_race_other_pi_2,Mother Race Other PI 2,,"Mother's Race Literal 2, Other Pacific Islander ",VARCHAR(120)
+53,mother_race_other_1,Mother Race Other 1,,"Mother's Race Literal 1, Other",VARCHAR(120)
+54,mother_race_other_2,Mother Race Other 2,,"Mother's Race Literal 2, Other ",VARCHAR(120)
 55,mother_race_nchs_ecode_1,Mother Race NCHS Ecode 1,,"Mother's Race Tabulation from Checkboxes, 1",CHAR(3)
 56,mother_race_nchs_ecode_2,Mother Race NCHS Ecode 2,,"Mother's Race Tabulation from Checkboxes, 2",CHAR(3)
 57,mother_race_nchs_ecode_3,Mother Race NCHS Ecode 3,,"Mother's Race Tabulation from Checkboxes, 3",CHAR(3)
@@ -76,52 +76,52 @@ Note: Hispanic ethnicity data are not complete for 1988. Before using this field
 71,mother_bridge_race,Mother Bridge Race,,Mother's NCHS Bridged Race,INTEGER
 72,mother_race_calculation,Mother Race Calculation,race_mom,"Mother's Race
 Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes for description).",CHAR(1)
-73,mother_race_summary_code,Mother Race Summary Code,moracsum,Mother’s Summary Race,INTEGER
-74,mother_hispanic_no,Mother Hispanic No,momh_no ,"Mother’s Hispanic Origin, Not Hispanic",CHAR(1)
-75,mother_hispanic_mexican,Mother Hispanic Mexican,momh_mex,"Mother’s Hispanic Origin, Mexican",CHAR(1)
-76,mother_hispanic_puerto_rican,Mother Hispanic Puerto Rican,momh_pr,"Mother’s Hispanic Origin, Puerto Rican ",CHAR(1)
-77,mother_hispanic_cuban,Mother Hispanic Cuban,momh_cub,"Mother’s Hispanic Origin, Cuban",CHAR(1)
-78,mother_hispanic_other,Mother Hispanic Other,momh_oth,"Mother’s Hispanic Origin, Other Hispanic",CHAR(1)
-79,mother_hispanic_other_specify,Mother Hispanic Other Specify,,"Mother’s Hispanic Origin, Other Hispanic Literal",VARCHAR(21)
-80,mother_hispanic_nchs_ecodes,Mother Hispanic NCHS Ecodes,,Mother’s Hispanic Tabulation from Checkboxes,INTEGER
-81,mother_hispanic_nchs_ccodes,Mother Hispanic NCHS Ccodes,,Mother’s Hispanic Tabulation from Literal,INTEGER
+73,mother_race_summary_code,Mother Race Summary Code,moracsum,Mother's Summary Race,INTEGER
+74,mother_hispanic_no,Mother Hispanic No,momh_no ,"Mother's Hispanic Origin, Not Hispanic",CHAR(1)
+75,mother_hispanic_mexican,Mother Hispanic Mexican,momh_mex,"Mother's Hispanic Origin, Mexican",CHAR(1)
+76,mother_hispanic_puerto_rican,Mother Hispanic Puerto Rican,momh_pr,"Mother's Hispanic Origin, Puerto Rican ",CHAR(1)
+77,mother_hispanic_cuban,Mother Hispanic Cuban,momh_cub,"Mother's Hispanic Origin, Cuban",CHAR(1)
+78,mother_hispanic_other,Mother Hispanic Other,momh_oth,"Mother's Hispanic Origin, Other Hispanic",CHAR(1)
+79,mother_hispanic_other_specify,Mother Hispanic Other Specify,,"Mother's Hispanic Origin, Other Hispanic Literal",VARCHAR(21)
+80,mother_hispanic_nchs_ecodes,Mother Hispanic NCHS Ecodes,,Mother's Hispanic Tabulation from Checkboxes,INTEGER
+81,mother_hispanic_nchs_ccodes,Mother Hispanic NCHS Ccodes,,Mother's Hispanic Tabulation from Literal,INTEGER
 82,mother_hispanic,Mother Hispanic,hisp_mom,"Mother's Hispanic Origin
 Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
 83,mother_occupation_milham,Mother Occupation Milham,occm_mom,"Mother's Occupation - Milham
 Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 cords. For further information please see the “Data Quality Technical Notes - Occupation (Milham Codes - other, Father).” For code table see ASCII file “occmil.asc”. Note: there are codes on the file which are invalid.",CHAR(3)
-84,mother_education,Mother Education,educ_mom,"Mother’s Education Level
+84,mother_education,Mother Education,educ_mom,"Mother's Education Level
 Highest grade completed by the mother.",INTEGER
-85,mother_educ_8th_grade_or_less,Mother Educ 8th Grade or Less,momle8ed,Mother’s Education Years If LE 8th Grade,INTEGER
+85,mother_educ_8th_grade_or_less,Mother Educ 8th Grade or Less,momle8ed,Mother's Education Years If LE 8th Grade,INTEGER
 86,father_date_of_birth,Father Date of Birth,,Father's Date of Birth,DATE
 87,father_calculated_age,Father Calculated Age,age_dad,"Father's Age
 Before using this field, see “Data Quality Technical Notes - Age ",INTEGER
 88,father_birthplace_state,Father Birthplace State,,Father's Birth State - Literal,VARCHAR(112)
 89,father_birthplace_state_fips,Father Birthplace State FIPS,,Father's Birthplace State FIPS code,CHAR(2)
-90,father_birthplace_country,Father Birthplace Country,,Father’s Birth Country - Literal,VARCHAR(256)
+90,father_birthplace_country,Father Birthplace Country,,Father's Birth Country - Literal,VARCHAR(256)
 91,father_birthplace_cntry_wa_code,Father Birthplace Cntry WA Code,bctrydad,Father's Birthplace Country WA code,CHAR(3)
-92,father_race_white,Father Race White,dadr_wht,"Father’s Race, White",CHAR(1)
-93,father_race_black,Father Race Black,dadr_blk,"Father’s Race, Black",CHAR(1)
-94,father_race_amer_indian_alaskan,Father Race Amer Indian Alaskan,dadr_ami,"Father’s Race, American Indian/Alaska Native ",CHAR(1)
-95,father_race_asian_indian,Father Race Asian Indian,dadr_asi,"Father’s Race, Asian Indian",CHAR(1)
-96,father_race_chinese,Father Race Chinese,dadr_chi,"Father’s Race, Chinese",CHAR(1)
-97,father_race_filipino,Father Race Filipino,dadr_fil,"Father’s Race, Filipino",CHAR(1)
-98,father_race_japanese,Father Race Japanese,dadr_jap,"Father’s Race, Japanese",CHAR(1)
-99,father_race_korean,Father Race Korean,dadr_kor,"Father’s Race, Korean",CHAR(1)
-100,father_race_vietnamese,Father Race Vietnamese,dadr_vie,"Father’s Race, Vietnamese",CHAR(1)
-101,father_race_other_asian,Father Race Other Asian,dadr_oas,"Father’s Race, Other Asian",CHAR(1)
-102,father_race_hawaiian,Father Race Hawaiian,dadr_haw,"Father’s Race, Native Hawaiian",CHAR(1)
-103,father_race_guam_or_chamorro,Father Race Guam or Chamorro,dadr_gua,"Father’s Race, Guamanian or Chamorro",CHAR(1)
-104,father_race_samoan,Father Race Samoan,dadr_sam,"Father’s Race, Samoan",CHAR(1)
-105,father_race_other_pi,Father Race Other PI,dadr_opi,"Father’s Race, Other Pacific Islander",CHAR(1)
-106,father_race_other,Father Race Other,dadr_oth,"Father’s Race, Other",CHAR(1)
-107,father_race_tribe_1,Father Race Tribe 1,,"Father’s Race Literal 1, American Indian/Alaska Native ",VARCHAR(120)
-108,father_race_tribe_2,Father Race Tribe 2,,"Father’s Race Literal 2, American Indian/Alaska Native ",VARCHAR(120)
-109,father_race_other_asian_1,Father Race Other Asian 1,,"Father’s Race Literal 1, Other Asian ",VARCHAR(120)
-110,father_race_other_asian_2,Father Race Other Asian 2,,"Father’s Race Literal 2, Other Asian",VARCHAR(120)
-111,father_race_other_pi_1,Father Race Other PI 1,,"Father’s Race Literal 1, Other Pacific Islander ",VARCHAR(120)
-112,father_race_other_pi_2,Father Race Other PI 2,,"Father’s Race Literal 2, Other Pacific Islander ",VARCHAR(120)
-113,father_race_other_1,Father Race Other 1,,"Father’s Race Literal 1, Other",VARCHAR(120)
-114,father_race_other_2,Father Race Other 2,,"Father’s Race Literal 2, Other ",VARCHAR(120)
+92,father_race_white,Father Race White,dadr_wht,"Father's Race, White",CHAR(1)
+93,father_race_black,Father Race Black,dadr_blk,"Father's Race, Black",CHAR(1)
+94,father_race_amer_indian_alaskan,Father Race Amer Indian Alaskan,dadr_ami,"Father's Race, American Indian/Alaska Native ",CHAR(1)
+95,father_race_asian_indian,Father Race Asian Indian,dadr_asi,"Father's Race, Asian Indian",CHAR(1)
+96,father_race_chinese,Father Race Chinese,dadr_chi,"Father's Race, Chinese",CHAR(1)
+97,father_race_filipino,Father Race Filipino,dadr_fil,"Father's Race, Filipino",CHAR(1)
+98,father_race_japanese,Father Race Japanese,dadr_jap,"Father's Race, Japanese",CHAR(1)
+99,father_race_korean,Father Race Korean,dadr_kor,"Father's Race, Korean",CHAR(1)
+100,father_race_vietnamese,Father Race Vietnamese,dadr_vie,"Father's Race, Vietnamese",CHAR(1)
+101,father_race_other_asian,Father Race Other Asian,dadr_oas,"Father's Race, Other Asian",CHAR(1)
+102,father_race_hawaiian,Father Race Hawaiian,dadr_haw,"Father's Race, Native Hawaiian",CHAR(1)
+103,father_race_guam_or_chamorro,Father Race Guam or Chamorro,dadr_gua,"Father's Race, Guamanian or Chamorro",CHAR(1)
+104,father_race_samoan,Father Race Samoan,dadr_sam,"Father's Race, Samoan",CHAR(1)
+105,father_race_other_pi,Father Race Other PI,dadr_opi,"Father's Race, Other Pacific Islander",CHAR(1)
+106,father_race_other,Father Race Other,dadr_oth,"Father's Race, Other",CHAR(1)
+107,father_race_tribe_1,Father Race Tribe 1,,"Father's Race Literal 1, American Indian/Alaska Native ",VARCHAR(120)
+108,father_race_tribe_2,Father Race Tribe 2,,"Father's Race Literal 2, American Indian/Alaska Native ",VARCHAR(120)
+109,father_race_other_asian_1,Father Race Other Asian 1,,"Father's Race Literal 1, Other Asian ",VARCHAR(120)
+110,father_race_other_asian_2,Father Race Other Asian 2,,"Father's Race Literal 2, Other Asian",VARCHAR(120)
+111,father_race_other_pi_1,Father Race Other PI 1,,"Father's Race Literal 1, Other Pacific Islander ",VARCHAR(120)
+112,father_race_other_pi_2,Father Race Other PI 2,,"Father's Race Literal 2, Other Pacific Islander ",VARCHAR(120)
+113,father_race_other_1,Father Race Other 1,,"Father's Race Literal 1, Other",VARCHAR(120)
+114,father_race_other_2,Father Race Other 2,,"Father's Race Literal 2, Other ",VARCHAR(120)
 115,father_race_nchs_ecode_1,Father Race NCHS Ecode 1,,"Father's Race Tabulation from Checkboxes, 1",CHAR(3)
 116,father_race_nchs_ecode_2,Father Race NCHS Ecode 2,,"Father's Race Tabulation from Checkboxes, 2",CHAR(3)
 117,father_race_nchs_ecode_3,Father Race NCHS Ecode 3,,"Father's Race Tabulation from Checkboxes, 3",CHAR(3)
@@ -141,27 +141,27 @@ Before using this field, see “Data Quality Technical Notes - Age ",INTEGER
 131,father_bridge_race,Father Bridge Race,,Father's NCHS Bridged Race,INTEGER
 132,father_race_calculation,Father Race Calculation,race_dad,"Father's Race Calculation
 Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes for description).",CHAR(1)
-133,father_race_summary_code,Father Race Summary Code,faracsum,Father’s Summary Race,INTEGER
-134,father_hispanic_no,Father Hispanic No,dadh_no ,"Father’s Hispanic Origin, Not Hispanic",CHAR(1)
-135,father_hispanic_mexican,Father Hispanic Mexican,dadh_mex,"Father’s Hispanic Origin, Mexican",CHAR(1)
-136,father_hispanic_puerto_rican,Father Hispanic Puerto Rican,dadh_pr,"Father’s Hispanic Origin, Puerto Rican ",CHAR(1)
-137,father_hispanic_cuban,Father Hispanic Cuban,dadh_cub,"Father’s Hispanic Origin, Cuban",CHAR(1)
-138,father_hispanic_other,Father Hispanic Other,dadh_oth,"Father’s Hispanic Origin, Other Hispanic",CHAR(1)
-139,father_hispanic_other_specify,Father Hispanic Other Specify,,"Father’s Hispanic Origin, Other Hispanic Literal",VARCHAR(20)
-140,father_hispanic_nchs_ecodes,Father Hispanic NCHS Ecode,,Father’s Hispanic Tabulation from Checkboxes,INTEGER
-141,father_hispanic_nchs_ccodes,Father Hispanic NCHS Ccode,,Father’s Hispanic Tabulation from Literal,INTEGER
+133,father_race_summary_code,Father Race Summary Code,faracsum,Father's Summary Race,INTEGER
+134,father_hispanic_no,Father Hispanic No,dadh_no ,"Father's Hispanic Origin, Not Hispanic",CHAR(1)
+135,father_hispanic_mexican,Father Hispanic Mexican,dadh_mex,"Father's Hispanic Origin, Mexican",CHAR(1)
+136,father_hispanic_puerto_rican,Father Hispanic Puerto Rican,dadh_pr,"Father's Hispanic Origin, Puerto Rican ",CHAR(1)
+137,father_hispanic_cuban,Father Hispanic Cuban,dadh_cub,"Father's Hispanic Origin, Cuban",CHAR(1)
+138,father_hispanic_other,Father Hispanic Other,dadh_oth,"Father's Hispanic Origin, Other Hispanic",CHAR(1)
+139,father_hispanic_other_specify,Father Hispanic Other Specify,,"Father's Hispanic Origin, Other Hispanic Literal",VARCHAR(20)
+140,father_hispanic_nchs_ecodes,Father Hispanic NCHS Ecode,,Father's Hispanic Tabulation from Checkboxes,INTEGER
+141,father_hispanic_nchs_ccodes,Father Hispanic NCHS Ccode,,Father's Hispanic Tabulation from Literal,INTEGER
 142,father_hispanic,Father Hispanic,hisp_dad,"Father's Hispanic Origin
 Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
 143,father_occupation_milham,Father Occup Milham,occm_dad,"Father's Occupation - Milham
 Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 records. For further information please see the “Data Quality Technical Notes - Occupation (Milham Codes - Mother, Father).” For code table see ASCII file “occmil.asc”. Note: there are codes on the file which are invalid.",CHAR(3)
-144,father_education,Father Education,educ_dad,"Father’s Education Level
+144,father_education,Father Education,educ_dad,"Father's Education Level
 Highest grade completed by the father.",INTEGER
-145,father_educ_8th_grade_or_less,Father Educ 8th Grade or Less,dadle8ed,Father’s Education Years If LE 8th Grade,INTEGER
-146,mother_height_feet,Mother Height Feet,ht_ft,"Mother’s Height, Feet",INTEGER
-147,mother_height_inches,Mother Height Inches,ht_in,"Mother’s Height, Inches",INTEGER
+145,father_educ_8th_grade_or_less,Father Educ 8th Grade or Less,dadle8ed,Father's Education Years If LE 8th Grade,INTEGER
+146,mother_height_feet,Mother Height Feet,ht_ft,"Mother's Height, Feet",INTEGER
+147,mother_height_inches,Mother Height Inches,ht_in,"Mother's Height, Inches",INTEGER
 148,mother_weight_prior,Mother Weight Prior,wghtpre,"Weight Prior to Pregnancy
 Number of pounds Mother weighed before pregnancy. Only whole number is kept. This field was first collected in 1992. Before using this field, see “Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.”",INTEGER
-149,mother_weight_at_delivery,Mother Weight at Delivery,wghtdelv,"Mother’s Weight At Delivery
+149,mother_weight_at_delivery,Mother Weight at Delivery,wghtdelv,"Mother's Weight At Delivery
 Number of pounds Mother weighed at delivery. Only whole number is kept. Before using this field, see “Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.”",INTEGER
 150,mother_weight_gain,Mother Weight Gain,wghtgain,"Weight Gain During Pregnancy
 Number of pounds Mother gained during pregnancy. Only whole number is kept. Before using this field, see “Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery weight.” 
@@ -197,7 +197,7 @@ Indicates the month from the beginning of the pregnancy at which Mother entered 
 172,nchs_month_prenatal_care_began,NCHS Month Prenatal Care Began,pnatfed,"NCHS Prenatal Care
 NCHS method of calculation of prenatal care to file. Before using this field, see “data Quality Technical Notes – Month Prenatal Care Began.”",CHAR(2)
 173,number_prenatal_visits,Number Prenatal Visits,pnatalvs,"Number of Prenatal Visits
-Indicates the number of prenatal visits for the entire pregnancy. The ‘95’ code was used until mid 1992.",INTEGER
+Indicates the number of prenatal visits for the entire pregnancy. The ‘95' code was used until mid 1992.",INTEGER
 174,prior_live_births_living,Prior Live Births Living,lb_nl,"Number of Prior Live Births, Now Living
 
 Before using this field, see “Data Quality Technical Notes - Previous Pregnancy History.”",INTEGER
@@ -288,7 +288,7 @@ Indicates whether vacuum extraction delivery was attempted but unsuccessful. ",C
 Indicates gram weight of infant. Pounds and ounces are converted as follows: grams = [(lbs*16)+oz]*28.3495267 (Rounded to the nearest gram)
 
 In 1980-1991 data was stored in units of pounds and ounces. This data has been converted to grams. Since one ounce is equivalent to 28 grams, the converted data will cluster in multiples of 28 grams. For more detail see “Data Quality Technical Notes - Birth Weight.”",INTEGER
-250,head_circumference,Head Circumference,circumf,"Child’s Head Circumference, Centimeters",INTEGER
+250,head_circumference,Head Circumference,circumf,"Child's Head Circumference, Centimeters",INTEGER
 251,apgar_5,APGAR 5,apgar5,"APGAR Score - 5 Minute
 The numerical sum of points given for heart rate, respirator effort, muscle tone, reflexes and color. Score taken at 5 minutes. Before using this field, see “Data Quality Technical Notes – Apgar Score (5 minutes).”
 ",INTEGER
