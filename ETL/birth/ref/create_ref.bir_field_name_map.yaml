@@ -1,0 +1,8 @@
+schema: ref
+table: bir_field_name_map
+vars:
+    field_number: INTEGER
+    field_name_apde: VARCHAR(255)
+    field_name_whales: VARCHAR(255)
+    description: VARCHAR(1000)
+    sql_format: VARCHAR(255)
