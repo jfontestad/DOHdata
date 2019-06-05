@@ -24,19 +24,18 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
   
   # Rows by year
   row_count_yr <- dbGetQuery(conn, 
-                             "SELECT dob_yr, COUNT (*) AS count FROM load_raw.bir_wa_2017_20xx
-                                   GROUP BY dob_yr")
+                             "SELECT date_of_birth_year, COUNT (*) AS count FROM load_raw.bir_wa_2017_20xx
+                                   GROUP BY date_of_birth_year")
+  
+  # Min/max etl_batch_id
+  etl_batch_id_min <- as.numeric(dbGetQuery(conn, "SELECT MIN (etl_batch_id) FROM load_raw.bir_wa_2017_20xx"))
+  etl_batch_id_max <- as.numeric(dbGetQuery(conn, "SELECT MAX (etl_batch_id) FROM load_raw.bir_wa_2017_20xx"))
 
   
   #### RUN COMPARISONS TO PREVIOUS DATA IF REQUIRED ####
   ### NB. These have been coded but not yet fully tested
   
   if (load_only == F) {
-    ### Pull out min/max etl_batch_id
-    batch_etl_id_min <- dbGetQuery(conn, "SELECT MIN (batch_etl_id) FROM load_raw.bir_wa_2017_20xx")
-    batch_etl_id_max <- dbGetQuery(conn, "SELECT MAX (batch_etl_id) FROM load_raw.bir_wa_2017_20xx")
-    
-    
     #### COUNT OVERALL NUMBER OF ROWS ####
     # Pull in the reference value (rows overall)
     previous_row_count_tot <- as.numeric(
@@ -80,7 +79,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
           glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -90,8 +89,8 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            {Sys.time()}, 
                            'Overall row counts differed in the most recent load 
                            ({row_count_tot} vs. {previous_row_count_tot} previously)  
-                           (maximum batch_etl_id shown, 
-                           range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           (maximum etl_batch_id shown, 
+                           range {etl_batch_id_min}:{etl_batch_id_max})')",
                    max_yr = as.numeric(years[length(years)]),
                    .con = conn))
         
@@ -103,7 +102,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
           glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -113,8 +112,8 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            {Sys.time()}, 
                            'There were {row_count_tot} rows in the most recent table 
                            (vs. {previous_row_count_tot} previously) 
-                           (maximum batch_etl_id shown, 
-                           range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           (maximum etl_batch_id shown, 
+                           range {etl_batch_id_min}:{etl_batch_id_max})')",
                    max_yr = as.numeric(years[length(years)]),
                    .con = conn))
       }
@@ -124,7 +123,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
         glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -134,8 +133,8 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            {Sys.time()}, 
                            'There were {row_count_tot} rows in the most recent table 
                            (vs. {previous_row_count_tot} previously) 
-                           (maximum batch_etl_id shown, 
-                           range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           (maximum etl_batch_id shown, 
+                           range {etl_batch_id_min}:{etl_batch_id_max})')",
                  max_yr = as.numeric(years[length(years)]),
                  .con = conn))
     }
@@ -145,7 +144,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
     # Pull in the reference value (for each year)
     previous_row_count_yr <- lapply(years, function(x) {
       
-      year_sql <- glue_sql("SELECT year(a.date_min) AS dob_yr, a.qa_value FROM
+      year_sql <- glue_sql("SELECT year(a.date_min) AS date_of_birth_year, a.qa_value FROM
                                  (SELECT * FROM metadata.qa_bir_values
                                    WHERE table_name = 'load_raw.bir_wa_2017_20xx' AND
                                    qa_item = 'row_count' AND
@@ -169,11 +168,11 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
     })
     # Turn into a data frame
     previous_row_count_yr <- data.frame(
-      dob_yr = sapply(previous_row_count_yr, function(x) x[1]),
+      date_of_birth_year = sapply(previous_row_count_yr, function(x) x[1]),
       count_prev = sapply(previous_row_count_yr, function(x) x[2]))
     
     # Join to current counts
-    previous_row_count_yr <- left_join(previous_row_count_yr, row_count_yr, by = "dob_yr")
+    previous_row_count_yr <- left_join(previous_row_count_yr, row_count_yr, by = "date_of_birth_year")
     
     if (all(row_count_yr$count == previous_row_count_yr$count_prev) == F) {
       # Find which years are not equal
@@ -185,7 +184,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
         "Warning: row counts for some years differed in the most recent load of 2017-20xx data \n
         The following years were mismatched: \n
         {glue_collapse(glue_data(row_count_yr_mismatch, 
-                              '{dob_yr}: {count_prev} previously vs {count} now'),
+                              '{date_of_birth_year}: {count_prev} previously vs {count} now'),
                             sep = '\n')}
       \n
       Was this expected behavior? \n
@@ -200,7 +199,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
           glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -208,8 +207,8 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            'Number rows compared to most recent run BY YEAR', 
                            'FAIL', 
                            {Sys.time()}, 
-                           'Row counts differed in the most recent load for the following years: {row_count_yr_mismatch$dob_yr*} 
-                           (maximum batch_etl_id shown, range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           'Row counts differed in the most recent load for the following years: {row_count_yr_mismatch$date_of_birth_year*} 
+                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                    max_yr = as.numeric(years[length(years)]),
                    .con = conn))
         
@@ -221,7 +220,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
           glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -230,7 +229,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            'PASS', 
                            {Sys.time()}, 
                            'Some differences in row counts but these were expected  
-                           (maximum batch_etl_id shown, range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                    max_yr = as.numeric(years[length(years)]),
                    .con = conn))
       }
@@ -240,7 +239,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
         glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -248,7 +247,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            'Number rows compared to most recent run BY YEAR', 
                            'PASS', 
                            {Sys.time()}, 
-                           'Row counts matched (maximum batch_etl_id shown, range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           'Row counts matched (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                  max_yr = as.numeric(years[length(years)]),
                  .con = conn))
     }
@@ -260,18 +259,17 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
   
   #### RUN GENERAL QA TASKS ####
   #### RANGE OF YEARS ####
-  # Exclude 2009, though this should be corrected earlier
-  min_yr <- min(row_count_yr$dob_yr[which(row_count_yr$dob_yr != 9)])
-  max_yr <- max(row_count_yr$dob_yr[which(row_count_yr$dob_yr != 9)])
-  count_yr <- length(unique(row_count_yr$dob_yr))
+  min_yr <- min(row_count_yr$date_of_birth_year)
+  max_yr <- max(row_count_yr$date_of_birth_year)
+  count_yr <- length(unique(row_count_yr$date_of_birth_year))
   
-  if (min_yr != 2003 | max_yr != 2016 | count_yr != 14) {
+  if (min_yr != 2017 | max_yr != as.numeric(years[length(years)]) | count_yr != length(years)) {
     dbGetQuery(
       conn = conn,
       glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -281,8 +279,8 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            {Sys.time()}, 
                            'There were {count_yr} years included in the data with a 
                            minimum year of {min_yr} and maximum year of {max_yr} 
-                           (should be 14 years from 2017-20xx, though 2009 loads as '9')
-                           (maximum batch_etl_id shown, range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           (should be {length(years)} years from 2017-20xx)
+                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                max_yr = as.numeric(years[length(years)]),
                .con = conn))
     
@@ -294,7 +292,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
       glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -304,14 +302,14 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            {Sys.time()}, 
                            'There were {count_yr} years included in the data with a 
                            minimum year of {min_yr} and maximum year of {max_yr} (as expected)
-                           (maximum batch_etl_id shown, range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                max_yr = as.numeric(years[length(years)]),
                .con = conn))
   }
   
   #### DUPLICATE CERT NUMBERS ####
   cert_count <- as.numeric(dbGetQuery(conn, 
-                                      "SELECT COUNT (DISTINCT certno_e) 
+                                      "SELECT COUNT (DISTINCT birth_cert_encrypt) 
                                             FROM load_raw.bir_wa_2017_20xx"))
   
   if (cert_count != row_count_tot) {
@@ -320,7 +318,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
       glue_sql("INSERT INTO metadata.qa_bir
                   (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -339,7 +337,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
       glue_sql("INSERT INTO metadata.qa_bir
                   (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -364,7 +362,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
       glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -372,8 +370,8 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            'Number rows BY YEAR', 
                            'FAIL', 
                            {Sys.time()}, 
-                           'Row counts fell outside the expected range (80-100k) for the following years: {row_count_yr_outlier$dob_yr*} 
-                           (maximum batch_etl_id shown, range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           'Row counts fell outside the expected range (80-100k) for the following years: {row_count_yr_outlier$date_of_birth_year*} 
+                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                max_yr = as.numeric(years[length(years)]),
                .con = conn))
     
@@ -384,7 +382,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
       glue_sql("INSERT INTO metadata.qa_bir
                    (etl_batch_id, last_run, date_min, date_max, table_name, 
                    qa_item, qa_result, qa_date, note) 
-                   VALUES ({batch_etl_id_max}, 
+                   VALUES ({etl_batch_id_max}, 
                            NULL,
                            '2017-01-01',
                            '{max_yr}-12-31',
@@ -393,7 +391,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            'PASS', 
                            {Sys.time()}, 
                            'The number of rows fell in the expected range (80-100k) for all years 
-                           (maximum batch_etl_id shown, range {batch_etl_id_min}:{batch_etl_id_max})')",
+                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                max_yr = as.numeric(years[length(years)]),
                .con = conn))
   }
@@ -419,9 +417,10 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
   
   
   ### Row counts by year
-  lapply(years, function(x) {
+  if (length(years) > 1) {
+      lapply(years, function(x) {
     
-    row_count_yr_value <- as.numeric(row_count_yr$count[row_count_yr$dob_yr == x])
+    row_count_yr_value <- as.numeric(row_count_yr$count[row_count_yr$date_of_birth_year == x])
     
     load_sql <- glue_sql("INSERT INTO metadata.qa_bir_values
                              (table_name, date_min, date_max, qa_item, 
@@ -438,5 +437,9 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
     dbGetQuery(conn = conn, load_sql)
     
   })
+    
+  }
+  
+
   
 }

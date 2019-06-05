@@ -37,7 +37,8 @@ load_load_raw.bir_wa_2003_2016_f <- function(table_config_create = NULL,
   # Recode list of variables to match format required for importing
   col_type_list_2003_2016 <- lapply(table_config_create$vars, function(x) {
     x <- str_replace_all(x, "INTEGER", "i")
-    x <- str_replace_all(x, "VARCHAR\\(\\d\\)", "c")
+    x <- str_replace_all(x, "VARCHAR\\(\\d+\\)", "c")
+    x <- str_replace_all(x, "CHAR\\(\\d+\\)", "c")
     x <- str_replace_all(x, "NUMERIC", "d")
     # Read dates in as characters and convert later
     x <- str_replace_all(x, "DATE", "c")
@@ -241,10 +242,19 @@ load_load_raw.bir_wa_2003_2016_f <- function(table_config_create = NULL,
   
   
   #### LOAD 2003-2016 DATA TO SQL ####
-  tbl_id <- DBI::Id(schema = table_config_load$schema, table = table_config_load$table) 
-  dbWriteTable(conn, tbl_id, value = as.data.frame(bir_2003_2016), overwrite = T)
+  # Need to manually truncate table so can use overwrite = F below (so column types work)
+  dbGetQuery(conn, glue_sql("TRUNCATE TABLE {`table_config_load$schema`}.{`table_config_load$table`}",
+                            .con = conn))
   
+  tbl_id_2013_2016 <- DBI::Id(schema = table_config_load$schema, table = table_config_load$table)
+  dbWriteTable(conn, tbl_id_2013_2016, value = as.data.frame(bir_2003_2016),
+               overwrite = F,
+               append = T,
+               field.types = paste(names(table_config_create$vars), 
+                                   table_config_create$vars, 
+                                   collapse = ", ", sep = " = "))
   
+
   #### COLLATE OUTPUT TO RETURN ####
   rows_to_load <- nrow(bir_2003_2016)
   batch_etl_id_min <- min(bir_2003_2016$etl_batch_id)
