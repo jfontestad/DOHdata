@@ -179,7 +179,7 @@ vars:
     prior_live_births_deceased: INTEGER
     last_live_birth_month: CHAR(2)
     last_live_birth_year: CHAR(4)
-    other_preg_outcomes: CHAR(1)
+    other_preg_outcomes: INTEGER
     other_preg_outcomes_month: CHAR(2)
     other_preg_outcomes_year: CHAR(4)
     date_last_menses: DATE
