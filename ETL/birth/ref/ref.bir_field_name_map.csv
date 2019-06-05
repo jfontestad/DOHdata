@@ -33,7 +33,7 @@ Time of birth in 24-hour format. Midnight has a value of '24', any time after mi
 31,child_calculated_ethnicity,Child Calculated Ethnicity,hispccal,"Infant's Calculated Ethnicity
 The ethnicity code given here is from the NCHS algorithm which uses mother's and father's Hispanic ethnicity to derive a code for the child's Hispanic ethnicity.
 
-Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
+Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see ""Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).""",INTEGER
 32,mother_race_white,Mother Race White,momr_wht,"Mother's Race, White",CHAR(1)
 33,mother_race_black,Mother Race Black,momr_blk,"Mother's Race, Black",CHAR(1)
 34,mother_race_amer_indian_alaskan,Mother Race Amer Indian Alaskan,momr_ami,"Mother's Race, American Indian/Alaska Native ",CHAR(1)
@@ -86,15 +86,15 @@ Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes fo
 80,mother_hispanic_nchs_ecodes,Mother Hispanic NCHS Ecodes,,Mother's Hispanic Tabulation from Checkboxes,INTEGER
 81,mother_hispanic_nchs_ccodes,Mother Hispanic NCHS Ccodes,,Mother's Hispanic Tabulation from Literal,INTEGER
 82,mother_hispanic,Mother Hispanic,hisp_mom,"Mother's Hispanic Origin
-Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
+Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see ""Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).""",INTEGER
 83,mother_occupation_milham,Mother Occupation Milham,occm_mom,"Mother's Occupation - Milham
-Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 cords. For further information please see the “Data Quality Technical Notes - Occupation (Milham Codes - other, Father).” For code table see ASCII file “occmil.asc”. Note: there are codes on the file which are invalid.",CHAR(3)
+Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 cords. For further information please see the ""Data Quality Technical Notes - Occupation (Milham Codes - other, Father)."" For code table see ASCII file ""occmil.asc"". Note: there are codes on the file which are invalid.",CHAR(3)
 84,mother_education,Mother Education,educ_mom,"Mother's Education Level
 Highest grade completed by the mother.",INTEGER
 85,mother_educ_8th_grade_or_less,Mother Educ 8th Grade or Less,momle8ed,Mother's Education Years If LE 8th Grade,INTEGER
 86,father_date_of_birth,Father Date of Birth,,Father's Date of Birth,DATE
 87,father_calculated_age,Father Calculated Age,age_dad,"Father's Age
-Before using this field, see “Data Quality Technical Notes - Age ",INTEGER
+Before using this field, see ""Data Quality Technical Notes - Age ",INTEGER
 88,father_birthplace_state,Father Birthplace State,,Father's Birth State - Literal,VARCHAR(112)
 89,father_birthplace_state_fips,Father Birthplace State FIPS,,Father's Birthplace State FIPS code,CHAR(2)
 90,father_birthplace_country,Father Birthplace Country,,Father's Birth Country - Literal,VARCHAR(256)
@@ -151,20 +151,20 @@ Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes fo
 140,father_hispanic_nchs_ecodes,Father Hispanic NCHS Ecodes,,Father's Hispanic Tabulation from Checkboxes,INTEGER
 141,father_hispanic_nchs_ccodes,Father Hispanic NCHS Ccodes,,Father's Hispanic Tabulation from Literal,INTEGER
 142,father_hispanic,Father Hispanic,hisp_dad,"Father's Hispanic Origin
-Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
+Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see ""Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).""",INTEGER
 143,father_occupation_milham,Father Occupation Milham,occm_dad,"Father's Occupation - Milham
-Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 records. For further information please see the “Data Quality Technical Notes - Occupation (Milham Codes - Mother, Father).” For code table see ASCII file “occmil.asc”. Note: there are codes on the file which are invalid.",CHAR(3)
+Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 records. For further information please see the ""Data Quality Technical Notes - Occupation (Milham Codes - Mother, Father)."" For code table see ASCII file ""occmil.asc"". Note: there are codes on the file which are invalid.",CHAR(3)
 144,father_education,Father Education,educ_dad,"Father's Education Level
 Highest grade completed by the father.",INTEGER
 145,father_educ_8th_grade_or_less,Father Educ 8th Grade or Less,dadle8ed,Father's Education Years If LE 8th Grade,INTEGER
 146,mother_height_feet,Mother Height Feet,ht_ft,"Mother's Height, Feet",INTEGER
 147,mother_height_inches,Mother Height Inches,ht_in,"Mother's Height, Inches",INTEGER
 148,mother_weight_prior,Mother Weight Prior,wghtpre,"Weight Prior to Pregnancy
-Number of pounds Mother weighed before pregnancy. Only whole number is kept. This field was first collected in 1992. Before using this field, see “Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.”",INTEGER
+Number of pounds Mother weighed before pregnancy. Only whole number is kept. This field was first collected in 1992. Before using this field, see ""Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.""",INTEGER
 149,mother_weight_at_delivery,Mother Weight at Delivery,wghtdelv,"Mother's Weight At Delivery
-Number of pounds Mother weighed at delivery. Only whole number is kept. Before using this field, see “Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.”",INTEGER
+Number of pounds Mother weighed at delivery. Only whole number is kept. Before using this field, see ""Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.""",INTEGER
 150,mother_weight_gain,Mother Weight Gain,wghtgain,"Weight Gain During Pregnancy
-Number of pounds Mother gained during pregnancy. Only whole number is kept. Before using this field, see “Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery weight.” 
+Number of pounds Mother gained during pregnancy. Only whole number is kept. Before using this field, see ""Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery weight."" 
  
 ***2003-present***
 This field is calculated from prepregnancy and delivery weights (see fields 110 and 213).
@@ -192,20 +192,20 @@ Indicates whether the mother received WIC benefits during pregnancy. WIC (Women 
 169,last_prenatal_visit_day,Last Prenatal Visit Day,lpv_da,Last Prenatal Visit Day,CHAR(2)
 170,last_prenatal_visit_year,Last Prenatal Visit Year,lpv_yr,Last Prenatal Visit Year,INTEGER
 171,month_prenatal_care_began,Month Prenatal Care Began,pnatalmo,"Month Prenatal Care Began
-Indicates the month from the beginning of the pregnancy at which Mother entered prenatal care. Before using this field, see “Data Quality Technical Notes - Month Prenatal Care Began.” As of 
+Indicates the month from the beginning of the pregnancy at which Mother entered prenatal care. Before using this field, see ""Data Quality Technical Notes - Month Prenatal Care Began."" As of 
 2003, this field is calculated from date of first prenatal visit and menses date.",INTEGER
 172,nchs_month_prenatal_care_began,NCHS Month Prenatal Care Began,pnatfed,"NCHS Prenatal Care
-NCHS method of calculation of prenatal care to file. Before using this field, see “data Quality Technical Notes – Month Prenatal Care Began.”",CHAR(2)
+NCHS method of calculation of prenatal care to file. Before using this field, see ""data Quality Technical Notes – Month Prenatal Care Began.""",INTEGER
 173,number_prenatal_visits,Number Prenatal Visits,pnatalvs,"Number of Prenatal Visits
 Indicates the number of prenatal visits for the entire pregnancy. The ‘95' code was used until mid 1992.",INTEGER
 174,prior_live_births_living,Prior Live Births Living,lb_nl,"Number of Prior Live Births, Now Living
 
-Before using this field, see “Data Quality Technical Notes - Previous Pregnancy History.”",INTEGER
+Before using this field, see ""Data Quality Technical Notes - Previous Pregnancy History.""",INTEGER
 175,prior_live_births_deceased,Prior Live Births Deceased,lb_nd,"Number of Prior Live Births, Now Dead
-Before using this field, see “Data Quality Technical Notes - Previous Pregnancy History.”",INTEGER
+Before using this field, see ""Data Quality Technical Notes - Previous Pregnancy History.""",INTEGER
 176,last_live_birth_month,Last Live Birth Month,llb_mo,Last Live Birth Month,CHAR(2)
 177,last_live_birth_year,Last Live Birth Year,llb_yr,Last Live Birth Year,CHAR(4)
-178,other_preg_outcomes,Other Preg Outcomes,otherout,Other Pregnancy Outcomes,CHAR(1)
+178,other_preg_outcomes,Other Preg Outcomes,otherout,Other Pregnancy Outcomes,INTEGER
 179,other_preg_outcomes_month,Other Preg Outcomes Month,oth_mo,Other Preg Outcomes Month,CHAR(2)
 180,other_preg_outcomes_year,Other Preg Outcomes Year,oth_yr,Other Preg Outcomes Year,CHAR(4)
 181,date_last_menses,Date Last Menses,mensmd4y,Date of Last Normal Menses,DATE
@@ -213,10 +213,10 @@ Before using this field, see “Data Quality Technical Notes - Previous Pregnancy 
 183,last_menses_day,Last Menses Day,mens_da,Last Menses Day,CHAR(2)
 184,last_menses_year,Last Menses Year,mens_yr,Last Menses Year,CHAR(4)
 185,gestation_estimate,Gestation Estimate,gest_est,"Gestation Estimate in Weeks
-In weeks as estimated by the physician at the time of the delivery. Before using this field, see “Data Quality Technical Notes - Gestational Age – Calculated and Clinical Estimate.”",INTEGER
+In weeks as estimated by the physician at the time of the delivery. Before using this field, see ""Data Quality Technical Notes - Gestational Age – Calculated and Clinical Estimate.""",INTEGER
 186,calculated_gestation,Calculated Gestation,gestcalc,"Calculated Gestation in Weeks
-Calculated from the date of birth and last menses date (mensdate) or from gestational estimate. Before using this field, see “Data Quality Technical Notes – Gestational Age – 
-Calculated and Clinical Estimate.”
+Calculated from the date of birth and last menses date (mensdate) or from gestational estimate. Before using this field, see ""Data Quality Technical Notes – Gestational Age – 
+Calculated and Clinical Estimate.""
 
 ",INTEGER
 187,gestation_calculated_flag,Gestation Calculated Flag,gestflag,"Gestation, Calculated Flag
@@ -287,10 +287,10 @@ Indicates whether vacuum extraction delivery was attempted but unsuccessful. ",C
 249,birth_weight_grams,Birth Weight - Grams,wt_grams,"Birth Weight of Baby - Grams
 Indicates gram weight of infant. Pounds and ounces are converted as follows: grams = [(lbs*16)+oz]*28.3495267 (Rounded to the nearest gram)
 
-In 1980-1991 data was stored in units of pounds and ounces. This data has been converted to grams. Since one ounce is equivalent to 28 grams, the converted data will cluster in multiples of 28 grams. For more detail see “Data Quality Technical Notes - Birth Weight.”",INTEGER
+In 1980-1991 data was stored in units of pounds and ounces. This data has been converted to grams. Since one ounce is equivalent to 28 grams, the converted data will cluster in multiples of 28 grams. For more detail see ""Data Quality Technical Notes - Birth Weight.""",INTEGER
 250,head_circumference,Head Circumference,circumf,"Child's Head Circumference, Centimeters",INTEGER
 251,apgar_5,APGAR 5,apgar5,"APGAR Score - 5 Minute
-The numerical sum of points given for heart rate, respirator effort, muscle tone, reflexes and color. Score taken at 5 minutes. Before using this field, see “Data Quality Technical Notes – Apgar Score (5 minutes).”
+The numerical sum of points given for heart rate, respirator effort, muscle tone, reflexes and color. Score taken at 5 minutes. Before using this field, see ""Data Quality Technical Notes – Apgar Score (5 minutes).""
 ",INTEGER
 252,apgar_10,APGAR 10,apgar10,"APGAR Score - 10 Minute
 The numerical sum of points given for heart rate, respirator effort, muscle tone, reflexes and color. Score taken at 10 minutes. Only reported if 5 minute score is <6. ",INTEGER
@@ -329,6 +329,6 @@ Number of children born.",INTEGER
 284,congenital_anomaly_unknown,Congenital Anomaly Unknown,malf1 - malf7,"Congenital Malformations, Unknown",CHAR(1)
 285,attendant_class,Attendant Class,attclass,Classification of Attendant,CHAR(2)
 286,certifier_class,Certifier Class,crt_clas,"Classification of Certifier
-Before using this field, see “Data Quality Technical Notes - Attendant/Certifier Classification.”",CHAR(2)
+Before using this field, see ""Data Quality Technical Notes - Attendant/Certifier Classification.""",CHAR(2)
 287,infant_death_flag,Infant Death Flag,dthflg,"Indicates that the infant died by the age of 1 year. Before using this field, see Data Technical Notes - Infant Death Flag. 
 ",CHAR(1)
