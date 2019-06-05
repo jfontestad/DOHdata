@@ -1,0 +1,334 @@
+field_number,field_name_apde,field_name_whales,field_name_bedrock,description,sql_format
+1,birth_cert_encrypt,Birth Cert Encrypt (External),certno_e,Certificate Number,INTEGER
+2,birth_cert_type,Birth Cert Type,certype,Certificate Type,CHAR(1)
+3,sex,Sex,sex,Sex of Child ,CHAR(1)
+4,date_of_birth_month,Date of Birth Month,dob_mo,Date of Birth Month,CHAR(2)
+5,date_of_birth_year,Date of Birth Year,dob_yr,Date of Birth Year,INTEGER
+6,time_of_birth,Time of Birth,birth_hr,"Time of Birth
+Time of birth in 24-hour format. Midnight has a value of ‘24’, any time after midnight but before 1 am has a value of ‘00’. Prior to mid-1992, out of state occurrences were not coded.",VARCHAR(5)
+7,mother_marital_status,Mother Marital Status,married,Marital Status of Mother ,CHAR(1)
+8,facility_type,Facility Type,fac_type,,INTEGER
+9,facility,Facility,facility,Facility ID Number,CHAR(4)
+10,intended_facility,Intended Facility,fac_int,Intended Facility Type,INTEGER
+11,birthplace_city,Birthplace City,,Birthplace City,VARCHAR(28)
+12,birthplace_county,Birthplace County,,Birthplace County,VARCHAR(28)
+13,birthplace_county_city_wa_code,Birthplace County City WA Code,city_occ,,CHAR(4)
+14,birthplace_county_wa_code,Birthplace County WA Code,cnty_occ,,CHAR(2)
+15,birthplace_state_nchs_code,Birthplace State NCHS Code,st_occ,Birthplace State NCHS Code,CHAR(2)
+16,mother_residence_city,Mother Residence City,,Mother's City of Residence Name,VARCHAR(112)
+17,mother_residence_county,Mother Residence County,,Mother's County of Residence Name,VARCHAR(112)
+18,mother_residence_city_wa_code,Mother Residence City WA Code,city_res,,CHAR(4)
+19,mother_residence_county_wa_code,Mother Residence County WA Code,cnty_res,,CHAR(2)
+20,mother_residence_state_nchs_code,Mother Residence State NCHS Code,st_res,Mother's State of Residence (old NCHS code),CHAR(2)
+21,mother_residence_zip,Mother Residence Zip,zipcode,Mother's ZIP Code of Residence,VARCHAR(10)
+22,mother_years_at_residence,Mother Years at Residence,res_yprt,Mother's Years Residence,INTEGER
+23,mother_months_at_residence,Mother Months at Residence,res_mprt,Mother's Months Residence,INTEGER
+24,mother_date_of_birth,Mother Date of Birth,,Mother's Date of Birth,DATE
+25,mother_calculated_age,Mother Calculated Age,age_mom,Mother's Age,INTEGER
+26,mother_birthplace_state,Mother Birthplace State,,Mother's Birth State - Literal,VARCHAR(112)
+27,mother_birthplace_state_fips,Mother Birthplace State FIPS,,Mother's Birthplace State FIPS code,CHAR(2)
+28,mother_birthplace_country,Mother Birthplace Country,,Mother’s Birth Country - Literal,VARCHAR(64)
+29,mother_birthplace_cntry_wa_code,Mother Birthplace Cntry WA Code,bctrymom,Mother's Birthplace Country WA Code,CHAR(3)
+30,child_calculated_race,Child Calculated Race,raceccal,,CHAR(1)
+31,child_calculated_ethnicity,Child Calculated Ethnicity,hispccal,"Infant's Calculated Ethnicity
+The ethnicity code given here is from the NCHS algorithm which uses mother’s and father’s Hispanic ethnicity to derive a code for the child’s Hispanic ethnicity.
+
+Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
+32,mother_race_white,Mother Race White,momr_wht,"Mother's Race, White",CHAR(1)
+33,mother_race_black,Mother Race Black,momr_blk,"Mother’s Race, Black",CHAR(1)
+34,mother_race_amer_indian_alaskan,Mother Race Amer Indian Alaskan,momr_ami,"Mother’s Race, American Indian/Alaska Native ",CHAR(1)
+35,mother_race_asian_indian,Mother Race Asian Indian,momr_asi,"Mother’s Race, Asian Indian",CHAR(1)
+36,mother_race_chinese,Mother Race Chinese,momr_chi,"Mother’s Race, Chinese",CHAR(1)
+37,mother_race_filipino,Mother Race Filipino,momr_fil,"Mother’s Race, Filipino",CHAR(1)
+38,mother_race_japanese,Mother Race Japanese,momr_jap,"Mother’s Race, Japanese",CHAR(1)
+39,mother_race_korean,Mother Race Korean,momr_kor,"Mother’s Race, Korean",CHAR(1)
+40,mother_race_vietnamese,Mother Race Vietnamese,momr_vie,"Mother’s Race, Vietnamese",CHAR(1)
+41,mother_race_other_asian,Mother Race Other Asian,momr_oas,"Mother’s Race, Other Asian",CHAR(1)
+42,mother_race_hawaiian,Mother Race Hawaiian,momr_haw,"Mother’s Race, Native Hawaiian",CHAR(1)
+43,mother_race_guam_or_chamorro,Mother Race Guam or Chamorro,momr_gua,"Mother’s Race, Guamanian or Chamorro",CHAR(1)
+44,mother_race_samoan,Mother Race Samoan,momr_sam,"Mother’s Race, Samoan",CHAR(1)
+45,mother_race_other_pi,Mother Race Other PI,momr_opi,"Mother’s Race, Other Pacific Islander",CHAR(1)
+46,mother_race_other,Mother Race Other,momr_oth,"Mother’s Race, Other",CHAR(1)
+47,mother_race_tribe_1,Mother Race Tribe 1,,"Mother’s Race Literal 1, American Indian/Alaska Native ",VARCHAR(120)
+48,mother_race_tribe_2,Mother Race Tribe 2,,"Mother’s Race Literal 2, American Indian/Alaska Native ",VARCHAR(120)
+49,mother_race_other_asian_1,Mother Race Other Asian 1,,"Mother’s Race Literal 1, Other Asian ",VARCHAR(120)
+50,mother_race_other_asian_2,Mother Race Other Asian 2,,"Mother’s Race Literal 2, Other Asian",VARCHAR(120)
+51,mother_race_other_pi_1,Mother Race Other PI 1,,"Mother’s Race Literal 1, Other Pacific Islander ",VARCHAR(120)
+52,mother_race_other_pi_2,Mother Race Other PI 2,,"Mother’s Race Literal 2, Other Pacific Islander ",VARCHAR(120)
+53,mother_race_other_1,Mother Race Other 1,,"Mother’s Race Literal 1, Other",VARCHAR(120)
+54,mother_race_other_2,Mother Race Other 2,,"Mother’s Race Literal 2, Other ",VARCHAR(120)
+55,mother_race_nchs_ecode_1,Mother Race NCHS Ecode 1,,"Mother's Race Tabulation from Checkboxes, 1",CHAR(3)
+56,mother_race_nchs_ecode_2,Mother Race NCHS Ecode 2,,"Mother's Race Tabulation from Checkboxes, 2",CHAR(3)
+57,mother_race_nchs_ecode_3,Mother Race NCHS Ecode 3,,"Mother's Race Tabulation from Checkboxes, 3",CHAR(3)
+58,mother_race_nchs_ecode_4,Mother Race NCHS Ecode 4,,"Mother's Race Tabulation from Checkboxes, 4",CHAR(3)
+59,mother_race_nchs_ecode_5,Mother Race NCHS Ecode 5,,"Mother's Race Tabulation from Checkboxes, 5",CHAR(3)
+60,mother_race_nchs_ecode_6,Mother Race NCHS Ecode 6,,"Mother's Race Tabulation from Checkboxes, 6",CHAR(3)
+61,mother_race_nchs_ecode_7,Mother Race NCHS Ecode 7,,"Mother's Race Tabulation from Checkboxes, 7",CHAR(3)
+62,mother_race_nchs_ecode_8,Mother Race NCHS Ecode 8,,"Mother's Race Tabulation from Checkboxes, 8",CHAR(3)
+63,mother_race_nchs_ccode_1,Mother Race NCHS Ccode 1,,"Mother's Race Tabulation from Literals, 1",CHAR(3)
+64,mother_race_nchs_ccode_2,Mother Race NCHS Ccode 2,,"Mother's Race Tabulation from Literals, 2",CHAR(3)
+65,mother_race_nchs_ccode_3,Mother Race NCHS Ccode 3,,"Mother's Race Tabulation from Literals, 3",CHAR(3)
+66,mother_race_nchs_ccode_4,Mother Race NCHS Ccode 4,,"Mother's Race Tabulation from Literals, 4",CHAR(3)
+67,mother_race_nchs_ccode_5,Mother Race NCHS Ccode 5,,"Mother's Race Tabulation from Literals, 5",CHAR(3)
+68,mother_race_nchs_ccode_6,Mother Race NCHS Ccode 6,,"Mother's Race Tabulation from Literals, 6",CHAR(3)
+69,mother_race_nchs_ccode_7,Mother Race NCHS Ccode 7,,"Mother's Race Tabulation from Literals, 7",CHAR(3)
+70,mother_race_nchs_ccode_8,Mother Race NCHS Ccode 8,,"Mother's Race Tabulation from Literals, 8",CHAR(3)
+71,mother_bridge_race,Mother Bridge Race,,Mother's NCHS Bridged Race,INTEGER
+72,mother_race_calculation,Mother Race Calculation,race_mom,"Mother's Race
+Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes for description).",CHAR(1)
+73,mother_race_summary_code,Mother Race Summary Code,moracsum,Mother’s Summary Race,INTEGER
+74,mother_hispanic_no,Mother Hispanic No,momh_no ,"Mother’s Hispanic Origin, Not Hispanic",CHAR(1)
+75,mother_hispanic_mexican,Mother Hispanic Mexican,momh_mex,"Mother’s Hispanic Origin, Mexican",CHAR(1)
+76,mother_hispanic_puerto_rican,Mother Hispanic Puerto Rican,momh_pr,"Mother’s Hispanic Origin, Puerto Rican ",CHAR(1)
+77,mother_hispanic_cuban,Mother Hispanic Cuban,momh_cub,"Mother’s Hispanic Origin, Cuban",CHAR(1)
+78,mother_hispanic_other,Mother Hispanic Other,momh_oth,"Mother’s Hispanic Origin, Other Hispanic",CHAR(1)
+79,mother_hispanic_other_specify,Mother Hispanic Other Specify,,"Mother’s Hispanic Origin, Other Hispanic Literal",VARCHAR(21)
+80,mother_hispanic_nchs_ecodes,Mother Hispanic NCHS Ecodes,,Mother’s Hispanic Tabulation from Checkboxes,INTEGER
+81,mother_hispanic_nchs_ccodes,Mother Hispanic NCHS Ccodes,,Mother’s Hispanic Tabulation from Literal,INTEGER
+82,mother_hispanic,Mother Hispanic,hisp_mom,"Mother's Hispanic Origin
+Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
+83,mother_occupation_milham,Mother Occupation Milham,occm_mom,"Mother's Occupation - Milham
+Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 cords. For further information please see the “Data Quality Technical Notes - Occupation (Milham Codes - other, Father).” For code table see ASCII file “occmil.asc”. Note: there are codes on the file which are invalid.",CHAR(3)
+84,mother_education,Mother Education,educ_mom,"Mother’s Education Level
+Highest grade completed by the mother.",INTEGER
+85,mother_educ_8th_grade_or_less,Mother Educ 8th Grade or Less,momle8ed,Mother’s Education Years If LE 8th Grade,INTEGER
+86,father_date_of_birth,Father Date of Birth,,Father's Date of Birth,DATE
+87,father_calculated_age,Father Calculated Age,age_dad,"Father's Age
+Before using this field, see “Data Quality Technical Notes - Age ",INTEGER
+88,father_birthplace_state,Father Birthplace State,,Father's Birth State - Literal,VARCHAR(112)
+89,father_birthplace_state_fips,Father Birthplace State FIPS,,Father's Birthplace State FIPS code,CHAR(2)
+90,father_birthplace_country,Father Birthplace Country,,Father’s Birth Country - Literal,VARCHAR(256)
+91,father_birthplace_cntry_wa_code,Father Birthplace Cntry WA Code,bctrydad,Father's Birthplace Country WA code,CHAR(3)
+92,father_race_white,Father Race White,dadr_wht,"Father’s Race, White",CHAR(1)
+93,father_race_black,Father Race Black,dadr_blk,"Father’s Race, Black",CHAR(1)
+94,father_race_amer_indian_alaskan,Father Race Amer Indian Alaskan,dadr_ami,"Father’s Race, American Indian/Alaska Native ",CHAR(1)
+95,father_race_asian_indian,Father Race Asian Indian,dadr_asi,"Father’s Race, Asian Indian",CHAR(1)
+96,father_race_chinese,Father Race Chinese,dadr_chi,"Father’s Race, Chinese",CHAR(1)
+97,father_race_filipino,Father Race Filipino,dadr_fil,"Father’s Race, Filipino",CHAR(1)
+98,father_race_japanese,Father Race Japanese,dadr_jap,"Father’s Race, Japanese",CHAR(1)
+99,father_race_korean,Father Race Korean,dadr_kor,"Father’s Race, Korean",CHAR(1)
+100,father_race_vietnamese,Father Race Vietnamese,dadr_vie,"Father’s Race, Vietnamese",CHAR(1)
+101,father_race_other_asian,Father Race Other Asian,dadr_oas,"Father’s Race, Other Asian",CHAR(1)
+102,father_race_hawaiian,Father Race Hawaiian,dadr_haw,"Father’s Race, Native Hawaiian",CHAR(1)
+103,father_race_guam_or_chamorro,Father Race Guam or Chamorro,dadr_gua,"Father’s Race, Guamanian or Chamorro",CHAR(1)
+104,father_race_samoan,Father Race Samoan,dadr_sam,"Father’s Race, Samoan",CHAR(1)
+105,father_race_other_pi,Father Race Other PI,dadr_opi,"Father’s Race, Other Pacific Islander",CHAR(1)
+106,father_race_other,Father Race Other,dadr_oth,"Father’s Race, Other",CHAR(1)
+107,father_race_tribe_1,Father Race Tribe 1,,"Father’s Race Literal 1, American Indian/Alaska Native ",VARCHAR(120)
+108,father_race_tribe_2,Father Race Tribe 2,,"Father’s Race Literal 2, American Indian/Alaska Native ",VARCHAR(120)
+109,father_race_other_asian_1,Father Race Other Asian 1,,"Father’s Race Literal 1, Other Asian ",VARCHAR(120)
+110,father_race_other_asian_2,Father Race Other Asian 2,,"Father’s Race Literal 2, Other Asian",VARCHAR(120)
+111,father_race_other_pi_1,Father Race Other PI 1,,"Father’s Race Literal 1, Other Pacific Islander ",VARCHAR(120)
+112,father_race_other_pi_2,Father Race Other PI 2,,"Father’s Race Literal 2, Other Pacific Islander ",VARCHAR(120)
+113,father_race_other_1,Father Race Other 1,,"Father’s Race Literal 1, Other",VARCHAR(120)
+114,father_race_other_2,Father Race Other 2,,"Father’s Race Literal 2, Other ",VARCHAR(120)
+115,father_race_nchs_ecode_1,Father Race NCHS Ecode 1,,"Father's Race Tabulation from Checkboxes, 1",CHAR(3)
+116,father_race_nchs_ecode_2,Father Race NCHS Ecode 2,,"Father's Race Tabulation from Checkboxes, 2",CHAR(3)
+117,father_race_nchs_ecode_3,Father Race NCHS Ecode 3,,"Father's Race Tabulation from Checkboxes, 3",CHAR(3)
+118,father_race_nchs_ecode_4,Father Race NCHS Ecode 4,,"Father's Race Tabulation from Checkboxes, 4",CHAR(3)
+119,father_race_nchs_ecode_5,Father Race NCHS Ecode 5,,"Father's Race Tabulation from Checkboxes, 5",CHAR(3)
+120,father_race_nchs_ecode_6,Father Race NCHS Ecode 6,,"Father's Race Tabulation from Checkboxes, 6",CHAR(3)
+121,father_race_nchs_ecode_7,Father Race NCHS Ecode 7,,"Father's Race Tabulation from Checkboxes, 7",CHAR(3)
+122,father_race_nchs_ecode_8,Father Race NCHS Ecode 8,,"Father's Race Tabulation from Checkboxes, 8",CHAR(3)
+123,father_race_nchs_ccode_1,Father Race NCHS Ccode 1,,"Father's Race Tabulation from Literals, 1",CHAR(3)
+124,father_race_nchs_ccode_2,Father Race NCHS Ccode 2,,"Father's Race Tabulation from Literals, 2",CHAR(3)
+125,father_race_nchs_ccode_3,Father Race NCHS Ccode 3,,"Father's Race Tabulation from Literals, 3",CHAR(3)
+126,father_race_nchs_ccode_4,Father Race NCHS Ccode 4,,"Father's Race Tabulation from Literals, 4",CHAR(3)
+127,father_race_nchs_ccode_5,Father Race NCHS Ccode 5,,"Father's Race Tabulation from Literals, 5",CHAR(3)
+128,father_race_nchs_ccode_6,Father Race NCHS Ccode 6,,"Father's Race Tabulation from Literals, 6",CHAR(3)
+129,father_race_nchs_ccode_7,Father Race NCHS Ccode 7,,"Father's Race Tabulation from Literals, 7",CHAR(3)
+130,father_race_nchs_ccode_8,Father Race NCHS Ccode 8,,"Father's Race Tabulation from Literals, 8",CHAR(3)
+131,father_bridge_race,Father Bridge Race,,Father's NCHS Bridged Race,INTEGER
+132,father_race_calculation,Father Race Calculation,race_dad,"Father's Race Calculation
+Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes for description).",CHAR(1)
+133,father_race_summary_code,Father Race Summary Code,faracsum,Father’s Summary Race,INTEGER
+134,father_hispanic_no,Father Hispanic No,dadh_no ,"Father’s Hispanic Origin, Not Hispanic",CHAR(1)
+135,father_hispanic_mexican,Father Hispanic Mexican,dadh_mex,"Father’s Hispanic Origin, Mexican",CHAR(1)
+136,father_hispanic_puerto_rican,Father Hispanic Puerto Rican,dadh_pr,"Father’s Hispanic Origin, Puerto Rican ",CHAR(1)
+137,father_hispanic_cuban,Father Hispanic Cuban,dadh_cub,"Father’s Hispanic Origin, Cuban",CHAR(1)
+138,father_hispanic_other,Father Hispanic Other,dadh_oth,"Father’s Hispanic Origin, Other Hispanic",CHAR(1)
+139,father_hispanic_other_specify,Father Hispanic Other Specify,,"Father’s Hispanic Origin, Other Hispanic Literal",VARCHAR(20)
+140,father_hispanic_nchs_ecodes,Father Hispanic NCHS Ecode,,Father’s Hispanic Tabulation from Checkboxes,INTEGER
+141,father_hispanic_nchs_ccodes,Father Hispanic NCHS Ccode,,Father’s Hispanic Tabulation from Literal,INTEGER
+142,father_hispanic,Father Hispanic,hisp_dad,"Father's Hispanic Origin
+Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see “Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).”",INTEGER
+143,father_occupation_milham,Father Occup Milham,occm_dad,"Father's Occupation - Milham
+Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 records. For further information please see the “Data Quality Technical Notes - Occupation (Milham Codes - Mother, Father).” For code table see ASCII file “occmil.asc”. Note: there are codes on the file which are invalid.",CHAR(3)
+144,father_education,Father Education,educ_dad,"Father’s Education Level
+Highest grade completed by the father.",INTEGER
+145,father_educ_8th_grade_or_less,Father Educ 8th Grade or Less,dadle8ed,Father’s Education Years If LE 8th Grade,INTEGER
+146,mother_height_feet,Mother Height Feet,ht_ft,"Mother’s Height, Feet",INTEGER
+147,mother_height_inches,Mother Height Inches,ht_in,"Mother’s Height, Inches",INTEGER
+148,mother_weight_prior,Mother Weight Prior,wghtpre,"Weight Prior to Pregnancy
+Number of pounds Mother weighed before pregnancy. Only whole number is kept. This field was first collected in 1992. Before using this field, see “Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.”",INTEGER
+149,mother_weight_at_delivery,Mother Weight at Delivery,wghtdelv,"Mother’s Weight At Delivery
+Number of pounds Mother weighed at delivery. Only whole number is kept. Before using this field, see “Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.”",INTEGER
+150,mother_weight_gain,Mother Weight Gain,wghtgain,"Weight Gain During Pregnancy
+Number of pounds Mother gained during pregnancy. Only whole number is kept. Before using this field, see “Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery weight.” 
+ 
+***2003-present***
+This field is calculated from prepregnancy and delivery weights (see fields 110 and 213).
+098 – 98+ lbs for out of state occurrences only",INTEGER
+151,mother_bmi,Mother BMI,bmi,Body Mass Index,NUMERIC
+152,cigarettes_smoked_3_months_prior,Cigarettes Smoked 3 Months Prior,cigs_bef,Number Cigarettes Smoked 3 Months Before Preg,INTEGER
+153,packs_smoked_3_months_prior,Packs Smoked 3 Months Prior,,Packs of Cigarettes Smoked 3 Months Before Preg,INTEGER
+154,cigarettes_smoked_1st_tri,Cigarettes Smoked 1st Tri,cigs_1st,Number Cigarettes Smoked during 1st Trimester,INTEGER
+155,packs_smoked_1st_tri,Packs Smoked 1st Tri,,Packs of Cigarettes Smoked during 1st Trimester,INTEGER
+156,cigarettes_smoked_2nd_tri,Cigarettes Smoked 2nd Tri,cigs_2nd,Number Cigarettes Smoked during 2nd Trimester,INTEGER
+157,packs_smoked_2nd_tri,Packs Smoked 2nd Tri,,Packs of Cigarettes Smoked during 2nd Trimester,INTEGER
+158,cigarettes_smoked_3rd_tri,Cigarettes Smoked 3rd Tri,cigs_3rd,Number Cigarettes Smoked during 3rd Trimester,INTEGER
+159,packs_smoked_3rd_tri,Packs Smoked 3rd Tri,,Packs of Cigarettes Smoked during 3rd Trimester,INTEGER
+160,mother_transfer,Mother Transfer,trnsferm,Mother Transferred After Attempted Delivery,CHAR(1)
+161,source_of_payment,Source of Payment,delivpay,"Delivery Source of Payment
+Indicates principal source of payment for the delivery.",INTEGER
+162,wic,WIC,wic_new,"WIC Benefits
+Indicates whether the mother received WIC benefits during pregnancy. WIC (Women and Infant Children) is a free supplemental food and nutrition education program. ",CHAR(1)
+163,date_first_prenatal_visit,Date First Prenatal Visit,fpvmd4y,Date First Prenatal Visit,DATE
+164,first_prenatal_visit_month,First Prenatal Visit Month,fpv_mo,First Prenatal Visit Month,CHAR(2)
+165,first_prenatal_visit_day,First Prenatal Visit Day,fpv_da,First Prenatal Visit Day,CHAR(2)
+166,first_prenatal_visit_year,First Prenatal Visit Year,fpv_yr,First Prenatal Visit Year,INTEGER
+167,date_last_prenatal_visit,Date Last Prenatal Visit,lpvmd4y,Date Last Prenatal Visit,DATE
+168,last_prenatal_visit_month,Last Prenatal Visit Month,lpv_mo,Last Prenatal Visit Month,CHAR(2)
+169,last_prenatal_visit_day,Last Prenatal Visit Day,lpv_da,Last Prenatal Visit Day,CHAR(2)
+170,last_prenatal_visit_year,Last Prenatal Visit Year,lpv_yr,Last Prenatal Visit Year,INTEGER
+171,month_prenatal_care_began,Month Prenatal Care Began,pnatalmo,"Month Prenatal Care Began
+Indicates the month from the beginning of the pregnancy at which Mother entered prenatal care. Before using this field, see “Data Quality Technical Notes - Month Prenatal Care Began.” As of 
+2003, this field is calculated from date of first prenatal visit and menses date.",INTEGER
+172,nchs_month_prenatal_care_began,NCHS Month Prenatal Care Began,pnatfed,"NCHS Prenatal Care
+NCHS method of calculation of prenatal care to file. Before using this field, see “data Quality Technical Notes – Month Prenatal Care Began.”",CHAR(2)
+173,number_prenatal_visits,Number Prenatal Visits,pnatalvs,"Number of Prenatal Visits
+Indicates the number of prenatal visits for the entire pregnancy. The ‘95’ code was used until mid 1992.",INTEGER
+174,prior_live_births_living,Prior Live Births Living,lb_nl,"Number of Prior Live Births, Now Living
+
+Before using this field, see “Data Quality Technical Notes - Previous Pregnancy History.”",INTEGER
+175,prior_live_births_deceased,Prior Live Births Deceased,lb_nd,"Number of Prior Live Births, Now Dead
+Before using this field, see “Data Quality Technical Notes - Previous Pregnancy History.”",INTEGER
+176,last_live_birth_month,Last Live Birth Month,llb_mo,Last Live Birth Month,CHAR(2)
+177,last_live_birth_year,Last Live Birth Year,llb_yr,Last Live Birth Year,CHAR(4)
+178,other_preg_outcomes,Other Preg Outcomes,otherout,Other Pregnancy Outcomes,CHAR(1)
+179,other_preg_outcomes_month,Other Preg Outcomes Month,oth_mo,Other Preg Outcomes Month,CHAR(2)
+180,other_preg_outcomes_year,Other Preg Outcomes Year,oth_yr,Other Preg Outcomes Year,CHAR(4)
+181,date_last_menses,Date Last Menses,mensmd4y,Date of Last Normal Menses,DATE
+182,last_menses_month,Last Menses Month,mens_mo,Last Menses Month,CHAR(2)
+183,last_menses_day,Last Menses Day,mens_da,Last Menses Day,CHAR(2)
+184,last_menses_year,Last Menses Year,mens_yr,Last Menses Year,CHAR(4)
+185,gestation_estimate,Gestation Estimate,gest_est,"Gestation Estimate in Weeks
+In weeks as estimated by the physician at the time of the delivery. Before using this field, see “Data Quality Technical Notes - Gestational Age – Calculated and Clinical Estimate.”",INTEGER
+186,calculated_gestation,Calculated Gestation,gestcalc,"Calculated Gestation in Weeks
+Calculated from the date of birth and last menses date (mensdate) or from gestational estimate. Before using this field, see “Data Quality Technical Notes – Gestational Age – 
+Calculated and Clinical Estimate.”
+
+",INTEGER
+187,gestation_calculated_flag,Gestation Calculated Flag,gestflag,"Gestation, Calculated Flag
+Indicates whether the calculated Gestation (gestcalc) field was calculated based on last menses date or estimated based on birth weight.",INTEGER
+188,prepreg_diabetes,Prepreg Diabetes,"mrf1 - mrf6, diabetes","Medical Risk Factor, Diabetes, Prepregnancy",CHAR(1)
+189,gestational_diabetes,Gest Diabetes,"mrf1 - mrf6, diabetes","Medical Risk Factor, Diabetes, Gestational",CHAR(1)
+190,prepreg_hypertension,Prepreg Hypertension,"mrf1 - mrf6, hyperflg ","Medical Risk Factor, Hypertension, Prepregnancy",CHAR(1)
+191,gestational_hypertention,Gestational Hypertension,"mrf1 - mrf6, hyperflg ","Medical Risk Factor, Hypertension, Gestational",CHAR(1)
+192,hypertension_eclampsia,Hypertension Eclampsia,mrf1 - mrf6,"Medical Risk Factor, Hypertension, Eclampsia",CHAR(1)
+193,preterm_births,Preterm Births,mrf1 - mrf6,"Medical Risk Factor, Previous Preterm Birth",CHAR(1)
+194,poor_preg_outcomes,Poor Preg Outcomes,mrf1 - mrf6,"Medical Risk Factor, Other Previous Poor Pregnancy Outcomes",CHAR(1)
+195,vaginal_bleeding,Vaginal Bleeding,mrf1 - mrf6,"Medical Risk Factor, Vaginal Bleeding",CHAR(1)
+196,fertility_treatment,Fertility Treatment,mrf1 - mrf6,"Medical Risk Factor, Infertility Treatments, Drugs",CHAR(1)
+197,assisted_reproduction,Assisted Reproduction,mrf1 - mrf6,"Medical Risk Factor, Infertility Treatments, ART",CHAR(1)
+198,previous_cesarean,Previous Cesarean,mrf1 - mrf6,"Medical Risk Factor, Previous Cesarean Section",CHAR(1)
+199,num_prev_cesarean,Num Prev Cesarean,prev_cno,"Medical Risk Factor, Number of Previous Cesarean Sections",INTEGER
+200,group_b_strep,Group B Strep,mrf1 - mrf6,"Medical Risk Factor, Group B Strep",CHAR(1)
+201,risk_factors_none,Risk Factors None,mrf1 - mrf6,"Medical Risk Factor, None of the Above",CHAR(1)
+202,risk_factors_unknown,Risk Factors Unknown,mrf1 - mrf6,"Medical Risk Factor, Unknown",CHAR(1)
+203,gonorrhea,Gonorrhea,minfect1 - minfect7,"Maternal Infections, Gonorrhea",CHAR(1)
+204,syphilis,Syphilis,minfect1 - minfect7,"Maternal Infections, Syphilis ",CHAR(1)
+205,herpes,Herpes,minfect1 - minfect7,"Maternal Infections, Herpes Simplex Virus (HSV) ",CHAR(1)
+206,chlamydia,Chlamydia,minfect1 - minfect7,"Maternal Infections, Chlamydia",CHAR(1)
+207,hep_b,Hep B,minfect1 - minfect7,"Maternal Infections, Hepatitis B",CHAR(1)
+208,hep_c,Hep C,minfect1 - minfect7,"Maternal Infections, Hepatitis C",CHAR(1)
+209,hiv,HIV,minfect1 - minfect7,"Maternal Infections, HIV Infection",CHAR(1)
+210,infections_other,Infections Other,minfect1 - minfect7,"Maternal Infections, Other",CHAR(1)
+211,infections_other_specify,Infections Other Specify,,"Maternal Infections, Other Literal Specify",VARCHAR(60)
+212,infections_none,Infections None,minfect1 - minfect7,"Maternal Infections, None of the Above",CHAR(1)
+213,infections_unknown,Infect Unknown,minfect1 - minfect7,"Maternal Infections, Unknown",CHAR(1)
+214,cervical_cerclage,Cervical Cerclage,obproc1 - obproc4,"Obstetric Procedure, Cervical Cerclage",CHAR(1)
+215,tocolysis,Tocolysis,obproc1 - obproc4,"Obstetric Procedure, Tocolysis",CHAR(1)
+216,ecv_success,ECV Success,"obproc1 - obproc4, cephaflg","Obstetric Procedure, External Cephalic Version, Successful",CHAR(1)
+217,ecv_failed,ECV Failed,"obproc1 - obproc4, cephaflg","Obstetric Procedure, External Cephalic Version, Failed",CHAR(1)
+218,obstet_proc_none,Obstet Proc None,obproc1 - obproc4,"Obstetric Procedure, None of the Above",CHAR(1)
+219,obstet_proc_unknown,Obstet Proc Unknown,obproc1 - obproc4,"Obstetric Procedure, Unknown",CHAR(1)
+220,ruptured_membranes,Ruptured Membranes,labons1 - labons3,"Onset of Labor, Premature Rupture of Membranes",CHAR(1)
+221,precipitous_labor,Precipitous Labor,labons1 - labons3,"Onset of Labor, Precipitous Labor",CHAR(1)
+222,prolonged_labor,Prolonged Labor,labons1 - labons3,"Onset of Labor, Prolonged Labor",CHAR(1)
+223,labor_onset_none,Labor Onset None,labons1 - labons3,"Onset of Labor, None of the Above",CHAR(1)
+224,labor_onset_unknown,Labor Onset Unknown,labons1 - labons3,"Onset of Labor, Unknown",CHAR(1)
+225,induction,Induction,labchar1 - labchar7,"Characteristics of Labor and Delivery, Induction of Labor",CHAR(1)
+226,augmentation,Augmentation,labchar1 - labchar7,"Characteristics of Labor and Delivery, Augmentation of Labor",CHAR(1)
+227,non_vertex_presentation,Non Vertex Presentation,labchar1 - labchar7,"Characteristics of Labor and Delivery, Non-vertex Presentation",CHAR(1)
+228,anesthesia,Anesthesia,labchar1 - labchar7,"Characteristics of Labor and Delivery, Anesthesia During Labor",CHAR(1)
+229,steroids,Steroids,labchar1 - labchar7,"Characteristics of Labor and Delivery, Steroids for Fetal Lung",CHAR(1)
+230,antibiotics,Antibiotics,labchar1 - labchar7,"Characteristics of Labor and Delivery, Antibiotics Received by Mother",CHAR(1)
+231,chorioamnionitis,Chorioamnionitis,labchar1 - labchar7,"Characteristics of Labor and Delivery, Chorioamnionitis Diagnosed",CHAR(1)
+232,meconium_stain,Meconium Stain,labchar1 - labchar7,"Characteristics of Labor and Delivery, Meconium Staining",CHAR(1)
+233,fetal_intolerance,Fetal Intolerance,labchar1 - labchar7,"Characteristics of Labor and Delivery, Fetal Intolerance of Labor",CHAR(1)
+234,mat_labor_characteristics_none,Mat Labor Characteristics None,labchar1 - labchar7,"Characteristics of Labor and Delivery, None of the Above",CHAR(1)
+235,mat_labor_characteristics_unknow,Mat Labor Characteristics Unknown,labchar1 - labchar7,"Characteristics of Labor and Delivery, Unknown",CHAR(1)
+236,maternal_transfusion,Maternal Transfusion,mmorbid1 - mmorbid5,"Maternal Morbidity, Maternal Transfusion",CHAR(1)
+237,perineal_laceration,Perineal Laceration,mmorbid1 - mmorbid5,"Maternal Morbidity, Perineal Laceration",CHAR(1)
+238,ruptured_uterus,Ruptured Uterus,mmorbid1 - mmorbid5,"Maternal Morbidity, Ruptured Uterus",CHAR(1)
+239,hysterectomy,Hysterectomy,mmorbid1 - mmorbid5,"Maternal Morbidity, Unplanned Hysterectomy",CHAR(1)
+240,intensive_care,Intensive Care,mmorbid1 - mmorbid5,"Maternal Morbidity, Admission to Intensive Care Unit",CHAR(1)
+241,operation,Operation,mmorbid1 - mmorbid5,"Maternal Morbidity, Unplanned Operating Room Procedure",CHAR(1)
+242,maternal_morbidity_none,Maternal Morbidity None,mmorbid1 - mmorbid5,"Maternal Morbidity, None of the Above",CHAR(1)
+243,maternal_morbidity_unknown,Maternal Morbidity Unknown,mmorbid1 - mmorbid5,"Maternal Morbidity, Unknown",CHAR(1)
+244,attempt_forceps,Attempt Forceps,forcfail,"Method of Delivery, Forceps Failed
+Indicates whether forceps delivery was attempted but unsuccessful.",CHAR(1)
+245,attempt_vacuum,Attempt Vacuum,vacfail,"Method of Delivery, Vacuum Extraction Failed
+Indicates whether vacuum extraction delivery was attempted but unsuccessful. ",CHAR(1)
+246,fetal_presentation,Fetal Presentation,fet_pres,"Method of Delivery, Fetal Presentation",CHAR(1)
+247,delivery_method_final,Delivery Method Final,dmethfin,"Method of Delivery, Final Route and Method",INTEGER
+248,delivery_method_calculation,Delivery Method Calculation,"dmeth1, dmeth2, dmeth3. dmeth4","Delivery Method, Calculated",INTEGER
+249,birth_weight_grams,Birth Weight - Grams,wt_grams,"Birth Weight of Baby - Grams
+Indicates gram weight of infant. Pounds and ounces are converted as follows: grams = [(lbs*16)+oz]*28.3495267 (Rounded to the nearest gram)
+
+In 1980-1991 data was stored in units of pounds and ounces. This data has been converted to grams. Since one ounce is equivalent to 28 grams, the converted data will cluster in multiples of 28 grams. For more detail see “Data Quality Technical Notes - Birth Weight.”",INTEGER
+250,head_circumference,Head Circumference,circumf,"Child’s Head Circumference, Centimeters",INTEGER
+251,apgar_5,APGAR 5,apgar5,"APGAR Score - 5 Minute
+The numerical sum of points given for heart rate, respirator effort, muscle tone, reflexes and color. Score taken at 5 minutes. Before using this field, see “Data Quality Technical Notes – Apgar Score (5 minutes).”
+",INTEGER
+252,apgar_10,APGAR 10,apgar10,"APGAR Score - 10 Minute
+The numerical sum of points given for heart rate, respirator effort, muscle tone, reflexes and color. Score taken at 10 minutes. Only reported if 5 minute score is <6. ",INTEGER
+253,plurality,Plurality,plural,"Plurality
+Number of children born.",INTEGER
+254,birth_order,Birth Order,order,Order at Birth,INTEGER
+255,child_transfer,Child Transfer,trnsferb,Baby Transferred to Another Facility,CHAR(1)
+256,breastfed,Breastfed,breastfd,Infant Being Breastfed,CHAR(1)
+257,child_alive,Child Alive,alive,Child Alive at Discharge,CHAR(1)
+258,assist_vent,Assist Vent,abcond1 - abcond6,"Abnormal Conditions of Newborn, Assisted Ventilation, Immediate",CHAR(1)
+259,assist_vent_6,Assist Vent 6,abcond1 - abcond6,"Abnormal Conditions of Newborn, Assisted Ventilation, Over 6 Hours",CHAR(1)
+260,nicu_admission,NICU Admission,abcond1 - abcond6,"Abnormal Conditions of Newborn, NICU Admission",CHAR(1)
+261,surfactant,Surfactant,abcond1 - abcond6,"Abnormal Conditions of Newborn, Surfactant Replacement",CHAR(1)
+262,child_antibiotics,Child Antibiotics,abcond1 - abcond6,"Abnormal Conditions of Newborn, Antibiotics for Newborn Sepsis",CHAR(1)
+263,child_seizure,Child Seizure,abcond1 - abcond6,"Abnormal Conditions of Newborn, Seizure",CHAR(1)
+264,child_injury,Child Injury,abcond1 - abcond6,"Abnormal Conditions of Newborn, Birth Injury",CHAR(1)
+265,abnormal_conditions_none,Abnormal Conditions None,abcond1 - abcond6,"Abnormal Conditions of Newborn, None of the Above",CHAR(1)
+266,abnormal_conditions_unknown,Abnormal Conditions Unknown,abcond1 - abcond6,"Abnormal Conditions of Newborn, Unknown",CHAR(1)
+267,anencephaly,Anencephaly,malf1 - malf7,"Congenital Malformations, Anencephaly",CHAR(1)
+268,msb,MSB,malf1 - malf7,"Congenital Malformations, Meningomyelocele/Spina Bifida",CHAR(1)
+269,congenital_heart,Congenital Heart,malf1 - malf7,"Congenital Malformations, Cyanotic Congenital Heart Disease",CHAR(1)
+270,congenital_hernia,Congenital Hernia,malf1 - malf7,"Congenital Malformations, Congenital Diaphragmatic Hernia",CHAR(1)
+271,omphalocele,Omphalocele,malf1 - malf7,"Congenital Malformations, Omphalocele",CHAR(1)
+272,gastroschisis,Gastroschisis,malf1 - malf7,"Congenital Malformations, Gastrochisis",CHAR(1)
+273,limb_defect,Limb Defect,malf1 - malf7,"Congenital Malformations, Limb Reduction Defect",CHAR(1)
+274,cleft_lip,Cleft Lip,malf1 - malf7,"Congenital Malformations, Cleft Lip",CHAR(1)
+275,cleft_palate,Cleft Palate,malf1 - malf7,"Congenital Malformations, Cleft Palate",CHAR(1)
+276,down_syndrome,Down Syndrome,malf1 - malf7,"Congenital Malformations, Down Syndrome",CHAR(1)
+277,down_confirm,Down Confirm,"malf1 - malf7, downsflg","Congenital Malformations, Down Syndrome Karyotype Confirmed",CHAR(1)
+278,down_pending,Down Pending,"malf1 - malf7, downsflg","Congenital Malformations, Down Syndrome Karyotype Pending",CHAR(1)
+279,other_chrom,Other Chrom,malf1 - malf7,"Congenital Malformations, Chromosomal Disorder",CHAR(1)
+280,other_chrom_confirm,Other Chrom Confirm,"malf1 - malf7, chromflg","Congenital Malformations, Chromosomal Disorder Karyotype Confirmed",CHAR(1)
+281,other_chrom_pending,Other Chrom Pending,"malf1 - malf7, chromflg","Congenital Malformations, Chromosomal Disorder Karyotype Pending",CHAR(1)
+282,hypospadias,Hypospadias,malf1 - malf7,"Congenital Malformations, Hypospadias",CHAR(1)
+283,congenital_anomaly_none,Congenital Anomaly None,malf1 - malf7,"Congenital Malformations, None of the Above",CHAR(1)
+284,congenital_anomaly_unknown,Congenital Anomaly Unknown,malf1 - malf7,"Congenital Malformations, Unknown",CHAR(1)
+285,attendant_class,Attendant Class,attclass,Classification of Attendant,CHAR(2)
+286,certifier_class,Certifier Class,crt_clas,"Classification of Certifier
+Before using this field, see “Data Quality Technical Notes - Attendant/Certifier Classification.”",CHAR(2)
+287,infant_death_flag,Infant Death Flag,dthflg,"Indicates that the infant died by the age of 1 year. Before using this field, see Data Technical Notes - Infant Death Flag. 
+",CHAR(1)
