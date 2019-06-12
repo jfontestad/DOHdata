@@ -1,0 +1,707 @@
+field_name,date_from,date_to,code,value
+birth_cert_type,1/1/1980,,R,Resident
+birth_cert_type,1/1/1980,,D,Delayed (selected years)
+birth_cert_type,1/1/1980,,O,Out of state
+birth_cert_type,1/1/1980,,B,Foreign born
+sex,1/1/1980,,F,Female
+sex,1/1/1980,,M,Male
+sex,1/1/1980,,U,Unknown
+sex,1/1/2017,,X,Gender that is not exclusively male or female
+mother_marital_status,1/1/1980,12/31/2016,Y,Yes
+mother_marital_status,1/1/1980,12/31/2016,N,No
+mother_marital_status,1/1/1980,12/31/2016,U,Not stated
+mother_marital_status,1/1/2017,,1,Married to other parent listed
+mother_marital_status,1/1/2017,,2,Married but not to the person listed as parent
+mother_marital_status,1/1/2017,,3,Married but refuse to provide information
+mother_marital_status,1/1/2017,,4,Not married and providing parent information
+mother_marital_status,1/1/2017,,5,"Not married now, was married during pregnancy"
+mother_marital_status,1/1/2017,,6,Not married and refuse to provide information
+mother_marital_status,1/1/2017,,8,Not provided
+mother_marital_status,1/1/2017,,U,Unknown
+facility_type,1/1/1980,12/31/2002,1,Hospital
+facility_type,1/1/1980,12/31/2002,2,Enroute
+facility_type,1/1/1980,12/31/2002,3,Birth center
+facility_type,1/1/1980,12/31/2002,4,Other medical facility
+facility_type,1/1/1980,12/31/2002,5,Home
+facility_type,1/1/1980,12/31/2002,6,Other
+facility_type,1/1/1980,12/31/2002,9,Unknown/not stated
+facility_type,1/1/1980,12/31/2002,,Not coded
+facility_type,1/1/2003,12/31/2016,1,Hospital
+facility_type,1/1/2003,12/31/2016,2,Enroute
+facility_type,1/1/2003,12/31/2016,3,Birth center
+facility_type,1/1/2003,12/31/2016,4,Clinic/doctor’s office
+facility_type,1/1/2003,12/31/2016,5,Home - unknown planning
+facility_type,1/1/2003,12/31/2016,6,Other
+facility_type,1/1/2003,12/31/2016,7,Home - planned
+facility_type,1/1/2003,12/31/2016,8,Home - unplanned
+facility_type,1/1/2003,12/31/2016,9,Unknown/not stated
+facility_type,1/1/2003,12/31/2016,,Not coded
+facility_type,1/1/2017,,1,Hospital
+facility_type,1/1/2017,,2,Enroute
+facility_type,1/1/2017,,3,Birth center
+facility_type,1/1/2017,,4,Clinic/doctor’s office
+facility_type,1/1/2017,,5,Home
+facility_type,1/1/2017,,6,Other
+facility_type,1/1/2017,,9,Unknown/not stated
+intended_facility,1/1/2003,12/31/2016,1,Hospital
+intended_facility,1/1/2003,12/31/2016,3,Birth center
+intended_facility,1/1/2003,12/31/2016,4,Clinic/doctor’s office
+intended_facility,1/1/2003,12/31/2016,6,Other
+intended_facility,1/1/2003,12/31/2016,7,Home - planned
+intended_facility,1/1/2017,,1,Hospital
+intended_facility,1/1/2017,,3,Birth center
+intended_facility,1/1/2017,,4,Clinic/doctor’s office
+intended_facility,1/1/2017,,6,Other
+intended_facility,1/1/2017,,7,Home (planned)
+intended_facility,1/1/2017,,9,Unknown/not stated
+state_fips,1/1/2017,,AL,Alabama
+state_fips,1/1/2017,,AK,Alaska
+state_fips,1/1/2017,,AZ,Arizona
+state_fips,1/1/2017,,AR,Arkansas
+state_fips,1/1/2017,,CA,California
+state_fips,1/1/2017,,CO,Colorado
+state_fips,1/1/2017,,CT,Connecticut
+state_fips,1/1/2017,,DE,Delaware
+state_fips,1/1/2017,,DC,District of Columbia
+state_fips,1/1/2017,,FL,Florida
+state_fips,1/1/2017,,GA,Georgia
+state_fips,1/1/2017,,HI,Hawaii
+state_fips,1/1/2017,,ID,Idaho
+state_fips,1/1/2017,,IL,Illinois
+state_fips,1/1/2017,,IN,Indiana
+state_fips,1/1/2017,,IA,Iowa
+state_fips,1/1/2017,,KS,Kansas
+state_fips,1/1/2017,,KY,Kentucky
+state_fips,1/1/2017,,LA,Louisiana
+state_fips,1/1/2017,,ME,Maine
+state_fips,1/1/2017,,MD,Maryland
+state_fips,1/1/2017,,MA,Massachusetts
+state_fips,1/1/2017,,MI,Michigan
+state_fips,1/1/2017,,MN,Minnesota
+state_fips,1/1/2017,,MS,Mississippi
+state_fips,1/1/2017,,MO,Missouri
+state_fips,1/1/2017,,MT,Montana
+state_fips,1/1/2017,,NE,Nebraska
+state_fips,1/1/2017,,NV,Nevada
+state_fips,1/1/2017,,NH,New Hampshire
+state_fips,1/1/2017,,NJ,New Jersey
+state_fips,1/1/2017,,NM,New Mexico
+state_fips,1/1/2017,,NY,New York
+state_fips,1/1/2017,,NC,North Carolina
+state_fips,1/1/2017,,ND,North Dakota
+state_fips,1/1/2017,,OH,Ohio
+state_fips,1/1/2017,,OK,Oklahoma
+state_fips,1/1/2017,,OR,Oregon
+state_fips,1/1/2017,,PA,Pennsylvania
+state_fips,1/1/2017,,RI,Rhode Island
+state_fips,1/1/2017,,SC,South Carolina
+state_fips,1/1/2017,,SD,South Dakota
+state_fips,1/1/2017,,TN,Tennessee
+state_fips,1/1/2017,,TX,Texas
+state_fips,1/1/2017,,UT,Utah
+state_fips,1/1/2017,,VT,Vermont
+state_fips,1/1/2017,,VA,Virginia
+state_fips,1/1/2017,,WA,Washington
+state_fips,1/1/2017,,WV,West Virginia
+state_fips,1/1/2017,,WI,Wisconsin
+state_fips,1/1/2017,,WY,Wyoming
+state_nchs,1/1/1980,12/31/2016,1,Alabama
+state_nchs,1/1/1980,12/31/2016,2,Alaska
+state_nchs,1/1/1980,12/31/2016,3,Arizona
+state_nchs,1/1/1980,12/31/2016,4,Arkansas
+state_nchs,1/1/1980,12/31/2016,5,California
+state_nchs,1/1/1980,12/31/2016,6,Colorado
+state_nchs,1/1/1980,12/31/2016,7,Connecticut
+state_nchs,1/1/1980,12/31/2016,8,Delaware
+state_nchs,1/1/1980,12/31/2016,9,District of Columbia
+state_nchs,1/1/1980,12/31/2016,10,Florida
+state_nchs,1/1/1980,12/31/2016,11,Georgia
+state_nchs,1/1/1980,12/31/2016,12,Hawaii
+state_nchs,1/1/1980,12/31/2016,13,Idaho
+state_nchs,1/1/1980,12/31/2016,14,Illinois
+state_nchs,1/1/1980,12/31/2016,15,Indiana
+state_nchs,1/1/1980,12/31/2016,16,Iowa
+state_nchs,1/1/1980,12/31/2016,17,Kansas
+state_nchs,1/1/1980,12/31/2016,18,Kentucky
+state_nchs,1/1/1980,12/31/2016,19,Louisiana
+state_nchs,1/1/1980,12/31/2016,20,Maine
+state_nchs,1/1/1980,12/31/2016,21,Maryland
+state_nchs,1/1/1980,12/31/2016,22,Massachusetts
+state_nchs,1/1/1980,12/31/2016,23,Michigan
+state_nchs,1/1/1980,12/31/2016,24,Minnesota
+state_nchs,1/1/1980,12/31/2016,25,Mississippi
+state_nchs,1/1/1980,12/31/2016,26,Missouri
+state_nchs,1/1/1980,12/31/2016,27,Montana
+state_nchs,1/1/1980,12/31/2016,28,Nebraska
+state_nchs,1/1/1980,12/31/2016,29,Nevada
+state_nchs,1/1/1980,12/31/2016,30,New Hampshire
+state_nchs,1/1/1980,12/31/2016,31,New Jersey
+state_nchs,1/1/1980,12/31/2016,32,New Mexico
+state_nchs,1/1/1980,12/31/2016,33,New York
+state_nchs,1/1/1980,12/31/2016,34,North Carolina
+state_nchs,1/1/1980,12/31/2016,35,North Dakota
+state_nchs,1/1/1980,12/31/2016,36,Ohio
+state_nchs,1/1/1980,12/31/2016,37,Oklahoma
+state_nchs,1/1/1980,12/31/2016,38,Oregon
+state_nchs,1/1/1980,12/31/2016,39,Pennsylvania
+state_nchs,1/1/1980,12/31/2016,40,Rhode Island
+state_nchs,1/1/1980,12/31/2016,41,South Carolina
+state_nchs,1/1/1980,12/31/2016,42,South Dakota
+state_nchs,1/1/1980,12/31/2016,43,Tennessee
+state_nchs,1/1/1980,12/31/2016,44,Texas
+state_nchs,1/1/1980,12/31/2016,45,Utah
+state_nchs,1/1/1980,12/31/2016,46,Vermont
+state_nchs,1/1/1980,12/31/2016,47,Virginia
+state_nchs,1/1/1980,12/31/2016,48,Washington
+state_nchs,1/1/1980,12/31/2016,49,West Virginia
+state_nchs,1/1/1980,12/31/2016,50,Wisconsin
+state_nchs,1/1/1980,12/31/2016,51,Wyoming
+state_nchs,1/1/1980,12/31/2016,52,Puerto Rico
+state_nchs,1/1/1980,12/31/2016,53,Virgin Islands
+state_nchs,1/1/1980,12/31/2016,54,Guam
+state_nchs,1/1/1980,12/31/2016,55,Canada
+state_nchs,1/1/1980,12/31/2016,56,Cuba
+state_nchs,1/1/1980,12/31/2016,57,Mexico
+state_nchs,1/1/1980,12/31/2016,59,Other Foreign
+state_nchs,1/1/1980,12/31/2016,60,American Samoa
+state_nchs,1/1/1980,12/31/2016,69,Marianas
+state_nchs,1/1/1980,12/31/2016,90,US (Unspecified)
+state_nchs,1/1/1980,12/31/2016,91,Refused to State
+state_nchs,1/1/1980,12/31/2016,99,Not Classifiable
+country_wa,1/1/1980,,627,AFGHANISTAN
+country_wa,1/1/1980,,500,AFRICA
+country_wa,1/1/1980,,601,ALBANIA
+country_wa,1/1/1980,,660,ALGERIA
+country_wa,1/1/1980,,501,AMERICAN SAMOA
+country_wa,1/1/1980,,761,ANDORRA
+country_wa,1/1/1980,,673,ANGOLA
+country_wa,1/1/1980,,771,ANGUILLA
+country_wa,1/1/1980,,762,ANTARCTICA
+country_wa,1/1/1980,,632,ANTIGUA AND BARBUDA
+country_wa,1/1/1980,,502,ARGENTINA
+country_wa,1/1/1980,,636,ARMENIA
+country_wa,1/1/1980,,633,ARUBA
+country_wa,1/1/1980,,746,ASIA
+country_wa,1/1/1980,,503,AUSTRALIA
+country_wa,1/1/1980,,591,AUSTRIA
+country_wa,1/1/1980,,703,AZERBAIJAN
+country_wa,1/1/1980,,642,AZORES
+country_wa,1/1/1980,,672,BAHAMAS
+country_wa,1/1/1980,,689,BAHRAIN
+country_wa,1/1/1980,,504,BANGLADESH
+country_wa,1/1/1980,,589,BARBADOS
+country_wa,1/1/1980,,683,BELARUS
+country_wa,1/1/1980,,505,BELGIUM
+country_wa,1/1/1980,,582,BELIZE
+country_wa,1/1/1980,,722,BENIN
+country_wa,1/1/1980,,506,BERMUDA
+country_wa,1/1/1980,,723,BHUTAN
+country_wa,1/1/1980,,507,BOLIVIA
+country_wa,1/1/1980,,783,BONAIRE
+country_wa,1/1/1980,,643,BORNEO
+country_wa,1/1/1980,,680,BOSNIA AND HERZEGOVINA
+country_wa,1/1/1980,,724,BOTSWANA
+country_wa,1/1/1980,,508,BRAZIL
+country_wa,1/1/1980,,772,BRITISH VIRGIN ISLANDS
+country_wa,1/1/1980,,739,BRITISH WEST INDIES
+country_wa,1/1/1980,,701,BRUNEI
+country_wa,1/1/1980,,599,BULGARIA
+country_wa,1/1/1980,,694,BURKINA FASO
+country_wa,1/1/1980,,509,BURMA
+country_wa,1/1/1980,,693,BURUNDI
+country_wa,1/1/1980,,510,CAMBODIA
+country_wa,1/1/1980,,634,CAMEROON
+country_wa,1/1/1980,,743,CANARY ISLANDS
+country_wa,1/1/1980,,600,CAPE VERDE
+country_wa,1/1/1980,,760,CARIBBEAN
+country_wa,1/1/1980,,757,CAROLINE ISLANDS
+country_wa,1/1/1980,,512,CAYMAN ISLANDS
+country_wa,1/1/1980,,699,CENTRAL AFRICAN REPUBLIC
+country_wa,1/1/1980,,513,CENTRAL AMERICA
+country_wa,1/1/1980,,725,CHAD
+country_wa,1/1/1980,,515,CHILE
+country_wa,1/1/1980,,745,CHINA
+country_wa,1/1/1980,,517,COLOMBIA
+country_wa,1/1/1980,,720,COMMONWEALTH OF DOMINICA
+country_wa,1/1/1980,,764,COMOROS
+country_wa,1/1/1980,,758,COOK ISLANDS
+country_wa,1/1/1980,,518,COSTA RICA
+country_wa,1/1/1980,,661,COTE D'IVOIRE
+country_wa,1/1/1980,,602,CROATIA
+country_wa,1/1/1980,,594,CUBA
+country_wa,1/1/1980,,682,CURACAO
+country_wa,1/1/1980,,651,CYPRUS
+country_wa,1/1/1980,,678,CZECH REPUBLIC
+country_wa,1/1/1980,,618,CZECHOSLOVAKIA
+country_wa,1/1/1980,,647,DEMOCRATIC REP. OF CONGO
+country_wa,1/1/1980,,519,DENMARK
+country_wa,1/1/1980,,726,DJIBOUTI
+country_wa,1/1/1980,,765,DOMINICA
+country_wa,1/1/1980,,520,DOMINICAN REPUBLIC
+country_wa,1/1/1980,,738,DUTCH EAST INDIES
+country_wa,1/1/1980,,677,EAST AFRICA
+country_wa,1/1/1980,,654,EAST GERMANY
+country_wa,1/1/1980,,753,EAST INDIES
+country_wa,1/1/1980,,766,EAST TIMOR
+country_wa,1/1/1980,,521,ECUADOR
+country_wa,1/1/1980,,597,EGYPT
+country_wa,1/1/1980,,522,EL SALVADOR
+country_wa,1/1/1980,,737,EQUATORIAL GUINEA
+country_wa,1/1/1980,,614,ERITREA
+country_wa,1/1/1980,,638,ESTONIA
+country_wa,1/1/1980,,524,ETHIOPIA
+country_wa,1/1/1980,,663,EUROPE
+country_wa,1/1/1980,,781,FALKLAND ISLANDS
+country_wa,1/1/1980,,779,FAROE ISLANDS
+country_wa,1/1/1980,,581,FIJI
+country_wa,1/1/1980,,608,FINLAND
+country_wa,1/1/1980,,525,FRANCE
+country_wa,1/1/1980,,671,FRENCH AFRICA
+country_wa,1/1/1980,,755,FRENCH GUIANA
+country_wa,1/1/1980,,687,FRENCH POLYNESIA
+country_wa,1/1/1980,,727,GABON
+country_wa,1/1/1980,,773,GAZA STRIP
+country_wa,1/1/1980,,526,GERMANY
+country_wa,1/1/1980,,623,GHANA
+country_wa,1/1/1980,,715,GIBRALTAR
+country_wa,1/1/1980,,741,GILBERT ISLANDS
+country_wa,1/1/1980,,527,GREECE
+country_wa,1/1/1980,,754,GREENLAND
+country_wa,1/1/1980,,662,GRENADA
+country_wa,1/1/1980,,752,GUADELOUPE
+country_wa,1/1/1980,,529,GUATEMALA
+country_wa,1/1/1980,,784,GUERNSEY
+country_wa,1/1/1980,,728,GUINEA
+country_wa,1/1/1980,,729,GUINEA-BISSAU
+country_wa,1/1/1980,,530,GUYANA
+country_wa,1/1/1980,,586,HAITI
+country_wa,1/1/1980,,531,HONDURAS
+country_wa,1/1/1980,,532,HONG KONG
+country_wa,1/1/1980,,533,HUNGARY
+country_wa,1/1/1980,,534,ICELAND
+country_wa,1/1/1980,,535,INDIA
+country_wa,1/1/1980,,536,INDOCHINA
+country_wa,1/1/1980,,584,INDONESIA
+country_wa,1/1/1980,,537,IRAN
+country_wa,1/1/1980,,538,IRAQ
+country_wa,1/1/1980,,539,IRELAND
+country_wa,1/1/1980,,786,ISLE OF MAN
+country_wa,1/1/1980,,540,ISRAEL
+country_wa,1/1/1980,,541,ITALY
+country_wa,1/1/1980,,598,JAMAICA
+country_wa,1/1/1980,,542,JAPAN
+country_wa,1/1/1980,,785,JERSEY
+country_wa,1/1/1980,,543,JORDAN
+country_wa,1/1/1980,,648,KAZAKHSTAN
+country_wa,1/1/1980,,619,KENYA
+country_wa,1/1/1980,,691,KIRIBATI
+country_wa,1/1/1980,,544,KOREA
+country_wa,1/1/1980,,780,KOSOVO
+country_wa,1/1/1980,,626,KUWAIT
+country_wa,1/1/1980,,675,KYRGYZSTAN
+country_wa,1/1/1980,,545,LAOS
+country_wa,1/1/1980,,595,LATVIA
+country_wa,1/1/1980,,605,LEBANON
+country_wa,1/1/1980,,730,LESOTHO
+country_wa,1/1/1980,,546,LIBERIA
+country_wa,1/1/1980,,615,LIBYA
+country_wa,1/1/1980,,731,LIECHTENSTEIN
+country_wa,1/1/1980,,685,LITHUANIA
+country_wa,1/1/1980,,635,LUXEMBURG
+country_wa,1/1/1980,,645,MACAU
+country_wa,1/1/1980,,716,MACEDONIA
+country_wa,1/1/1980,,655,MADAGASCAR
+country_wa,1/1/1980,,700,MALAWI
+country_wa,1/1/1980,,547,MALAYA
+country_wa,1/1/1980,,617,MALAYSIA
+country_wa,1/1/1980,,732,MALDIVES
+country_wa,1/1/1980,,656,MALI
+country_wa,1/1/1980,,665,MALTA
+country_wa,1/1/1980,,652,MARSHALL ISLANDS
+country_wa,1/1/1980,,763,MARTINIQUE
+country_wa,1/1/1980,,711,MAURITANIA
+country_wa,1/1/1980,,686,MAURITIUS
+country_wa,1/1/1980,,787,MAYOTTE
+country_wa,1/1/1980,,631,MICRONESIA
+country_wa,1/1/1980,,641,MIDWAY ISLAND
+country_wa,1/1/1980,,653,MOLDOVA
+country_wa,1/1/1980,,733,MONACO
+country_wa,1/1/1980,,549,MONGOLIA
+country_wa,1/1/1980,,777,MONTENEGRO
+country_wa,1/1/1980,,708,MONTSERRAT
+country_wa,1/1/1980,,696,MORAVIA
+country_wa,1/1/1980,,588,MOROCCO
+country_wa,1/1/1980,,742,MOZAMBIQUE
+country_wa,1/1/1980,,734,NAMIBIA
+country_wa,1/1/1980,,744,NAURU
+country_wa,1/1/1980,,590,NEPAL
+country_wa,1/1/1980,,604,NETHERLANDS
+country_wa,1/1/1980,,709,NETHERLANDS ANTILLES
+country_wa,1/1/1980,,695,NEW CALEDONIA
+country_wa,1/1/1980,,749,NEW GUINEA
+country_wa,1/1/1980,,792,NEW HEBRIDES
+country_wa,1/1/1980,,550,NEW ZEALAND
+country_wa,1/1/1980,,551,NICARAGUA
+country_wa,1/1/1980,,735,NIGER
+country_wa,1/1/1980,,585,NIGERIA
+country_wa,1/1/1980,,776,NIUE
+country_wa,1/1/1980,,664,NORTH AFRICA
+country_wa,1/1/1980,,639,NORTH KOREA
+country_wa,1/1/1980,,794,NORTH VIETNAM
+country_wa,1/1/1980,,610,NORTHERN MARIANA ISLANDS
+country_wa,1/1/1980,,552,NORWAY
+country_wa,1/1/1980,,999,NOT CLASSIFIABLE
+country_wa,1/1/1980,,553,OKINAWA
+country_wa,1/1/1980,,712,OMAN
+country_wa,1/1/1980,,554,PACIFIC ISLAND
+country_wa,1/1/1980,,555,PAKISTAN
+country_wa,1/1/1980,,676,PALAU
+country_wa,1/1/1980,,657,PALESTINE
+country_wa,1/1/1980,,583,PANAMA
+country_wa,1/1/1980,,640,PAPUA NEW GUINEA
+country_wa,1/1/1980,,556,PARAGUAY
+country_wa,1/1/1980,,516,PEOPLE'S REPUBLIC OF CHINA
+country_wa,1/1/1980,,557,PERU
+country_wa,1/1/1980,,558,PHILIPPINES
+country_wa,1/1/1980,,559,POLAND
+country_wa,1/1/1980,,759,POLYNESIA
+country_wa,1/1/1980,,560,PORTUGAL
+country_wa,1/1/1980,,782,PRUSSIA
+country_wa,1/1/1980,,644,QATAR
+country_wa,1/1/1980,,666,REPUBLIC OF GEORGIA
+country_wa,1/1/1980,,704,REPUBLIC OF THE CONGO
+country_wa,1/1/1980,,788,REUNION
+country_wa,1/1/1980,,562,RHODESIA
+country_wa,1/1/1980,,596,ROMANIA
+country_wa,1/1/1980,,592,RUSSIA
+country_wa,1/1/1980,,719,RWANDA
+country_wa,1/1/1980,,778,SAINT HELENA
+country_wa,1/1/1980,,751,SAINT KITTS AND NEVIS
+country_wa,1/1/1980,,670,SAINT LUCIA
+country_wa,1/1/1980,,789,SAINT MARTIN
+country_wa,1/1/1980,,646,SAINT VINCENT AND GRENADINES
+country_wa,1/1/1980,,578,SAMOA
+country_wa,1/1/1980,,768,SAN MARINO
+country_wa,1/1/1980,,747,SAO TOME AND PRINCIPE
+country_wa,1/1/1980,,606,SAUDI ARABIA
+country_wa,1/1/1980,,564,SCOTLAND
+country_wa,1/1/1980,,669,SENEGAL
+country_wa,1/1/1980,,706,SERBIA
+country_wa,1/1/1980,,690,SEYCHELLES
+country_wa,1/1/1980,,688,SIERRA LEONE
+country_wa,1/1/1980,,616,SINGAPORE
+country_wa,1/1/1980,,790,SINT MAARTEN
+country_wa,1/1/1980,,679,SLOVAKIA
+country_wa,1/1/1980,,681,SLOVENIA
+country_wa,1/1/1980,,710,SOLOMON ISLANDS
+country_wa,1/1/1980,,609,SOMALIA
+country_wa,1/1/1980,,565,SOUTH AFRICA
+country_wa,1/1/1980,,566,SOUTH AMERICA
+country_wa,1/1/1980,,791,SOUTH SUDAN
+country_wa,1/1/1980,,795,SOUTH VIETNAM
+country_wa,1/1/1980,,567,SPAIN
+country_wa,1/1/1980,,514,SRI LANKA
+country_wa,1/1/1980,,668,SUDAN
+country_wa,1/1/1980,,702,SURINAME
+country_wa,1/1/1980,,697,SWAZILAND
+country_wa,1/1/1980,,568,SWEDEN
+country_wa,1/1/1980,,603,SWITZERLAND
+country_wa,1/1/1980,,630,SYRIA
+country_wa,1/1/1980,,717,TAHITI
+country_wa,1/1/1980,,569,TAIWAN
+country_wa,1/1/1980,,718,TAJIKISTAN
+country_wa,1/1/1980,,740,TANGANYIKA
+country_wa,1/1/1980,,629,TANZANIA
+country_wa,1/1/1980,,570,THAILAND
+country_wa,1/1/1980,,659,THE GAMBIA
+country_wa,1/1/1980,,674,TIBET
+country_wa,1/1/1980,,793,TIMOR
+country_wa,1/1/1980,,698,TOGO
+country_wa,1/1/1980,,796,TOKELAU
+country_wa,1/1/1980,,571,TONGA
+country_wa,1/1/1980,,593,TRINIDAD AND TOBAGO
+country_wa,1/1/1980,,713,TRUST TERRITORIES
+country_wa,1/1/1980,,611,TUNISIA
+country_wa,1/1/1980,,572,TURKEY
+country_wa,1/1/1980,,748,TURKMENISTAN
+country_wa,1/1/1980,,770,TURKS AND CAICOS ISLANDS
+country_wa,1/1/1980,,756,TUVALU
+country_wa,1/1/1980,,613,U.S.S.R.
+country_wa,1/1/1980,,622,UGANDA
+country_wa,1/1/1980,,612,UKRAINE
+country_wa,1/1/1980,,667,UNITED ARAB EMIRATES
+country_wa,1/1/1980,,523,UNITED KINGDOM
+country_wa,1/1/1980,,775,UNITED STATES
+country_wa,1/1/1980,,620,URUGUAY
+country_wa,1/1/1980,,684,UZBEKISTAN
+country_wa,1/1/1980,,707,VANUATU
+country_wa,1/1/1980,,767,VATICAN CITY
+country_wa,1/1/1980,,573,VENEZUELA
+country_wa,1/1/1980,,574,VIETNAM
+country_wa,1/1/1980,,750,WAKE ISLAND
+country_wa,1/1/1980,,587,WALES
+country_wa,1/1/1980,,650,WEST AFRICA
+country_wa,1/1/1980,,774,WEST BANK
+country_wa,1/1/1980,,576,WEST GERMANY
+country_wa,1/1/1980,,607,WEST INDIES
+country_wa,1/1/1980,,736,WESTERN SAHARA
+country_wa,1/1/1980,,658,YAP
+country_wa,1/1/1980,,624,YEMEN
+country_wa,1/1/1980,,579,YUGOSLAVIA
+country_wa,1/1/1980,,580,ZAMBIA
+country_wa,1/1/1980,,628,ZIMBABWE
+child_calculated_race,1/1/1992,,1,White
+child_calculated_race,1/1/1992,,2,Black
+child_calculated_race,1/1/1992,,3,Native American
+child_calculated_race,1/1/1992,,4,Chinese
+child_calculated_race,1/1/1992,,5,Japanese 
+child_calculated_race,1/1/1992,,6,Other Non
+child_calculated_race,1/1/1992,,7,Filipino
+child_calculated_race,1/1/1992,,8,Refused to State
+child_calculated_race,1/1/1992,,9,Unknown/Not Stated
+child_calculated_race,1/1/1992,,A,Hawaiian
+child_calculated_race,1/1/1992,,B,Other Asian/Pacific Islander
+child_calculated_race,1/1/1992,,C,Mexican/Chicano/Hispanic
+child_calculated_race,1/1/1992,,D,Asian Indian
+child_calculated_race,1/1/1992,,E,Korean
+child_calculated_race,1/1/1992,,F,Samoan
+child_calculated_race,1/1/1992,,G,Vietnamese
+child_calculated_race,1/1/1992,,H,Guamanian
+child_calculated_race,1/1/2003,,,Not processed by NCHS
+county_wa,1/1/1980,,0,Non-Washington State or Unknown
+county_wa,1/1/1980,,1,Adams County
+county_wa,1/1/1980,,2,Asotin County
+county_wa,1/1/1980,,3,Benton County
+county_wa,1/1/1980,,4,Chelan County
+county_wa,1/1/1980,,5,Clallam County
+county_wa,1/1/1980,,6,Clark County
+county_wa,1/1/1980,,7,Columbia County
+county_wa,1/1/1980,,8,Cowlitz County
+county_wa,1/1/1980,,9,Douglas County
+county_wa,1/1/1980,,10,Ferry County
+county_wa,1/1/1980,,11,Franklin County
+county_wa,1/1/1980,,12,Garfield County
+county_wa,1/1/1980,,13,Grant County
+county_wa,1/1/1980,,14,Grays Harbor County
+county_wa,1/1/1980,,15,Island County
+county_wa,1/1/1980,,16,Jefferson County
+county_wa,1/1/1980,,17,King County
+county_wa,1/1/1980,,18,Kitsap County
+county_wa,1/1/1980,,19,Kittitas County
+county_wa,1/1/1980,,20,Klickitat County
+county_wa,1/1/1980,,21,Lewis County
+county_wa,1/1/1980,,22,Lincoln County
+county_wa,1/1/1980,,23,Mason County
+county_wa,1/1/1980,,24,Okanogan County
+county_wa,1/1/1980,,25,Pacific County
+county_wa,1/1/1980,,26,Pend Oreille County
+county_wa,1/1/1980,,27,Pierce County
+county_wa,1/1/1980,,28,San Juan County
+county_wa,1/1/1980,,29,Skagit County
+county_wa,1/1/1980,,30,Skamania County
+county_wa,1/1/1980,,31,Snohomish County
+county_wa,1/1/1980,,32,Spokane County
+county_wa,1/1/1980,,33,Stevens County
+county_wa,1/1/1980,,34,Thurston County
+county_wa,1/1/1980,,35,Wahkiakum County
+county_wa,1/1/1980,,36,Walla Walla County
+county_wa,1/1/1980,,37,Whatcom County
+county_wa,1/1/1980,,38,Whitman County
+county_wa,1/1/1980,,39,Yakima County
+city_wa,1/1/1980,,0,Non-Washington State or Unknown 
+city_wa,1/1/1980,,9999,Non-Washington State or Unknown 
+city_wa,1/1/1980,,100,Adams County rural
+city_wa,1/1/1980,,103,Othello
+city_wa,1/1/1980,,200,Asotin County rural
+city_wa,1/1/1980,,203,Clarkston
+city_wa,1/1/1980,,300,Benton County rural
+city_wa,1/1/1980,,301,Kennewick
+city_wa,1/1/1980,,302,Richland
+city_wa,1/1/1980,,303,Prosser
+city_wa,1/1/1981,,304,West Richland
+city_wa,1/1/2001,,305,Benton City
+city_wa,1/1/1980,,400,Chelan County rural
+city_wa,1/1/1980,,402,Wenatchee
+city_wa,1/1/1980,,403,Chelan
+city_wa,1/1/1992,,404,Cashmere
+city_wa,1/1/1980,,500,Clallam County rural
+city_wa,1/1/1981,,501,Forks
+city_wa,1/1/1980,,502,Port Angeles
+city_wa,1/1/1980,,503,Sequim
+city_wa,1/1/1980,,600,Clark County rural
+city_wa,1/1/1980,,602,Vancouver
+city_wa,1/1/1980,,603,Camas
+city_wa,1/1/1980,,604,Washougal
+city_wa,1/1/1980,,605,Battle Ground
+city_wa,1/1/2006,,606,Ridgefield
+city_wa,1/1/2009,,607,La Center
+city_wa,1/1/1980,,700,Columbia County rural
+city_wa,1/1/1980,12/31/1989,703,Dayton
+city_wa,1/1/1992,,703,Dayton
+city_wa,1/1/1980,,800,Cowlitz County rural
+city_wa,1/1/1980,,802,Longview
+city_wa,1/1/1980,,803,Kelso
+city_wa,1/1/1984,,804,Woodland
+city_wa,1/1/2010,,805,Kalama
+city_wa,1/1/1980,,900,Douglas County rural
+city_wa,1/1/1992,,901,East Wenatchee
+city_wa,1/1/1980,,1000,Ferry County rural
+city_wa,1/1/1980,,1100,Franklin County rural
+city_wa,1/1/1980,,1102,Pasco
+city_wa,1/1/1994,,1103,Connell
+city_wa,1/1/1980,,1200,Garfield County rural
+city_wa,1/1/1980,,1300,Grant County rural
+city_wa,1/1/1980,,1304,Ephrata
+city_wa,1/1/1980,,1305,Moses Lake
+city_wa,1/1/1980,,1306,Quincy
+city_wa,1/1/2001,,1307,Mattawa
+city_wa,1/1/2001,,1308,Warden
+city_wa,1/1/1980,,1400,Grays Harbor County rural
+city_wa,1/1/1980,,1401,Aberdeen
+city_wa,1/1/1980,,1402,Hoquiam
+city_wa,1/1/1980,,1403,Montesano
+city_wa,1/1/1980,12/31/1984,1404,Elma
+city_wa,1/1/1992,,1404,Elma
+city_wa,1/1/1993,,1405,Ocean Shores
+city_wa,1/1/1980,,1500,Island County rural
+city_wa,1/1/1980,,1503,Oak Harbor
+city_wa,1/1/1980,,1600,Jefferson County rural
+city_wa,1/1/1980,,1603,Port Townsend
+city_wa,1/1/1980,,1700,King County rural
+city_wa,1/1/1980,,1701,Seattle
+city_wa,1/1/1980,,1702,Renton
+city_wa,1/1/1980,,1703,Auburn
+city_wa,1/1/1980,,1704,Enumclaw
+city_wa,1/1/1980,,1705,Kent
+city_wa,1/1/1980,,1706,Kirkland
+city_wa,1/1/1980,,1707,Bellevue
+city_wa,1/1/1980,,1708,Normandy Park
+city_wa,1/1/1980,,1709,Mercer Island
+city_wa,1/1/1980,,1710,Redmond
+city_wa,1/1/1980,,1711,Bothell
+city_wa,1/1/1981,12/31/1981,1712,Clyde Hill
+city_wa,1/1/1987,12/31/1987,1712,Clyde Hill
+city_wa,1/1/1992,,1712,Clyde Hill
+city_wa,1/1/1980,,1713,Des Moines
+city_wa,1/1/1980,,1714,Issaquah
+city_wa,1/1/1987,,1715,Lake Forest Park
+city_wa,1/1/1980,,1716,Medina
+city_wa,1/1/1980,,1717,Tukwila
+city_wa,1/1/1986,,1718,Pacific
+city_wa,1/1/1990,,1719,Federal Way
+city_wa,1/1/1990,,1720,SeaTac
+city_wa,1/1/1992,,1721,Duvall
+city_wa,1/1/1992,,1722,North Bend
+city_wa,1/1/1993,,1723,Burien
+city_wa,1/1/1993,,1724,Woodinville
+city_wa,1/1/1995,,1725,Newcastle
+city_wa,1/1/1997,,1726,Shoreline
+city_wa,1/1/1998,,1727,Black Diamond
+city_wa,1/1/1998,,1728,Covington
+city_wa,1/1/1998,,1729,Maple Valley
+city_wa,1/1/2000,,1730,Kenmore
+city_wa,1/1/2000,,1731,Sammamish
+city_wa,1/1/2001,,1732,Algona
+city_wa,1/1/2001,,1733,Snoqualmie
+city_wa,1/1/1980,,1800,Kitsap County rural
+city_wa,1/1/1980,,1802,Bremerton
+city_wa,1/1/1980,,1803,Port Orchard
+city_wa,1/1/1980,,1804,Poulsbo
+city_wa,1/1/1985,,1805,Bainbridge Island (formerly Winslow)
+city_wa,1/1/1980,,1900,Kittitas County rural
+city_wa,1/1/1980,,1903,Ellensburg
+city_wa,1/1/1980,,2000,Klickitat County rural
+city_wa,1/1/1980,,2003,Goldendale
+city_wa,1/1/1980,,2100,Lewis County rural
+city_wa,1/1/1980,,2103,Centralia
+city_wa,1/1/1980,,2104,Chehalis
+city_wa,1/1/1980,,2200,Lincoln County rural
+city_wa,1/1/1980,,2300,Mason County rural
+city_wa,1/1/1980,,2303,Shelton
+city_wa,1/1/1980,,2400,Okanogan County rural
+city_wa,1/1/1980,,2403,Omak
+city_wa,1/1/2010,,2410,Okanogan
+city_wa,1/1/1980,,2500,Pacific County rural
+city_wa,1/1/1980,,2503,Raymond
+city_wa,1/1/1980,,2600,Pend Oreille County rural
+city_wa,1/1/1980,,2700,Pierce County rural
+city_wa,1/1/1980,,2701,Tacoma
+city_wa,1/1/1980,,2702,Puyallup
+city_wa,1/1/1980,,2703,Sumner
+city_wa,1/1/1980,,2704,Buckley
+city_wa,1/1/1980,,2705,Fircrest
+city_wa,1/1/1980,,2706,Bonney Lake
+city_wa,1/1/1980,,2707,Milton
+city_wa,1/1/1980,,2708,Steilacoom
+city_wa,1/1/1984,,2709,Gig Harbor
+city_wa,1/1/1987,,2710,Fife
+city_wa,1/1/1996,,2711,Edgewood
+city_wa,1/1/1996,,2712,Lakewood
+city_wa,1/1/1996,,2713,University Place
+city_wa,1/1/1997,,2714,Orting
+city_wa,1/1/2001,,2715,Du Pont
+city_wa,1/1/2006,,2716,Auburn
+city_wa,1/1/1980,,2800,San Juan County rural
+city_wa,1/1/1980,,2900,Skagit County rural
+city_wa,1/1/1980,,2903,Anacortes
+city_wa,1/1/1980,,2904,Mount Vernon
+city_wa,1/1/1980,,2905,Sedro Woolley
+city_wa,1/1/1980,,2906,Burlington
+city_wa,1/1/1980,,3000,Skamania County rural
+city_wa,1/1/1980,,3100,Snohomish County rural
+city_wa,1/1/1980,,3101,Arlington
+city_wa,1/1/1980,,3102,Everett
+city_wa,1/1/1980,,3103,Snohomish
+city_wa,1/1/1980,,3104,Edmonds
+city_wa,1/1/1980,,3105,Lynnwood
+city_wa,1/1/1980,,3106,Marysville
+city_wa,1/1/1980,,3107,Mountlake Terrace
+city_wa,1/1/1980,,3108,Brier
+city_wa,1/1/1980,,3109,Monroe
+city_wa,1/1/1982,,3110,Mukilteo
+city_wa,1/1/1985,,3111,Mill Creek
+city_wa,1/1/1988,,3112,Lake Stevens
+city_wa,1/1/1993,,3113,Bothell
+city_wa,1/1/1994,,3114,Sultan
+city_wa,1/1/1995,,3115,Stanwood
+city_wa,1/1/2001,,3116,Granite Falls
+city_wa,1/1/1980,,3200,Spokane County rural
+city_wa,1/1/1980,,3201,Spokane (city)
+city_wa,1/1/1980,,3203,Medical Lake
+city_wa,1/1/1980,,3204,Cheney
+city_wa,1/1/1994,,3205,Airway Heights
+city_wa,1/1/1994,,3206,Deer Park
+city_wa,1/1/2003,,3207,Liberty Lake
+city_wa,1/1/2004,,3208,Spokane Valley
+city_wa,1/1/1980,,3300,Stevens County rural
+city_wa,1/1/1980,,3303,Colville
+city_wa,1/1/1980,,3400,Thurston County rural
+city_wa,1/1/1980,,3402,Olympia
+city_wa,1/1/1980,,3403,Tumwater
+city_wa,1/1/1980,,3404,Lacey
+city_wa,1/1/1998,,3405,Yelm
+city_wa,1/1/1980,,3500,Wahkiakum County rural
+city_wa,1/1/1980,,3600,Walla Walla County rural
+city_wa,1/1/1980,,3602,Walla Walla (city)
+city_wa,1/1/1980,,3603,College Place
+city_wa,1/1/1980,,3700,Whatcom County rural
+city_wa,1/1/1980,,3702,Bellingham
+city_wa,1/1/1980,,3703,Lynden
+city_wa,1/1/1980,,3704,Ferndale
+city_wa,1/1/1980,,3705,Blaine
+city_wa,1/1/1990,,3705,Blaine
+city_wa,1/1/2015,,3706,Everson
+city_wa,1/1/1980,,3800,Whitman County rural
+city_wa,1/1/1980,,3802,Pullman
+city_wa,1/1/1980,,3803,Colfax
+city_wa,1/1/1980,,3900,Yakima County rural
+city_wa,1/1/1980,,3902,Yakima (city)
+city_wa,1/1/1980,,3903,Sunnyside
+city_wa,1/1/1980,,3904,Toppenish
+city_wa,1/1/1980,,3905,Grandview
+city_wa,1/1/1980,,3906,Wapato
+city_wa,1/1/1980,,3907,Selah
+city_wa,1/1/1980,,3908,Union Gap
+city_wa,1/1/2001,,3909,Granger
+city_wa,1/1/2006,,3910,Zillah
+city_wa,1/1/2010,,3911,Moxee
