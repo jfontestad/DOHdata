@@ -283,7 +283,7 @@ Indicates whether forceps delivery was attempted but unsuccessful.",CHAR(1)
 Indicates whether vacuum extraction delivery was attempted but unsuccessful. ",CHAR(1)
 246,fetal_presentation,Fetal Presentation,fet_pres,"Method of Delivery, Fetal Presentation",CHAR(1)
 247,delivery_method_final,Delivery Method Final,dmethfin,"Method of Delivery, Final Route and Method",INTEGER
-248,delivery_method_calculation,Delivery Method Calculation,"dmeth1, dmeth2, dmeth3. dmeth4","Delivery Method, Calculated",INTEGER
+248,delivery_method_calculation,Delivery Method Calculation,dmeth1,"Delivery Method, Calculated",INTEGER
 249,birth_weight_grams,Birth Weight - Grams,wt_grams,"Birth Weight of Baby - Grams
 Indicates gram weight of infant. Pounds and ounces are converted as follows: grams = [(lbs*16)+oz]*28.3495267 (Rounded to the nearest gram)
 
