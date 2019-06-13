@@ -1,0 +1,346 @@
+nchs_level,nchs_code,nchs_name
+state,01 ,Alabama
+state,02 ,Alaska
+state,03 ,Arizona
+state,04 ,Arkansas
+state,05 ,California
+state,06 ,Colorado
+state,07 ,Connecticut
+state,08 ,Delaware
+state,09 ,District of Columbia
+state,10 ,Florida
+state,11 ,Georgia
+state,12 ,Hawaii
+state,13 ,Idaho
+state,14 ,Illinois
+state,15 ,Indiana
+state,16 ,Iowa
+state,17 ,Kansas
+state,18 ,Kentucky
+state,19 ,Louisiana
+state,20 ,Maine
+state,21 ,Maryland
+state,22 ,Massachusetts
+state,23 ,Michigan
+state,24 ,Minnesota
+state,25 ,Mississippi
+state,26 ,Missouri
+state,27 ,Montana
+state,28 ,Nebraska
+state,29 ,Nevada
+state,30 ,New Hampshire
+state,31 ,New Jersey
+state,32 ,New Mexico
+state,33 ,New York
+state,34 ,North Carolina
+state,35 ,North Dakota
+state,36 ,Ohio
+state,37 ,Oklahoma
+state,38 ,Oregon
+state,39 ,Pennsylvania
+state,40 ,Rhode Island
+state,41 ,South Carolina
+state,42 ,South Dakota
+state,43 ,Tennessee
+state,44 ,Texas
+state,45 ,Utah
+state,46 ,Vermont
+state,47 ,Virginia
+state,48 ,Washington
+state,49 ,West Virginia
+state,50 ,Wisconsin
+state,51 ,Wyoming
+state,52 ,Puerto Rico
+state,53 ,Virgin Islands
+state,54 ,Guam
+state,55 ,Canada
+state,56 ,Cuba
+state,57 ,Mexico
+state,59 ,Other Foreign
+state,60 ,American Samoa
+state,69 ,Marianas
+state,90 ,United States (Unspecified)
+state,91 ,Refused to State
+state,99 ,Not Classifiable
+country,627,Afghanistan
+country,500,Africa
+country,601,Albania
+country,660,Algeria
+country,501,American Samoa
+country,761,Andorra
+country,673,Angola
+country,771,Anguilla
+country,762,Antarctica
+country,632,Antigua and Barbuda
+country,502,Argentina
+country,636,Armenia
+country,633,Aruba
+country,746,Asia
+country,503,Australia
+country,591,Austria
+country,703,Azerbaijan
+country,642,Azores
+country,672,Bahamas
+country,689,Bahrain
+country,504,Bangladesh
+country,589,Barbados
+country,683,Belarus
+country,505,Belgium
+country,582,Belize
+country,722,Benin
+country,506,Bermuda
+country,723,Bhutan
+country,507,Bolivia
+country,783,Bonaire
+country,643,Borneo
+country,680,Bosnia and Herzegovina
+country,724,Botswana
+country,508,Brazil
+country,772,British Virgin Islands
+country,739,British West Indies
+country,701,Brunei
+country,599,Bulgaria
+country,694,Burkina Faso
+country,509,Burma
+country,693,Burundi
+country,510,Cambodia
+country,634,Cameroon
+country,743,Canary Islands
+country,600,Cape Verde
+country,760,Caribbean
+country,757,Caroline Islands
+country,512,Cayman Islands
+country,699,Central African Republic
+country,513,Central America
+country,725,Chad
+country,515,Chile
+country,745,China
+country,517,Colombia
+country,720,Commonwealth of Dominica
+country,764,Comoros
+country,758,Cook Islands
+country,518,Costa Rica
+country,661,Cote D'Ivoire
+country,602,Croatia
+country,594,Cuba
+country,682,Curacao
+country,651,Cyprus
+country,678,Czech Republic
+country,618,Czechoslovakia
+country,647,Democratic Rep. of Congo
+country,519,Denmark
+country,726,Djibouti
+country,765,Dominica
+country,520,Dominican Republic
+country,738,Dutch East Indies
+country,677,East Africa
+country,654,East Germany
+country,753,East Indies
+country,766,East Timor
+country,521,Ecuador
+country,597,Egypt
+country,522,El Salvador
+country,737,Equatorial Guinea
+country,614,Eritrea
+country,638,Estonia
+country,524,Ethiopia
+country,663,Europe
+country,781,Falkland Islands
+country,779,Faroe Islands
+country,581,Fiji
+country,608,Finland
+country,525,France
+country,671,French Africa
+country,755,French Guiana
+country,687,French Polynesia
+country,727,Gabon
+country,773,Gaza Strip
+country,526,Germany
+country,623,Ghana
+country,715,Gibraltar
+country,741,Gilbert Islands
+country,527,Greece
+country,754,Greenland
+country,662,Grenada
+country,752,Guadeloupe
+country,529,Guatemala
+country,784,Guernsey
+country,728,Guinea
+country,729,Guinea-Bissau
+country,530,Guyana
+country,586,Haiti
+country,531,Honduras
+country,532,Hong Kong
+country,533,Hungary
+country,534,Iceland
+country,535,India
+country,536,Indochina
+country,584,Indonesia
+country,537,Iran
+country,538,Iraq
+country,539,Ireland
+country,786,Isle of Man
+country,540,Israel
+country,541,Italy
+country,598,Jamaica
+country,542,Japan
+country,785,Jersey
+country,543,Jordan
+country,648,Kazakhstan
+country,619,Kenya
+country,691,Kiribati
+country,544,Korea
+country,780,Kosovo
+country,626,Kuwait
+country,675,Kyrgyzstan
+country,545,Laos
+country,595,Latvia
+country,605,Lebanon
+country,730,Lesotho
+country,546,Liberia
+country,615,Libya
+country,731,Liechtenstein
+country,685,Lithuania
+country,635,Luxemburg
+country,645,Macau
+country,716,Macedonia
+country,655,Madagascar
+country,700,Malawi
+country,547,Malaya
+country,617,Malaysia
+country,732,Maldives
+country,656,Mali
+country,665,Malta
+country,652,Marshall Islands
+country,763,Martinique
+country,711,Mauritania
+country,686,Mauritius
+country,787,Mayotte
+country,631,Micronesia
+country,641,Midway Island
+country,653,Moldova
+country,733,Monaco
+country,549,Mongolia
+country,777,Montenegro
+country,708,Montserrat
+country,696,Moravia
+country,588,Morocco
+country,742,Mozambique
+country,734,Namibia
+country,744,Nauru
+country,590,Nepal
+country,604,Netherlands
+country,709,Netherlands Antilles
+country,695,New Caledonia
+country,749,New Guinea
+country,792,New Hebrides
+country,550,New Zealand
+country,551,Nicaragua
+country,735,Niger
+country,585,Nigeria
+country,776,Niue
+country,664,North Africa
+country,639,North Korea
+country,794,North Vietnam
+country,610,Northern Mariana Islands
+country,552,Norway
+country,999,Not Classifiable
+country,553,Okinawa
+country,712,Oman
+country,554,Pacific Island
+country,555,Pakistan
+country,676,Palau
+country,657,Palestine
+country,583,Panama
+country,640,Papua New Guinea
+country,556,Paraguay
+country,516,People's Republic of China
+country,557,Peru
+country,558,Philippines
+country,559,Poland
+country,759,Polynesia
+country,560,Portugal
+country,782,Prussia
+country,644,Qatar
+country,666,Republic of Georgia
+country,704,Republic of the Congo
+country,788,Reunion
+country,562,Rhodesia
+country,596,Romania
+country,592,Russia
+country,719,Rwanda
+country,778,Saint Helena
+country,751,Saint Kitts and Nevis
+country,670,Saint Lucia
+country,789,Saint Martin
+country,646,Saint Vincent and Grenadines
+country,578,Samoa
+country,768,San Marino
+country,747,Sao Tome and Principe
+country,606,Saudi Arabia
+country,564,Scotland
+country,669,Senegal
+country,706,Serbia
+country,690,Seychelles
+country,688,Sierra Leone
+country,616,Singapore
+country,790,Sint Maarten
+country,679,Slovakia
+country,681,Slovenia
+country,710,Solomon Islands
+country,609,Somalia
+country,565,South Africa
+country,566,South America
+country,791,South Sudan
+country,795,South Vietnam
+country,567,Spain
+country,514,Sri Lanka
+country,668,Sudan
+country,702,Suriname
+country,697,Swaziland
+country,568,Sweden
+country,603,Switzerland
+country,630,Syria
+country,717,Tahiti
+country,569,Taiwan
+country,718,Tajikistan
+country,740,Tanganyika
+country,629,Tanzania
+country,570,Thailand
+country,659,The Gambia
+country,674,Tibet
+country,793,Timor
+country,698,Togo
+country,796,Tokelau
+country,571,Tonga
+country,593,Trinidad and Tobago
+country,713,Trust Territories
+country,611,Tunisia
+country,572,Turkey
+country,748,Turkmenistan
+country,770,Turks and Caicos Islands
+country,756,Tuvalu
+country,613,U.S.S.R.
+country,622,Uganda
+country,612,Ukraine
+country,667,United Arab Emirates
+country,523,United Kingdom
+country,775,United States
+country,620,Uruguay
+country,684,Uzbekistan
+country,707,Vanuatu
+country,767,Vatican City
+country,573,Venezuela
+country,574,Vietnam
+country,750,Wake Island
+country,587,Wales
+country,650,West Africa
+country,774,West Bank
+country,576,West Germany
+country,607,West Indies
+country,736,Western Sahara
+country,658,Yap
+country,624,Yemen
+country,579,Yugoslavia
+country,580,Zambia
+country,628,Zimbabwe
