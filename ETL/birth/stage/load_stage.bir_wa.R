@@ -50,7 +50,7 @@ load_stage.bir_wa_f <- function(table_config_create = NULL,
   # Can rely on the fact that the code for diabetes (01) only ever went in mrf1
   # and code for hypertension (02) only ever went in mrf1 and mrf2
   # Also rely on the fact that if mrf1 = "09" or "99" then all other mrf fields are NA
-    bir_2013_2016 <- bir_2013_2016 %>% 
+  bir_2013_2016 <- bir_2013_2016 %>% 
     mutate(
       prepreg_diabetes = case_when(
         mrf1 == "01" & diabetes == "E" ~ "Y",
@@ -81,9 +81,8 @@ load_stage.bir_wa_f <- function(table_config_create = NULL,
         TRUE ~ "U"
       ),
       risk_factors_none = case_when(
-        mrf1 == "09" & mrf2 == "09" & mrf3 == "09" & mrf4 == "09" &
-          mrf5 == "09" & mrf6 == "09" ~ "Y",
-        (mrf1 != "09" & mrf1 != "99") ~ "N",
+        mrf1 == "09" ~ "Y",
+        mrf1 != "09" & mrf1 != "99" ~ "N",
         TRUE ~ "U"
       ),
       risk_factors_unknown = case_when(
@@ -92,92 +91,412 @@ load_stage.bir_wa_f <- function(table_config_create = NULL,
         TRUE ~ "U"
       )
     )
-    
-    # Other medical risk factors are more straight forward
-    # First set up lists of new vars and their equivalent code in mfr
-    mrf_name <- list("hypertension_eclampsia", "preterm_births", "poor_preg_outcomes",
-                      "vaginal_bleeding", "fertility_treatment", "assisted_reproduction",
-                      "previous_cesarean", "group_b_strep")
-    mrf_num <- list("02", "03", "04", "05", "06", "06", "07", "08")
-    
-    # Write a function to recode new var
-    mrf_f <- function(df, name, num) {
-      df <- df %>%
-        mutate(!!name := case_when(
-          (mrf1 == num | mrf2 == num | mrf3 == num | mrf4 == num | mrf5 == num | mrf6 == num) ~ "Y",
-          mrf1 == "09" ~ "N",
-          mrf1 != num & mrf1 != "99" & 
-            (mrf2 != num | is.na(mrf2)) & (mrf3 != num | is.na(mrf3)) &
-            (mrf4 != num | is.na(mrf4)) & (mrf5 != num | is.na(mrf5)) & 
-            (mrf6 != num | is.na(mrf6)) ~ "N",
-          mrf1 == "09" ~ "N",
-          TRUE ~ "U"
-        )) %>%
-        # Just keep the new column and the cert number to join on
-        select(birth_cert_encrypt, !!name)
-    }
-    
-    # Run function and collapse list of results into a single df
-    mrf_out <- purrr::map2(mrf_name, mrf_num, 
+  
+  # Other medical risk factors are more straight forward
+  # First set up lists of new vars and their equivalent code
+  mrf_name <- list("hypertension_eclampsia", "preterm_births", "poor_preg_outcomes",
+                   "vaginal_bleeding", "fertility_treatment", "assisted_reproduction",
+                   "previous_cesarean", "group_b_strep")
+  mrf_num <- list("02", "03", "04", "05", "06", "06", "07", "08")
+  
+  # Write a function to recode new var
+  mrf_f <- function(df, name, num) {
+    df <- df %>%
+      mutate(!!name := case_when(
+        (mrf1 == num | mrf2 == num | mrf3 == num | mrf4 == num | mrf5 == num | mrf6 == num) ~ "Y",
+        mrf1 == "09" ~ "N",
+        mrf1 != num & mrf1 != "99" & 
+          (mrf2 != num | is.na(mrf2)) & (mrf3 != num | is.na(mrf3)) &
+          (mrf4 != num | is.na(mrf4)) & (mrf5 != num | is.na(mrf5)) & 
+          (mrf6 != num | is.na(mrf6)) ~ "N",
+        TRUE ~ "U"
+      )) %>%
+      # Just keep the new column and the cert number to join on
+      select(birth_cert_encrypt, !!name)
+  }
+  
+  # Run function and collapse list of results into a single df
+  mrf_out <- purrr::map2(mrf_name, mrf_num, 
                          ~ mrf_f(df = bir_2013_2016, name = .x, num = .y)) %>%
-      purrr::reduce(left_join, by = "birth_cert_encrypt")
-    
-    # Bind new columns to existing data frame
-    bir_2013_2016 <- left_join(bir_2013_2016, mrf_out, by = "birth_cert_encrypt")
-    
-    # Clean up mfr objects
-    rm(mfr_name, mfr_num, mfr_f, mfr_out)
-    
-    
-    #### Maternal infections ####
-    
-    
-    
-    
-    #### Obstetric procedures ####
-    bir_2013_2016 <- bir_2013_2016 %>% 
-      mutate(
-        
-        
-        prepreg_diabetes = case_when(
-          mrf1 == "01" & diabetes == "E" ~ "Y",
-          mrf1 == "01" & diabetes == "U" ~ "U",
-          mrf1 == "01" & diabetes == "G" ~ "N",
-          mrf1 != "01" & mrf1 != "99" ~ "N",
-          TRUE ~ "U"
-        ),
-        gestational_diabetes = case_when(
-          mrf1 == "01" & diabetes == "G" ~ "Y",
-          mrf1 == "01" & diabetes == "U" ~ "U",
-          mrf1 == "01" & diabetes == "E" ~ "N",
-          mrf1 != "01" & mrf1 != "99" ~ "N",
-          TRUE ~ "U"
-        )
+    purrr::reduce(left_join, by = "birth_cert_encrypt")
+  
+  # Bind new columns to existing data frame
+  bir_2013_2016 <- left_join(bir_2013_2016, mrf_out, by = "birth_cert_encrypt")
+  
+  # Clean up objects
+  rm(mrf_name, mrf_num, mrf_f, mrf_out)
+  
+  
+  #### Maternal infections ####
+  # First set up lists of new vars and their equivalent code
+  minfect_name <- list("gonorrhea", "syphilis", "herpes", "chlamydia", 
+                       "hep_b", "hep_c", "hiv", "infections_other")
+  minfect_num <- list("01", "02", "03", "04", "05", "06", "07", "08")
+  
+  # Write a function to recode new var
+  minfect_f <- function(df, name, num) {
+    df <- df %>%
+      mutate(!!name := case_when(
+        (minfect1 == num | minfect2 == num | minfect3 == num | minfect4 == num | 
+           minfect5 == num | minfect6 == num | minfect7 == num) ~ "Y",
+        minfect1 == "09" | minfect1 == "9 " ~ "N",
+        minfect1 != num & minfect1 != "99" & 
+          (minfect2 != num | is.na(minfect2)) & (minfect3 != num | is.na(minfect3)) &
+          (minfect4 != num | is.na(minfect4)) & (minfect5 != num | is.na(minfect5)) & 
+          (minfect6 != num | is.na(minfect6)) & (minfect7 != num | is.na(minfect7)) ~ "N",
+        TRUE ~ "U"
+      )) %>%
+      # Just keep the new column and the cert number to join on
+      select(birth_cert_encrypt, !!name)
+  }
+  
+  # Run function and collapse list of results into a single df
+  minfect_out <- purrr::map2(minfect_name, minfect_num, 
+                             ~ minfect_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+    purrr::reduce(left_join, by = "birth_cert_encrypt")
+  
+  # Bind new columns to existing data frame
+  bir_2013_2016 <- left_join(bir_2013_2016, minfect_out, by = "birth_cert_encrypt")
+  
+  # Make infections_none and infections_unknown
+  bir_2013_2016 <- bir_2013_2016 %>%
+    mutate(
+      infections_none = case_when(
+        minfect1 %in% c("09", "9 ") ~ "Y",
+        minfect1 != "09" & minfect1 != "99" ~ "N",
+        TRUE ~ "U"
+      ),
+      infections_unknown = case_when(
+        minfect1 == "99" ~ "Y",
+        minfect1 != "99" ~ "N",
+        TRUE ~ "U"
       )
+    )
+  
+  # Clean up objects
+  rm(minfect_name, minfect_num, minfect_f, minfect_out)
+  
+  
+  
+  #### Obstetric procedures ####
+  bir_2013_2016 <- bir_2013_2016 %>% 
+    mutate(
+      cervical_cerclage = case_when(
+        obproc1 == "1" ~ "Y",
+        !(obproc1 %in% c("8", "9")) ~ "N",
+        TRUE ~ "U"
+      ),
+      tocolysis = case_when(
+        obproc1 == "2" | obproc2 == "2" ~ "Y",
+        !obproc1 %in% c("8", "9") ~ "N",
+        TRUE ~ "U"
+      ),
+      ecv_success = case_when(
+        (obproc1 == "3" | obproc2 == "3" | obproc2 == "3" | obproc2 == "3") & 
+          cephaflg == "S" ~ "Y",
+        (obproc1 == "3" | obproc2 == "3" | obproc2 == "3" | obproc2 == "3") & 
+          cephaflg == "F" ~ "N",
+        (obproc1 != "3" & !obproc2 %in% c("8", "9")) & 
+          (obproc2 != "3" | is.na(obproc2)) & 
+          (obproc3 != "3" | is.na(obproc3)) ~ "N",
+        TRUE ~ "U"
+      ),
+      ecv_failed = case_when(
+        (obproc1 == "3" | obproc2 == "3" | obproc2 == "3" | obproc2 == "3") & 
+          cephaflg == "F" ~ "Y",
+        (obproc1 == "3" | obproc2 == "3" | obproc2 == "3" | obproc2 == "3") & 
+          cephaflg == "S" ~ "N",
+        (obproc1 != "3" & !obproc2 %in% c("8", "9")) & 
+          (obproc2 != "3" | is.na(obproc2)) & 
+          (obproc3 != "3" | is.na(obproc3)) ~ "N",
+        TRUE ~ "U"
+      ),
+      obstet_proc_none = case_when(
+        obproc1 == "4" ~ "Y",
+        (obproc1 != "4" & obproc1 != "9") ~ "N",
+        TRUE ~ "U"
+      ),
+      obstet_proc_unknown = case_when(
+        obproc1 == "9" ~ "Y",
+        !obproc1 %in% c("8", "9") ~ "N",
+        TRUE ~ "U"
+      )
+    )
+  
+  #### Labor onset ####
+  bir_2013_2016 <- bir_2013_2016 %>% 
+    mutate(
+      ruptured_membranes = case_when(
+        labons1 == "01" ~ "Y",
+        !labons1 %in% c("99", "09") ~ "N",
+        TRUE ~ "U"
+      ),
+      precipitous_labor = case_when(
+        labons1 == "02" | labons2 == "02" ~ "Y",
+        !labons1 %in% c("99", "09") ~ "N",
+        TRUE ~ "U"
+      ),
+      prolonged_labor = case_when(
+        labons1 == "03" | labons2 == "03" | labons3 == "03" ~ "Y",
+        !labons1 %in% c("99", "09") ~ "N",
+        TRUE ~ "U"
+      ),
+      labor_onset_none = case_when(
+        labons1 == "04" ~ "Y",
+        labons1 != "04" & !labons1 %in% c("99", "09") ~ "N",
+        TRUE ~ "U"
+      ),
+      labor_onset_unknown = case_when(
+        labons1 %in% c("99", "09") ~ "Y",
+        labons1 != "99" ~ "N",
+        TRUE ~ "U"
+      )
+    )
+  
+  
+  #### Characteristics of labor ####
+  # First set up lists of new vars and their equivalent code
+  labchar_name <- list("induction", "augmentation", "non_vertex_presentation", 
+                       "anesthesia", "steroids", "antibiotics", "chorioamnionitis", 
+                       "meconium_stain", "fetal_intolerance")
+  labchar_num <- list("01", "02", "03", "04", "05", "06", "07", "08", "09")
+  
+  # Write a function to recode new var
+  labchar_f <- function(df, name, num) {
+    df <- df %>%
+      mutate(!!name := case_when(
+        (labchar1 == num | labchar2 == num | labchar3 == num | labchar4 == num | 
+           labchar5 == num | labchar6 == num | labchar7 == num) ~ "Y",
+        labchar1 == "10" ~ "N",
+        labchar1 != num & labchar1 != "99" & 
+          (labchar2 != num | is.na(labchar2)) & (labchar3 != num | is.na(labchar3)) &
+          (labchar4 != num | is.na(labchar4)) & (labchar5 != num | is.na(labchar5)) & 
+          (labchar6 != num | is.na(labchar6)) & (labchar7 != num | is.na(labchar7)) ~ "N",
+        TRUE ~ "U"
+      )) %>%
+      # Just keep the new column and the cert number to join on
+      select(birth_cert_encrypt, !!name)
+  }
+  
+  # Run function and collapse list of results into a single df
+  labchar_out <- purrr::map2(labchar_name, labchar_num, 
+                             ~ labchar_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+    purrr::reduce(left_join, by = "birth_cert_encrypt")
+  
+  # Bind new columns to existing data frame
+  bir_2013_2016 <- left_join(bir_2013_2016, labchar_out, by = "birth_cert_encrypt")
+  
+  # Make infections_none and infections_unknown
+  bir_2013_2016 <- bir_2013_2016 %>%
+    mutate(
+      mat_labor_characteristics_none = case_when(
+        labchar1 == "10" ~ "Y",
+        labchar1 != "10" & labchar1 != "99" ~ "N",
+        TRUE ~ "U"
+      ),
+      mat_labor_characteristics_unknow = case_when(
+        labchar1 == "99" ~ "Y",
+        labchar1 != "99" ~ "N",
+        TRUE ~ "U"
+      )
+    )
+  
+  # Clean up objects
+  rm(labchar_name, labchar_num, labchar_f, labchar_out)
 
   
+  #### Maternal morbidity ####
+  # First set up lists of new vars and their equivalent code
+  mmorbid_name <- list("maternal_transfusion", "perineal_laceration", "ruptured_uterus", 
+                       "hysterectomy", "intensive_care", "operation")
+  mmorbid_num <- list("01", "02", "03", "04", "05", "06")
+  
+  # Write a function to recode new var
+  mmorbid_f <- function(df, name, num) {
+    df <- df %>%
+      mutate(!!name := case_when(
+        mmorbid1 == num | mmorbid2 == num | mmorbid3 == num | 
+          mmorbid4 == num | mmorbid5 == num ~ "Y",
+        mmorbid1 == "07" ~ "N",
+        mmorbid1 != num & mmorbid1 != "99" & 
+          (mmorbid2 != num | is.na(mmorbid2)) & (mmorbid3 != num | is.na(mmorbid3)) &
+          (mmorbid4 != num | is.na(mmorbid4)) & (mmorbid5 != num | is.na(mmorbid5)) ~ "N",
+        TRUE ~ "U"
+      )) %>%
+      # Just keep the new column and the cert number to join on
+      select(birth_cert_encrypt, !!name)
+  }
+  
+  # Run function and collapse list of results into a single df
+  mmorbid_out <- purrr::map2(mmorbid_name, mmorbid_num, 
+                             ~ mmorbid_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+    purrr::reduce(left_join, by = "birth_cert_encrypt")
+  
+  # Bind new columns to existing data frame
+  bir_2013_2016 <- left_join(bir_2013_2016, mmorbid_out, by = "birth_cert_encrypt")
+  
+  # Make infections_none and infections_unknown
+  bir_2013_2016 <- bir_2013_2016 %>%
+    mutate(
+      maternal_morbidity_none = case_when(
+        mmorbid1 == "07" ~ "Y",
+        mmorbid1 != "07" & mmorbid1 != "99" ~ "N",
+        TRUE ~ "U"
+      ),
+      maternal_morbidity_unknown = case_when(
+        mmorbid1 == "99" ~ "Y",
+        mmorbid1 != "99" ~ "N",
+        TRUE ~ "U"
+      )
+    )
+  
+  # Clean up objects
+  rm(mmorbid_name, mmorbid_num, mmorbid_f, mmorbid_out)
   
   
+  #### Abnormal conditions of newborn ####
+  # First set up lists of new vars and their equivalent code
+  abcond_name <- list("assist_vent", "assist_vent_6", "nicu_admission", 
+                       "surfactant", "child_antibiotics", "child_injury")
+  abcond_num <- list("01", "02", "03", "04", "05", "06")
+  
+  # Write a function to recode new var
+  abcond_f <- function(df, name, num) {
+    df <- df %>%
+      mutate(!!name := case_when(
+        abcond1 == num | abcond2 == num | abcond3 == num | 
+          abcond4 == num | abcond5 == num | abcond6 == num ~ "Y",
+        abcond1 == "08" ~ "N",
+        abcond1 != num & abcond1 != "99" & 
+          (abcond2 != num | is.na(abcond2)) & (abcond3 != num | is.na(abcond3)) &
+          (abcond4 != num | is.na(abcond4)) & (abcond5 != num | is.na(abcond5)) &
+          (abcond6 != num | is.na(abcond6)) ~ "N",
+        TRUE ~ "U"
+      )) %>%
+      # Just keep the new column and the cert number to join on
+      select(birth_cert_encrypt, !!name)
+  }
+  
+  # Run function and collapse list of results into a single df
+  abcond_out <- purrr::map2(abcond_name, abcond_num, 
+                             ~ abcond_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+    purrr::reduce(left_join, by = "birth_cert_encrypt")
+  
+  # Bind new columns to existing data frame
+  bir_2013_2016 <- left_join(bir_2013_2016, abcond_out, by = "birth_cert_encrypt")
+  
+  # Make infections_none and infections_unknown
+  bir_2013_2016 <- bir_2013_2016 %>%
+    mutate(
+      abnormal_conditions_none = case_when(
+        abcond1 == "08" ~ "Y",
+        abcond1 != "08" & !abcond1 %in% c("99", "09") ~ "N",
+        TRUE ~ "U"
+      ),
+      abnormal_conditions_unknown = case_when(
+        abcond1 %in% c("99", "09") ~ "Y",
+        !abcond1 %in% c("99", "09") ~ "N",
+        TRUE ~ "U"
+      )
+    )
+  
+  # Clean up objects
+  rm(abcond_name, abcond_num, abcond_f, abcond_out)
+  
+  
+  #### Congenital malformations ####
+  # First set up lists of new vars and their equivalent code
+  malf_name <- list("anencephaly", "msb", "congenital_heart", 
+                    "congenital_hernia", "omphalocele", "gastroschisis",
+                    "limb_defect", "cleft_lip", "cleft_palate",
+                    "down_syndrome", "other_chrom", "hypospadias")
+  malf_num <- list("01", "02", "03", "04", "05", "06", "07", "08", "09",
+                   "10", "11", "12")
+  
+  # Write a function to recode new var
+  malf_f <- function(df, name, num) {
+    df <- df %>%
+      mutate(!!name := case_when(
+        malf1 == num | malf2 == num | malf3 == num | malf4 == num | 
+          malf5 == num | malf6 == num | malf7 == num ~ "Y",
+        malf1 == "08" ~ "N",
+        malf1 != num & malf1 != "99" & 
+          (malf2 != num | is.na(malf2)) & (malf3 != num | is.na(malf3)) &
+          (malf4 != num | is.na(malf4)) & (malf5 != num | is.na(malf5)) &
+          (malf6 != num | is.na(malf6)) & (malf7 != num | is.na(malf7)) ~ "N",
+        TRUE ~ "U"
+      )) %>%
+      # Just keep the new column and the cert number to join on
+      select(birth_cert_encrypt, !!name)
+  }
+  
+  # Run function and collapse list of results into a single df
+  malf_out <- purrr::map2(malf_name, malf_num, 
+                            ~ malf_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+    purrr::reduce(left_join, by = "birth_cert_encrypt")
+  
+  # Bind new columns to existing data frame
+  bir_2013_2016 <- left_join(bir_2013_2016, malf_out, by = "birth_cert_encrypt")
+  
+  # Make other flags + infections_none and infections_unknown
+  bir_2013_2016 <- bir_2013_2016 %>%
+    mutate(
+      down_confirm = case_when(
+        down_syndrome == "Y" & downsflg %in% c("C", "Y") ~ "Y",
+        down_syndrome == "Y" & downsflg == "P" ~ "N",
+        TRUE ~ "U"
+      ),
+      down_pending = case_when(
+        down_syndrome == "Y" & downsflg == "P" ~ "Y",
+        down_syndrome == "Y" & downsflg %in% c("C", "Y") ~ "N",
+        TRUE ~ "U"
+      ),
+      other_chrom_confirm = case_when(
+        other_chrom == "Y" & downsflg == "C" ~ "Y",
+        other_chrom == "Y" & downsflg == "P" ~ "N",
+        TRUE ~ "U"
+      ),
+      other_chrom_pending = case_when(
+        other_chrom == "Y" & downsflg == "P" ~ "Y",
+        other_chrom == "Y" & downsflg == "C" ~ "N",
+        TRUE ~ "U"
+      ),
+      congenital_anomaly_none = case_when(
+        malf1 == "13" ~ "Y",
+        malf1 != "13" & !malf1 %in% c("99", "18") ~ "N",
+        TRUE ~ "U"
+      ),
+      congenital_anomaly_unknown = case_when(
+        malf1 %in% c("99", "18") ~ "Y",
+        !malf1 %in% c("99", "18") ~ "N",
+        TRUE ~ "U"
+      )
+    )
+  
+  # Clean up objects
+  rm(malf_name, malf_num, malf_f, malf_out)
+  
+    
+  
+  #### Rename other fields that don't exist in the new system ####
+  bir_2013_2016 <- bir_2013_2016 %>%
+    rename(
+      nchs_new_record = nchsnew, # This appears to always be NA
+      
+    )
+  
+  
+  #### Fix up birth place variables ####
   # birplmom and birpldad need to be converted to FIPS codes and renamed to mother/father_birthplace_state_fips
   
 
-  # Look through codes that are split out now
 
-  # - obproc1-4
-  # - cephaflg
-  # - abcond1-6
-  # - malf1-7
-  # - downsflg
-  # - chromflg
-  # - labchar1-7
-  # - minfect1-7
-  # - mmorbid1-5
-  # - labons1-3
-  
-  
   # Rename some fields that don't exist in the new system
   # - nchsnew
   # - geozip
+  
+  
+  
   
   
   
