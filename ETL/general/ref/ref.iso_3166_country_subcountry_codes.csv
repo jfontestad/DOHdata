@@ -1,11 +1,11 @@
 iso3166_1_code,iso3166_1_name,iso3166_2_full_code,iso3166_2_code,iso3166_2_name
-AD,Andorra,AD-07,07,Andorra la Vella
-AD,Andorra,AD-02,02,Canillo
-AD,Andorra,AD-03,03,Encamp
-AD,Andorra,AD-08,08,Escaldes-Engordany
-AD,Andorra,AD-04,04,La Massana
-AD,Andorra,AD-05,05,Ordino
-AD,Andorra,AD-06,06,Sant Julia de Loria
+AD,Andorra,AD-07,7,Andorra la Vella
+AD,Andorra,AD-02,2,Canillo
+AD,Andorra,AD-03,3,Encamp
+AD,Andorra,AD-08,8,Escaldes-Engordany
+AD,Andorra,AD-04,4,La Massana
+AD,Andorra,AD-05,5,Ordino
+AD,Andorra,AD-06,6,Sant Julia de Loria
 AE,United Arab Emirates,AE-AJ,AJ,'Ajman
 AE,United Arab Emirates,AE-AZ,AZ,Abu Zaby
 AE,United Arab Emirates,AE-FU,FU,Al Fujayrah
@@ -32,22 +32,22 @@ AF,Afghanistan,AF-PAR,PAR,Parwan
 AF,Afghanistan,AF-TAK,TAK,Takhar
 AF,Afghanistan,AF-URU,URU,Uruzgan
 AG,Antigua and Barbuda,AG-11,11,Redonda
-AG,Antigua and Barbuda,AG-03,03,Saint George
-AG,Antigua and Barbuda,AG-04,04,Saint John
-AG,Antigua and Barbuda,AG-05,05,Saint Mary
-AG,Antigua and Barbuda,AG-06,06,Saint Paul
-AG,Antigua and Barbuda,AG-07,07,Saint Peter
-AG,Antigua and Barbuda,AG-08,08,Saint Philip
+AG,Antigua and Barbuda,AG-03,3,Saint George
+AG,Antigua and Barbuda,AG-04,4,Saint John
+AG,Antigua and Barbuda,AG-05,5,Saint Mary
+AG,Antigua and Barbuda,AG-06,6,Saint Paul
+AG,Antigua and Barbuda,AG-07,7,Saint Peter
+AG,Antigua and Barbuda,AG-08,8,Saint Philip
 AI,Anguilla,,,Anguilla
-AL,Albania,AL-01,01,Berat
-AL,Albania,AL-09,09,Diber
-AL,Albania,AL-02,02,Durres
-AL,Albania,AL-03,03,Elbasan
-AL,Albania,AL-04,04,Fier
-AL,Albania,AL-05,05,Gjirokaster
-AL,Albania,AL-06,06,Korce
-AL,Albania,AL-07,07,Kukes
-AL,Albania,AL-08,08,Lezhe
+AL,Albania,AL-01,1,Berat
+AL,Albania,AL-09,9,Diber
+AL,Albania,AL-02,2,Durres
+AL,Albania,AL-03,3,Elbasan
+AL,Albania,AL-04,4,Fier
+AL,Albania,AL-05,5,Gjirokaster
+AL,Albania,AL-06,6,Korce
+AL,Albania,AL-07,7,Kukes
+AL,Albania,AL-08,8,Lezhe
 AL,Albania,AL-10,10,Shkoder
 AL,Albania,AL-11,11,Tirane
 AL,Albania,AL-12,12,Vlore
@@ -181,17 +181,17 @@ AZ,Azerbaijan,AZ-ZAR,ZAR,Zardab
 BA,Bosnia and Herzegovina,BA-BRC,BRC,Brcko distrikt
 BA,Bosnia and Herzegovina,BA-BIH,BIH,Federacija Bosne i Hercegovine
 BA,Bosnia and Herzegovina,BA-SRP,SRP,Republika Srpska
-BB,Barbados,BB-01,01,Christ Church
-BB,Barbados,BB-02,02,Saint Andrew
-BB,Barbados,BB-03,03,Saint George
-BB,Barbados,BB-04,04,Saint James
-BB,Barbados,BB-06,06,Saint Joseph
-BB,Barbados,BB-07,07,Saint Lucy
-BB,Barbados,BB-08,08,Saint Michael
-BB,Barbados,BB-09,09,Saint Peter
+BB,Barbados,BB-01,1,Christ Church
+BB,Barbados,BB-02,2,Saint Andrew
+BB,Barbados,BB-03,3,Saint George
+BB,Barbados,BB-04,4,Saint James
+BB,Barbados,BB-06,6,Saint Joseph
+BB,Barbados,BB-07,7,Saint Lucy
+BB,Barbados,BB-08,8,Saint Michael
+BB,Barbados,BB-09,9,Saint Peter
 BB,Barbados,BB-10,10,Saint Philip
 BB,Barbados,BB-11,11,Saint Thomas
-BD,Bangladesh,BD-06,06,Barisal
+BD,Bangladesh,BD-06,6,Barisal
 BD,Bangladesh,BD-10,10,Chittagong
 BD,Bangladesh,BD-13,13,Dhaka
 BD,Bangladesh,BD-27,27,Khulna
@@ -222,12 +222,12 @@ BF,Burkina Faso,BF-SMT,SMT,Sanmatenga
 BF,Burkina Faso,BF-TUI,TUI,Tuy
 BF,Burkina Faso,BF-YAT,YAT,Yatenga
 BF,Burkina Faso,BF-ZOU,ZOU,Zoundweogo
-BG,Bulgaria,BG-01,01,Blagoevgrad
-BG,Bulgaria,BG-02,02,Burgas
-BG,Bulgaria,BG-08,08,Dobrich
-BG,Bulgaria,BG-07,07,Gabrovo
+BG,Bulgaria,BG-01,1,Blagoevgrad
+BG,Bulgaria,BG-02,2,Burgas
+BG,Bulgaria,BG-08,8,Dobrich
+BG,Bulgaria,BG-07,7,Gabrovo
 BG,Bulgaria,BG-26,26,Haskovo
-BG,Bulgaria,BG-09,09,Kardzhali
+BG,Bulgaria,BG-09,9,Kardzhali
 BG,Bulgaria,BG-10,10,Kyustendil
 BG,Bulgaria,BG-11,11,Lovech
 BG,Bulgaria,BG-12,12,Montana
@@ -245,10 +245,10 @@ BG,Bulgaria,BG-23,23,Sofia
 BG,Bulgaria,BG-22,22,Sofia (stolitsa)
 BG,Bulgaria,BG-24,24,Stara Zagora
 BG,Bulgaria,BG-25,25,Targovishte
-BG,Bulgaria,BG-03,03,Varna
-BG,Bulgaria,BG-04,04,Veliko Tarnovo
-BG,Bulgaria,BG-05,05,Vidin
-BG,Bulgaria,BG-06,06,Vratsa
+BG,Bulgaria,BG-03,3,Varna
+BG,Bulgaria,BG-04,4,Veliko Tarnovo
+BG,Bulgaria,BG-05,5,Vidin
+BG,Bulgaria,BG-06,6,Vratsa
 BG,Bulgaria,BG-28,28,Yambol
 BH,Bahrain,BH-13,13,Al 'Asimah
 BH,Bahrain,BH-14,14,Al Janubiyah
@@ -543,20 +543,20 @@ CR,Costa Rica,CR-L,L,Limon
 CR,Costa Rica,CR-P,P,Puntarenas
 CR,Costa Rica,CR-SJ,SJ,San Jose
 CU,Cuba,CU-15,15,Artemisa
-CU,Cuba,CU-09,09,Camaguey
-CU,Cuba,CU-08,08,Ciego de Avila
-CU,Cuba,CU-06,06,Cienfuegos
+CU,Cuba,CU-09,9,Camaguey
+CU,Cuba,CU-08,8,Ciego de Avila
+CU,Cuba,CU-06,6,Cienfuegos
 CU,Cuba,CU-12,12,Granma
 CU,Cuba,CU-14,14,Guantanamo
 CU,Cuba,CU-11,11,Holguin
-CU,Cuba,CU-03,03,La Habana
+CU,Cuba,CU-03,3,La Habana
 CU,Cuba,CU-10,10,Las Tunas
-CU,Cuba,CU-04,04,Matanzas
+CU,Cuba,CU-04,4,Matanzas
 CU,Cuba,CU-16,16,Mayabeque
-CU,Cuba,CU-01,01,Pinar del Rio
-CU,Cuba,CU-07,07,Sancti Spiritus
+CU,Cuba,CU-01,1,Pinar del Rio
+CU,Cuba,CU-07,7,Sancti Spiritus
 CU,Cuba,CU-13,13,Santiago de Cuba
-CU,Cuba,CU-05,05,Villa Clara
+CU,Cuba,CU-05,5,Villa Clara
 CV,Cape Verde,CV-BV,BV,Boa Vista
 CV,Cape Verde,CV-PN,PN,Porto Novo
 CV,Cape Verde,CV-PR,PR,Praia
@@ -566,12 +566,12 @@ CV,Cape Verde,CV-SF,SF,Sao Filipe
 CV,Cape Verde,CV-SV,SV,Sao Vicente
 CW,Curaçao,,,Curacao
 CX,Christmas Island,,,Christmas Island
-CY,Cyprus,CY-04,04,Ammochostos
-CY,Cyprus,CY-06,06,Keryneia
-CY,Cyprus,CY-03,03,Larnaka
-CY,Cyprus,CY-01,01,Lefkosia
-CY,Cyprus,CY-02,02,Lemesos
-CY,Cyprus,CY-05,05,Pafos
+CY,Cyprus,CY-04,4,Ammochostos
+CY,Cyprus,CY-06,6,Keryneia
+CY,Cyprus,CY-03,3,Larnaka
+CY,Cyprus,CY-01,1,Lefkosia
+CY,Cyprus,CY-02,2,Lemesos
+CY,Cyprus,CY-05,5,Pafos
 CZ,Czech Republic,CZ-31,31,Jihocesky kraj
 CZ,Czech Republic,CZ-64,64,Jihomoravsky kraj
 CZ,Czech Republic,CZ-41,41,Karlovarsky kraj
@@ -609,19 +609,19 @@ DK,Denmark,DK-82,82,Midtjylland
 DK,Denmark,DK-81,81,Nordjylland
 DK,Denmark,DK-85,85,Sjaelland
 DK,Denmark,DK-83,83,Syddanmark
-DM,Dominica,DM-02,02,Saint Andrew
-DM,Dominica,DM-04,04,Saint George
-DM,Dominica,DM-05,05,Saint John
-DM,Dominica,DM-08,08,Saint Mark
+DM,Dominica,DM-02,2,Saint Andrew
+DM,Dominica,DM-04,4,Saint George
+DM,Dominica,DM-05,5,Saint John
+DM,Dominica,DM-08,8,Saint Mark
 DM,Dominica,DM-10,10,Saint Paul
-DO,Dominican Republic,DO-02,02,Azua
-DO,Dominican Republic,DO-03,03,Baoruco
-DO,Dominican Republic,DO-04,04,Barahona
-DO,Dominican Republic,DO-05,05,Dajabon
-DO,Dominican Republic,DO-01,01,Distrito Nacional (Santo Domingo)
-DO,Dominican Republic,DO-06,06,Duarte
-DO,Dominican Republic,DO-08,08,El Seibo
-DO,Dominican Republic,DO-09,09,Espaillat
+DO,Dominican Republic,DO-02,2,Azua
+DO,Dominican Republic,DO-03,3,Baoruco
+DO,Dominican Republic,DO-04,4,Barahona
+DO,Dominican Republic,DO-05,5,Dajabon
+DO,Dominican Republic,DO-01,1,Distrito Nacional (Santo Domingo)
+DO,Dominican Republic,DO-06,6,Duarte
+DO,Dominican Republic,DO-08,8,El Seibo
+DO,Dominican Republic,DO-09,9,Espaillat
 DO,Dominican Republic,DO-30,30,Hato Mayor
 DO,Dominican Republic,DO-19,19,Hermanas Mirabal
 DO,Dominican Republic,DO-10,10,Independencia
@@ -644,20 +644,20 @@ DO,Dominican Republic,DO-24,24,Sanchez Ramirez
 DO,Dominican Republic,DO-25,25,Santiago
 DO,Dominican Republic,DO-26,26,Santiago Rodriguez
 DO,Dominican Republic,DO-27,27,Valverde
-DZ,Algeria,DZ-01,01,Adrar
+DZ,Algeria,DZ-01,1,Adrar
 DZ,Algeria,DZ-44,44,Ain Defla
 DZ,Algeria,DZ-46,46,Ain Temouchent
 DZ,Algeria,DZ-16,16,Alger
 DZ,Algeria,DZ-23,23,Annaba
-DZ,Algeria,DZ-05,05,Batna
-DZ,Algeria,DZ-08,08,Bechar
-DZ,Algeria,DZ-06,06,Bejaia
-DZ,Algeria,DZ-07,07,Biskra
-DZ,Algeria,DZ-09,09,Blida
+DZ,Algeria,DZ-05,5,Batna
+DZ,Algeria,DZ-08,8,Bechar
+DZ,Algeria,DZ-06,6,Bejaia
+DZ,Algeria,DZ-07,7,Biskra
+DZ,Algeria,DZ-09,9,Blida
 DZ,Algeria,DZ-34,34,Bordj Bou Arreridj
 DZ,Algeria,DZ-10,10,Bouira
 DZ,Algeria,DZ-35,35,Boumerdes
-DZ,Algeria,DZ-02,02,Chlef
+DZ,Algeria,DZ-02,2,Chlef
 DZ,Algeria,DZ-25,25,Constantine
 DZ,Algeria,DZ-17,17,Djelfa
 DZ,Algeria,DZ-32,32,El Bayadh
@@ -668,7 +668,7 @@ DZ,Algeria,DZ-24,24,Guelma
 DZ,Algeria,DZ-33,33,Illizi
 DZ,Algeria,DZ-18,18,Jijel
 DZ,Algeria,DZ-40,40,Khenchela
-DZ,Algeria,DZ-03,03,Laghouat
+DZ,Algeria,DZ-03,3,Laghouat
 DZ,Algeria,DZ-28,28,M'sila
 DZ,Algeria,DZ-29,29,Mascara
 DZ,Algeria,DZ-26,26,Medea
@@ -677,7 +677,7 @@ DZ,Algeria,DZ-27,27,Mostaganem
 DZ,Algeria,DZ-45,45,Naama
 DZ,Algeria,DZ-31,31,Oran
 DZ,Algeria,DZ-30,30,Ouargla
-DZ,Algeria,DZ-04,04,Oum el Bouaghi
+DZ,Algeria,DZ-04,4,Oum el Bouaghi
 DZ,Algeria,DZ-48,48,Relizane
 DZ,Algeria,DZ-20,20,Saida
 DZ,Algeria,DZ-19,19,Setif
@@ -788,14 +788,14 @@ ET,Ethiopia,ET-OR,OR,Oromiya
 ET,Ethiopia,ET-SO,SO,Sumale
 ET,Ethiopia,ET-TI,TI,Tigray
 ET,Ethiopia,ET-SN,SN,YeDebub Biheroch Bihereseboch na Hizboch
-FI,Finland,FI-02,02,Etela-Karjala
-FI,Finland,FI-03,03,Etela-Pohjanmaa
-FI,Finland,FI-04,04,Etela-Savo
-FI,Finland,FI-05,05,Kainuu
-FI,Finland,FI-06,06,Kanta-Hame
-FI,Finland,FI-07,07,Keski-Pohjanmaa
-FI,Finland,FI-08,08,Keski-Suomi
-FI,Finland,FI-09,09,Kymenlaakso
+FI,Finland,FI-02,2,Etela-Karjala
+FI,Finland,FI-03,3,Etela-Pohjanmaa
+FI,Finland,FI-04,4,Etela-Savo
+FI,Finland,FI-05,5,Kainuu
+FI,Finland,FI-06,6,Kanta-Hame
+FI,Finland,FI-07,7,Keski-Pohjanmaa
+FI,Finland,FI-08,8,Keski-Suomi
+FI,Finland,FI-09,9,Kymenlaakso
 FI,Finland,FI-10,10,Lappi
 FI,Finland,FI-16,16,Paijat-Hame
 FI,Finland,FI-11,11,Pirkanmaa
@@ -845,12 +845,12 @@ GB,United Kingdom,GB-ENG,ENG,England
 GB,United Kingdom,GB-NIR,NIR,Northern Ireland
 GB,United Kingdom,GB-SCT,SCT,Scotland
 GB,United Kingdom,GB-WLS,WLS,Wales
-GD,Grenada,GD-01,01,Saint Andrew
-GD,Grenada,GD-02,02,Saint David
-GD,Grenada,GD-03,03,Saint George
-GD,Grenada,GD-04,04,Saint John
-GD,Grenada,GD-05,05,Saint Mark
-GD,Grenada,GD-06,06,Saint Patrick
+GD,Grenada,GD-01,1,Saint Andrew
+GD,Grenada,GD-02,2,Saint David
+GD,Grenada,GD-03,3,Saint George
+GD,Grenada,GD-04,4,Saint John
+GD,Grenada,GD-05,5,Saint Mark
+GD,Grenada,GD-06,6,Saint Patrick
 GD,Grenada,GD-10,10,Southern Grenadine Islands
 GE,Georgia,GE-AB,AB,Abkhazia
 GE,Georgia,GE-AJ,AJ,Ajaria
@@ -984,27 +984,27 @@ HN,Honduras,HN-OL,OL,Olancho
 HN,Honduras,HN-SB,SB,Santa Barbara
 HN,Honduras,HN-VA,VA,Valle
 HN,Honduras,HN-YO,YO,Yoro
-HR,Croatia,HR-07,07,Bjelovarsko-bilogorska zupanija
+HR,Croatia,HR-07,7,Bjelovarsko-bilogorska zupanija
 HR,Croatia,HR-12,12,Brodsko-posavska zupanija
 HR,Croatia,HR-19,19,Dubrovacko-neretvanska zupanija
 HR,Croatia,HR-21,21,Grad Zagreb
 HR,Croatia,HR-18,18,Istarska zupanija
-HR,Croatia,HR-04,04,Karlovacka zupanija
-HR,Croatia,HR-06,06,Koprivnicko-krizevacka zupanija
-HR,Croatia,HR-02,02,Krapinsko-zagorska zupanija
-HR,Croatia,HR-09,09,Licko-senjska zupanija
+HR,Croatia,HR-04,4,Karlovacka zupanija
+HR,Croatia,HR-06,6,Koprivnicko-krizevacka zupanija
+HR,Croatia,HR-02,2,Krapinsko-zagorska zupanija
+HR,Croatia,HR-09,9,Licko-senjska zupanija
 HR,Croatia,HR-20,20,Medimurska zupanija
 HR,Croatia,HR-14,14,Osjecko-baranjska zupanija
 HR,Croatia,HR-11,11,Pozesko-slavonska zupanija
-HR,Croatia,HR-08,08,Primorsko-goranska zupanija
+HR,Croatia,HR-08,8,Primorsko-goranska zupanija
 HR,Croatia,HR-15,15,Sibensko-kninska zupanija
-HR,Croatia,HR-03,03,Sisacko-moslavacka zupanija
+HR,Croatia,HR-03,3,Sisacko-moslavacka zupanija
 HR,Croatia,HR-17,17,Splitsko-dalmatinska zupanija
-HR,Croatia,HR-05,05,Varazdinska zupanija
+HR,Croatia,HR-05,5,Varazdinska zupanija
 HR,Croatia,HR-10,10,Viroviticko-podravska zupanija
 HR,Croatia,HR-16,16,Vukovarsko-srijemska zupanija
 HR,Croatia,HR-13,13,Zadarska zupanija
-HR,Croatia,HR-01,01,Zagrebacka zupanija
+HR,Croatia,HR-01,1,Zagrebacka zupanija
 HT,Haiti,HT-AR,AR,Artibonite
 HT,Haiti,HT-CE,CE,Centre
 HT,Haiti,HT-GA,GA,Grande'Anse
@@ -1157,18 +1157,18 @@ IQ,Iraq,IQ-NI,NI,Ninawa
 IQ,Iraq,IQ-SD,SD,Salah ad Din
 IQ,Iraq,IQ-WA,WA,Wasit
 IR,"Iran, Islamic Republic of",IR-32,32,Alborz
-IR,"Iran, Islamic Republic of",IR-03,03,Ardabil
-IR,"Iran, Islamic Republic of",IR-02,02,Azarbayjan-e Gharbi
-IR,"Iran, Islamic Republic of",IR-01,01,Azarbayjan-e Sharqi
-IR,"Iran, Islamic Republic of",IR-06,06,Bushehr
-IR,"Iran, Islamic Republic of",IR-08,08,Chahar Mahal va Bakhtiari
-IR,"Iran, Islamic Republic of",IR-04,04,Esfahan
+IR,"Iran, Islamic Republic of",IR-03,3,Ardabil
+IR,"Iran, Islamic Republic of",IR-02,2,Azarbayjan-e Gharbi
+IR,"Iran, Islamic Republic of",IR-01,1,Azarbayjan-e Sharqi
+IR,"Iran, Islamic Republic of",IR-06,6,Bushehr
+IR,"Iran, Islamic Republic of",IR-08,8,Chahar Mahal va Bakhtiari
+IR,"Iran, Islamic Republic of",IR-04,4,Esfahan
 IR,"Iran, Islamic Republic of",IR-14,14,Fars
 IR,"Iran, Islamic Republic of",IR-19,19,Gilan
 IR,"Iran, Islamic Republic of",IR-27,27,Golestan
 IR,"Iran, Islamic Republic of",IR-24,24,Hamadan
 IR,"Iran, Islamic Republic of",IR-23,23,Hormozgan
-IR,"Iran, Islamic Republic of",IR-05,05,Ilam
+IR,"Iran, Islamic Republic of",IR-05,5,Ilam
 IR,"Iran, Islamic Republic of",IR-15,15,Kerman
 IR,"Iran, Islamic Republic of",IR-17,17,Kermanshah
 IR,"Iran, Islamic Republic of",IR-29,29,Khorasan-e Jonubi
@@ -1184,7 +1184,7 @@ IR,"Iran, Islamic Republic of",IR-28,28,Qazvin
 IR,"Iran, Islamic Republic of",IR-26,26,Qom
 IR,"Iran, Islamic Republic of",IR-12,12,Semnan
 IR,"Iran, Islamic Republic of",IR-13,13,Sistan va Baluchestan
-IR,"Iran, Islamic Republic of",IR-07,07,Tehran
+IR,"Iran, Islamic Republic of",IR-07,7,Tehran
 IR,"Iran, Islamic Republic of",IR-25,25,Yazd
 IR,"Iran, Islamic Republic of",IR-11,11,Zanjan
 IS,Iceland,IS-7,7,Austurland
@@ -1217,18 +1217,18 @@ IT,Italy,IT-23,23,Valle d'Aosta
 IT,Italy,IT-34,34,Veneto
 JE,Jersey,,,Jersey
 JM,Jamaica,JM-13,13,Clarendon
-JM,Jamaica,JM-09,09,Hanover
-JM,Jamaica,JM-01,01,Kingston
+JM,Jamaica,JM-09,9,Hanover
+JM,Jamaica,JM-01,1,Kingston
 JM,Jamaica,JM-12,12,Manchester
-JM,Jamaica,JM-04,04,Portland
-JM,Jamaica,JM-02,02,Saint Andrew
-JM,Jamaica,JM-06,06,Saint Ann
+JM,Jamaica,JM-04,4,Portland
+JM,Jamaica,JM-02,2,Saint Andrew
+JM,Jamaica,JM-06,6,Saint Ann
 JM,Jamaica,JM-14,14,Saint Catherine
 JM,Jamaica,JM-11,11,Saint Elizabeth
-JM,Jamaica,JM-08,08,Saint James
-JM,Jamaica,JM-05,05,Saint Mary
-JM,Jamaica,JM-03,03,Saint Thomas
-JM,Jamaica,JM-07,07,Trelawny
+JM,Jamaica,JM-08,8,Saint James
+JM,Jamaica,JM-05,5,Saint Mary
+JM,Jamaica,JM-03,3,Saint Thomas
+JM,Jamaica,JM-07,7,Trelawny
 JM,Jamaica,JM-10,10,Westmoreland
 JO,Jordan,JO-AJ,AJ,'Ajlun
 JO,Jordan,JO-AQ,AQ,Al 'Aqabah
@@ -1243,21 +1243,21 @@ JO,Jordan,JO-JA,JA,Jarash
 JO,Jordan,JO-MN,MN,Ma'an
 JO,Jordan,JO-MD,MD,Madaba
 JP,Japan,JP-23,23,Aichi
-JP,Japan,JP-05,05,Akita
-JP,Japan,JP-02,02,Aomori
+JP,Japan,JP-05,5,Akita
+JP,Japan,JP-02,2,Aomori
 JP,Japan,JP-12,12,Chiba
 JP,Japan,JP-38,38,Ehime
 JP,Japan,JP-18,18,Fukui
 JP,Japan,JP-40,40,Fukuoka
-JP,Japan,JP-07,07,Fukushima
+JP,Japan,JP-07,7,Fukushima
 JP,Japan,JP-21,21,Gifu
 JP,Japan,JP-10,10,Gunma
 JP,Japan,JP-34,34,Hiroshima
-JP,Japan,JP-01,01,Hokkaido
+JP,Japan,JP-01,1,Hokkaido
 JP,Japan,JP-28,28,Hyogo
-JP,Japan,JP-08,08,Ibaraki
+JP,Japan,JP-08,8,Ibaraki
 JP,Japan,JP-17,17,Ishikawa
-JP,Japan,JP-03,03,Iwate
+JP,Japan,JP-03,3,Iwate
 JP,Japan,JP-37,37,Kagawa
 JP,Japan,JP-46,46,Kagoshima
 JP,Japan,JP-14,14,Kanagawa
@@ -1265,7 +1265,7 @@ JP,Japan,JP-39,39,Kochi
 JP,Japan,JP-43,43,Kumamoto
 JP,Japan,JP-26,26,Kyoto
 JP,Japan,JP-24,24,Mie
-JP,Japan,JP-04,04,Miyagi
+JP,Japan,JP-04,4,Miyagi
 JP,Japan,JP-45,45,Miyazaki
 JP,Japan,JP-20,20,Nagano
 JP,Japan,JP-42,42,Nagasaki
@@ -1280,24 +1280,24 @@ JP,Japan,JP-11,11,Saitama
 JP,Japan,JP-25,25,Shiga
 JP,Japan,JP-32,32,Shimane
 JP,Japan,JP-22,22,Shizuoka
-JP,Japan,JP-09,09,Tochigi
+JP,Japan,JP-09,9,Tochigi
 JP,Japan,JP-36,36,Tokushima
 JP,Japan,JP-13,13,Tokyo
 JP,Japan,JP-31,31,Tottori
 JP,Japan,JP-16,16,Toyama
 JP,Japan,JP-30,30,Wakayama
-JP,Japan,JP-06,06,Yamagata
+JP,Japan,JP-06,6,Yamagata
 JP,Japan,JP-35,35,Yamaguchi
 JP,Japan,JP-19,19,Yamanashi
-KE,Kenya,KE-01,01,Baringo
-KE,Kenya,KE-02,02,Bomet
-KE,Kenya,KE-03,03,Bungoma
-KE,Kenya,KE-04,04,Busia
-KE,Kenya,KE-05,05,Elgeyo/Marakwet
-KE,Kenya,KE-06,06,Embu
-KE,Kenya,KE-07,07,Garissa
-KE,Kenya,KE-08,08,Homa Bay
-KE,Kenya,KE-09,09,Isiolo
+KE,Kenya,KE-01,1,Baringo
+KE,Kenya,KE-02,2,Bomet
+KE,Kenya,KE-03,3,Bungoma
+KE,Kenya,KE-04,4,Busia
+KE,Kenya,KE-05,5,Elgeyo/Marakwet
+KE,Kenya,KE-06,6,Embu
+KE,Kenya,KE-07,7,Garissa
+KE,Kenya,KE-08,8,Homa Bay
+KE,Kenya,KE-09,9,Isiolo
 KE,Kenya,KE-10,10,Kajiado
 KE,Kenya,KE-11,11,Kakamega
 KE,Kenya,KE-12,12,Kericho
@@ -1364,17 +1364,17 @@ KI,Kiribati,KI-G,G,Gilbert Islands
 KI,Kiribati,KI-L,L,Line Islands
 KM,Comoros,KM-A,A,Anjouan
 KM,Comoros,KM-G,G,Grande Comore
-KN,Saint Kitts and Nevis,KN-02,02,Saint Anne Sandy Point
-KN,Saint Kitts and Nevis,KN-03,03,Saint George Basseterre
-KN,Saint Kitts and Nevis,KN-05,05,Saint James Windward
-KN,Saint Kitts and Nevis,KN-07,07,Saint John Figtree
-KN,Saint Kitts and Nevis,KN-08,08,Saint Mary Cayon
-KN,Saint Kitts and Nevis,KN-09,09,Saint Paul Capisterre
+KN,Saint Kitts and Nevis,KN-02,2,Saint Anne Sandy Point
+KN,Saint Kitts and Nevis,KN-03,3,Saint George Basseterre
+KN,Saint Kitts and Nevis,KN-05,5,Saint James Windward
+KN,Saint Kitts and Nevis,KN-07,7,Saint John Figtree
+KN,Saint Kitts and Nevis,KN-08,8,Saint Mary Cayon
+KN,Saint Kitts and Nevis,KN-09,9,Saint Paul Capisterre
 KN,Saint Kitts and Nevis,KN-10,10,Saint Paul Charlestown
 KN,Saint Kitts and Nevis,KN-11,11,Saint Peter Basseterre
 KN,Saint Kitts and Nevis,KN-12,12,Saint Thomas Lowland
 KN,Saint Kitts and Nevis,KN-13,13,Saint Thomas Middle Island
-KP,"Korea, Democratic People's Republic of",KP-01,01,P'yongyang
+KP,"Korea, Democratic People's Republic of",KP-01,1,P'yongyang
 KR,"Korea, Republic of",KR-26,26,Busan-gwangyeoksi
 KR,"Korea, Republic of",KR-43,43,Chungcheongbuk-do
 KR,"Korea, Republic of",KR-44,44,Chungcheongnam-do
@@ -1434,23 +1434,23 @@ LB,Lebanon,LB-AS,AS,Liban-Nord
 LB,Lebanon,LB-JA,JA,Liban-Sud
 LB,Lebanon,LB-JL,JL,Mont-Liban
 LB,Lebanon,LB-NA,NA,Nabatiye
-LC,Saint Lucia,LC-01,01,Anse la Raye
-LC,Saint Lucia,LC-02,02,Castries
-LC,Saint Lucia,LC-05,05,Dennery
-LC,Saint Lucia,LC-06,06,Gros Islet
-LC,Saint Lucia,LC-07,07,Laborie
-LC,Saint Lucia,LC-08,08,Micoud
+LC,Saint Lucia,LC-01,1,Anse la Raye
+LC,Saint Lucia,LC-02,2,Castries
+LC,Saint Lucia,LC-05,5,Dennery
+LC,Saint Lucia,LC-06,6,Gros Islet
+LC,Saint Lucia,LC-07,7,Laborie
+LC,Saint Lucia,LC-08,8,Micoud
 LC,Saint Lucia,LC-10,10,Soufriere
 LC,Saint Lucia,LC-11,11,Vieux Fort
-LI,Liechtenstein,LI-01,01,Balzers
-LI,Liechtenstein,LI-02,02,Eschen
-LI,Liechtenstein,LI-03,03,Gamprin
-LI,Liechtenstein,LI-04,04,Mauren
-LI,Liechtenstein,LI-05,05,Planken
-LI,Liechtenstein,LI-06,06,Ruggell
-LI,Liechtenstein,LI-07,07,Schaan
-LI,Liechtenstein,LI-08,08,Schellenberg
-LI,Liechtenstein,LI-09,09,Triesen
+LI,Liechtenstein,LI-01,1,Balzers
+LI,Liechtenstein,LI-02,2,Eschen
+LI,Liechtenstein,LI-03,3,Gamprin
+LI,Liechtenstein,LI-04,4,Mauren
+LI,Liechtenstein,LI-05,5,Planken
+LI,Liechtenstein,LI-06,6,Ruggell
+LI,Liechtenstein,LI-07,7,Schaan
+LI,Liechtenstein,LI-08,8,Schellenberg
+LI,Liechtenstein,LI-09,9,Triesen
 LI,Liechtenstein,LI-10,10,Triesenberg
 LI,Liechtenstein,LI-11,11,Vaduz
 LK,Sri Lanka,LK-2,2,Central Province
@@ -1489,70 +1489,70 @@ LT,Lithuania,LT-VL,VL,Vilniaus apskritis
 LU,Luxembourg,LU-DI,DI,Diekirch
 LU,Luxembourg,LU-GR,GR,Grevenmacher
 LU,Luxembourg,LU-LU,LU,Luxembourg
-LV,Latvia,LV-011,011,Adazu novads
-LV,Latvia,LV-001,001,Aglonas novads
-LV,Latvia,LV-002,002,Aizkraukles novads
-LV,Latvia,LV-003,003,Aizputes novads
-LV,Latvia,LV-005,005,Alojas novads
-LV,Latvia,LV-007,007,Aluksnes novads
-LV,Latvia,LV-012,012,Babites novads
-LV,Latvia,LV-013,013,Baldones novads
-LV,Latvia,LV-014,014,Baltinavas novads
-LV,Latvia,LV-015,015,Balvu novads
-LV,Latvia,LV-016,016,Bauskas novads
-LV,Latvia,LV-017,017,Beverinas novads
-LV,Latvia,LV-018,018,Brocenu novads
-LV,Latvia,LV-020,020,Carnikavas novads
-LV,Latvia,LV-022,022,Cesu novads
-LV,Latvia,LV-021,021,Cesvaines novads
-LV,Latvia,LV-023,023,Ciblas novads
-LV,Latvia,LV-025,025,Daugavpils novads
-LV,Latvia,LV-026,026,Dobeles novads
-LV,Latvia,LV-030,030,Erglu novads
-LV,Latvia,LV-033,033,Gulbenes novads
-LV,Latvia,LV-034,034,Iecavas novads
-LV,Latvia,LV-035,035,Ikskiles novads
-LV,Latvia,LV-037,037,Incukalna novads
-LV,Latvia,LV-038,038,Jaunjelgavas novads
-LV,Latvia,LV-039,039,Jaunpiebalgas novads
-LV,Latvia,LV-040,040,Jaunpils novads
-LV,Latvia,LV-042,042,Jekabpils novads
+LV,Latvia,LV-011,11,Adazu novads
+LV,Latvia,LV-001,1,Aglonas novads
+LV,Latvia,LV-002,2,Aizkraukles novads
+LV,Latvia,LV-003,3,Aizputes novads
+LV,Latvia,LV-005,5,Alojas novads
+LV,Latvia,LV-007,7,Aluksnes novads
+LV,Latvia,LV-012,12,Babites novads
+LV,Latvia,LV-013,13,Baldones novads
+LV,Latvia,LV-014,14,Baltinavas novads
+LV,Latvia,LV-015,15,Balvu novads
+LV,Latvia,LV-016,16,Bauskas novads
+LV,Latvia,LV-017,17,Beverinas novads
+LV,Latvia,LV-018,18,Brocenu novads
+LV,Latvia,LV-020,20,Carnikavas novads
+LV,Latvia,LV-022,22,Cesu novads
+LV,Latvia,LV-021,21,Cesvaines novads
+LV,Latvia,LV-023,23,Ciblas novads
+LV,Latvia,LV-025,25,Daugavpils novads
+LV,Latvia,LV-026,26,Dobeles novads
+LV,Latvia,LV-030,30,Erglu novads
+LV,Latvia,LV-033,33,Gulbenes novads
+LV,Latvia,LV-034,34,Iecavas novads
+LV,Latvia,LV-035,35,Ikskiles novads
+LV,Latvia,LV-037,37,Incukalna novads
+LV,Latvia,LV-038,38,Jaunjelgavas novads
+LV,Latvia,LV-039,39,Jaunpiebalgas novads
+LV,Latvia,LV-040,40,Jaunpils novads
+LV,Latvia,LV-042,42,Jekabpils novads
 LV,Latvia,LV-JEL,JEL,Jelgava
-LV,Latvia,LV-041,041,Jelgavas novads
+LV,Latvia,LV-041,41,Jelgavas novads
 LV,Latvia,LV-JUR,JUR,Jurmala
-LV,Latvia,LV-052,052,Kekavas novads
-LV,Latvia,LV-046,046,Kokneses novads
-LV,Latvia,LV-047,047,Kraslavas novads
-LV,Latvia,LV-050,050,Kuldigas novads
-LV,Latvia,LV-053,053,Lielvardes novads
+LV,Latvia,LV-052,52,Kekavas novads
+LV,Latvia,LV-046,46,Kokneses novads
+LV,Latvia,LV-047,47,Kraslavas novads
+LV,Latvia,LV-050,50,Kuldigas novads
+LV,Latvia,LV-053,53,Lielvardes novads
 LV,Latvia,LV-LPX,LPX,Liepaja
-LV,Latvia,LV-054,054,Limbazu novads
-LV,Latvia,LV-056,056,Livanu novads
-LV,Latvia,LV-057,057,Lubanas novads
-LV,Latvia,LV-058,058,Ludzas novads
-LV,Latvia,LV-059,059,Madonas novads
-LV,Latvia,LV-061,061,Malpils novads
-LV,Latvia,LV-064,064,Nauksenu novads
-LV,Latvia,LV-067,067,Ogres novads
-LV,Latvia,LV-068,068,Olaines novads
-LV,Latvia,LV-069,069,Ozolnieku novads
-LV,Latvia,LV-073,073,Preilu novads
-LV,Latvia,LV-077,077,Rezeknes novads
-LV,Latvia,LV-078,078,Riebinu novads
+LV,Latvia,LV-054,54,Limbazu novads
+LV,Latvia,LV-056,56,Livanu novads
+LV,Latvia,LV-057,57,Lubanas novads
+LV,Latvia,LV-058,58,Ludzas novads
+LV,Latvia,LV-059,59,Madonas novads
+LV,Latvia,LV-061,61,Malpils novads
+LV,Latvia,LV-064,64,Nauksenu novads
+LV,Latvia,LV-067,67,Ogres novads
+LV,Latvia,LV-068,68,Olaines novads
+LV,Latvia,LV-069,69,Ozolnieku novads
+LV,Latvia,LV-073,73,Preilu novads
+LV,Latvia,LV-077,77,Rezeknes novads
+LV,Latvia,LV-078,78,Riebinu novads
 LV,Latvia,LV-RIX,RIX,Riga
-LV,Latvia,LV-079,079,Rojas novads
-LV,Latvia,LV-080,080,Ropazu novads
-LV,Latvia,LV-082,082,Rugaju novads
-LV,Latvia,LV-083,083,Rundales novads
-LV,Latvia,LV-087,087,Salaspils novads
-LV,Latvia,LV-088,088,Saldus novads
-LV,Latvia,LV-089,089,Saulkrastu novads
-LV,Latvia,LV-090,090,Sejas novads
-LV,Latvia,LV-091,091,Siguldas novads
-LV,Latvia,LV-093,093,Skrundas novads
-LV,Latvia,LV-095,095,Stopinu novads
-LV,Latvia,LV-097,097,Talsu novads
-LV,Latvia,LV-099,099,Tukuma novads
+LV,Latvia,LV-079,79,Rojas novads
+LV,Latvia,LV-080,80,Ropazu novads
+LV,Latvia,LV-082,82,Rugaju novads
+LV,Latvia,LV-083,83,Rundales novads
+LV,Latvia,LV-087,87,Salaspils novads
+LV,Latvia,LV-088,88,Saldus novads
+LV,Latvia,LV-089,89,Saulkrastu novads
+LV,Latvia,LV-090,90,Sejas novads
+LV,Latvia,LV-091,91,Siguldas novads
+LV,Latvia,LV-093,93,Skrundas novads
+LV,Latvia,LV-095,95,Stopinu novads
+LV,Latvia,LV-097,97,Talsu novads
+LV,Latvia,LV-099,99,Tukuma novads
 LV,Latvia,LV-101,101,Valkas novads
 LV,Latvia,LV-VMR,VMR,Valmiera
 LV,Latvia,LV-105,105,Vecumnieku novads
@@ -1576,17 +1576,17 @@ LY,Libya,LY-SB,SB,Sabha
 LY,Libya,LY-SR,SR,Surt
 LY,Libya,LY-TB,TB,Tarabulus
 LY,Libya,LY-WS,WS,Wadi ash Shati'
-MA,Morocco,MA-05,05,Beni-Mellal-Khenifra
-MA,Morocco,MA-06,06,Casablanca-Settat
-MA,Morocco,MA-08,08,Draa-Tafilalet
-MA,Morocco,MA-03,03,Fes- Meknes
+MA,Morocco,MA-05,5,Beni-Mellal-Khenifra
+MA,Morocco,MA-06,6,Casablanca-Settat
+MA,Morocco,MA-08,8,Draa-Tafilalet
+MA,Morocco,MA-03,3,Fes- Meknes
 MA,Morocco,MA-10,10,Guelmim-Oued Noun (EH-partial)
-MA,Morocco,MA-02,02,L'Oriental
+MA,Morocco,MA-02,2,L'Oriental
 MA,Morocco,MA-11,11,Laayoune-Sakia El Hamra (EH-partial)
-MA,Morocco,MA-07,07,Marrakech-Safi
-MA,Morocco,MA-04,04,Rabat-Sale-Kenitra
-MA,Morocco,MA-09,09,Souss-Massa
-MA,Morocco,MA-01,01,Tanger-Tetouan-Al Hoceima
+MA,Morocco,MA-07,7,Marrakech-Safi
+MA,Morocco,MA-04,4,Rabat-Sale-Kenitra
+MA,Morocco,MA-09,9,Souss-Massa
+MA,Morocco,MA-01,1,Tanger-Tetouan-Al Hoceima
 MC,Monaco,MC-CO,CO,La Condamine
 MC,Monaco,MC-MO,MO,Monaco-Ville
 MC,Monaco,MC-MC,MC,Monte-Carlo
@@ -1628,14 +1628,14 @@ MD,"Moldova, Republic of",MD-ST,ST,Straseni
 MD,"Moldova, Republic of",MD-TA,TA,Taraclia
 MD,"Moldova, Republic of",MD-TE,TE,Telenesti
 MD,"Moldova, Republic of",MD-UN,UN,Ungheni
-ME,Montenegro,ME-02,02,Bar
-ME,Montenegro,ME-03,03,Berane
-ME,Montenegro,ME-04,04,Bijelo Polje
-ME,Montenegro,ME-05,05,Budva
-ME,Montenegro,ME-06,06,Cetinje
-ME,Montenegro,ME-07,07,Danilovgrad
-ME,Montenegro,ME-08,08,Herceg-Novi
-ME,Montenegro,ME-09,09,Kolasin
+ME,Montenegro,ME-02,2,Bar
+ME,Montenegro,ME-03,3,Berane
+ME,Montenegro,ME-04,4,Bijelo Polje
+ME,Montenegro,ME-05,5,Budva
+ME,Montenegro,ME-06,6,Cetinje
+ME,Montenegro,ME-07,7,Danilovgrad
+ME,Montenegro,ME-08,8,Herceg-Novi
+ME,Montenegro,ME-09,9,Kolasin
 ME,Montenegro,ME-10,10,Kotor
 ME,Montenegro,ME-12,12,Niksic
 ME,Montenegro,ME-13,13,Plav
@@ -1655,12 +1655,12 @@ MG,Madagascar,MG-A,A,Toamasina
 MG,Madagascar,MG-U,U,Toliara
 MH,Marshall Islands,MH-KWA,KWA,Kwajalein
 MH,Marshall Islands,MH-MAJ,MAJ,Majuro
-MK,"Macedonia, the Former Yugoslav Republic of",MK-03,03,Berovo
-MK,"Macedonia, the Former Yugoslav Republic of",MK-04,04,Bitola
-MK,"Macedonia, the Former Yugoslav Republic of",MK-05,05,Bogdanci
-MK,"Macedonia, the Former Yugoslav Republic of",MK-06,06,Bogovinje
-MK,"Macedonia, the Former Yugoslav Republic of",MK-07,07,Bosilovo
-MK,"Macedonia, the Former Yugoslav Republic of",MK-08,08,Brvenica
+MK,"Macedonia, the Former Yugoslav Republic of",MK-03,3,Berovo
+MK,"Macedonia, the Former Yugoslav Republic of",MK-04,4,Bitola
+MK,"Macedonia, the Former Yugoslav Republic of",MK-05,5,Bogdanci
+MK,"Macedonia, the Former Yugoslav Republic of",MK-06,6,Bogovinje
+MK,"Macedonia, the Former Yugoslav Republic of",MK-07,7,Bosilovo
+MK,"Macedonia, the Former Yugoslav Republic of",MK-08,8,Brvenica
 MK,"Macedonia, the Former Yugoslav Republic of",MK-78,78,Centar Zupa
 MK,"Macedonia, the Former Yugoslav Republic of",MK-81,81,Cesinovo-Oblesevo
 MK,"Macedonia, the Former Yugoslav Republic of",MK-82,82,Cucer Sandevo
@@ -1724,46 +1724,46 @@ ML,Mali,ML-5,5,Mopti
 ML,Mali,ML-4,4,Segou
 ML,Mali,ML-3,3,Sikasso
 ML,Mali,ML-6,6,Tombouctou
-MM,Myanmar,MM-07,07,Ayeyarwady
-MM,Myanmar,MM-02,02,Bago
+MM,Myanmar,MM-07,7,Ayeyarwady
+MM,Myanmar,MM-02,2,Bago
 MM,Myanmar,MM-11,11,Kachin
-MM,Myanmar,MM-03,03,Magway
-MM,Myanmar,MM-04,04,Mandalay
+MM,Myanmar,MM-03,3,Magway
+MM,Myanmar,MM-04,4,Mandalay
 MM,Myanmar,MM-15,15,Mon
 MM,Myanmar,MM-18,18,Nay Pyi Taw
 MM,Myanmar,MM-17,17,Shan
-MM,Myanmar,MM-05,05,Tanintharyi
-MM,Myanmar,MM-06,06,Yangon
-MN,Mongolia,MN-071,071,Bayan-Olgiy
-MN,Mongolia,MN-067,067,Bulgan
-MN,Mongolia,MN-037,037,Darhan uul
-MN,Mongolia,MN-063,063,Dornogovi
-MN,Mongolia,MN-065,065,Govi-Altay
-MN,Mongolia,MN-043,043,Hovd
-MN,Mongolia,MN-053,053,Omnogovi
-MN,Mongolia,MN-035,035,Orhon
-MN,Mongolia,MN-055,055,Ovorhangay
-MN,Mongolia,MN-049,049,Selenge
-MN,Mongolia,MN-047,047,Tov
+MM,Myanmar,MM-05,5,Tanintharyi
+MM,Myanmar,MM-06,6,Yangon
+MN,Mongolia,MN-071,71,Bayan-Olgiy
+MN,Mongolia,MN-067,67,Bulgan
+MN,Mongolia,MN-037,37,Darhan uul
+MN,Mongolia,MN-063,63,Dornogovi
+MN,Mongolia,MN-065,65,Govi-Altay
+MN,Mongolia,MN-043,43,Hovd
+MN,Mongolia,MN-053,53,Omnogovi
+MN,Mongolia,MN-035,35,Orhon
+MN,Mongolia,MN-055,55,Ovorhangay
+MN,Mongolia,MN-049,49,Selenge
+MN,Mongolia,MN-047,47,Tov
 MN,Mongolia,MN-1,1,Ulaanbaatar
 MO,Macao,,,Macao
 MP,Northern Mariana Islands,,,Northern Mariana Islands
 MQ,Martinique,,,Martinique
-MR,Mauritania,MR-08,08,Dakhlet Nouadhibou
+MR,Mauritania,MR-08,8,Dakhlet Nouadhibou
 MR,Mauritania,MR-10,10,Guidimaka
 MR,Mauritania,MR-14,14,Nouakchott Nord
 MR,Mauritania,MR-11,11,Tiris Zemmour
 MS,Montserrat,,,Saint Anthony
 MS,Montserrat,,,Saint Peter
-MT,Malta,MT-01,01,Attard
-MT,Malta,MT-02,02,Balzan
-MT,Malta,MT-03,03,Birgu
-MT,Malta,MT-04,04,Birkirkara
-MT,Malta,MT-05,05,Birzebbuga
-MT,Malta,MT-06,06,Bormla
-MT,Malta,MT-07,07,Dingli
-MT,Malta,MT-08,08,Fgura
-MT,Malta,MT-09,09,Floriana
+MT,Malta,MT-01,1,Attard
+MT,Malta,MT-02,2,Balzan
+MT,Malta,MT-03,3,Birgu
+MT,Malta,MT-04,4,Birkirkara
+MT,Malta,MT-05,5,Birzebbuga
+MT,Malta,MT-06,6,Bormla
+MT,Malta,MT-07,7,Dingli
+MT,Malta,MT-08,8,Fgura
+MT,Malta,MT-09,9,Floriana
 MT,Malta,MT-10,10,Fontana
 MT,Malta,MT-13,13,Ghajnsielem
 MT,Malta,MT-14,14,Gharb
@@ -1831,18 +1831,18 @@ MU,Mauritius,MU-PL,PL,Port Louis
 MU,Mauritius,MU-RR,RR,Riviere du Rempart
 MU,Mauritius,MU-RO,RO,Rodrigues Islands
 MU,Mauritius,MU-SA,SA,Savanne
-MV,Maldives,MV-02,02,Alifu Alifu
+MV,Maldives,MV-02,2,Alifu Alifu
 MV,Maldives,MV-20,20,Baa
 MV,Maldives,MV-28,28,Gaafu Dhaalu
 MV,Maldives,MV-23,23,Haa Dhaalu
 MV,Maldives,MV-26,26,Kaafu
-MV,Maldives,MV-05,05,Laamu
+MV,Maldives,MV-05,5,Laamu
 MV,Maldives,MV-MLE,MLE,Maale
 MV,Maldives,MV-12,12,Meemu
 MV,Maldives,MV-25,25,Noonu
 MV,Maldives,MV-13,13,Raa
-MV,Maldives,MV-01,01,Seenu
-MV,Maldives,MV-04,04,Vaavu
+MV,Maldives,MV-01,1,Seenu
+MV,Maldives,MV-04,4,Vaavu
 MW,Malawi,MW-BA,BA,Balaka
 MW,Malawi,MW-BL,BL,Blantyre
 MW,Malawi,MW-DO,DO,Dowa
@@ -1885,15 +1885,15 @@ MX,Mexico,MX-TLA,TLA,Tlaxcala
 MX,Mexico,MX-VER,VER,Veracruz de Ignacio de la Llave
 MX,Mexico,MX-YUC,YUC,Yucatan
 MX,Mexico,MX-ZAC,ZAC,Zacatecas
-MY,Malaysia,MY-01,01,Johor
-MY,Malaysia,MY-02,02,Kedah
-MY,Malaysia,MY-03,03,Kelantan
-MY,Malaysia,MY-04,04,Melaka
-MY,Malaysia,MY-05,05,Negeri Sembilan
-MY,Malaysia,MY-06,06,Pahang
-MY,Malaysia,MY-08,08,Perak
-MY,Malaysia,MY-09,09,Perlis
-MY,Malaysia,MY-07,07,Pulau Pinang
+MY,Malaysia,MY-01,1,Johor
+MY,Malaysia,MY-02,2,Kedah
+MY,Malaysia,MY-03,3,Kelantan
+MY,Malaysia,MY-04,4,Melaka
+MY,Malaysia,MY-05,5,Negeri Sembilan
+MY,Malaysia,MY-06,6,Pahang
+MY,Malaysia,MY-08,8,Perak
+MY,Malaysia,MY-09,9,Perlis
+MY,Malaysia,MY-07,7,Pulau Pinang
 MY,Malaysia,MY-12,12,Sabah
 MY,Malaysia,MY-13,13,Sarawak
 MY,Malaysia,MY-10,10,Selangor
@@ -1999,25 +1999,25 @@ NL,Netherlands,NL-OV,OV,Overijssel
 NL,Netherlands,NL-UT,UT,Utrecht
 NL,Netherlands,NL-ZE,ZE,Zeeland
 NL,Netherlands,NL-ZH,ZH,Zuid-Holland
-NO,Norway,NO-02,02,Akershus
-NO,Norway,NO-09,09,Aust-Agder
-NO,Norway,NO-06,06,Buskerud
+NO,Norway,NO-02,2,Akershus
+NO,Norway,NO-09,9,Aust-Agder
+NO,Norway,NO-06,6,Buskerud
 NO,Norway,NO-20,20,Finnmark
-NO,Norway,NO-04,04,Hedmark
+NO,Norway,NO-04,4,Hedmark
 NO,Norway,NO-12,12,Hordaland
 NO,Norway,NO-15,15,More og Romsdal
 NO,Norway,NO-17,17,Nord-Trondelag
 NO,Norway,NO-18,18,Nordland
-NO,Norway,NO-05,05,Oppland
-NO,Norway,NO-03,03,Oslo
-NO,Norway,NO-01,01,Ostfold
+NO,Norway,NO-05,5,Oppland
+NO,Norway,NO-03,3,Oslo
+NO,Norway,NO-01,1,Ostfold
 NO,Norway,NO-11,11,Rogaland
 NO,Norway,NO-14,14,Sogn og Fjordane
 NO,Norway,NO-16,16,Sor-Trondelag
-NO,Norway,NO-08,08,Telemark
+NO,Norway,NO-08,8,Telemark
 NO,Norway,NO-19,19,Troms
 NO,Norway,NO-10,10,Vest-Agder
-NO,Norway,NO-07,07,Vestfold
+NO,Norway,NO-07,7,Vestfold
 NP,Nepal,NP-BA,BA,Bagmati
 NP,Nepal,NP-BH,BH,Bheri
 NP,Nepal,NP-DH,DH,Dhawalagiri
@@ -2160,7 +2160,7 @@ PH,Philippines,PH-MDR,MDR,Mindoro Oriental
 PH,Philippines,PH-MSC,MSC,Misamis Occidental
 PH,Philippines,PH-MSR,MSR,Misamis Oriental
 PH,Philippines,PH-MOU,MOU,Mountain Province
-PH,Philippines,PH-00,00,National Capital Region
+PH,Philippines,PH-00,0,National Capital Region
 PH,Philippines,PH-NEC,NEC,Negros Occidental
 PH,Philippines,PH-NER,NER,Negros Oriental
 PH,Philippines,PH-NSA,NSA,Northern Samar
@@ -2303,15 +2303,15 @@ PS,"Palestine, State of",PS-RBH,RBH,Ramallah
 PS,"Palestine, State of",PS-SLT,SLT,Salfit
 PS,"Palestine, State of",PS-TBS,TBS,Tubas
 PS,"Palestine, State of",PS-TKM,TKM,Tulkarm
-PT,Portugal,PT-01,01,Aveiro
-PT,Portugal,PT-02,02,Beja
-PT,Portugal,PT-03,03,Braga
-PT,Portugal,PT-04,04,Braganca
-PT,Portugal,PT-05,05,Castelo Branco
-PT,Portugal,PT-06,06,Coimbra
-PT,Portugal,PT-07,07,Evora
-PT,Portugal,PT-08,08,Faro
-PT,Portugal,PT-09,09,Guarda
+PT,Portugal,PT-01,1,Aveiro
+PT,Portugal,PT-02,2,Beja
+PT,Portugal,PT-03,3,Braga
+PT,Portugal,PT-04,4,Braganca
+PT,Portugal,PT-05,5,Castelo Branco
+PT,Portugal,PT-06,6,Coimbra
+PT,Portugal,PT-07,7,Evora
+PT,Portugal,PT-08,8,Faro
+PT,Portugal,PT-09,9,Guarda
 PT,Portugal,PT-10,10,Leiria
 PT,Portugal,PT-11,11,Lisboa
 PT,Portugal,PT-12,12,Portalegre
@@ -2323,7 +2323,7 @@ PT,Portugal,PT-15,15,Setubal
 PT,Portugal,PT-16,16,Viana do Castelo
 PT,Portugal,PT-17,17,Vila Real
 PT,Portugal,PT-18,18,Viseu
-PW,Palau,PW-004,004,Airai
+PW,Palau,PW-004,4,Airai
 PW,Palau,PW-100,100,Kayangel
 PW,Palau,PW-150,150,Koror
 PW,Palau,PW-212,212,Melekeok
@@ -2396,15 +2396,15 @@ RO,Romania,RO-TL,TL,Tulcea
 RO,Romania,RO-VL,VL,Valcea
 RO,Romania,RO-VS,VS,Vaslui
 RO,Romania,RO-VN,VN,Vrancea
-RS,Serbia,RS-00,00,Beograd
+RS,Serbia,RS-00,0,Beograd
 RS,Serbia,RS-14,14,Borski okrug
 RS,Serbia,RS-11,11,Branicevski okrug
 RS,Serbia,RS-23,23,Jablanicki okrug
-RS,Serbia,RS-06,06,Juznobacki okrug
-RS,Serbia,RS-04,04,Juznobanatski okrug
-RS,Serbia,RS-09,09,Kolubarski okrug
+RS,Serbia,RS-06,6,Juznobacki okrug
+RS,Serbia,RS-04,4,Juznobanatski okrug
+RS,Serbia,RS-09,9,Kolubarski okrug
 RS,Serbia,RS-28,28,Kosovsko-Mitrovacki okrug
-RS,Serbia,RS-08,08,Macvanski okrug
+RS,Serbia,RS-08,8,Macvanski okrug
 RS,Serbia,RS-17,17,Moravicki okrug
 RS,Serbia,RS-20,20,Nisavski okrug
 RS,Serbia,RS-24,24,Pcinjski okrug
@@ -2414,14 +2414,14 @@ RS,Serbia,RS-13,13,Pomoravski okrug
 RS,Serbia,RS-27,27,Prizrenski okrug
 RS,Serbia,RS-19,19,Rasinski okrug
 RS,Serbia,RS-18,18,Raski okrug
-RS,Serbia,RS-01,01,Severnobacki okrug
-RS,Serbia,RS-03,03,Severnobanatski okrug
-RS,Serbia,RS-02,02,Srednjebanatski okrug
-RS,Serbia,RS-07,07,Sremski okrug
+RS,Serbia,RS-01,1,Severnobacki okrug
+RS,Serbia,RS-03,3,Severnobanatski okrug
+RS,Serbia,RS-02,2,Srednjebanatski okrug
+RS,Serbia,RS-07,7,Sremski okrug
 RS,Serbia,RS-12,12,Sumadijski okrug
 RS,Serbia,RS-21,21,Toplicki okrug
 RS,Serbia,RS-15,15,Zajecarski okrug
-RS,Serbia,RS-05,05,Zapadnobacki okrug
+RS,Serbia,RS-05,5,Zapadnobacki okrug
 RS,Serbia,RS-16,16,Zlatiborski okrug
 RU,Russian Federation,RU-AD,AD,"Adygeya, Respublika"
 RU,Russian Federation,RU-AL,AL,"Altay, Respublika"
@@ -2506,31 +2506,31 @@ RU,Russian Federation,RU-YAN,YAN,Yamalo-Nenetskiy avtonomnyy okrug
 RU,Russian Federation,RU-YAR,YAR,Yaroslavskaya oblast'
 RU,Russian Federation,RU-YEV,YEV,Yevreyskaya avtonomnaya oblast'
 RU,Russian Federation,RU-ZAB,ZAB,Zabaykal'skiy kray
-RW,Rwanda,RW-02,02,Est
-RW,Rwanda,RW-03,03,Nord
-RW,Rwanda,RW-04,04,Ouest
-RW,Rwanda,RW-05,05,Sud
-RW,Rwanda,RW-01,01,Ville de Kigali
+RW,Rwanda,RW-02,2,Est
+RW,Rwanda,RW-03,3,Nord
+RW,Rwanda,RW-04,4,Ouest
+RW,Rwanda,RW-05,5,Sud
+RW,Rwanda,RW-01,1,Ville de Kigali
 SA,Saudi Arabia,SA-14,14,'Asir
 SA,Saudi Arabia,SA-11,11,Al Bahah
-SA,Saudi Arabia,SA-08,08,Al Hudud ash Shamaliyah
+SA,Saudi Arabia,SA-08,8,Al Hudud ash Shamaliyah
 SA,Saudi Arabia,SA-12,12,Al Jawf
-SA,Saudi Arabia,SA-03,03,Al Madinah al Munawwarah
-SA,Saudi Arabia,SA-05,05,Al Qasim
-SA,Saudi Arabia,SA-01,01,Ar Riyad
-SA,Saudi Arabia,SA-04,04,Ash Sharqiyah
-SA,Saudi Arabia,SA-06,06,Ha'il
-SA,Saudi Arabia,SA-09,09,Jazan
-SA,Saudi Arabia,SA-02,02,Makkah al Mukarramah
+SA,Saudi Arabia,SA-03,3,Al Madinah al Munawwarah
+SA,Saudi Arabia,SA-05,5,Al Qasim
+SA,Saudi Arabia,SA-01,1,Ar Riyad
+SA,Saudi Arabia,SA-04,4,Ash Sharqiyah
+SA,Saudi Arabia,SA-06,6,Ha'il
+SA,Saudi Arabia,SA-09,9,Jazan
+SA,Saudi Arabia,SA-02,2,Makkah al Mukarramah
 SA,Saudi Arabia,SA-10,10,Najran
-SA,Saudi Arabia,SA-07,07,Tabuk
+SA,Saudi Arabia,SA-07,7,Tabuk
 SB,Solomon Islands,SB-GU,GU,Guadalcanal
 SB,Solomon Islands,SB-WE,WE,Western
-SC,Seychelles,SC-02,02,Anse Boileau
-SC,Seychelles,SC-05,05,Anse Royale
-SC,Seychelles,SC-01,01,Anse aux Pins
-SC,Seychelles,SC-06,06,Baie Lazare
-SC,Seychelles,SC-08,08,Beau Vallon
+SC,Seychelles,SC-02,2,Anse Boileau
+SC,Seychelles,SC-05,5,Anse Royale
+SC,Seychelles,SC-01,1,Anse aux Pins
+SC,Seychelles,SC-06,6,Baie Lazare
+SC,Seychelles,SC-08,8,Beau Vallon
 SC,Seychelles,SC-10,10,Bel Ombre
 SC,Seychelles,SC-11,11,Cascade
 SC,Seychelles,SC-16,16,English River
@@ -2575,124 +2575,124 @@ SE,Sweden,SE-U,U,Vastmanlands lan
 SE,Sweden,SE-O,O,Vastra Gotalands lan
 SG,Singapore,,,Singapore
 SH,"Saint Helena, Ascension and Tristan da Cunha",SH-HL,HL,Saint Helena
-SI,Slovenia,SI-001,001,Ajdovscina
+SI,Slovenia,SI-001,1,Ajdovscina
 SI,Slovenia,SI-195,195,Apace
-SI,Slovenia,SI-002,002,Beltinci
+SI,Slovenia,SI-002,2,Beltinci
 SI,Slovenia,SI-148,148,Benedikt
 SI,Slovenia,SI-149,149,Bistrica ob Sotli
-SI,Slovenia,SI-003,003,Bled
+SI,Slovenia,SI-003,3,Bled
 SI,Slovenia,SI-150,150,Bloke
-SI,Slovenia,SI-004,004,Bohinj
-SI,Slovenia,SI-005,005,Borovnica
-SI,Slovenia,SI-006,006,Bovec
+SI,Slovenia,SI-004,4,Bohinj
+SI,Slovenia,SI-005,5,Borovnica
+SI,Slovenia,SI-006,6,Bovec
 SI,Slovenia,SI-151,151,Braslovce
-SI,Slovenia,SI-007,007,Brda
-SI,Slovenia,SI-009,009,Brezice
-SI,Slovenia,SI-008,008,Brezovica
+SI,Slovenia,SI-007,7,Brda
+SI,Slovenia,SI-009,9,Brezice
+SI,Slovenia,SI-008,8,Brezovica
 SI,Slovenia,SI-152,152,Cankova
-SI,Slovenia,SI-011,011,Celje
-SI,Slovenia,SI-012,012,Cerklje na Gorenjskem
-SI,Slovenia,SI-013,013,Cerknica
-SI,Slovenia,SI-014,014,Cerkno
+SI,Slovenia,SI-011,11,Celje
+SI,Slovenia,SI-012,12,Cerklje na Gorenjskem
+SI,Slovenia,SI-013,13,Cerknica
+SI,Slovenia,SI-014,14,Cerkno
 SI,Slovenia,SI-196,196,Cirkulane
-SI,Slovenia,SI-015,015,Crensovci
-SI,Slovenia,SI-017,017,Crnomelj
-SI,Slovenia,SI-018,018,Destrnik
-SI,Slovenia,SI-019,019,Divaca
+SI,Slovenia,SI-015,15,Crensovci
+SI,Slovenia,SI-017,17,Crnomelj
+SI,Slovenia,SI-018,18,Destrnik
+SI,Slovenia,SI-019,19,Divaca
 SI,Slovenia,SI-154,154,Dobje
-SI,Slovenia,SI-020,020,Dobrepolje
+SI,Slovenia,SI-020,20,Dobrepolje
 SI,Slovenia,SI-155,155,Dobrna
-SI,Slovenia,SI-021,021,Dobrova-Polhov Gradec
+SI,Slovenia,SI-021,21,Dobrova-Polhov Gradec
 SI,Slovenia,SI-156,156,Dobrovnik
-SI,Slovenia,SI-023,023,Domzale
-SI,Slovenia,SI-024,024,Dornava
-SI,Slovenia,SI-025,025,Dravograd
-SI,Slovenia,SI-026,026,Duplek
+SI,Slovenia,SI-023,23,Domzale
+SI,Slovenia,SI-024,24,Dornava
+SI,Slovenia,SI-025,25,Dravograd
+SI,Slovenia,SI-026,26,Duplek
 SI,Slovenia,SI-207,207,Gorje
-SI,Slovenia,SI-029,029,Gornja Radgona
-SI,Slovenia,SI-031,031,Gornji Petrovci
+SI,Slovenia,SI-029,29,Gornja Radgona
+SI,Slovenia,SI-031,31,Gornji Petrovci
 SI,Slovenia,SI-158,158,Grad
-SI,Slovenia,SI-032,032,Grosuplje
+SI,Slovenia,SI-032,32,Grosuplje
 SI,Slovenia,SI-159,159,Hajdina
 SI,Slovenia,SI-160,160,Hoce-Slivnica
 SI,Slovenia,SI-161,161,Hodos
 SI,Slovenia,SI-162,162,Horjul
-SI,Slovenia,SI-034,034,Hrastnik
-SI,Slovenia,SI-035,035,Hrpelje-Kozina
-SI,Slovenia,SI-036,036,Idrija
-SI,Slovenia,SI-037,037,Ig
-SI,Slovenia,SI-038,038,Ilirska Bistrica
-SI,Slovenia,SI-039,039,Ivancna Gorica
-SI,Slovenia,SI-040,040,Izola
-SI,Slovenia,SI-041,041,Jesenice
-SI,Slovenia,SI-042,042,Jursinci
-SI,Slovenia,SI-043,043,Kamnik
-SI,Slovenia,SI-044,044,Kanal
-SI,Slovenia,SI-045,045,Kidricevo
-SI,Slovenia,SI-046,046,Kobarid
-SI,Slovenia,SI-047,047,Kobilje
-SI,Slovenia,SI-048,048,Kocevje
-SI,Slovenia,SI-049,049,Komen
+SI,Slovenia,SI-034,34,Hrastnik
+SI,Slovenia,SI-035,35,Hrpelje-Kozina
+SI,Slovenia,SI-036,36,Idrija
+SI,Slovenia,SI-037,37,Ig
+SI,Slovenia,SI-038,38,Ilirska Bistrica
+SI,Slovenia,SI-039,39,Ivancna Gorica
+SI,Slovenia,SI-040,40,Izola
+SI,Slovenia,SI-041,41,Jesenice
+SI,Slovenia,SI-042,42,Jursinci
+SI,Slovenia,SI-043,43,Kamnik
+SI,Slovenia,SI-044,44,Kanal
+SI,Slovenia,SI-045,45,Kidricevo
+SI,Slovenia,SI-046,46,Kobarid
+SI,Slovenia,SI-047,47,Kobilje
+SI,Slovenia,SI-048,48,Kocevje
+SI,Slovenia,SI-049,49,Komen
 SI,Slovenia,SI-164,164,Komenda
-SI,Slovenia,SI-050,050,Koper
+SI,Slovenia,SI-050,50,Koper
 SI,Slovenia,SI-197,197,Kosanjevica na Krki
 SI,Slovenia,SI-165,165,Kostel
-SI,Slovenia,SI-052,052,Kranj
-SI,Slovenia,SI-053,053,Kranjska Gora
+SI,Slovenia,SI-052,52,Kranj
+SI,Slovenia,SI-053,53,Kranjska Gora
 SI,Slovenia,SI-166,166,Krizevci
-SI,Slovenia,SI-054,054,Krsko
-SI,Slovenia,SI-055,055,Kungota
-SI,Slovenia,SI-056,056,Kuzma
-SI,Slovenia,SI-057,057,Lasko
-SI,Slovenia,SI-058,058,Lenart
-SI,Slovenia,SI-059,059,Lendava
-SI,Slovenia,SI-060,060,Litija
-SI,Slovenia,SI-061,061,Ljubljana
-SI,Slovenia,SI-063,063,Ljutomer
+SI,Slovenia,SI-054,54,Krsko
+SI,Slovenia,SI-055,55,Kungota
+SI,Slovenia,SI-056,56,Kuzma
+SI,Slovenia,SI-057,57,Lasko
+SI,Slovenia,SI-058,58,Lenart
+SI,Slovenia,SI-059,59,Lendava
+SI,Slovenia,SI-060,60,Litija
+SI,Slovenia,SI-061,61,Ljubljana
+SI,Slovenia,SI-063,63,Ljutomer
 SI,Slovenia,SI-208,208,Log-Dragomer
-SI,Slovenia,SI-064,064,Logatec
-SI,Slovenia,SI-065,065,Loska Dolina
+SI,Slovenia,SI-064,64,Logatec
+SI,Slovenia,SI-065,65,Loska Dolina
 SI,Slovenia,SI-167,167,Lovrenc na Pohorju
-SI,Slovenia,SI-067,067,Luce
-SI,Slovenia,SI-068,068,Lukovica
-SI,Slovenia,SI-069,069,Majsperk
+SI,Slovenia,SI-067,67,Luce
+SI,Slovenia,SI-068,68,Lukovica
+SI,Slovenia,SI-069,69,Majsperk
 SI,Slovenia,SI-198,198,Makole
-SI,Slovenia,SI-070,070,Maribor
+SI,Slovenia,SI-070,70,Maribor
 SI,Slovenia,SI-168,168,Markovci
-SI,Slovenia,SI-071,071,Medvode
-SI,Slovenia,SI-072,072,Menges
-SI,Slovenia,SI-073,073,Metlika
-SI,Slovenia,SI-074,074,Mezica
+SI,Slovenia,SI-071,71,Medvode
+SI,Slovenia,SI-072,72,Menges
+SI,Slovenia,SI-073,73,Metlika
+SI,Slovenia,SI-074,74,Mezica
 SI,Slovenia,SI-169,169,Miklavz na Dravskem Polju
-SI,Slovenia,SI-075,075,Miren-Kostanjevica
+SI,Slovenia,SI-075,75,Miren-Kostanjevica
 SI,Slovenia,SI-170,170,Mirna Pec
-SI,Slovenia,SI-076,076,Mislinja
+SI,Slovenia,SI-076,76,Mislinja
 SI,Slovenia,SI-199,199,Mokronog-Trebelno
-SI,Slovenia,SI-077,077,Moravce
-SI,Slovenia,SI-079,079,Mozirje
-SI,Slovenia,SI-080,080,Murska Sobota
-SI,Slovenia,SI-081,081,Muta
-SI,Slovenia,SI-082,082,Naklo
-SI,Slovenia,SI-083,083,Nazarje
-SI,Slovenia,SI-084,084,Nova Gorica
-SI,Slovenia,SI-085,085,Novo Mesto
-SI,Slovenia,SI-086,086,Odranci
+SI,Slovenia,SI-077,77,Moravce
+SI,Slovenia,SI-079,79,Mozirje
+SI,Slovenia,SI-080,80,Murska Sobota
+SI,Slovenia,SI-081,81,Muta
+SI,Slovenia,SI-082,82,Naklo
+SI,Slovenia,SI-083,83,Nazarje
+SI,Slovenia,SI-084,84,Nova Gorica
+SI,Slovenia,SI-085,85,Novo Mesto
+SI,Slovenia,SI-086,86,Odranci
 SI,Slovenia,SI-171,171,Oplotnica
-SI,Slovenia,SI-087,087,Ormoz
-SI,Slovenia,SI-090,090,Piran
-SI,Slovenia,SI-091,091,Pivka
-SI,Slovenia,SI-092,092,Podcetrtek
+SI,Slovenia,SI-087,87,Ormoz
+SI,Slovenia,SI-090,90,Piran
+SI,Slovenia,SI-091,91,Pivka
+SI,Slovenia,SI-092,92,Podcetrtek
 SI,Slovenia,SI-172,172,Podlehnik
 SI,Slovenia,SI-200,200,Poljcane
 SI,Slovenia,SI-173,173,Polzela
-SI,Slovenia,SI-094,094,Postojna
+SI,Slovenia,SI-094,94,Postojna
 SI,Slovenia,SI-174,174,Prebold
-SI,Slovenia,SI-095,095,Preddvor
+SI,Slovenia,SI-095,95,Preddvor
 SI,Slovenia,SI-175,175,Prevalje
-SI,Slovenia,SI-096,096,Ptuj
-SI,Slovenia,SI-097,097,Puconci
-SI,Slovenia,SI-098,098,Race-Fram
-SI,Slovenia,SI-099,099,Radece
+SI,Slovenia,SI-096,96,Ptuj
+SI,Slovenia,SI-097,97,Puconci
+SI,Slovenia,SI-098,98,Race-Fram
+SI,Slovenia,SI-099,99,Radece
 SI,Slovenia,SI-100,100,Radenci
 SI,Slovenia,SI-101,101,Radlje ob Dravi
 SI,Slovenia,SI-102,102,Radovljica
@@ -2704,7 +2704,7 @@ SI,Slovenia,SI-104,104,Ribnica
 SI,Slovenia,SI-106,106,Rogaska Slatina
 SI,Slovenia,SI-105,105,Rogasovci
 SI,Slovenia,SI-108,108,Ruse
-SI,Slovenia,SI-033,033,Salovci
+SI,Slovenia,SI-033,33,Salovci
 SI,Slovenia,SI-109,109,Semic
 SI,Slovenia,SI-183,183,Sempeter-Vrtojba
 SI,Slovenia,SI-117,117,Sencur
@@ -2736,7 +2736,7 @@ SI,Slovenia,SI-116,116,Sveti Jurij
 SI,Slovenia,SI-210,210,Sveti Jurij v Slovenskih Goricah
 SI,Slovenia,SI-205,205,Sveti Tomaz
 SI,Slovenia,SI-184,184,Tabor
-SI,Slovenia,SI-010,010,Tisina
+SI,Slovenia,SI-010,10,Tisina
 SI,Slovenia,SI-128,128,Tolmin
 SI,Slovenia,SI-129,129,Trbovlje
 SI,Slovenia,SI-130,130,Trebnje
@@ -2776,9 +2776,9 @@ SK,Slovakia,SK-ZI,ZI,Zilinsky kraj
 SL,Sierra Leone,SL-E,E,Eastern
 SL,Sierra Leone,SL-N,N,Northern
 SL,Sierra Leone,SL-W,W,Western Area
-SM,San Marino,SM-03,03,Domagnano
-SM,San Marino,SM-07,07,San Marino
-SM,San Marino,SM-09,09,Serravalle
+SM,San Marino,SM-03,3,Domagnano
+SM,San Marino,SM-07,7,San Marino
+SM,San Marino,SM-09,9,Serravalle
 SN,Senegal,SN-DK,DK,Dakar
 SN,Senegal,SN-DB,DB,Diourbel
 SN,Senegal,SN-FK,FK,Fatick
@@ -2971,19 +2971,19 @@ TN,Tunisia,TN-83,83,Tataouine
 TN,Tunisia,TN-72,72,Tozeur
 TN,Tunisia,TN-11,11,Tunis
 TN,Tunisia,TN-22,22,Zaghouan
-TO,Tonga,TO-04,04,Tongatapu
-TO,Tonga,TO-05,05,Vava'u
-TR,Turkey,TR-01,01,Adana
-TR,Turkey,TR-02,02,Adiyaman
-TR,Turkey,TR-03,03,Afyonkarahisar
-TR,Turkey,TR-04,04,Agri
+TO,Tonga,TO-04,4,Tongatapu
+TO,Tonga,TO-05,5,Vava'u
+TR,Turkey,TR-01,1,Adana
+TR,Turkey,TR-02,2,Adiyaman
+TR,Turkey,TR-03,3,Afyonkarahisar
+TR,Turkey,TR-04,4,Agri
 TR,Turkey,TR-68,68,Aksaray
-TR,Turkey,TR-05,05,Amasya
-TR,Turkey,TR-06,06,Ankara
-TR,Turkey,TR-07,07,Antalya
+TR,Turkey,TR-05,5,Amasya
+TR,Turkey,TR-06,6,Ankara
+TR,Turkey,TR-07,7,Antalya
 TR,Turkey,TR-75,75,Ardahan
-TR,Turkey,TR-08,08,Artvin
-TR,Turkey,TR-09,09,Aydin
+TR,Turkey,TR-08,8,Artvin
+TR,Turkey,TR-09,9,Aydin
 TR,Turkey,TR-10,10,Balikesir
 TR,Turkey,TR-74,74,Bartin
 TR,Turkey,TR-72,72,Batman
@@ -3090,16 +3090,16 @@ TW,"Taiwan, Province of China",TW-TTT,TTT,Taitung
 TW,"Taiwan, Province of China",TW-TAO,TAO,Taoyuan
 TW,"Taiwan, Province of China",TW-ILA,ILA,Yilan
 TW,"Taiwan, Province of China",TW-YUN,YUN,Yunlin
-TZ,"Tanzania, United Republic of",TZ-01,01,Arusha
-TZ,"Tanzania, United Republic of",TZ-02,02,Dar es Salaam
-TZ,"Tanzania, United Republic of",TZ-03,03,Dodoma
+TZ,"Tanzania, United Republic of",TZ-01,1,Arusha
+TZ,"Tanzania, United Republic of",TZ-02,2,Dar es Salaam
+TZ,"Tanzania, United Republic of",TZ-03,3,Dodoma
 TZ,"Tanzania, United Republic of",TZ-27,27,Geita
-TZ,"Tanzania, United Republic of",TZ-04,04,Iringa
-TZ,"Tanzania, United Republic of",TZ-05,05,Kagera
-TZ,"Tanzania, United Republic of",TZ-07,07,Kaskazini Unguja
+TZ,"Tanzania, United Republic of",TZ-04,4,Iringa
+TZ,"Tanzania, United Republic of",TZ-05,5,Kagera
+TZ,"Tanzania, United Republic of",TZ-07,7,Kaskazini Unguja
 TZ,"Tanzania, United Republic of",TZ-28,28,Katavi
-TZ,"Tanzania, United Republic of",TZ-08,08,Kigoma
-TZ,"Tanzania, United Republic of",TZ-09,09,Kilimanjaro
+TZ,"Tanzania, United Republic of",TZ-08,8,Kigoma
+TZ,"Tanzania, United Republic of",TZ-09,9,Kilimanjaro
 TZ,"Tanzania, United Republic of",TZ-10,10,Kusini Pemba
 TZ,"Tanzania, United Republic of",TZ-11,11,Kusini Unguja
 TZ,"Tanzania, United Republic of",TZ-12,12,Lindi
@@ -3132,7 +3132,7 @@ UA,Ukraine,UA-68,68,Khmelnytska oblast
 UA,Ukraine,UA-35,35,Kirovohradska oblast
 UA,Ukraine,UA-30,30,Kyiv
 UA,Ukraine,UA-32,32,Kyivska oblast
-UA,Ukraine,UA-09,09,Luhanska oblast
+UA,Ukraine,UA-09,9,Luhanska oblast
 UA,Ukraine,UA-46,46,Lvivska oblast
 UA,Ukraine,UA-48,48,Mykolaivska oblast
 UA,Ukraine,UA-51,51,Odeska oblast
@@ -3141,8 +3141,8 @@ UA,Ukraine,UA-56,56,Rivnenska oblast
 UA,Ukraine,UA-40,40,Sevastopol
 UA,Ukraine,UA-59,59,Sumska oblast
 UA,Ukraine,UA-61,61,Ternopilska oblast
-UA,Ukraine,UA-05,05,Vinnytska oblast
-UA,Ukraine,UA-07,07,Volynska oblast
+UA,Ukraine,UA-05,5,Vinnytska oblast
+UA,Ukraine,UA-07,7,Volynska oblast
 UA,Ukraine,UA-21,21,Zakarpatska oblast
 UA,Ukraine,UA-23,23,Zaporizka oblast
 UA,Ukraine,UA-18,18,Zhytomyrska oblast
@@ -3171,6 +3171,7 @@ UG,Uganda,UG-113,113,Wakiso
 UM,United States Minor Outlying Islands,UM-95,95,Palmyra Atoll
 US,United States,US-AL,AL,Alabama
 US,United States,US-AK,AK,Alaska
+US,United States,US-AS,AS,American Samoa
 US,United States,US-AZ,AZ,Arizona
 US,United States,US-AR,AR,Arkansas
 US,United States,US-CA,CA,California
@@ -3180,6 +3181,7 @@ US,United States,US-DE,DE,Delaware
 US,United States,US-DC,DC,District of Columbia
 US,United States,US-FL,FL,Florida
 US,United States,US-GA,GA,Georgia
+US,United States,US-GU,GU,Guam
 US,United States,US-HI,HI,Hawaii
 US,United States,US-ID,ID,Idaho
 US,United States,US-IL,IL,Illinois
@@ -3195,6 +3197,7 @@ US,United States,US-MI,MI,Michigan
 US,United States,US-MN,MN,Minnesota
 US,United States,US-MS,MS,Mississippi
 US,United States,US-MO,MO,Missouri
+US,United States,US-MP,MP,Northern Mariana Islands
 US,United States,US-MT,MT,Montana
 US,United States,US-NE,NE,Nebraska
 US,United States,US-NV,NV,Nevada
@@ -3208,14 +3211,17 @@ US,United States,US-OH,OH,Ohio
 US,United States,US-OK,OK,Oklahoma
 US,United States,US-OR,OR,Oregon
 US,United States,US-PA,PA,Pennsylvania
+US,United States,US-PR,PR,Puerto Rico
 US,United States,US-RI,RI,Rhode Island
 US,United States,US-SC,SC,South Carolina
 US,United States,US-SD,SD,South Dakota
 US,United States,US-TN,TN,Tennessee
 US,United States,US-TX,TX,Texas
+US,United States,US-UM,UM,United States Minor Outlying Islands
 US,United States,US-UT,UT,Utah
 US,United States,US-VT,VT,Vermont
 US,United States,US-VA,VA,Virginia
+US,United States,US-VI,VI,Virgin Islands
 US,United States,US-WA,WA,Washington
 US,United States,US-WV,WV,West Virginia
 US,United States,US-WI,WI,Wisconsin
@@ -3251,11 +3257,11 @@ UZ,Uzbekistan,UZ-SU,SU,Surxondaryo
 UZ,Uzbekistan,UZ-TK,TK,Toshkent
 UZ,Uzbekistan,UZ-XO,XO,Xorazm
 VA,Holy See (Vatican City State),,,Vatican City
-VC,Saint Vincent and the Grenadines,VC-01,01,Charlotte
-VC,Saint Vincent and the Grenadines,VC-06,06,Grenadines
-VC,Saint Vincent and the Grenadines,VC-03,03,Saint David
-VC,Saint Vincent and the Grenadines,VC-04,04,Saint George
-VC,Saint Vincent and the Grenadines,VC-05,05,Saint Patrick
+VC,Saint Vincent and the Grenadines,VC-01,1,Charlotte
+VC,Saint Vincent and the Grenadines,VC-06,6,Grenadines
+VC,Saint Vincent and the Grenadines,VC-03,3,Saint David
+VC,Saint Vincent and the Grenadines,VC-04,4,Saint George
+VC,Saint Vincent and the Grenadines,VC-05,5,Saint Patrick
 VE,"Venezuela, Bolivarian Republic of",VE-Z,Z,Amazonas
 VE,"Venezuela, Bolivarian Republic of",VE-B,B,Anzoategui
 VE,"Venezuela, Bolivarian Republic of",VE-C,C,Apure
@@ -3295,7 +3301,7 @@ VN,Viet Nam,VN-58,58,Binh Phuoc
 VN,Viet Nam,VN-40,40,Binh Thuan
 VN,Viet Nam,VN-59,59,Ca Mau
 VN,Viet Nam,VN-CT,CT,Can Tho
-VN,Viet Nam,VN-04,04,Cao Bang
+VN,Viet Nam,VN-04,4,Cao Bang
 VN,Viet Nam,VN-DN,DN,Da Nang
 VN,Viet Nam,VN-33,33,Dak Lak
 VN,Viet Nam,VN-72,72,Dak Nong
@@ -3303,7 +3309,7 @@ VN,Viet Nam,VN-71,71,Dien Bien
 VN,Viet Nam,VN-39,39,Dong Nai
 VN,Viet Nam,VN-45,45,Dong Thap
 VN,Viet Nam,VN-30,30,Gia Lai
-VN,Viet Nam,VN-03,03,Ha Giang
+VN,Viet Nam,VN-03,3,Ha Giang
 VN,Viet Nam,VN-63,63,Ha Nam
 VN,Viet Nam,VN-HN,HN,Ha Noi
 VN,Viet Nam,VN-23,23,Ha Tinh
@@ -3315,10 +3321,10 @@ VN,Viet Nam,VN-66,66,Hung Yen
 VN,Viet Nam,VN-34,34,Khanh Hoa
 VN,Viet Nam,VN-47,47,Kien Giang
 VN,Viet Nam,VN-28,28,Kon Tum
-VN,Viet Nam,VN-01,01,Lai Chau
+VN,Viet Nam,VN-01,1,Lai Chau
 VN,Viet Nam,VN-35,35,Lam Dong
-VN,Viet Nam,VN-09,09,Lang Son
-VN,Viet Nam,VN-02,02,Lao Cai
+VN,Viet Nam,VN-09,9,Lang Son
+VN,Viet Nam,VN-02,2,Lao Cai
 VN,Viet Nam,VN-41,41,Long An
 VN,Viet Nam,VN-67,67,Nam Dinh
 VN,Viet Nam,VN-22,22,Nghe An
@@ -3332,7 +3338,7 @@ VN,Viet Nam,VN-29,29,Quang Ngai
 VN,Viet Nam,VN-13,13,Quang Ninh
 VN,Viet Nam,VN-25,25,Quang Tri
 VN,Viet Nam,VN-52,52,Soc Trang
-VN,Viet Nam,VN-05,05,Son La
+VN,Viet Nam,VN-05,5,Son La
 VN,Viet Nam,VN-37,37,Tay Ninh
 VN,Viet Nam,VN-20,20,Thai Binh
 VN,Viet Nam,VN-69,69,Thai Nguyen
@@ -3340,10 +3346,10 @@ VN,Viet Nam,VN-21,21,Thanh Hoa
 VN,Viet Nam,VN-26,26,Thua Thien-Hue
 VN,Viet Nam,VN-46,46,Tien Giang
 VN,Viet Nam,VN-51,51,Tra Vinh
-VN,Viet Nam,VN-07,07,Tuyen Quang
+VN,Viet Nam,VN-07,7,Tuyen Quang
 VN,Viet Nam,VN-49,49,Vinh Long
 VN,Viet Nam,VN-70,70,Vinh Phuc
-VN,Viet Nam,VN-06,06,Yen Bai
+VN,Viet Nam,VN-06,6,Yen Bai
 VU,Vanuatu,VU-SAM,SAM,Sanma
 VU,Vanuatu,VU-SEE,SEE,Shefa
 VU,Vanuatu,VU-TAE,TAE,Tafea
@@ -3375,15 +3381,15 @@ ZA,South Africa,ZA-MP,MP,Mpumalanga
 ZA,South Africa,ZA-NW,NW,North-West
 ZA,South Africa,ZA-NC,NC,Northern Cape
 ZA,South Africa,ZA-WC,WC,Western Cape
-ZM,Zambia,ZM-02,02,Central
-ZM,Zambia,ZM-08,08,Copperbelt
-ZM,Zambia,ZM-03,03,Eastern
-ZM,Zambia,ZM-04,04,Luapula
-ZM,Zambia,ZM-09,09,Lusaka
-ZM,Zambia,ZM-06,06,North-Western
-ZM,Zambia,ZM-05,05,Northern
-ZM,Zambia,ZM-07,07,Southern
-ZM,Zambia,ZM-01,01,Western
+ZM,Zambia,ZM-02,2,Central
+ZM,Zambia,ZM-08,8,Copperbelt
+ZM,Zambia,ZM-03,3,Eastern
+ZM,Zambia,ZM-04,4,Luapula
+ZM,Zambia,ZM-09,9,Lusaka
+ZM,Zambia,ZM-06,6,North-Western
+ZM,Zambia,ZM-05,5,Northern
+ZM,Zambia,ZM-07,7,Southern
+ZM,Zambia,ZM-01,1,Western
 ZW,Zimbabwe,ZW-BU,BU,Bulawayo
 ZW,Zimbabwe,ZW-HA,HA,Harare
 ZW,Zimbabwe,ZW-MA,MA,Manicaland
