@@ -127,7 +127,8 @@ load_metadata_etl_log_f <- function(conn = NULL,
 
   
   if (is.na(proceed)) {
-    print("ETL log load cancelled at user request")
+    stop("ETL log load cancelled at user request")
+    
   } else if (proceed == F & nrow(matches) > 0) {
     reuse <- askYesNo(msg = "Would you like to reuse the most recent existing entry that matches?")
     
@@ -138,7 +139,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
       return(etl_batch_id)
       
     } else {
-      print("ETL log load cancelled at user request")
+      stop("ETL log load cancelled at user request")
     }
     
   } else if (proceed == T) {
