@@ -111,6 +111,7 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_create = NULL,
   
   
   #### COMBINE 2017-20xx INTO A SINGLE DATA FRAME ####
+  print("Combining years into a single file")
   bir_2017_20xx <- bind_rows(bir_files_2017_20xx)
   
   ## Check snake_case matches what is expected for SQL table
@@ -122,6 +123,7 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_create = NULL,
   
 
   #### LOAD 2017-20xx DATA TO SQL ####
+  print("Loading data to SQL")
   dbGetQuery(conn, glue_sql("TRUNCATE TABLE {`table_config_load$schema`}.{`table_config_load$table`}",
                             .con = conn))
 

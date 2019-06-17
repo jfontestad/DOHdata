@@ -226,6 +226,7 @@ load_load_raw.bir_wa_2003_2016_f <- function(table_config_create = NULL,
   
   
   #### COMBINE 2003-2016 INTO A SINGLE DATA FRAME ####
+  print("Combining years into a single file")
   bir_2003_2016 <- bind_rows(bir_files_2003_2016)
   
   ### Add overlapping variables
@@ -242,6 +243,7 @@ load_load_raw.bir_wa_2003_2016_f <- function(table_config_create = NULL,
   
   
   #### LOAD 2003-2016 DATA TO SQL ####
+  print("Loading data to SQL")
   # Need to manually truncate table so can use overwrite = F below (so column types work)
   dbGetQuery(conn, glue_sql("TRUNCATE TABLE {`table_config_load$schema`}.{`table_config_load$table`}",
                             .con = conn))
