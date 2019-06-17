@@ -28,8 +28,9 @@ qa_load_raw_bir_wa_2003_2016_f <- function(conn = db_apde,
                                    GROUP BY dob_yr")
   # Fix 9 to be 2009
   row_count_yr <- row_count_yr %>%
-    mutate(dob_yr = ifelse(dob_yr == 9, 2009, dob_yr)) %>%
-    arrange(dob_yr)
+    mutate(dob_yr = ifelse(dob_yr %in% c("09  ", "09"), "2009", dob_yr)) %>%
+    arrange(dob_yr) %>%
+    mutate(dob_yr = as.numeric(dob_yr))
   
   # Min/max etl_batch_id
   etl_batch_id_min <- as.numeric(dbGetQuery(conn, "SELECT MIN (etl_batch_id) FROM load_raw.bir_wa_2003_2016"))
