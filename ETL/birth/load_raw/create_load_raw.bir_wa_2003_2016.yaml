@@ -4,7 +4,7 @@ years:
 vars:
     certno_e: INTEGER
     certype: CHAR(1)
-    dob_yr: INTEGER
+    dob_yr: CHAR(4)
     dob_mo: CHAR(2)
     birth_hr: CHAR(2)
     sex: CHAR(1)
@@ -205,11 +205,11 @@ vars:
     delivpay: INTEGER
     fpv_mo: CHAR(2)
     fpv_da: CHAR(2)
-    fpv_yr: INTEGER
+    fpv_yr: CHAR(4)
     fpvmd4y: DATE
     lpv_mo: CHAR(2)
     lpv_da: CHAR(2)
-    lpv_yr: INTEGER
+    lpv_yr: CHAR(4)
     lpvmd4y: DATE
     cigs_bef: INTEGER
     cigs_1st: INTEGER

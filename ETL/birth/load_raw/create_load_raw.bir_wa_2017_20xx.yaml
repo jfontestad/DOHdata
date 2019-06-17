@@ -6,7 +6,7 @@ vars:
     birth_cert_type: CHAR(1)
     sex: CHAR(1)
     date_of_birth_month: CHAR(2)
-    date_of_birth_year: INTEGER
+    date_of_birth_year: CHAR(4)
     time_of_birth: VARCHAR(5)
     mother_marital_status: CHAR(1)
     facility_type: INTEGER
@@ -167,11 +167,11 @@ vars:
     date_first_prenatal_visit: DATE
     first_prenatal_visit_month: CHAR(2)
     first_prenatal_visit_day: CHAR(2)
-    first_prenatal_visit_year: INTEGER
+    first_prenatal_visit_year: CHAR(4)
     date_last_prenatal_visit: DATE
     last_prenatal_visit_month: CHAR(2)
     last_prenatal_visit_day: CHAR(2)
-    last_prenatal_visit_year: INTEGER
+    last_prenatal_visit_year: CHAR(4)
     month_prenatal_care_began: INTEGER
     nchs_month_prenatal_care_began: INTEGER
     number_prenatal_visits: INTEGER
@@ -188,7 +188,7 @@ vars:
     last_menses_year: CHAR(4)
     gestation_estimate: INTEGER
     calculated_gestation: INTEGER
-    gestation_calculated_flag: INTEGER
+    gestation_calculated_flag: CHAR(1)
     prepreg_diabetes: CHAR(1)
     gestational_diabetes: CHAR(1)
     prepreg_hypertension: CHAR(1)
@@ -286,7 +286,7 @@ vars:
     hypospadias: CHAR(1)
     congenital_anomaly_none: CHAR(1)
     congenital_anomaly_unknown: CHAR(1)
-    attendant_class: CHAR(2)
-    certifier_class: CHAR(2)
+    attendant_class: INTEGER
+    certifier_class: INTEGER
     infant_death_flag: CHAR(1)
     etl_batch_id: INTEGER
