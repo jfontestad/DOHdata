@@ -25,7 +25,7 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 
 
 #### SET UP USEFUL REF TABLES ####
-bir_field_names_map <- dbGetQuery(db_apde, "SELECT * FROM ref.bir_field_name_map")
+bir_field_names_map <- dbGetQuery(db_apde, "SELECT * FROM [PH_APDEStore].[ref].[bir_field_name_map]")
 
 
 #### LOAD_RAW: 2003-2016 ####
