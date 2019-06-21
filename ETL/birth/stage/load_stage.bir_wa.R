@@ -9,6 +9,15 @@
 # Standardize missing to be NULL
 # Standardize country/county/state/city codes (not needed as there is literal and code now)
 
+#### Set-up environment ----
+rm(list=ls())
+
+library(odbc) # Read to and write from SQL
+library(RCurl) # Read files from Github
+library(tidyverse) # Manipulate data
+library(data.table) # Manipulate data quickly / efficiently
+
+db_apde <- dbConnect(odbc(), "APDESQL50") ##Connect to SQL server
 
 #### PULL IN TABLE CONFIG FILE FOR VAR TYPE INFO ####
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(
@@ -553,24 +562,26 @@ rm(iso_3166, nchs, ref_country, bir_place)
 
 
 #### ALIGN VARIABLE TYPES ####
-bir_2013_2016 <- bir_2013_2016 %>%
-  mutate_at(vars(mother_years_at_residence, mother_months_at_residence,
-                 delivery_method_calculation, attendant_class, certifier_class),
-            funs(as.numeric(.)))
-
-
-bir_2017_20xx <- bir_2017_20xx %>%
-  mutate_at(vars(gestation_calculated_flag),
-            funs(as.numeric(.)))
-
-
-
-
+    setnames(bir_2013_2016, 
+             c("res_yprt", "res_mprt", "dmeth1", "attclass", "crt_clas", "gestflag"), 
+             c("mother_years_at_residence", "mother_months_at_residence", "delivery_method_calculation", "attendant_class", "certifier_class", "gestation_calculated_flag") 
+              )
+    
+    bir_2013_2016 <- bir_2013_2016 %>%
+      mutate_at(vars(mother_years_at_residence, mother_months_at_residence,
+                     delivery_method_calculation, attendant_class, certifier_class),
+                funs(as.numeric(.)))
+    setDT(bir_2013_2016)
+    
+    
+    bir_2017_20xx <- bir_2017_20xx %>%
+      mutate_at(vars(gestation_calculated_flag),
+                funs(as.numeric(.)))
+    setDT(bir_2017_20xx)
 
 #### BRING NEW AND OLD DATA TOGETHER ####
 bir_combined <- bind_rows(bir_2017_20xx, bir_2013_2016)
 bir_combined <- setDT(bir_combined)
-
 
 #### STANDARDIZE MISSING TO BE NULL ####
 # Can catch a lot of variables in one go 
@@ -606,17 +617,25 @@ for (j in col_num_9) {
 
 
 # Clean up objects
-rm(col_char, col_num, col_char_9, col_num_9)
-
-
+rm(col_char, col_num, col_char_9, col_num_9, bir_2013_2016, bir_2017_20xx)
 
 
 #### CHANGE COLUMN TYPES TO INTEGER WHERE POSSIBLE ####
-## Will be handled with recode script
+  to.numeric <- function(my.dt){
+    my.cols <- names(my.dt)
+    for(i in 1:length(my.cols)){
+      added.NAs <- nrow(my.dt[is.na(get(my.cols[i])), ]) - 
+        suppressWarnings(nrow(my.dt[is.na(as.numeric(gsub(" ", "", get(my.cols[i])))), ])) # Additional NAs if converted to numeric
+      if(added.NAs==0){
+        my.dt[, my.cols[i] := suppressWarnings(as.numeric(get(my.cols[i])))]
+      }
+    }    
+    
+    return(my.dt)
+  }
+  
+  bir_combined <- to.numeric(bir_combined)
 
-
-#### FIX YEAR OF BIRTH FOR 2009 ####
-# Handled by recode script?
 
 
 
