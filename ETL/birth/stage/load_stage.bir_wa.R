@@ -23,20 +23,23 @@ db_apde <- dbConnect(odbc(), "APDESQL50") ##Connect to SQL server
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
+#### SET UP PATH to SQL OUTPUT TABLE ---- 
+    tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
+                            table = table_config_stage_bir_wa$table)
 
 #### PULL IN BOTH DATA SETS ####
-tbl_id_2013_2016 <- DBI::Id(schema = "load_raw", table = "bir_wa_2003_2016")
-bir_2013_2016 <- DBI::dbReadTable(db_apde, tbl_id_2013_2016)
-
-tbl_id_2017_20xx <- DBI::Id(schema = "load_raw", table = "bir_wa_2017_20xx")
-bir_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_2017_20xx)
+    tbl_id_2003_2016 <- DBI::Id(schema = "load_raw", table = "bir_wa_2003_2016")
+    bir_2003_2016 <- DBI::dbReadTable(db_apde, tbl_id_2003_2016)
+    
+    tbl_id_2017_20xx <- DBI::Id(schema = "load_raw", table = "bir_wa_2017_20xx")
+    bir_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_2017_20xx)
 
 
 #### REMOVE FIELDS IN BEDROCK NOT COLLECTED AFTER 2003 ####
 ### NB. Need to do this BEFORE renaming variables because otherwise two 
 ###   WIC variables are created
 ### Remove variables not collected after 2003
-bir_2013_2016 <- bir_2013_2016 %>%
+bir_2003_2016 <- bir_2003_2016 %>%
   select(-priorprg, -fd_lt20, -fd_ge20, -apgar1, -ind_num, -malf_sam, -herpes, 
          -smokenum, -drinknum, -contains("amnio"), -dmeth2, -dmeth3, -dmeth4, 
          -contains("complab"), -racecdes, -hispcdes, -carepay, -wic, -firsteps, 
@@ -50,19 +53,18 @@ bir_2013_2016 <- bir_2013_2016 %>%
 
 #### STANDARDIZE NAMES FROM BEDROCK TO WHALES ####
 ### Bring in reference table
-field_maps <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_field_name_map.csv")
+field_maps <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_field_name_map.csv")
 
-data.table::setnames(bir_2013_2016, 
-                     field_maps$field_name_apde[match(names(bir_2013_2016), 
+data.table::setnames(bir_2003_2016, 
+                     field_maps$field_name_apde[match(names(bir_2003_2016), 
                                                       field_maps$field_name_bedrock)])
-
 
 #### SPLIT OUT VARIABLES THAT ARE NOW INDIVIDUAL FLAGS ####
 #### Medical risk factors ####
 # Can rely on the fact that the code for diabetes (01) only ever went in mrf1
 # and code for hypertension (02) only ever went in mrf1 and mrf2
 # Also rely on the fact that if mrf1 = "09" or "99" then all other mrf fields are NA
-bir_2013_2016 <- bir_2013_2016 %>% 
+bir_2003_2016 <- bir_2003_2016 %>% 
   mutate(
     prepreg_diabetes = case_when(
       mrf1 == "01" & diabetes == "E" ~ "Y",
@@ -129,11 +131,11 @@ mrf_f <- function(df, name, num) {
 
 # Run function and collapse list of results into a single df
 mrf_out <- purrr::map2(mrf_name, mrf_num, 
-                       ~ mrf_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+                       ~ mrf_f(df = bir_2003_2016, name = .x, num = .y)) %>%
   purrr::reduce(left_join, by = "birth_cert_encrypt")
 
 # Bind new columns to existing data frame and remove old vars
-bir_2013_2016 <- left_join(bir_2013_2016, mrf_out, by = "birth_cert_encrypt") %>%
+bir_2003_2016 <- left_join(bir_2003_2016, mrf_out, by = "birth_cert_encrypt") %>%
   select(-contains("mrf"), -diabetes, -hyperflg)
 
 # Clean up objects
@@ -165,14 +167,14 @@ minfect_f <- function(df, name, num) {
 
 # Run function and collapse list of results into a single df
 minfect_out <- purrr::map2(minfect_name, minfect_num, 
-                           ~ minfect_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+                           ~ minfect_f(df = bir_2003_2016, name = .x, num = .y)) %>%
   purrr::reduce(left_join, by = "birth_cert_encrypt")
 
 # Bind new columns to existing data frame
-bir_2013_2016 <- left_join(bir_2013_2016, minfect_out, by = "birth_cert_encrypt")
+bir_2003_2016 <- left_join(bir_2003_2016, minfect_out, by = "birth_cert_encrypt")
 
 # Make infections_none and infections_unknown and remove old vars
-bir_2013_2016 <- bir_2013_2016 %>%
+bir_2003_2016 <- bir_2003_2016 %>%
   mutate(
     infections_none = case_when(
       minfect1 %in% c("09", "9 ") ~ "Y",
@@ -193,7 +195,7 @@ rm(minfect_name, minfect_num, minfect_f, minfect_out)
 
 
 #### Obstetric procedures ####
-bir_2013_2016 <- bir_2013_2016 %>% 
+bir_2003_2016 <- bir_2003_2016 %>% 
   mutate(
     cervical_cerclage = case_when(
       obproc1 == "1" ~ "Y",
@@ -239,7 +241,7 @@ bir_2013_2016 <- bir_2013_2016 %>%
   select(-contains("obproc"), -cephaflg)
 
 #### Labor onset ####
-bir_2013_2016 <- bir_2013_2016 %>% 
+bir_2003_2016 <- bir_2003_2016 %>% 
   mutate(
     ruptured_membranes = case_when(
       labons1 == "01" ~ "Y",
@@ -296,14 +298,14 @@ labchar_f <- function(df, name, num) {
 
 # Run function and collapse list of results into a single df
 labchar_out <- purrr::map2(labchar_name, labchar_num, 
-                           ~ labchar_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+                           ~ labchar_f(df = bir_2003_2016, name = .x, num = .y)) %>%
   purrr::reduce(left_join, by = "birth_cert_encrypt")
 
 # Bind new columns to existing data frame
-bir_2013_2016 <- left_join(bir_2013_2016, labchar_out, by = "birth_cert_encrypt")
+bir_2003_2016 <- left_join(bir_2003_2016, labchar_out, by = "birth_cert_encrypt")
 
 # Make infections_none and infections_unknown and remove old vars
-bir_2013_2016 <- bir_2013_2016 %>%
+bir_2003_2016 <- bir_2003_2016 %>%
   mutate(
     mat_labor_characteristics_none = case_when(
       labchar1 == "10" ~ "Y",
@@ -346,14 +348,14 @@ mmorbid_f <- function(df, name, num) {
 
 # Run function and collapse list of results into a single df
 mmorbid_out <- purrr::map2(mmorbid_name, mmorbid_num, 
-                           ~ mmorbid_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+                           ~ mmorbid_f(df = bir_2003_2016, name = .x, num = .y)) %>%
   purrr::reduce(left_join, by = "birth_cert_encrypt")
 
 # Bind new columns to existing data frame
-bir_2013_2016 <- left_join(bir_2013_2016, mmorbid_out, by = "birth_cert_encrypt")
+bir_2003_2016 <- left_join(bir_2003_2016, mmorbid_out, by = "birth_cert_encrypt")
 
 # Make infections_none and infections_unknown and remove old vars
-bir_2013_2016 <- bir_2013_2016 %>%
+bir_2003_2016 <- bir_2003_2016 %>%
   mutate(
     maternal_morbidity_none = case_when(
       mmorbid1 == "07" ~ "Y",
@@ -397,14 +399,14 @@ abcond_f <- function(df, name, num) {
 
 # Run function and collapse list of results into a single df
 abcond_out <- purrr::map2(abcond_name, abcond_num, 
-                          ~ abcond_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+                          ~ abcond_f(df = bir_2003_2016, name = .x, num = .y)) %>%
   purrr::reduce(left_join, by = "birth_cert_encrypt")
 
 # Bind new columns to existing data frame
-bir_2013_2016 <- left_join(bir_2013_2016, abcond_out, by = "birth_cert_encrypt")
+bir_2003_2016 <- left_join(bir_2003_2016, abcond_out, by = "birth_cert_encrypt")
 
 # Make infections_none and infections_unknown and remove old vars
-bir_2013_2016 <- bir_2013_2016 %>%
+bir_2003_2016 <- bir_2003_2016 %>%
   mutate(
     abnormal_conditions_none = case_when(
       abcond1 == "08" ~ "Y",
@@ -451,14 +453,14 @@ malf_f <- function(df, name, num) {
 
 # Run function and collapse list of results into a single df
 malf_out <- purrr::map2(malf_name, malf_num, 
-                        ~ malf_f(df = bir_2013_2016, name = .x, num = .y)) %>%
+                        ~ malf_f(df = bir_2003_2016, name = .x, num = .y)) %>%
   purrr::reduce(left_join, by = "birth_cert_encrypt")
 
 # Bind new columns to existing data frame
-bir_2013_2016 <- left_join(bir_2013_2016, malf_out, by = "birth_cert_encrypt")
+bir_2003_2016 <- left_join(bir_2003_2016, malf_out, by = "birth_cert_encrypt")
 
 # Make other flags + infections_none and infections_unknown and remove old vars
-bir_2013_2016 <- bir_2013_2016 %>%
+bir_2003_2016 <- bir_2003_2016 %>%
   mutate(
     down_confirm = case_when(
       down_syndrome == "Y" & downsflg %in% c("C", "Y") ~ "Y",
@@ -499,7 +501,7 @@ rm(malf_name, malf_num, malf_f, malf_out)
 
 
 #### RENAME FIELDS THAT DO NOT EXIST IN THE NEW SYSTEM ####
-bir_2013_2016 <- bir_2013_2016 %>%
+bir_2003_2016 <- bir_2003_2016 %>%
   rename(nchs_new_record = nchsnew) # This appears to always be NA
 
 
@@ -507,8 +509,8 @@ bir_2013_2016 <- bir_2013_2016 %>%
 # birplmom and birpldad need to be converted to ISO-3166 codes and renamed to mother/father_birthplace_state_fips
 
 ### Bring in reference tables
-iso_3166 <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv")
-nchs <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.nchs_country_state.csv")
+iso_3166 <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv", colClasses="character")
+nchs <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.nchs_country_state.csv", colClasses="character")
 
 # Restrict to relevant level
 iso_3166 <- iso_3166 %>% filter(iso3166_1_name == "United States")
@@ -542,7 +544,7 @@ ref_country <- left_join(nchs, iso_3166, by = c("nchs_name" = "iso3166_2_name"))
   )
 
 ### Pull in just mother/father birth place columns  and cert no
-bir_place <- bir_2013_2016 %>% select(birth_cert_encrypt, birplmom, birpldad) %>%
+bir_place <- bir_2003_2016 %>% select(birth_cert_encrypt, birplmom, birpldad) %>%
   # Join to ref table for mother's bir place
   left_join(., select(ref_country, nchs_code, iso3166_2_code), 
             by = c("birplmom" = "nchs_code")) %>%
@@ -554,7 +556,7 @@ bir_place <- bir_2013_2016 %>% select(birth_cert_encrypt, birplmom, birpldad) %>
   select(birth_cert_encrypt, mother_birthplace_state_fips, father_birthplace_state_fips)
 
 ### Join back to main data and drop old fields
-bir_2013_2016 <- left_join(bir_2013_2016, bir_place, by = "birth_cert_encrypt") %>%
+bir_2003_2016 <- left_join(bir_2003_2016, bir_place, by = "birth_cert_encrypt") %>%
   select(-birplmom, -birpldad)
 
 ### Remove objects
@@ -562,25 +564,17 @@ rm(iso_3166, nchs, ref_country, bir_place)
 
 
 #### ALIGN VARIABLE TYPES ####
-    setnames(bir_2013_2016, 
-             c("res_yprt", "res_mprt", "dmeth1", "attclass", "crt_clas", "gestflag"), 
-             c("mother_years_at_residence", "mother_months_at_residence", "delivery_method_calculation", "attendant_class", "certifier_class", "gestation_calculated_flag") 
-              )
-    
-    bir_2013_2016 <- bir_2013_2016 %>%
-      mutate_at(vars(mother_years_at_residence, mother_months_at_residence,
-                     delivery_method_calculation, attendant_class, certifier_class),
-                funs(as.numeric(.)))
-    setDT(bir_2013_2016)
-    
-    
-    bir_2017_20xx <- bir_2017_20xx %>%
-      mutate_at(vars(gestation_calculated_flag),
-                funs(as.numeric(.)))
-    setDT(bir_2017_20xx)
+bir_2003_2016 <- bir_2003_2016 %>%
+  mutate_at(vars(mother_years_at_residence, mother_months_at_residence,
+                 delivery_method_calculation, attendant_class, certifier_class),
+            list( ~ as.numeric(.)))
+
+bir_2017_20xx <- bir_2017_20xx %>%
+  mutate_at(vars(gestation_calculated_flag),
+            list( ~ as.numeric(.)))
 
 #### BRING NEW AND OLD DATA TOGETHER ####
-bir_combined <- bind_rows(bir_2017_20xx, bir_2013_2016)
+bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
 
 #### STANDARDIZE MISSING TO BE NULL ####
 # Can catch a lot of variables in one go 
@@ -614,38 +608,43 @@ bir_combined <- bind_rows(bir_2017_20xx, bir_2013_2016)
     }
 
 # Clean up objects to free memory
-  rm(col_char, col_num, col_char_9, col_num_9, bir_2013_2016, bir_2017_20xx)
+  rm(col_char, col_num, col_char_9, col_num_9, bir_2003_2016, bir_2017_20xx)
   gc() 
 
 
 #### CHANGE COLUMN TYPES TO INTEGER WHERE POSSIBLE ####
+  data.table::setDT(bir_combined) # be certain that it is a data.table object
+  
   to.numeric <- function(my.dt){
-    my.cols <- names(my.dt)[sapply(bir_combined, is.character)] # get vector of all character columns
+    my.cols <- names(my.dt)[sapply(my.dt, is.character)] # get vector of all character columns
     for(i in 1:length(my.cols)){
+      
+      message(paste0("Testing ", i, " of ", length(my.cols), ": ", my.cols[i], " ...", gsub(Sys.Date(), "", Sys.time())))
+    
       added.NAs <- nrow(my.dt[is.na(get(my.cols[i])), ]) - 
         suppressWarnings(nrow(my.dt[is.na(as.numeric(gsub(" ", "", get(my.cols[i])))), ])) # Additional NAs if converted to numeric
+      
       if(added.NAs==0){
+        message(paste0("     Converting ", my.cols[i], " to numeric"))
         my.dt[, my.cols[i] := suppressWarnings(as.numeric(get(my.cols[i])))]
       }
     }    
     
-    return(my.dt)
+    #return(my.dt)
   }
   
-  bir_combined <- to.numeric(bir_combined)
-
-
-
-
-
-#### LOAD TO SQL ####
+  to.numeric(bir_combined)
+  
+#### LOAD INITIAL APPENDED VERSION TO SQL ####
 # Need to manually truncate table so can use overwrite = F below (so column types work)
-dbGetQuery(conn, glue_sql("TRUNCATE TABLE {`table_config_stage_bir_wa$schema`}.{`table_config_stage_bir_wa$table`}",
-                          .con = conn))
 
-tbl_id_2013_2016 <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
-                            table = table_config_stage_bir_wa$table)
-dbWriteTable(conn, tbl_id_2013_2016, value = as.data.frame(bir_combined),
+# Ensure that the "type" is correct when comparing R data.table to SQL shell
+  r.table <- data.table(name = names(bir_combined), r.class = sapply(bir_combined, class))
+  sql.table <- data.table(name = names(table_config_stage_bir_wa$vars), sql.class = table_config_stage_bir_wa$vars)
+  xwalk <- fread("C:/Users/dcolombara/code/DOHdata/ETL/birth/ref/ref.bir_field_name_map.csv")[, field_name_bedrock]
+  xwalk <- xwalk[!is.na(field_name_bedrock) & field_name_bedrock != ""]
+  
+dbWriteTable(conn, tbl_id_2003_20xx, value = as.data.frame(bir_combined),
              overwrite = F,
              append = T,
              field.types = paste(names(table_config_stage_bir_wa$vars), 
@@ -653,6 +652,4 @@ dbWriteTable(conn, tbl_id_2013_2016, value = as.data.frame(bir_combined),
                                  collapse = ", ", sep = " = "))
 
 
-
-
-
+#### THE END ----
