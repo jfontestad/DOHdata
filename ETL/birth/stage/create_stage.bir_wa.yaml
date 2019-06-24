@@ -66,12 +66,12 @@ vars:
     mother_race_nchs_ecode_8: CHAR(3)
     mother_race_nchs_ccode_1: CHAR(3)
     mother_race_nchs_ccode_2: CHAR(3)
-    mother_race_nchs_ccode_3: INTEGER
-    mother_race_nchs_ccode_4: INTEGER
-    mother_race_nchs_ccode_5: INTEGER
-    mother_race_nchs_ccode_6: INTEGER
-    mother_race_nchs_ccode_7: INTEGER
-    mother_race_nchs_ccode_8: INTEGER
+    mother_race_nchs_ccode_3: CHAR(3)
+    mother_race_nchs_ccode_4: CHAR(3)
+    mother_race_nchs_ccode_5: CHAR(3)
+    mother_race_nchs_ccode_6: CHAR(3)
+    mother_race_nchs_ccode_7: CHAR(3)
+    mother_race_nchs_ccode_8: CHAR(3)
     mother_bridge_race: INTEGER
     mother_race_calculation: CHAR(1)
     mother_race_summary_code: INTEGER
@@ -126,12 +126,12 @@ vars:
     father_race_nchs_ecode_8: CHAR(3)
     father_race_nchs_ccode_1: CHAR(3)
     father_race_nchs_ccode_2: CHAR(3)
-    father_race_nchs_ccode_3: INTEGER
-    father_race_nchs_ccode_4: INTEGER
-    father_race_nchs_ccode_5: INTEGER
-    father_race_nchs_ccode_6: INTEGER
-    father_race_nchs_ccode_7: INTEGER
-    father_race_nchs_ccode_8: INTEGER
+    father_race_nchs_ccode_3: CHAR(3)
+    father_race_nchs_ccode_4: CHAR(3)
+    father_race_nchs_ccode_5: CHAR(3)
+    father_race_nchs_ccode_6: CHAR(3)
+    father_race_nchs_ccode_7: CHAR(3)
+    father_race_nchs_ccode_8: CHAR(3)
     father_bridge_race: INTEGER
     father_race_calculation: CHAR(1)
     father_race_summary_code: INTEGER
