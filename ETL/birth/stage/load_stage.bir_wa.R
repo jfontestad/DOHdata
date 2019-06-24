@@ -21,7 +21,7 @@ db_apde <- dbConnect(odbc(), "APDESQL50") ##Connect to SQL server
 
 #### PULL IN TABLE CONFIG FILE FOR VAR TYPE INFO ####
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(
-  "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
+  "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
 #### SET UP PATH to SQL OUTPUT TABLE ---- 
     tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
@@ -635,16 +635,31 @@ bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
   
   to.numeric(bir_combined)
   
+  
+#### CHANGE DATE COLUMNS TO DATE TYPE ----
+  date.cols <- c("date_first_prenatal_visit",	"date_last_menses",	"date_last_prenatal_visit",	"father_date_of_birth",	"mother_date_of_birth")
+  bir_combined[, (date.cols) := lapply(.SD, as.Date), .SDcols = date.cols]
+  
+  
 #### LOAD INITIAL APPENDED VERSION TO SQL ####
-# Need to manually truncate table so can use overwrite = F below (so column types work)
-
+    # Drop vars that are 100% missing, not in the Whales standards, and not useful
+        bir_combined[, nchs_new_record := NULL] 
+  
 # Ensure that the "type" is correct when comparing R data.table to SQL shell
   r.table <- data.table(name = names(bir_combined), r.class = sapply(bir_combined, class))
-  sql.table <- data.table(name = names(table_config_stage_bir_wa$vars), sql.class = table_config_stage_bir_wa$vars)
-  xwalk <- fread("C:/Users/dcolombara/code/DOHdata/ETL/birth/ref/ref.bir_field_name_map.csv")[, field_name_bedrock]
-  xwalk <- xwalk[!is.na(field_name_bedrock) & field_name_bedrock != ""]
+  sql.table <- data.table(name = names(table_config_stage_bir_wa$vars), sql.class = as.character(table_config_stage_bir_wa$vars))
+    sql.table[, sql.class := tolower(sql.class)]
+    sql.table[sql.class %like% "char", sql.class := "character"]
+  compare <- merge(r.table, sql.table, by = "name", all = TRUE)
+  View(compare[r.class != sql.class ])
   
-dbWriteTable(conn, tbl_id_2003_20xx, value = as.data.frame(bir_combined),
+# Need to manually truncate table so can use overwrite = F below (so column types work)
+  dbGetQuery(db_apde, glue::glue_sql("TRUNCATE TABLE {`table_config_stage_bir_wa$schema`}.{`table_config_stage_bir_wa$table`}",
+                            .con = db_apde))  
+  
+# Need to manually truncate table so can use overwrite = F below (so column types work)
+  
+dbWriteTable(db_apde, tbl_id_2003_20xx, value = as.data.frame(bir_combined),
              overwrite = F,
              append = T,
              field.types = paste(names(table_config_stage_bir_wa$vars), 
