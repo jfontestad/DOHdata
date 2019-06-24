@@ -581,48 +581,46 @@ rm(iso_3166, nchs, ref_country, bir_place)
 
 #### BRING NEW AND OLD DATA TOGETHER ####
 bir_combined <- bind_rows(bir_2017_20xx, bir_2013_2016)
-bir_combined <- setDT(bir_combined)
 
 #### STANDARDIZE MISSING TO BE NULL ####
 # Can catch a lot of variables in one go 
-col_char <- names(bir_combined)[sapply(bir_combined, is.character)]
-for (j in col_char) {
-  set(bir_combined, i = which(bir_combined[[j]] %in% c("U", "XX", "ZZ", "99:99", "99")), 
-      j = j, value = NA_character_)
-}
-
-col_num <- names(bir_combined)[sapply(bir_combined, is.numeric)]
-col_num <- col_num[!col_num == "mother_weight_gain"] # Remove as 99 is legitimate 
-for (j in col_num) {
-  set(bir_combined, i = which(bir_combined[[j]] %in% c(9999, 999, 99.9, 99)), 
-      j = j, value = NA_integer_)
-}
-
+    col_char <- names(bir_combined)[sapply(bir_combined, is.character)]
+    for (j in col_char) {
+      set(bir_combined, i = which(bir_combined[[j]] %in% c("U", "XX", "ZZ", "99:99", "99")), 
+          j = j, value = NA_character_)
+    }
+    
+    col_num <- names(bir_combined)[sapply(bir_combined, is.numeric)]
+    col_num <- col_num[!col_num == "mother_weight_gain"] # Remove as 99 is legitimate 
+    for (j in col_num) {
+      set(bir_combined, i = which(bir_combined[[j]] %in% c(9999, 999, 99.9, 99)), 
+          j = j, value = NA_integer_)
+    }
 
 # Now get specific variables
-# (can't use 9 in the catch-all above because it is a non-NA code for some vars)
-col_char_9 <- c("child_calculated_race", "mother_race_calculation", "father_race_calculation")
-for (j in col_char_9) {
-  set(bir_combined, i = which(bir_combined[[j]] %in% c("9", "09")), j = j, value = NA_character_)
-}
+    # (can't use 9 in the catch-all above because it is a non-NA code for some vars)
+    col_char_9 <- c("child_calculated_race", "mother_race_calculation", "father_race_calculation")
+    for (j in col_char_9) {
+      set(bir_combined, i = which(bir_combined[[j]] %in% c("9", "09")), j = j, value = NA_character_)
+    }
+    
+    col_num_9 <- c("facility_type", "intended_facility", "child_calculated_ethnicity",
+                   "mother_hispanic", "mother_education", "mother_educ_8th_grade_or_less",
+                   "father_hispanic", "father_education", "father_educ_8th_grade_or_less",
+                   "mother_height_feet", "source_of_payment", "plurality", "birth_order",
+                   "attendant_class", "certifier_class")
+    for (j in col_num_9) {
+      set(bir_combined, i = which(bir_combined[[j]] == 9), j = j, value = NA_integer_)
+    }
 
-col_num_9 <- c("facility_type", "intended_facility", "child_calculated_ethnicity",
-               "mother_hispanic", "mother_education", "mother_educ_8th_grade_or_less",
-               "father_hispanic", "father_education", "father_educ_8th_grade_or_less",
-               "mother_height_feet", "source_of_payment", "plurality", "birth_order",
-               "attendant_class", "certifier_class")
-for (j in col_num_9) {
-  set(bir_combined, i = which(bir_combined[[j]] == 9), j = j, value = NA_integer_)
-}
-
-
-# Clean up objects
-rm(col_char, col_num, col_char_9, col_num_9, bir_2013_2016, bir_2017_20xx)
+# Clean up objects to free memory
+  rm(col_char, col_num, col_char_9, col_num_9, bir_2013_2016, bir_2017_20xx)
+  gc() 
 
 
 #### CHANGE COLUMN TYPES TO INTEGER WHERE POSSIBLE ####
   to.numeric <- function(my.dt){
-    my.cols <- names(my.dt)
+    my.cols <- names(my.dt)[sapply(bir_combined, is.character)] # get vector of all character columns
     for(i in 1:length(my.cols)){
       added.NAs <- nrow(my.dt[is.na(get(my.cols[i])), ]) - 
         suppressWarnings(nrow(my.dt[is.na(as.numeric(gsub(" ", "", get(my.cols[i])))), ])) # Additional NAs if converted to numeric
