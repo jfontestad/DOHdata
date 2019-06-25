@@ -514,6 +514,7 @@ nchs <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/
 
 # Restrict to relevant level
 iso_3166 <- iso_3166 %>% filter(iso3166_1_name == "United States")
+nchs.country <- nchs %>% filter(nchs_level == "country")
 nchs <- nchs %>% filter(nchs_level == "state")
 
 ### Join together and make some manual additions
@@ -558,6 +559,15 @@ bir_place <- bir_2003_2016 %>% select(birth_cert_encrypt, birplmom, birpldad) %>
 ### Join back to main data and drop old fields
 bir_2003_2016 <- left_join(bir_2003_2016, bir_place, by = "birth_cert_encrypt") %>%
   select(-birplmom, -birpldad)
+
+### Identify the countries whose ids are given as mother_birthplace_cntry_wa_code ----
+setDT(nchs.country) # convert to data.table
+nchs.country[, nchs_level := NULL]
+nchs.country[, nchs_name := toupper(nchs_name)]
+setnames(nchs.country, names(nchs.country), c("mother_birthplace_cntry_wa_code", "mother_birthplace_country"))
+bir_2003_2016<-merge(bir_2003_2016, nchs.country, by = "mother_birthplace_cntry_wa_code", all.x = TRUE, all.y = FALSE)
+setnames(nchs.country, names(nchs.country), c("father_birthplace_cntry_wa_code", "father_birthplace_country"))
+bir_2003_2016<-merge(bir_2003_2016, nchs.country, by = "father_birthplace_cntry_wa_code", all.x = TRUE, all.y = FALSE)
 
 ### Remove objects
 rm(iso_3166, nchs, ref_country, bir_place)
