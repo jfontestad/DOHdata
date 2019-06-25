@@ -642,8 +642,11 @@ bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
   
   
 #### LOAD INITIAL APPENDED VERSION TO SQL ####
-    # Drop vars that are 100% missing, not in the Whales standards, and not useful
-        bir_combined[, nchs_new_record := NULL] 
+# Drop vars that are 100% missing, not in the Whales standards, and not useful
+  bir_combined[, nchs_new_record := NULL] 
+  
+# Fix year for 2009 because needed for automated recoding that follows
+  bir_combined[date_of_birth_year==9, date_of_birth_year := 2009 ]
   
 # Ensure that the "type" is correct when comparing R data.table to SQL shell
   r.table <- data.table(name = names(bir_combined), r.class = sapply(bir_combined, class))
@@ -657,14 +660,17 @@ bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
   dbGetQuery(db_apde, glue::glue_sql("TRUNCATE TABLE {`table_config_stage_bir_wa$schema`}.{`table_config_stage_bir_wa$table`}",
                             .con = db_apde))  
   
-# Need to manually truncate table so can use overwrite = F below (so column types work)
-  
-dbWriteTable(db_apde, tbl_id_2003_20xx, value = as.data.frame(bir_combined),
+# Write table to SQL
+  dbWriteTable(db_apde, tbl_id_2003_20xx, value = as.data.frame(bir_combined),
              overwrite = F,
              append = T,
              field.types = paste(names(table_config_stage_bir_wa$vars), 
                                  table_config_stage_bir_wa$vars, 
                                  collapse = ", ", sep = " = "))
 
+
+#### DELETE OBJECTS TO FREE MEMORY ----
+  rm(list = setdiff(ls(), c("tbl_id_2003_20xx", "bir_combined", "db_apde")))
+  gc()
 
 #### THE END ----
