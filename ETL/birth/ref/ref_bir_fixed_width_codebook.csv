@@ -1,0 +1,242 @@
+var_full_name,var_num,var_name,colstart,colend,width
+Certificate Number,1,certno_e,1,10,10
+Certificate Type,2,certype,11,11,1
+Year of Birth,3,dob_yr,12,15,4
+Month of Birth,4,dob_mo,16,17,2
+Birth Hour,6,birth_hr,20,21,2
+Sex,7,sex,22,22,1
+Plurality,8,plural,23,23,1
+City of Occurrence,9,city_occ,24,27,2
+County of Occurrence,10,cnty_occ,24,25,2
+Facility or Institution of Birth,11,facility,28,30,3
+Mother's Age,12,age_mom,31,32,2
+Mother's Birth State,13,birplmom,33,34,2
+Mother's City of Residence,14,city_res,35,38,2
+Mother's County of Residence,15,cnty_res,35,36,2
+Father's Age,16,age_dad,39,40,2
+Father's Birth State,17,birpldad,41,42,2
+Classification of Attendant,18,attclass,43,44,2
+Father's Race,19,race_dad,45,45,1
+Mother's Race,20,race_mom,46,46,1
+Child's Calculated Race,21,raceccal,47,47,1
+Father's Education Level,22,educ_dad,48,49,2
+Mother’s Education Level,23,educ_mom,50,51,2
+"Number of Prior Live Births, Now Living",24,lb_nl,52,54,3
+Total Prior Pregnancies,25,priorprg,55,57,3
+Filler,26-29,filler1,58,75,18
+Month Prenatal Care Began,30,pnatalmo,76,78,3
+Number of Prenatal Visits,31,pnatalvs,79,81,3
+Marital Status of Mother,32,married,82,82,1
+Birth Weight of Baby - Grams,33,wt_grams,83,86,4
+Facility Type for Place of Birth,35,fac_type,101,101,1
+Father's Occupation - Milham,36,occm_dad,102,104,3
+Mother's Occupation - Milham,37,occm_mom,105,107,3
+"Number of Prior Live Births, Now Dead",38,lb_nd,108,110,3
+Number of Prior Fetal Deaths LT 20 Weeks,39,fd_lt20,111,113,3
+Number of Prior Fetal Deaths GE 20 Weeks,40,fd_ge20,114,116,3
+APGAR Score - 1 Minute,41,apgar1,117,119,3
+APGAR Score - 5 Minute,42,apgar5,120,122,3
+Order at Birth,43,order,123,123,1
+Classification of Certifier,44,crt_clas,124,125,2
+Induced Terminations,46,ind_num,134,136,3
+Mother Transferred After Attempted Delivery,47,trnsferm,137,137,1
+Baby Transferred to Another Facility,48,trnsferb,138,138,1
+Malformation Code - Milham,50,malf_sam,145,147,3
+Father's Hispanic Origin,51,hisp_dad,148,148,1
+Mother's Hispanic Origin,52,hisp_mom,149,149,1
+Child's Calculated Hispanic Ethnicity,53,hispccal,150,150,1
+Length of Residence,54,res_yymm,151,154,4
+"Gestation Estimate, Clinical",56,gest_est,167,169,3
+ZIP Code of Residence,57,zipcode,170,174,5
+Medical Risk Factor 1,59,mrf1,179,180,2
+Medical Risk Factor 2,60,mrf2,181,182,2
+Medical Risk Factor 3,61,mrf3,183,184,2
+Medical Risk Factor 4,62,mrf4,185,186,2
+Medical Risk Factor 5,63,mrf5,187,188,2
+Medical Risk Factor 6,64,mrf6,189,190,2
+Diabetes,65,diabetes,191,191,1
+Genital Herpes,66,herpes,192,192,1
+Number of Cigarettes,67,smokenum,193,195,3
+Number of Drinks,68,drinknum,196,198,3
+Weight Gain During Pregnancy,69,wghtgain,199,201,3
+Obstetric Procedure 1,70,obproc1,202,202,1
+Obstetric Procedure 2,71,obproc2,203,203,1
+Obstetric Procedure 3,72,obproc3,204,204,1
+Obstetric Procedure 4,73,obproc4,205,205,1
+Amniocentesis - 1st Checked,74,amnio1,206,206,1
+Amniocentesis - 2nd Checked,75,amnio2,207,207,1
+Amniocentesis - 3rd Checked,76,amnio3,208,208,1
+Delivery Method 1,77,dmeth1,209,209,1
+Delivery Method 2,78,dmeth2,210,210,1
+Delivery Method 3,79,dmeth3,211,211,1
+Delivery Method 4,80,dmeth4,212,212,1
+Complications of Labor and/or Delivery 1,81,complab1,213,214,2
+Complications of Labor and/or Delivery 2,82,complab2,215,216,2
+Complications of Labor and/or Delivery 3,83,complab3,217,218,2
+Complications of Labor and/or Delivery 4,84,complab4,219,220,2
+Complications of Labor and/or Delivery 5,85,complab5,221,222,2
+Complications of Labor and/or Delivery 6,86,complab6,223,224,2
+Complications of Labor and/or Delivery 7,87,complab7,225,226,2
+Abnormal Conditions of Newborn 1,88,abcond1,227,228,2
+Abnormal Conditions of Newborn 2,89,abcond2,229,230,2
+Abnormal Conditions of Newborn 3,90,abcond3,231,232,2
+Abnormal Conditions of Newborn 4,91,abcond4,233,234,2
+Abnormal Conditions of Newborn 5,92,abcond5,235,236,2
+Abnormal Conditions of Newborn 6,93,abcond6,237,238,2
+Congenital Malformations 1,94,malf1,239,240,2
+Congenital Malformations 2,95,malf2,241,242,2
+Congenital Malformations 3,96,malf3,243,244,2
+Congenital Malformations 4,97,malf4,245,246,2
+Congenital Malformations 5,98,malf5,247,248,2
+Congenital Malformations 6,99,malf6,249,250,2
+Congenital Malformations 7,100,malf7,251,252,2
+State of Occurrence,101,st_occ,253,254,2
+Mother's State of Residence,102,st_res,255,256,2
+Child's Designated Race,103,racecdes,257,257,1
+Child's Designated Hispanic Origin,104,hispcdes,258,258,1
+Principle Payment for Prenatal Care,105,carepay,259,259,1
+WIC Participation,106,wic,260,260,1
+First Steps Participation,107,firsteps,261,261,1
+AFDC Participation,108,afdc,262,262,1
+Service from Local Health Department,109,localhd,263,263,1
+Weight Prior to Pregnancy,110,wghtpre,264,266,3
+Uterine Bleeding - 1st Check,111,ubleed1,267,267,1
+Uterine Bleeding - 2nd Check,112,ubleed2,268,268,1
+Uterine Bleeding - 3rd Check,113,ubleed3,269,269,1
+Smoking Status,114,smoking,270,270,1
+Drinking Status,115,drinking,271,271,1
+Filler,117-118,filler2,273,280,8
+Number of Prior Livebirths-Fullterm-Now Alive,119,lb_f_nl,281,283,3
+"Number of Prior Live Births, Fullterm",120,lb_f84,284,286,3
+Number of Prior Livebirths-Premature-Now Alive,121,lb_p_nl,287,289,3
+"Number of Prior Live Births, Premature",122,lb_p84,290,292,3
+Number of Prior Livebirths-Premature-Now Dead,123,lb_p_nd,293,295,3
+Number of Prior Livebirths-Fullterm-Now Dead,124,lb_f_nd,296,298,3
+Number of Prior Fetal Deaths 20-36 Weeks,125,fd_2036,299,301,3
+Number of Prior Fetal Deaths GE 37 Weeks,126,fd_ge37,302,304,3
+Congenital Malformation ICD-9 1,127,malficd1,305,308,4
+Congenital Malformation ICD-9 2,128,malficd2,309,312,4
+Congenital Malformation ICD-9 3,129,malficd3,313,316,4
+Congenital Malformation ICD-9 4,130,malficd4,317,320,4
+Congenital Malformation ICD-9 5,131,malficd5,321,324,4
+Congenital Malformation ICD-9 6,132,malficd6,325,328,4
+Congenital Malformation ICD-9 7,133,malficd7,329,332,4
+Congenital Malformation ICD-9 8,134,malficd8,333,336,4
+"Gestation, Calculated",135,gestcalc,337,338,2
+"Gestation, Calculated Flag",136,gestflag,339,339,1
+Complications Not Related to Pregnancy 1,137,mrfnon1,340,341,2
+Complications Not Related to Pregnancy 2,138,mrfnon2,342,343,2
+Complications Not Related to Pregnancy 3,139,mrfnon3,344,345,2
+Complications Not Related to Pregnancy 4,140,mrfnon4,346,347,2
+Complications Not Related to Pregnancy 5,141,mrfnon5,348,349,2
+Complications Not Related to Pregnancy 6,142,mrfnon6,350,351,2
+Complications Not Related to Pregnancy 7,143,mrfnon7,352,353,2
+Complications Not Related to Pregnancy 8,144,mrfnon8,354,355,2
+Complications Not Related to Pregnancy 9,145,mrfnon9,356,357,2
+NCHS New Record Flag,146,nchsnew,358,358,1
+Infant Death Flag,147,dthflg,359,359,1
+Last Induced Termination,148,indmm4y,360,365,6
+Last Live Birth,149,llbmm4y,366,371,6
+Last Fetal Death or Spontaneous Outcome,150,lfdmm4y,372,377,6
+Date of Last Normal Menses,151,mensmd4y,378,385,8
+Last Other Pregnancy Outcome,152,lothmm4y,386,391,6
+Last Prior Pregnancy,153,lppmm4y,392,397,6
+Mother’s Birth Country Code,154,bctrymom,398,400,3
+Father’s Birth Country Code,155,bctrydad,401,403,3
+Zip code assigned by GIS software ,156,geozip,404,408,5
+Child Alive at Discharge,157,alive,409,409,1
+Intended Facility Type for Place of Birth,158,fac_int,410,410,1
+Mother’s Residence Tribal Reservation Code,159,trib_res,411,413,3
+"Mother’s Hispanic Origin, Not Hispanic",160,momh_no,414,414,1
+"Mother’s Hispanic Origin, Mexican",161,momh_mex,415,415,1
+"Mother’s Hispanic Origin, Puerto Rican",162,momh_pr,416,416,1
+"Mother’s Hispanic Origin, Cuban",163,momh_cub,417,417,1
+"Mother’s Hispanic, Other Hispanic",164,momh_oth,418,418,1
+"Mother’s Race, White",165,momr_wht,419,419,1
+"Mother’s Race, Black",166,momr_blk,420,420,1
+"Mother’s Race, American Indian/Alaska Native",167,momr_ami,421,421,1
+"Mother’s Race, Asian Indian",168,momr_asi,422,422,1
+"Mother’s Race, Chinese",169,momr_chi,423,423,1
+"Mother’s Race, Filipino",170,momr_fil,424,424,1
+"Mother’s Race, Japanese",171,momr_jap,425,425,1
+"Mother’s Race, Korean",172,momr_kor,426,426,1
+"Mother’s Race, Vietnamese",173,momr_vie,427,427,1
+"Mother’s Race, Other Asian",174,momr_oas,428,428,1
+"Mother’s Race, Native Hawaiian",175,momr_haw,429,429,1
+"Mother’s Race, Guamanian or Chamorro",176,momr_gua,430,430,1
+"Mother’s Race, Samoan",177,momr_sam,431,431,1
+"Mother’s Race, Other Pacific Islander",178,momr_opi,432,432,1
+"Mother’s Race, Other",179,momr_oth,433,433,1
+"Father’s Hispanic Origin, Not Hispanic",180,dadh_no,434,434,1
+"Father’s Hispanic Origin, Mexican",181,dadh_mex,435,435,1
+"Father’s Hispanic Origin, Puerto Rican",182,dadh_pr,436,436,1
+"Father’s Hispanic Origin, Cuban",183,dadh_cub,437,437,1
+"Father’s Hispanic Origin, Other Hispanic",184,dadh_oth,438,438,1
+"Father’s Race, White",185,dadr_wht,439,439,1
+"Father’s Race, Black",186,dadr_blk,440,440,1
+"Father’s Race, American Indian/Alaska Native",187,dadr_ami,441,441,1
+"Father’s Race, Asian Indian",188,dadr_asi,442,442,1
+"Father’s Race, Chinese",189,dadr_chi,443,443,1
+"Father’s Race, Filipino",190,dadr_fil,444,444,1
+"Father’s Race, Japanese",191,dadr_jap,445,445,1
+"Father’s Race, Korean",192,dadr_kor,446,446,1
+"Father’s Race, Vietnamese",193,dadr_vie,447,447,1
+"Father’s Race, Other Asian",194,dadr_oas,448,448,1
+"Father’s Race, Native Hawaiian",195,dadr_haw,449,449,1
+"Father’s Race, Guamanian or Chamorro",196,dadr_gua,450,450,1
+"Father’s Race, Samoan",197,dadr_sam,451,451,1
+"Father’s Race, Other Pacific Islander",198,dadr_opi,452,452,1
+"Father’s Race, Other",199,dadr_oth,453,453,1
+Mother’s Education Years If LE 8th Grade,200,momle8ed,454,454,1
+Father’s Education Years If LE 8th Grade,201,dadle8ed,455,455,1
+Other Pregnancy Outcomes,202,otherout,456,458,3
+Date Other Pregnancy Outcomes,203,othmm4y,459,464,6
+Delivery Source Of Payment,204,delivpay,465,465,1
+Date First Prenatal Visit,205,fpvmd4y,466,473,8
+Date Last Prenatal Visit,206,lpvmd4y,474,481,8
+Number Cigarettes Smoked 3 Months Before Preg,207,cigs_bef,482,483,2
+Number Cigarettes Smoked during 1st Trimester,208,cigs_1st,484,485,2
+Number Cigarettes Smoked during 2nd Trimester,209,cigs_2nd,486,487,2
+Number Cigarettes Smoked during 3rd Trimester,210,cigs_3rd,488,489,2
+APGAR Score - 10 Minute,211,apgar10,490,492,3
+"Child’s Head Circumference, Centimeters",212,circumf,493,494,2
+Mother’s Weight At Delivery,213,wghtdelv,495,497,3
+"Mother’s Height, Feet",214,ht_ft,498,498,1
+"Mother’s Height, Inches",215,ht_in,499,500,2
+Infant Being Breastfed,216,breastfd,501,501,1
+WIC Benefits (beginning in 2003),217,wic_new,502,502,1
+Hypertension Flag,218,hyperflg,503,503,1
+External Cephalic Version Flag,219,cephaflg,504,504,1
+Number of Previous Cesarean Deliveries,220,prev_cno,505,506,2
+"Method of Delivery, Forceps Failed",221,forcfail,507,507,1
+"Method of Delivery, Vacuum Extraction Failed",222,vacfail,508,508,1
+"Method of Delivery, Fetal Presentation",223,fet_pres,509,509,1
+"Method of Delivery, Final Route and Method",224,dmethfin,510,510,1
+Characteristics of Labor and Delivery 1,225,labchar1,511,512,2
+Characteristics of Labor and Delivery 2,226,labchar2,513,514,2
+Characteristics of Labor and Delivery 3,227,labchar3,515,516,2
+Characteristics of Labor and Delivery 4,228,labchar4,517,518,2
+Characteristics of Labor and Delivery 5,229,labchar5,519,520,2
+Characteristics of Labor and Delivery 6,230,labchar6,521,522,2
+Characteristics of Labor and Delivery 7,231,labchar7,523,524,2
+Maternal Infections 1,232,minfect1,525,526,2
+Maternal Infections 2,233,minfect2,527,528,2
+Maternal Infections 3,234,minfect3,529,530,2
+Maternal Infections 4,235,minfect4,531,532,2
+Maternal Infections 5,236,minfect5,533,534,2
+Maternal Infections 6,237,minfect6,535,536,2
+Maternal Infections 7,238,minfect7,537,538,2
+Maternal Morbidity 1,239,mmorbid1,539,540,2
+Maternal Morbidity 2,240,mmorbid2,541,542,2
+Maternal Morbidity 3,241,mmorbid3,543,544,2
+Maternal Morbidity 4,242,mmorbid4,545,546,2
+Maternal Morbidity 5,243,mmorbid5,547,548,2
+Onset Of Labor 1,244,labons1,549,550,2
+Onset Of Labor 2,245,labons2,551,552,2
+Onset Of Labor 3,246,labons3,553,554,2
+Down Syndrome Flag,247,downsflg,555,555,1
+Chromosomal Disorder Flag,248,chromflg,556,556,1
+Mother’s Summary Race,249,moracsum,557,558,2
+Father’s Summary Race,250,faracsum,559,560,2
+Body Mass Index,251,bmi,561,564,4
+NCHS Prenatal Care,252,pnatfed,565,567,3
