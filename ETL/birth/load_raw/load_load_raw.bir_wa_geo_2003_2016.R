@@ -144,6 +144,7 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
   #### ADD ADDITIONAL VARIABLES OF INTEREST ####
   bir_2003_2016 <- bir_2003_2016 %>%
     mutate(
+      dob_yr = as.integer(str_sub(certno_e, 1, 4)),
       fips10_co = case_when(
         cnty_res == 17 ~ 33, # King County
         cnty_res == 31 ~ 61, # Snohomish County
@@ -163,8 +164,8 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
   
   # Set order to match SQL table
   bir_2003_2016 <- bir_2003_2016 %>%
-    select(certno_e, cnty_res, geo_id_blk10, fips10_co, fips10, tra10, bgp10, 
-           blk10, geozip, r_zip, school, tra90, bgp90, xtra90, xblg90, 
+    select(certno_e, dob_yr, cnty_res, geo_id_blk10, fips10_co, fips10, tra10, 
+           bgp10, blk10, geozip, r_zip, school, tra90, bgp90, xtra90, xblg90, 
            tra00, bgp00, source, latitude, longitude, match_score,
            etl_batch_id)
   

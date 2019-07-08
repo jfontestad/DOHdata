@@ -5,6 +5,7 @@ index:
     - certno_e
 vars:
     certno_e
+    year
     cnty_res
     geo_id_blk10
     fips10_co
