@@ -9,7 +9,7 @@ vars:
     tra90: CHAR(7)
     bgp90: CHAR(1)
     r_zip: CHAR(5)
-    xtract90: CHAR(6)
+    xtra90: CHAR(6)
     xblg90: CHAR(1)
     latitude: CHAR(12)
     longitude: CHAR(12)
