@@ -23,12 +23,12 @@ load_metadata_etl_log_f <- function(conn = NULL,
   
   #### ERROR CHECKS ####
   if (is.null(conn)) {
-    print("No DB connection specificed, trying PH_APDEStore50")
+    message("No DB connection specificed, trying PH_APDEStore50")
     conn <- odbc::dbConnect(odbc(), "PH_APDEStore50")
   }
   
-  if (is.null(data_source) | !data_source %in% c("birth", "bskhs", "death", "hospital")) {
-    stop("Enter a data source (one of the following: 'birth', 'bskhs', 
+  if (is.null(data_source) | !data_source %in% c("birth", "birth_geo", "bskhs", "death", "hospital")) {
+    stop("Enter a data source (one of the following: 'birth', 'birth_geo', 'bskhs', 
          'death', 'hospital'")
   }
   
@@ -135,7 +135,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
     if (reuse == T) {
       etl_batch_id <- matches$etl_batch_id[1]
       
-      print(glue::glue("Reusing ETL batch #{etl_batch_id}"))
+      message(glue::glue("Reusing ETL batch #{etl_batch_id}"))
       return(etl_batch_id)
       
     } else {
@@ -155,7 +155,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
     
     # Finish with a message and return the latest etl_batch_id
     # (users should be assigning this to a current_batch_id object)
-    print(glue::glue("ETL batch #{etl_batch_id} loaded"))
+    message(glue::glue("ETL batch #{etl_batch_id} loaded"))
     return(etl_batch_id)
   }
   
@@ -169,7 +169,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
 retrieve_metadata_etl_log_f <- function(conn = NULL, etl_batch_id = NULL) {
   ### Error checks
   if (is.null(conn)) {
-    print("No DB connection specificed, trying PH_APDEStore50")
+    message("No DB connection specificed, trying PH_APDEStore50")
     conn <- odbc::dbConnect(odbc(), "PH_APDEStore50")
   }
   
