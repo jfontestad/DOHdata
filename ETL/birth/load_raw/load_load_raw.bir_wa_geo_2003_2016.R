@@ -44,12 +44,9 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
     x <- str_replace_all(x, "DATE", "c")
   })
   
-  # Make specific change to BMI
-  names(col_type_list_2003_2016)[str_detect(names(col_type_list_2003_2016), "bmi")] <- "BMI"
   # Remove fields that will go in the loaded table but aren't in all data files
   col_type_list_2003_2016 <- col_type_list_2003_2016[
-    str_detect(names(col_type_list_2003_2016), "etl_batch_id") == F & 
-      str_detect(names(col_type_list_2003_2016), "md4y") == F]
+    str_detect(names(col_type_list_2003_2016), "etl_batch_id") == F]
   
   
   #### SET UP FIXED WIDTH FILES ####
@@ -60,7 +57,7 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
     latitude = c(46, 57), longitude = c(59, 69), 
     source = c(70, 89), score = c(90, 92), 
     tract00 = c(93, 99), blgrp00 = c(93, 100), scd = c(104, 108), 
-    tract10d = c(118, 125), bgp10d = c(118, 125), fips = c(118, 129))
+    tract10d = c(118, 124), bgp10d = c(118, 125), fips = c(118, 128))
   
   
   #### LOAD 2003-2016 DATA TO R ####
@@ -92,14 +89,12 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
   # Rename list items
   names(bir_files_2003_2016) <- bir_names_2003_2016
   
-  # Change BMI name back to lower case
-  bir_files_2003_2016 <- lapply(bir_files_2003_2016, data.table::setnames, "BMI", "bmi")
-  
+
   
   #### BATCH ID FOR 2003-2016 ####
   batch_ids_2003_2016 <- lapply(bir_names_2003_2016, function(x) {
     # Set up variables
-    table_name <- paste0("table_", str_sub(x, -4, -1))
+    table_name <- paste0("table_", str_sub(x, 7, 10))
     date_min_txt <- table_config_load[[table_name]][["date_min"]]
     date_max_txt <- table_config_load[[table_name]][["date_max"]]
     date_issue_txt <- table_config_load[[table_name]][["date_issue"]]
@@ -108,12 +103,12 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
     # Obtain batch ID for each file
     # Skip checking most recent entries
     current_batch_id <- load_metadata_etl_log_f(conn = conn,
-                                                data_source = "birth",
+                                                data_source = "birth_geo",
                                                 date_min = date_min_txt,
                                                 date_max = date_max_txt,
                                                 date_issue = date_issue_txt,
                                                 date_delivery = date_delivery_txt,
-                                                note = "Retroactively adding older years",
+                                                note = "Retroactively adding older years, issue and delivery dates are not accurate",
                                                 auto_proceed = T)
     
     return(current_batch_id)
@@ -125,24 +120,60 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
   
   
   #### COMBINE 2003-2016 INTO A SINGLE DATA FRAME ####
-  print("Combining years into a single file")
+  message("Combining years into a single file")
   bir_2003_2016 <- bind_rows(bir_files_2003_2016)
   
-  ### Add overlapping variables
+  
+  ### Rename to match SQL table
   bir_2003_2016 <- bir_2003_2016 %>%
-    mutate(mensmd4y = as.Date(paste(mens_yr, mens_mo, mens_da, sep = "-"), format = "%Y-%m-%d"),
-           fpvmd4y = as.Date(paste(fpv_yr, fpv_mo, fpv_da, sep = "-"), format = "%Y-%m-%d"),
-           lpvmd4y = as.Date(paste(lpv_yr, lpv_mo, lpv_da, sep = "-"), format = "%Y-%m-%d")
-    )
+    rename(cnty_res = r_co,
+           geozip = geo_zip,
+           tra90 = tract90,
+           bgp90 = blgrp90,
+           xtra90 = xtract90,
+           xblg90 = xblgrp90,
+           match_score = score,
+           tra00 = tract00,
+           bgp00 = blgrp00,
+           tra10 = tract10d,
+           bgp10 = bgp10d,
+           fips10 = fips,
+           school = scd)
   
-  ### Reorder to match SQL table
+  
+  #### ADD ADDITIONAL VARIABLES OF INTEREST ####
   bir_2003_2016 <- bir_2003_2016 %>%
-    select(certno_e:mens_yr, mensmd4y, loth_mo:fpv_yr, fpvmd4y, lpv_mo:lpv_yr, lpvmd4y,
-           cigs_bef:bmi, pnatfed, etl_batch_id)
+    mutate(
+      fips10_co = case_when(
+        cnty_res == 17 ~ 33, # King County
+        cnty_res == 31 ~ 61, # Snohomish County
+        TRUE ~ NA_real_
+      ),
+      geo_id_blk10 = 
+        case_when(
+          is.na(fips10) ~ NA_character_,
+          TRUE ~ paste0("530", fips10_co, str_replace(fips10, "\\.", ""))
+        ),
+      blk10 = case_when(
+        is.na(fips10) ~ NA_character_,
+        TRUE ~ str_sub(fips10, -3, -1)
+      )
+    ) %>%
+    select(-fips_co)
   
+  # Set order to match SQL table
+  bir_2003_2016 <- bir_2003_2016 %>%
+    select(certno_e, cnty_res, geo_id_blk10, fips10_co, fips10, tra10, bgp10, 
+           blk10, geozip, r_zip, school, tra90, bgp90, xtra90, xblg90, 
+           tra00, bgp00, source, latitude, longitude, match_score,
+           etl_batch_id)
   
+  # Reorder columns by cert number
+  bir_2003_2016 <- bir_2003_2016 %>% arrange(certno_e)
+
+
   #### LOAD 2003-2016 DATA TO SQL ####
-  print("Loading data to SQL")
+  message("Loading data to SQL")
   # Need to manually truncate table so can use overwrite = F below (so column types work)
   dbGetQuery(conn, glue_sql("TRUNCATE TABLE {`table_config_load$schema`}.{`table_config_load$table`}",
                             .con = conn))
@@ -205,7 +236,7 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
     batch_etl_id_max = batch_etl_id_max
   )
   
-  print(glue::glue("load_raw.bir_wa_2003_2016 loaded to SQL ({rows_to_load} rows)"))
+  message(glue::glue("load_raw.bir_wa_2003_2016 loaded to SQL ({rows_to_load} rows)"))
   return(output)  
   
 
