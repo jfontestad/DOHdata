@@ -3,7 +3,7 @@ table: bir_wa_geo_2003_2016
 years:
 vars:
     certno_e: INTEGER
-    year: INTEGER
+    dob_yr: INTEGER
     cnty_res: CHAR(2)
     geo_id_blk10: CHAR(15)
     fips10_co: CHAR(3)
