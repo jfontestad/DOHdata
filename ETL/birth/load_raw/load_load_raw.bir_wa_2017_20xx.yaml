@@ -292,6 +292,7 @@ vars:
     - attendant_class
     - certifier_class
     - infant_death_flag
+    - etl_batch_id
 table_2017:
     vars_2017: null
     date_min: 2017-01-01
