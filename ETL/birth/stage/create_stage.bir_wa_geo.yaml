@@ -9,8 +9,6 @@ vars:
     residence_zip_code: CHAR(5)
     res_geo_source: VARCHAR(255)
     res_geo_match_score: INTEGER
-    residence_latitude: CHAR(12)
-    residence_longitude: CHAR(12)
     res_geo_school_district: CHAR(5)
     res_geo_census_full_2000: CHAR(15)
     res_geo_census_tract_2000: CHAR(7)
