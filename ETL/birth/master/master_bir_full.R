@@ -159,19 +159,12 @@ qa_load_raw_bir_wa_geo_2017_20xx_f(conn = db_apde, load_only = T)
 ###############
 #### STAGE ####
 ###############
-
-### Pull in functions
+#### BIR_WA ####
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa.R")
-devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/qa_stage.bir_wa.R")
 
+#### BIR_WA_GEO ####
+devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa_geo.R")
 
-### Create table
-create_table_f(conn = db_apde,
-               config_url = "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml",
-               overall = T, ind_yr = F, overwrite = T)
-
-### Load table
-devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa.R")
 
 
 
