@@ -57,6 +57,7 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
     latitude = c(46, 57), longitude = c(59, 69), 
     source = c(70, 89), score = c(90, 92), 
     tract00 = c(93, 99), blgrp00 = c(100, 100), scd = c(104, 108), 
+    zcta = c(109, 113), geocity = c(114, 117),
     tract10d = c(118, 124), bgp10d = c(125, 125), blk10d = c(126, 128))
   
   
@@ -65,6 +66,12 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
   bir_file_names_2003_2016 <- list.files(path = file.path(bir_path_inner, "raw"), 
                                          pattern = "birth_20(0[3-9]{1}|1[0-6]{1})_geo.(asc|csv)$",
                                          full.names = T)
+  
+  # Add check to make sure some files are found
+  if(length(bir_file_names_2003_2016) == 0) {
+    stop("No files found to load. Check path and file names.")
+  }
+  
   bir_names_2003_2016 <- lapply(bir_file_names_2003_2016, function(x)
     str_sub(x,
             start = str_locate(x, "birth_20")[1], 
