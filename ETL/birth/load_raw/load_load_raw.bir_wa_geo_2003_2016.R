@@ -123,59 +123,13 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
   message("Combining years into a single file")
   bir_2003_2016 <- bind_rows(bir_files_2003_2016)
   
-  
-  ### Rename to match SQL table
-  bir_2003_2016 <- bir_2003_2016 %>%
-    rename(cnty_res = r_co,
-           geozip = geo_zip,
-           tra90 = tract90,
-           bgp90 = blgrp90,
-           xtra90 = xtract90,
-           xblg90 = xblgrp90,
-           match_score = score,
-           tra00 = tract00,
-           bgp00 = blgrp00,
-           tra10 = tract10d,
-           bgp10 = bgp10d,
-           fips10 = fips,
-           school = scd)
-  
-  
-  #### ADD ADDITIONAL VARIABLES OF INTEREST ####
-  bir_2003_2016 <- bir_2003_2016 %>%
-    mutate(
-      dob_yr = as.integer(str_sub(certno_e, 1, 4)),
-      fips10_co = case_when(
-        cnty_res == 17 ~ 33, # King County
-        cnty_res == 31 ~ 61, # Snohomish County
-        TRUE ~ NA_real_
-      ),
-      geo_id_blk10 = 
-        case_when(
-          is.na(fips10) ~ NA_character_,
-          TRUE ~ paste0("530", fips10_co, str_replace(fips10, "\\.", ""))
-        ),
-      blk10 = case_when(
-        is.na(fips10) ~ NA_character_,
-        TRUE ~ str_sub(fips10, -3, -1)
-      )
-    ) %>%
-    select(-fips_co)
-  
-  # Set order to match SQL table
-  bir_2003_2016 <- bir_2003_2016 %>%
-    select(certno_e, dob_yr, cnty_res, geo_id_blk10, fips10_co, fips10, tra10, 
-           bgp10, blk10, geozip, r_zip, school, tra90, bgp90, xtra90, xblg90, 
-           tra00, bgp00, source, latitude, longitude, match_score,
-           etl_batch_id)
-  
-  # Reorder columns by cert number
+
+   # Reorder columns by cert number
   bir_2003_2016 <- bir_2003_2016 %>% arrange(certno_e)
 
 
   #### LOAD 2003-2016 DATA TO SQL ####
   message("Loading data to SQL")
-
   tbl_id_2013_2016 <- DBI::Id(schema = table_config_load$schema, table = table_config_load$table)
   dbWriteTable(conn, tbl_id_2013_2016, value = as.data.frame(bir_2003_2016),
                overwrite = T, append = F,
