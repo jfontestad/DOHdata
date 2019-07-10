@@ -18,6 +18,8 @@ vars:
     tract00: CHAR(7)
     blgrp00: CHAR(1)
     scd: CHAR(5)
+    zcta: CHAR(5)
+    geocity: CHAR(4)
     tract10d: CHAR(7)
     bgp10d: CHAR(1)
     blk10d: CHAR(3)

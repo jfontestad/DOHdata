@@ -20,6 +20,8 @@ vars:
     tract00
     blgrp00
     scd
+    zcta
+    geocity
     tract10d
     bgp10d
     blk10d
