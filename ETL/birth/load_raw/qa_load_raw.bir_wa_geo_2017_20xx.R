@@ -24,11 +24,11 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
   
   # Rows by year
   row_count_yr <- dbGetQuery(conn, 
-                             "SELECT a.dob_yr, COUNT (*) as count FROm
-                             (SELECT LEFT(state_file_number, 4) AS dob_yr FROM load_raw.bir_wa_geo_2017_20xx) a
-                             GROUP BY a.dob_yr
-                             ORDER BY a.dob_yr")
-  row_count_yr <- row_count_yr %>% mutate(dob_yr = as.numeric(dob_yr))
+                             "SELECT a.date_of_birth_year, COUNT (*) as count FROm
+                             (SELECT LEFT(state_file_number, 4) AS date_of_birth_year FROM load_raw.bir_wa_geo_2017_20xx) a
+                             GROUP BY a.date_of_birth_year
+                             ORDER BY a.date_of_birth_year")
+  row_count_yr <- row_count_yr %>% mutate(date_of_birth_year = as.numeric(date_of_birth_year))
   
   # Min/max etl_batch_id
   etl_batch_id_min <- as.numeric(dbGetQuery(conn, "SELECT MIN (etl_batch_id) FROM load_raw.bir_wa_geo_2017_20xx"))
@@ -210,8 +210,9 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
                            'Number rows compared to most recent run BY YEAR', 
                            'FAIL', 
                            {Sys.time()}, 
-                           'Row counts differed in the most recent load for the following years: {row_count_yr_mismatch$date_of_birth_year*} 
-                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
+                           'Row counts differed in the most recent load for the following years: ",
+                            "{row_count_yr_mismatch$date_of_birth_year*} ",
+                            "(maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                    max_yr = as.numeric(years[length(years)]),
                    .con = conn))
         
@@ -231,8 +232,8 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
                            'Number rows compared to most recent run BY YEAR', 
                            'PASS', 
                            {Sys.time()}, 
-                           'Some differences in row counts but these were expected  
-                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
+                           'Some differences in row counts but these were expected ",
+                           "(maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                    max_yr = as.numeric(years[length(years)]),
                    .con = conn))
       }
@@ -281,9 +282,9 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
                            'FAIL', 
                            {Sys.time()}, 
                            'There were {count_yr} years included in the data with a 
-                           minimum year of {min_yr} and maximum year of {max_yr} 
-                           (should be {length(years)} years from 2017-20xx)
-                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
+                           minimum year of {min_yr} and maximum year of {max_yr} ",
+                           "(should be {length(years)} years from 2017-20xx) ",
+                           "(maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                max_yr = as.numeric(years[length(years)]),
                .con = conn))
     
@@ -303,16 +304,16 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
                            'Range of years in the data', 
                            'PASS', 
                            {Sys.time()}, 
-                           'There were {count_yr} years included in the data with a 
-                           minimum year of {min_yr} and maximum year of {max_yr} (as expected)
-                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
+                           'There were {count_yr} years included in the data with a ",
+                            "minimum year of {min_yr} and maximum year of {max_yr} (as expected) ",
+                            "(maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                max_yr = as.numeric(years[length(years)]),
                .con = conn))
   }
   
   #### DUPLICATE CERT NUMBERS ####
   cert_count <- as.numeric(dbGetQuery(conn, 
-                                      "SELECT COUNT (DISTINCT birth_cert_encrypt) 
+                                      "SELECT COUNT (DISTINCT state_file_number) 
                                             FROM load_raw.bir_wa_geo_2017_20xx"))
   
   if (cert_count != row_count_tot) {
@@ -357,7 +358,7 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
   
   #### NUMBER OF CERTS PER YEAR ####
   row_count_yr_outlier <- row_count_yr %>%
-    filter(count <80000 | count > 100000)
+    filter(count <25000 | count > 40000)
   
   if (nrow(row_count_yr_outlier) >= 1) {
     dbGetQuery(
@@ -373,12 +374,13 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
                            'Number rows BY YEAR', 
                            'FAIL', 
                            {Sys.time()}, 
-                           'Row counts fell outside the expected range (80-100k) for the following years: {row_count_yr_outlier$date_of_birth_year*} 
-                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
+                           'Row counts fell outside the expected range (25-40k) for the following years: ",
+                            "{row_count_yr_outlier$date_of_birth_year*} (maximum etl_batch_id shown, range ",
+                            "{etl_batch_id_min}:{etl_batch_id_max})')",
                max_yr = as.numeric(years[length(years)]),
                .con = conn))
     
-    stop(glue("Some row counts fell outside expected range (80-100k). Check metadata.qa_bir for details"))
+    stop(glue("Some row counts fell outside expected range (25-40k). Check metadata.qa_bir for details"))
   } else {
     dbGetQuery(
       conn = conn,
@@ -393,8 +395,8 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
                            'Number rows BY YEAR', 
                            'PASS', 
                            {Sys.time()}, 
-                           'The number of rows fell in the expected range (80-100k) for all years 
-                           (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
+                           'The number of rows fell in the expected range (25-40k) for all years ",
+                           "(maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
                max_yr = as.numeric(years[length(years)]),
                .con = conn))
   }
