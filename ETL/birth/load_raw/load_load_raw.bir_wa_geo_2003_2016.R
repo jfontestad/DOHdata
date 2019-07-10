@@ -56,8 +56,8 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
     xtract90 = c(39, 44), xblgrp90 = c(45, 45), 
     latitude = c(46, 57), longitude = c(59, 69), 
     source = c(70, 89), score = c(90, 92), 
-    tract00 = c(93, 99), blgrp00 = c(93, 100), scd = c(104, 108), 
-    tract10d = c(118, 124), bgp10d = c(118, 125), fips = c(118, 128))
+    tract00 = c(93, 99), blgrp00 = c(100, 100), scd = c(104, 108), 
+    tract10d = c(118, 124), bgp10d = c(125, 125), blk10d = c(126, 128))
   
   
   #### LOAD 2003-2016 DATA TO R ####
@@ -175,17 +175,11 @@ load_load_raw.bir_wa_geo_2003_2016_f <- function(table_config_create = NULL,
 
   #### LOAD 2003-2016 DATA TO SQL ####
   message("Loading data to SQL")
-  # Need to manually truncate table so can use overwrite = F below (so column types work)
-  dbGetQuery(conn, glue_sql("TRUNCATE TABLE {`table_config_load$schema`}.{`table_config_load$table`}",
-                            .con = conn))
-  
+
   tbl_id_2013_2016 <- DBI::Id(schema = table_config_load$schema, table = table_config_load$table)
   dbWriteTable(conn, tbl_id_2013_2016, value = as.data.frame(bir_2003_2016),
-               overwrite = F,
-               append = T,
-               field.types = paste(names(table_config_create$vars), 
-                                   table_config_create$vars, 
-                                   collapse = ", ", sep = " = "))
+               overwrite = T, append = F,
+               field.types = unlist(table_config_create$vars))
   
   
   #### COLLATE OUTPUT TO RETURN ####

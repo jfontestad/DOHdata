@@ -16,9 +16,9 @@ vars:
     source: CHAR(20)
     score: INTEGER
     tract00: CHAR(7)
-    blgrp00: CHAR(8)
+    blgrp00: CHAR(1)
     scd: CHAR(5)
     tract10d: CHAR(7)
-    bgp10d: CHAR(8)
+    bgp10d: CHAR(1)
     blk10d: CHAR(3)
     etl_batch_id: INTEGER

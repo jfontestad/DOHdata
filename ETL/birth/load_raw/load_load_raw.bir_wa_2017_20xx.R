@@ -124,17 +124,11 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_create = NULL,
 
   #### LOAD 2017-20xx DATA TO SQL ####
   print("Loading data to SQL")
-  dbGetQuery(conn, glue_sql("TRUNCATE TABLE {`table_config_load$schema`}.{`table_config_load$table`}",
-                            .con = conn))
-
   tbl_id_2017_20xx <- DBI::Id(schema = table_config_load$schema, table = table_config_load$table)
   dbWriteTable(conn, tbl_id_2017_20xx, value = as.data.frame(bir_2017_20xx), 
-               overwrite = F,
-               append = T,
-               field.types = paste(names(table_config_create$vars), 
-                                  table_config_create$vars, 
-                                  collapse = ", ", sep = " = "))
-  
+               overwrite = T,
+               append = F,
+               field.types = unlist(table_config_create$vars))
   
   
   

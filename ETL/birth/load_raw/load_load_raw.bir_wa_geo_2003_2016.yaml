@@ -5,27 +5,24 @@ index:
     - certno_e
 vars:
     certno_e
-    dob_yr
-    cnty_res
-    geo_id_blk10
-    fips10_co
-    fips10
-    tra10
-    bgp10
-    blk10
-    geozip
+    r_co
+    fips_co
+    geo_zip
+    tract90
+    blgrp90
     r_zip
-    school
-    tra90
-    bgp90
-    xtra90
-    xblg90
-    tra00
-    bgp00
-    source
+    xtract90
+    xblgrp90
     latitude
     longitude
-    match_score
+    source
+    score
+    tract00
+    blgrp00
+    scd
+    tract10d
+    bgp10d
+    blk10d
     etl_batch_id
 table_2003:
     vars_2003: null
