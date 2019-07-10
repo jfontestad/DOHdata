@@ -629,13 +629,5 @@ dbGetQuery(conn, glue_sql("TRUNCATE TABLE {`table_config_stage_bir_wa$schema`}.{
 tbl_id_2013_2016 <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
                             table = table_config_stage_bir_wa$table)
 dbWriteTable(conn, tbl_id_2013_2016, value = as.data.frame(bir_combined),
-             overwrite = F,
-             append = T,
-             field.types = paste(names(table_config_stage_bir_wa$vars), 
-                                 table_config_stage_bir_wa$vars, 
-                                 collapse = ", ", sep = " = "))
-
-
-
-
-
+             overwrite = T, append = F,
+             field.types = unlist(table_config_stage_bir_wa$vars))
