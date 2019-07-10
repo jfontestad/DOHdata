@@ -115,10 +115,9 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_create = NULL,
   bir_2017_20xx <- bind_rows(bir_files_2017_20xx)
   
   ## Check snake_case matches what is expected for SQL table
-  if (all_equal(names(bir_2017_20xx[names(bir_2017_20xx) != "etl_batch_id"]), 
-            bir_field_names_map$field_name_apde) == F) {
+  if (min(names(bir_2017_20xx[!names(bir_2017_20xx) %in% c("etl_batch_id")])
+          %in% bir_field_names_map$field_name_apde) == 0) {
     stop("There is an error in the fields names of the 2017_20xx combined data.")
-    
   }
   
 
