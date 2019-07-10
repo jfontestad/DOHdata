@@ -24,8 +24,11 @@ qa_load_raw_bir_wa_geo_2003_2016_f <- function(conn = db_apde,
   
   # Rows by year
   row_count_yr <- dbGetQuery(conn, 
-                             "SELECT dob_yr, COUNT (*) AS count FROM load_raw.bir_wa_geo_2003_2016
-                                   GROUP BY dob_yr")
+                             "SELECT a.dob_yr, COUNT (*) as count FROm
+                             (SELECT LEFT(certno_e, 4) AS dob_yr FROM load_raw.bir_wa_geo_2003_2016) a
+                             GROUP BY a.dob_yr
+                             ORDER BY a.dob_yr")
+  row_count_yr <- row_count_yr %>% mutate(dob_yr = as.numeric(dob_yr))
 
   # Min/max etl_batch_id
   etl_batch_id_min <- as.numeric(dbGetQuery(conn, "SELECT MIN (etl_batch_id) FROM load_raw.bir_wa_geo_2003_2016"))
