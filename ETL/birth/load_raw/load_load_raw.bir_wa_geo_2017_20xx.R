@@ -52,13 +52,22 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
   # Remove fields that will go in the loaded table but aren't in all data files
   col_type_list_2017_20xx <- col_type_list_2017_20xx[str_detect(names(col_type_list_2017_20xx), "etl_batch_id") == F]
   
+  # Rename fields to match what is actually loaded from the csv
+  names(col_type_list_2017_20xx) <- bir_field_names_map$field_name_whales[match(names(col_type_list_2017_20xx), 
+                                                                                bir_field_names_map$field_name_apde)]
   
 
-    #### LOAD 2017-20xx DATA TO R ####
+  #### LOAD 2017-20xx DATA TO R ####
   # Find list of files with years 2017-20xx inclusive
-  bir_file_names_2017_20xx <- list.files(path = file.path(bir_path_inner, "DATA/raw"), 
-                                         pattern = "birth_20(1[7-9]{1}|2[0-9]{1}).(asc|csv|xls|xlsx)$",
+  bir_file_names_2017_20xx <- list.files(path = file.path(bir_path_inner, "raw"), 
+                                         pattern = "birth_20(1[7-9]{1}|2[0-9]{1})_geo.(asc|csv|xls|xlsx)$",
                                          full.names = T)
+  
+  # Add check to make sure some files are found
+  if(length(bir_file_names_2017_20xx) == 0) {
+    stop("No files found to load. Check path and file names.")
+  }
+  
   bir_names_2017_20xx <- lapply(bir_file_names_2017_20xx, function(x)
     str_sub(x,
             start = str_locate(x, "birth_20")[1], 
@@ -88,7 +97,7 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
     # Obtain batch ID for each file
     # Skip checking most recent entries
     current_batch_id <- load_metadata_etl_log_f(conn = conn,
-                                                data_source = "birth",
+                                                data_source = "birth_geo",
                                                 date_min = date_min_txt,
                                                 date_max = date_max_txt,
                                                 date_issue = date_issue_txt,
@@ -109,12 +118,10 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
   bir_2017_20xx <- bind_rows(bir_files_2017_20xx)
   
   ## Check snake_case matches what is expected for SQL table
-  if (all_equal(names(bir_2017_20xx[names(bir_2017_20xx) != "etl_batch_id"]), 
-            bir_field_names_map$field_name_apde) == F) {
+  if (min(names(bir_2017_20xx[!names(bir_2017_20xx) %in% c("etl_batch_id")])
+          %in% bir_field_names_map$field_name_apde) == 0) {
     stop("There is an error in the fields names of the 2017_20xx combined data.")
-    
   }
-  
 
   #### LOAD 2017-20xx DATA TO SQL ####
   print("Loading data to SQL")
