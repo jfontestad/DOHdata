@@ -165,6 +165,6 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 #### BIR_WA_GEO ####
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa_geo.R")
 
-
+### Need to QA each geo file
 
 

@@ -32,8 +32,8 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
     devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/scripts_general/etl_log.R")
   }
   
-  if (exists("bir_field_names_map") == F) {
-    bir_field_names_map <- dbGetQuery(db_apde, "SELECT * FROM ref.bir_field_name_map")
+  if (exists("bir_field_map") == F) {
+    bir_field_map <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_field_name_map.csv")
   }
   
   
@@ -53,8 +53,8 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
   col_type_list_2017_20xx <- col_type_list_2017_20xx[str_detect(names(col_type_list_2017_20xx), "etl_batch_id") == F]
   
   # Rename fields to match what is actually loaded from the csv
-  names(col_type_list_2017_20xx) <- bir_field_names_map$field_name_whales[match(names(col_type_list_2017_20xx), 
-                                                                                bir_field_names_map$field_name_apde)]
+  names(col_type_list_2017_20xx) <- bir_field_map$field_name_whales[match(names(col_type_list_2017_20xx), 
+                                                                                bir_field_map$field_name_apde)]
   
 
   #### LOAD 2017-20xx DATA TO R ####
@@ -119,7 +119,7 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
   
   ## Check snake_case matches what is expected for SQL table
   if (min(names(bir_2017_20xx[!names(bir_2017_20xx) %in% c("etl_batch_id")])
-          %in% bir_field_names_map$field_name_apde) == 0) {
+          %in% bir_field_map$field_name_apde) == 0) {
     stop("There is an error in the fields names of the 2017_20xx combined data.")
   }
 
