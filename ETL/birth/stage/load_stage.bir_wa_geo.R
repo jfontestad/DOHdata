@@ -31,11 +31,11 @@ bir_geo_2017_20xx <- bir_geo_2017_20xx %>%
 
 #### STANDARDIZE NAMES ####
 ### Bring in reference table
-field_maps <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_field_name_map.csv")
+bir_field_map <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_field_name_map.csv")
 
 data.table::setnames(bir_geo_2013_2016, 
-                     field_maps$field_name_apde[match(names(bir_geo_2013_2016), 
-                                                      field_maps$field_name_bedrock)])
+                     bir_field_map$field_name_apde[match(names(bir_geo_2013_2016), 
+                                                      bir_field_map$field_name_bedrock)])
 
 bir_geo_2017_20xx <- bir_geo_2017_20xx %>% rename(birth_cert_encrypt = state_file_number)
 
@@ -44,6 +44,9 @@ bir_geo_2017_20xx <- bir_geo_2017_20xx %>% rename(birth_cert_encrypt = state_fil
 #### BRING NEW AND OLD DATA TOGETHER ####
 bir_geo_combined <- bind_rows(bir_geo_2017_20xx, bir_geo_2013_2016)
 
+# Also trim white space
+bir_geo_combined <- bir_geo_combined %>%
+  mutate(res_geo_source = trimws(res_geo_source))
 
 #### ALIGN BEDROCK VARIABLES WITH WHALES STRUCTURE ####
 bir_geo_combined <- bir_geo_combined %>% 
@@ -77,17 +80,25 @@ bir_geo_combined <- bir_geo_combined %>%
         str_replace(res_geo_census_tract_2010, "\\.", ""),
         res_geo_census_block_grp_2010,
         res_geo_census_block_2010),
-      TRUE ~ NA_character_)
+      TRUE ~ NA_character_),
+    # Make a flag to indicate whether we should use this record for routine
+    # analyses that are broken down by geography
+    res_geo_use = case_when(
+      is.na(res_geo_census_full_2000) & is.na(res_geo_census_full_2010) ~ 0,
+      res_geo_match_score < 70 & res_geo_source != "CNTY EXCEP" ~ 0,
+      res_geo_source == "CNTY EXCEP" | res_geo_match_score >= 70  ~ 1,
+      TRUE ~ NA_real_
+    )
   ) %>%
   select(birth_cert_encrypt, birth_cert_type, date_of_birth_year, 
          mother_residence_county_wa_code, mother_residence_city_wa_code,
-         residence_zip_code, res_geo_source, res_geo_match_score,
+         residence_zip_code, reported_zip, res_geo_source, res_geo_match_score,
          res_geo_school_district, res_geo_census_full_2000,
          res_geo_census_tract_2000, res_geo_census_block_grp_2000,
          res_geo_census_block_2000, res_geo_zcta_2000,
          res_geo_census_full_2010, res_geo_census_tract_2010,
          res_geo_census_block_grp_2010, res_geo_census_block_2010,
-         res_geo_zcta_2010, etl_batch_id)
+         res_geo_zcta_2010, res_geo_use, etl_batch_id)
 
 
 #### REORDER ROWS ####
