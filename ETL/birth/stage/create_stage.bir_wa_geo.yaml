@@ -7,6 +7,7 @@ vars:
     mother_residence_county_wa_code: CHAR(2)
     mother_residence_city_wa_code: CHAR(4)
     residence_zip_code: CHAR(5)
+    reported_zip: CHAR(5)
     res_geo_source: VARCHAR(255)
     res_geo_match_score: INTEGER
     res_geo_school_district: CHAR(5)
@@ -20,4 +21,5 @@ vars:
     res_geo_census_block_grp_2010: CHAR(1)
     res_geo_census_block_2010: CHAR(3)
     res_geo_zcta_2010: CHAR(5)
+    res_geo_use: TINYINT
     etl_batch_id: INTEGER

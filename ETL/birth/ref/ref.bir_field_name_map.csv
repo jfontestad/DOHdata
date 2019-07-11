@@ -333,7 +333,7 @@ Number of children born.",INTEGER
 Before using this field, see ""Data Quality Technical Notes - Attendant/Certifier Classification.""",CHAR(2)
 287,infant_death_flag,Infant Death Flag,dthflg,"Indicates that the infant died by the age of 1 year. Before using this field, see Data Technical Notes - Infant Death Flag. 
 ",CHAR(1)
-,r_zip,,r_zip,Reported ZIP code,CHAR(5)
+,reported_zip,,r_zip,Reported ZIP code,CHAR(5)
 ,residence_zip_code,Residence Zip Code,geo_zip,Corrected and geocoded zip code,CHAR(5)
 ,res_geo_source,Res Geo Source,source,Name of the street data set used to geocode,VARCHAR(255)
 ,res_geo_match_score,Res Geo Match Score,score,Match score from geocoding (100 = exact),INTEGER
