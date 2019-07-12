@@ -25,7 +25,7 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
   # Rows by year
   row_count_yr <- dbGetQuery(conn, 
                              "SELECT a.date_of_birth_year, COUNT (*) as count FROm
-                             (SELECT LEFT(state_file_number, 4) AS date_of_birth_year FROM load_raw.bir_wa_geo_2017_20xx) a
+                             (SELECT LEFT(birth_cert_encrypt, 4) AS date_of_birth_year FROM load_raw.bir_wa_geo_2017_20xx) a
                              GROUP BY a.date_of_birth_year
                              ORDER BY a.date_of_birth_year")
   row_count_yr <- row_count_yr %>% mutate(date_of_birth_year = as.numeric(date_of_birth_year))
@@ -313,7 +313,7 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
   
   #### DUPLICATE CERT NUMBERS ####
   cert_count <- as.numeric(dbGetQuery(conn, 
-                                      "SELECT COUNT (DISTINCT state_file_number) 
+                                      "SELECT COUNT (DISTINCT birth_cert_encrypt) 
                                             FROM load_raw.bir_wa_geo_2017_20xx"))
   
   if (cert_count != row_count_tot) {
@@ -444,5 +444,7 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
   })
     
   }
-  
+ 
+  message("All QA tasks complete. See metadata.qa_bir and metadata.qa_bir_values tables")
+   
 }

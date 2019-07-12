@@ -25,9 +25,6 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/claims_data/m
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/scripts_general/etl_log.R")
 
 
-#### SET UP USEFUL REF TABLES ####
-bir_field_names_map <- dbGetQuery(db_apde, "SELECT * FROM ref.bir_field_name_map")
-
 
 #############################
 #### LOAD_RAW: 2003-2016 ####
@@ -106,17 +103,8 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 
 
 ### Pull in config files to define variable types and metadata
-table_config_create_bir_wa_2017_20xx <- yaml::yaml.load(getURL(
-  "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/create_load_raw.bir_wa_2017_20xx.yaml"))
 table_config_load_bir_wa_2017_20xx <- yaml::yaml.load(getURL(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_2017_20xx.yaml"))
-
-
-### Create table
-# create_table_f(conn = db_apde,
-#                config_url = "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/create_load_raw.bir_wa_2017_20xx.yaml",
-#                overall = T, ind_yr = F, overwrite = T)
-
 
 ### Run function to import and load data
 load_bir_wa_2017_20xx_output <- load_load_raw.bir_wa_2017_20xx_f(
@@ -129,6 +117,10 @@ load_bir_wa_2017_20xx_output <- load_load_raw.bir_wa_2017_20xx_f(
 ### Run function to QA loaded data
 qa_load_raw_bir_wa_2017_20xx_f(conn = db_apde, load_only = T)
 
+### Clean up
+rm(table_config_load_bir_wa_2017_20xx, load_load_raw.bir_wa_2017_20xx_f,
+   qa_load_raw_bir_wa_2017_20xx_f)
+
 
 #################################
 #### LOAD_RAW: 2017-20xx GEO ####
@@ -138,15 +130,12 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/qa_load_raw.bir_wa_geo_2017_20xx.R")
 
 ### Pull in config files to define variable types and metadata
-table_config_create_bir_wa_geo_2017_20xx <- yaml::yaml.load(getURL(
-  "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/create_load_raw.bir_wa_geo_2017_20xx.yaml"))
 table_config_load_bir_wa_geo_2017_20xx <- yaml::yaml.load(getURL(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_geo_2017_20xx.yaml"))
 
 
 ### Run function to import and load data
 load_bir_wa_geo_2017_20xx_output <- load_load_raw.bir_wa_geo_2017_20xx_f(
-  table_config_create = table_config_create_bir_wa_geo_2017_20xx,
   table_config_load = table_config_load_bir_wa_geo_2017_20xx,
   bir_path_inner = bir_path_geo,
   conn = db_apde)
@@ -154,6 +143,9 @@ load_bir_wa_geo_2017_20xx_output <- load_load_raw.bir_wa_geo_2017_20xx_f(
 ### Run function to QA loaded data
 qa_load_raw_bir_wa_geo_2017_20xx_f(conn = db_apde, load_only = T)
 
+### Clean up
+rm(table_config_load_bir_wa_geo_2017_20xx, load_load_raw.bir_wa_geo_2017_20xx_f,
+   qa_load_raw_bir_wa_geo_2017_20xx_f)
 
 
 ###############

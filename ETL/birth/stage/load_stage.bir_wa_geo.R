@@ -24,10 +24,6 @@ bir_geo_2013_2016 <- bir_geo_2013_2016 %>%
          # Also drop lat and long since they are not included in this file
          -latitude, -longitude)
 
-# Remove lat/long from newer data
-bir_geo_2017_20xx <- bir_geo_2017_20xx %>%
-  select(-residence_latitude, -residence_longitude)
-
 
 #### STANDARDIZE NAMES ####
 ### Bring in reference table
@@ -36,8 +32,6 @@ bir_field_map <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHd
 data.table::setnames(bir_geo_2013_2016, 
                      bir_field_map$field_name_apde[match(names(bir_geo_2013_2016), 
                                                       bir_field_map$field_name_bedrock)])
-
-bir_geo_2017_20xx <- bir_geo_2017_20xx %>% rename(birth_cert_encrypt = state_file_number)
 
 
 
