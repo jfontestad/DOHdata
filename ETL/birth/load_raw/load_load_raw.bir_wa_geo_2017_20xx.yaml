@@ -26,3 +26,4 @@ table_2017:
     date_max: 2017-12-31
     date_issue: 2019-01-30
     date_delivery: 2019-07-11
+    note: Updated file with encrypted birth cert num to allow linkage
