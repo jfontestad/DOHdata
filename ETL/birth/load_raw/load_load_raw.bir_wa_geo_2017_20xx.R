@@ -4,21 +4,12 @@
 # 2019-06
 
 
-load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
-                                             table_config_load = NULL,
-                                             bir_path_inner = bir_path,
-                                             conn = db_apde) {
+load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_load = NULL,
+                                                 bir_path_inner = bir_path,
+                                                 conn = db_apde) {
   
   
   #### ERROR CHECKS ####
-  if (is.null(table_config_create)) {
-    print("No table creation config file specified, attempting default URL")
-    
-    table_config_create <- yaml::yaml.load(getURL(
-      "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/create_load_raw.bir_wa_geo_2017_20xx.yaml"))
-  }
-  
-  
   if (is.null(table_config_load)) {
     print("No table load config file specified, attempting default URL")
     
@@ -39,7 +30,7 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
   
   #### SET UP LOADING VARIABLES FROM CONFIG FILES ####
   # Recode list of variables to match format required for importing
-  col_type_list_2017_20xx <- lapply(table_config_create$vars, function(x) {
+  col_type_list_2017_20xx <- lapply(table_config_load$vars, function(x) {
     x <- str_replace_all(x, "INTEGER", "i")
     x <- str_replace_all(x, "VARCHAR\\(\\d+\\)", "c")
     x <- str_replace_all(x, "CHAR\\(\\d+\\)", "c")
@@ -93,6 +84,7 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
     date_max_txt <- table_config_load[[table_name]][["date_max"]]
     date_issue_txt <- table_config_load[[table_name]][["date_issue"]]
     date_delivery_txt <- table_config_load[[table_name]][["date_delivery"]]
+    note_txt <- table_config_load[[table_name]][["note"]]
     
     # Obtain batch ID for each file
     # Skip checking most recent entries
@@ -102,7 +94,7 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
                                                 date_max = date_max_txt,
                                                 date_issue = date_issue_txt,
                                                 date_delivery = date_delivery_txt,
-                                                note = "Initial load of 2017 data, an update is expected",
+                                                note = note_txt,
                                                 auto_proceed = F)
     
     return(current_batch_id)
@@ -114,7 +106,7 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
   
   
   #### COMBINE 2017-20xx INTO A SINGLE DATA FRAME ####
-  print("Combining years into a single file")
+  message("Combining years into a single file")
   bir_2017_20xx <- bind_rows(bir_files_2017_20xx)
   
   ## Check snake_case matches what is expected for SQL table
@@ -124,12 +116,12 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
   }
 
   #### LOAD 2017-20xx DATA TO SQL ####
-  print("Loading data to SQL")
+  message("Loading data to SQL")
   tbl_id_2017_20xx <- DBI::Id(schema = table_config_load$schema, table = table_config_load$table)
   dbWriteTable(conn, tbl_id_2017_20xx, value = as.data.frame(bir_2017_20xx), 
                overwrite = T,
                append = F,
-               field.types = unlist(table_config_create$vars))
+               field.types = unlist(table_config_load$vars))
   
   
   
@@ -141,8 +133,8 @@ load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_create = NULL,
   # 
   # })
   # 
-  # spec_len <- data.frame(field = names(table_config_create$vars)[names(table_config_create$vars) != "etl_batch_id"],
-  #                        type = unlist(table_config_create$vars)[names(table_config_create$vars) != "etl_batch_id"],
+  # spec_len <- data.frame(field = names(table_config_load$vars)[names(table_config_load$vars) != "etl_batch_id"],
+  #                        type = unlist(table_config_load$vars)[names(table_config_load$vars) != "etl_batch_id"],
   #                        max_len = test_len) %>%
   #   mutate(char_det = str_detect(type, "CHAR"),
   #          spec_len = as.numeric(case_when(
