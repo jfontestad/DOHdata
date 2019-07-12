@@ -1,8 +1,8 @@
 schema: load_raw
 table: bir_wa_geo_2017_20xx
-index_name: idx_cl_load_raw_bir_wa_state_file_number
+index_name: idx_cl_load_raw_bir_wa_birth_cert_encrypt
 index:
-    - state_file_number
+    - birth_cert_encrypt
 vars:
     birth_cert_encrypt: INTEGER
     birth_cert_type: CHAR(1)
