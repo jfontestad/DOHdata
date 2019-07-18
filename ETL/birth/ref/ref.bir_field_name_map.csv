@@ -1,5 +1,6 @@
 field_number,field_name_apde,field_name_whales,field_name_bedrock,description,sql_format
 1,birth_cert_encrypt,Birth Cert Encrypt,certno_e,Certificate Number,INTEGER
+1,state_file_number,State File Number,,Certificate Number,INTEGER
 2,birth_cert_type,Birth Cert Type,certype,Certificate Type,CHAR(1)
 3,sex,Sex,sex,Sex of Child ,CHAR(1)
 4,date_of_birth_month,Date of Birth Month,dob_mo,Date of Birth Month,CHAR(2)
@@ -332,3 +333,24 @@ Number of children born.",INTEGER
 Before using this field, see ""Data Quality Technical Notes - Attendant/Certifier Classification.""",CHAR(2)
 287,infant_death_flag,Infant Death Flag,dthflg,"Indicates that the infant died by the age of 1 year. Before using this field, see Data Technical Notes - Infant Death Flag. 
 ",CHAR(1)
+,reported_zip,,r_zip,Reported ZIP code,CHAR(5)
+,residence_zip_code,Residence Zip Code,geo_zip,Corrected and geocoded zip code,CHAR(5)
+,res_geo_source,Res Geo Source,source,Name of the street data set used to geocode,VARCHAR(255)
+,res_geo_match_score,Res Geo Match Score,score,Match score from geocoding (100 = exact),INTEGER
+,residence_latitude,Residence Latitude,latitude,Geocoded latitude,CHAR(12)
+,residence_longitude,Residence Longitude,longitude,Geocoded longitude,CHAR(12)
+,res_geo_school_district,Res Geo School District,scd,Geocoded school district,CHAR(5)
+,res_geo_census_tract_1990,,tract90,Geocoded tract using 1990 boundaries,CHAR(7)
+,res_geo_census_block_grp_1990,,blgrp90,Geocoded block group using 1990 boundaries,CHAR(1)
+,,,xtract90,Geocoded tract using old method of determining geocoded,CHAR(6)
+,,,xblgrp90,Geocoded block group using old method of determining geocoded,CHAR(1)
+,res_geo_census_tract_2000,Res Geo Census Tract 2000,tract00,Geocoded tract using 2000 boundaries,CHAR(7)
+,res_geo_census_block_grp_2000,Res Geo Census Block Grp 2000,blgrp00,Geocoded block group using 2000 boundaries,CHAR(1)
+,res_geo_census_block_2000,Res Geo Census Block 2000,,Geocoded block using 2000 boundaries,CHAR(3)
+,res_geo_zcta_2000,Res Geo ZCTA 2000,,Geocoded ZCTA using 2000 boundaries,CHAR(5)
+,res_geo_census_tract_2010,Res Geo Census Tract 2010,tract10d,Geocoded tract using 2010 boundaries,CHAR(7)
+,res_geo_census_block_grp_2010,Res Geo Census Block Grp 2010,bgp10d,Geocoded block group using 2010 boundaries,CHAR(1)
+,res_geo_census_block_2010,Res Geo Census Block 2010,blk10d,Geocoded block using 2010 boundaries,CHAR(3)
+,res_geo_zcta_2010,Res Geo ZCTA 2010,,Geocoded ZCTA using 2010 boundaries,CHAR(5)
+,res_geo_county_2010,,fips_co,Geocoded county code using 2010 boundaries,CHAR(3)
+19,mother_residence_county_wa_code,Mother Residence County WA Code,r_co,,CHAR(2)

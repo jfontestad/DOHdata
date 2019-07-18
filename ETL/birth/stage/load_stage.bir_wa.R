@@ -38,7 +38,7 @@ table_config_stage_bir_wa <- yaml::yaml.load(getURL(
 #### REMOVE FIELDS IN BEDROCK NOT COLLECTED AFTER 2003 ####
 ### NB. Need to do this BEFORE renaming variables because otherwise two 
 ###   WIC variables are created
-### Remove variables not collected after 2003
+### Remove variables not collected after 2003 or are 100% missing
 bir_2003_2016 <- bir_2003_2016 %>%
   select(-priorprg, -fd_lt20, -fd_ge20, -apgar1, -ind_num, -malf_sam, -herpes, 
          -smokenum, -drinknum, -contains("amnio"), -dmeth2, -dmeth3, -dmeth4, 
@@ -46,7 +46,8 @@ bir_2003_2016 <- bir_2003_2016 %>%
          -afdc, -localhd, -contains("ubleed"), -smoking, -drinking, -lb_f_nl, 
          -lb_f84, -lb_p_nl, -lb_p84, -lb_p_nd, -lb_f_nd, -fd_2036, -fd_ge37, 
          -contains("malficd"), -contains("mrfnon"), -ind_mo, -ind_yr, -lfd_mo, 
-         -lfd_yr, -loth_mo, -loth_yr, -lpp_mo, -lpp_yr, -trib_res) %>%
+         -lfd_yr, -loth_mo, -loth_yr, -lpp_mo, -lpp_yr, -trib_res,
+         -nchsnew) %>%
   # Also remove geozip, which is in the geocoded birth file
   select(-geozip)
 
@@ -621,7 +622,6 @@ bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
   rm(col_char, col_num, col_char_9, col_num_9, bir_2003_2016, bir_2017_20xx)
   gc() 
 
-
 #### CHANGE COLUMN TYPES TO INTEGER WHERE POSSIBLE ####
   data.table::setDT(bir_combined) # be certain that it is a data.table object
   
@@ -678,6 +678,10 @@ bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
                                  table_config_stage_bir_wa$vars, 
                                  collapse = ", ", sep = " = "))
 
+#### FIX CERT NUMBER FOR 2012 ####
+# Warning: max integer size is 2147483648 so this code will break in ~140 years
+bir_combined[date_of_birth_year == 2012, 
+             birth_cert_encrypt := as.integer(paste0(2012L, birth_cert_encrypt))]
 
 #### DELETE OBJECTS TO FREE MEMORY ----
   rm(list = setdiff(ls(), c("tbl_id_2003_20xx", "bir_combined", "db_apde")))

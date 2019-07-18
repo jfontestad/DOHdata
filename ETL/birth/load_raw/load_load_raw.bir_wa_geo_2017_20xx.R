@@ -4,9 +4,9 @@
 # 2019-06
 
 
-load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
-                                             bir_path_inner = bir_path,
-                                             conn = db_apde) {
+load_load_raw.bir_wa_geo_2017_20xx_f <- function(table_config_load = NULL,
+                                                 bir_path_inner = bir_path,
+                                                 conn = db_apde) {
   
   
   #### ERROR CHECKS ####
@@ -14,7 +14,7 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
     print("No table load config file specified, attempting default URL")
     
     table_config_load <- yaml::yaml.load(getURL(
-      "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_2017_20xx.yaml"))
+      "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_geo_2017_20xx.yaml"))
   }
   
   
@@ -43,19 +43,22 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
   # Remove fields that will go in the loaded table but aren't in all data files
   col_type_list_2017_20xx <- col_type_list_2017_20xx[str_detect(names(col_type_list_2017_20xx), "etl_batch_id") == F]
   
-  
   # Rename fields to match what is actually loaded from the csv
-  # NB. The 2017 csv file has spelling errors and inconsistencies in the field names.
-  # Ref table updated to reflect this but something to watch in future loads.
   names(col_type_list_2017_20xx) <- bir_field_map$field_name_whales[match(names(col_type_list_2017_20xx), 
-                                                        bir_field_map$field_name_apde)]
+                                                                                bir_field_map$field_name_apde)]
   
-  
+
   #### LOAD 2017-20xx DATA TO R ####
   # Find list of files with years 2017-20xx inclusive
-  bir_file_names_2017_20xx <- list.files(path = file.path(bir_path_inner, "DATA/raw"), 
-                                         pattern = "birth_20(1[7-9]{1}|2[0-9]{1}).(asc|csv|xls|xlsx)$",
+  bir_file_names_2017_20xx <- list.files(path = file.path(bir_path_inner, "raw"), 
+                                         pattern = "birth_20(1[7-9]{1}|2[0-9]{1})_geo.(asc|csv|xls|xlsx)$",
                                          full.names = T)
+  
+  # Add check to make sure some files are found
+  if(length(bir_file_names_2017_20xx) == 0) {
+    stop("No files found to load. Check path and file names.")
+  }
+  
   bir_names_2017_20xx <- lapply(bir_file_names_2017_20xx, function(x)
     str_sub(x,
             start = str_locate(x, "birth_20")[1], 
@@ -86,7 +89,7 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
     # Obtain batch ID for each file
     # Skip checking most recent entries
     current_batch_id <- load_metadata_etl_log_f(conn = conn,
-                                                data_source = "birth",
+                                                data_source = "birth_geo",
                                                 date_min = date_min_txt,
                                                 date_max = date_max_txt,
                                                 date_issue = date_issue_txt,
@@ -103,7 +106,7 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
   
   
   #### COMBINE 2017-20xx INTO A SINGLE DATA FRAME ####
-  print("Combining years into a single file")
+  message("Combining years into a single file")
   bir_2017_20xx <- bind_rows(bir_files_2017_20xx)
   
   ## Check snake_case matches what is expected for SQL table
@@ -111,10 +114,9 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
           %in% bir_field_map$field_name_apde) == 0) {
     stop("There is an error in the fields names of the 2017_20xx combined data.")
   }
-  
 
   #### LOAD 2017-20xx DATA TO SQL ####
-  print("Loading data to SQL")
+  message("Loading data to SQL")
   tbl_id_2017_20xx <- DBI::Id(schema = table_config_load$schema, table = table_config_load$table)
   dbWriteTable(conn, tbl_id_2017_20xx, value = as.data.frame(bir_2017_20xx), 
                overwrite = T,
@@ -145,7 +147,7 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
   # spec_len %>% filter(max_len > spec_len)
   # 
   # 
-  # print(names(dbGetQuery(conn, "SELECT TOP (0) * FROM load_raw.bir_wa_2017_20xx")))
+  # print(names(dbGetQuery(conn, "SELECT TOP (0) * FROM load_raw.bir_wa_geo_2017_20xx")))
   
   
   #### COLLATE OUTPUT TO RETURN ####
@@ -197,7 +199,7 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
     batch_etl_id_max = batch_etl_id_max
   )
   
-  print(glue::glue("load_raw.bir_wa_2017_20xx loaded to SQL ({rows_to_load} rows)"))
+  print(glue::glue("load_raw.bir_wa_geo_2017_20xx loaded to SQL ({rows_to_load} rows)"))
   return(output)
   
 }
