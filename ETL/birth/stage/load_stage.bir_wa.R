@@ -21,7 +21,7 @@ db_apde <- dbConnect(odbc(), "APDESQL50") ##Connect to SQL server
 
 #### PULL IN TABLE CONFIG FILE FOR VAR TYPE INFO ####
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(
-  "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/stage/create_stage.bir_wa.yaml"))
+  "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
 #### SET UP PATH to SQL OUTPUT TABLE ---- 
     tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
@@ -40,7 +40,7 @@ table_config_stage_bir_wa <- yaml::yaml.load(getURL(
 ###   WIC variables are created
 ### Remove variables not collected after 2003 or are 100% missing
 bir_2003_2016 <- bir_2003_2016 %>%
-  select(-priorprg, -fd_lt20, -fd_ge20, -apgar1, -ind_num, -malf_sam, -herpes, 
+  select(-fd_lt20, -fd_ge20, -apgar1, -ind_num, -malf_sam, -herpes, 
          -smokenum, -drinknum, -contains("amnio"), -dmeth2, -dmeth3, -dmeth4, 
          -contains("complab"), -racecdes, -hispcdes, -carepay, -wic, -firsteps, 
          -afdc, -localhd, -contains("ubleed"), -smoking, -drinking, -lb_f_nl, 
@@ -502,9 +502,6 @@ rm(malf_name, malf_num, malf_f, malf_out)
 
 
 #### RENAME FIELDS THAT DO NOT EXIST IN THE NEW SYSTEM ####
-bir_2003_2016 <- bir_2003_2016 %>%
-  rename(nchs_new_record = nchsnew) # This appears to always be NA
-
 
 #### FIX UP MOTHER/FATHER PLACE OF BIRTH ####
 # birplmom and birpldad need to be converted to ISO-3166 codes and renamed to mother/father_birthplace_state_fips
@@ -561,7 +558,7 @@ bir_place <- bir_2003_2016 %>% select(birth_cert_encrypt, birplmom, birpldad) %>
 bir_2003_2016 <- left_join(bir_2003_2016, bir_place, by = "birth_cert_encrypt") %>%
   select(-birplmom, -birpldad)
 
-### Identify the countries whose ids are given as mother_birthplace_cntry_wa_code ----
+#### Identify the countries whose ids are given as mother_birthplace_cntry_wa_code ----
 setDT(nchs.country) # convert to data.table
 nchs.country[, nchs_level := NULL]
 nchs.country[, nchs_name := toupper(nchs_name)]
@@ -585,7 +582,7 @@ bir_2017_20xx <- bir_2017_20xx %>%
             list( ~ as.numeric(.)))
 
 #### BRING NEW AND OLD DATA TOGETHER ####
-bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
+bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 
 #### STANDARDIZE MISSING TO BE NULL ####
 # Can catch a lot of variables in one go 
@@ -623,10 +620,12 @@ bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
   gc() 
 
 #### CHANGE COLUMN TYPES TO INTEGER WHERE POSSIBLE ####
-  data.table::setDT(bir_combined) # be certain that it is a data.table object
-  
   to.numeric <- function(my.dt){
     my.cols <- names(my.dt)[sapply(my.dt, is.character)] # get vector of all character columns
+    my.cols <- setdiff(my.cols, grep("race_nchs", my.cols, value = TRUE)) # These race vars should remain characters
+    my.cols <- setdiff(my.cols, grep("_year$", my.cols, value = TRUE))  # Alastair coded all years as characters
+    my.cols <- setdiff(my.cols, grep("_month$", my.cols, value = TRUE)) # Alastair coded all months as characters
+    my.cols <- setdiff(my.cols, grep("_day$", my.cols, value = TRUE))   # Alastair coded all days as characters
     for(i in 1:length(my.cols)){
       
       message(paste0("Testing ", i, " of ", length(my.cols), ": ", my.cols[i], " ...", gsub(Sys.Date(), "", Sys.time())))
@@ -653,18 +652,17 @@ bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
   
 #### LOAD INITIAL APPENDED VERSION TO SQL ####
 # Drop vars that are 100% missing, not in the Whales standards, and not useful
-  bir_combined[, nchs_new_record := NULL] 
-  
+
 # Fix year for 2009 because needed for automated recoding that follows
   bir_combined[date_of_birth_year==9, date_of_birth_year := 2009 ]
   
 # Ensure that the "type" is correct when comparing R data.table to SQL shell
-  r.table <- data.table(name = names(bir_combined), r.class = sapply(bir_combined, class))
-  sql.table <- data.table(name = names(table_config_stage_bir_wa$vars), sql.class = as.character(table_config_stage_bir_wa$vars))
-    sql.table[, sql.class := tolower(sql.class)]
-    sql.table[sql.class %like% "char", sql.class := "character"]
-  compare <- merge(r.table, sql.table, by = "name", all = TRUE)
-  View(compare[r.class != sql.class ])
+  r.table <- data.table(name = names(bir_combined), r.class = tolower(sapply(bir_combined, class)))
+  yaml.table <- data.table(name = names(table_config_stage_bir_wa$vars), yaml.class = as.character(table_config_stage_bir_wa$vars))
+    yaml.table[, yaml.class := tolower(yaml.class)]
+    yaml.table[yaml.class %like% "char", yaml.class := "character"]
+  compare <- merge(r.table, yaml.table, by = "name", all = TRUE)
+  View(compare[r.class != yaml.class ])
   
 # Need to manually truncate table so can use overwrite = F below (so column types work)
   dbGetQuery(db_apde, glue::glue_sql("TRUNCATE TABLE {`table_config_stage_bir_wa$schema`}.{`table_config_stage_bir_wa$table`}",
