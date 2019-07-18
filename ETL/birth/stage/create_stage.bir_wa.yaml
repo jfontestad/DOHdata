@@ -175,6 +175,7 @@ vars:
     month_prenatal_care_began: INTEGER
     nchs_month_prenatal_care_began: INTEGER
     number_prenatal_visits: INTEGER
+    priorpreg: INTEGER
     prior_live_births_living: INTEGER
     prior_live_births_deceased: INTEGER
     last_live_birth_month: CHAR(2)
