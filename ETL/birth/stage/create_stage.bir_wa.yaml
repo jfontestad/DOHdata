@@ -14,13 +14,13 @@ vars:
     intended_facility: INTEGER
     birthplace_city: VARCHAR(28)
     birthplace_county: VARCHAR(28)
-    birthplace_county_city_wa_code: INTEGER
-    birthplace_county_wa_code: INTEGER
+    birthplace_county_city_wa_code: CHAR(4)
+    birthplace_county_wa_code: CHAR(2)
     birthplace_state_nchs_code: INTEGER
     mother_residence_city: VARCHAR(112)
     mother_residence_county: VARCHAR(112)
-    mother_residence_city_wa_code: INTEGER
-    mother_residence_county_wa_code: INTEGER
+    mother_residence_city_wa_code: CHAR(4)
+    mother_residence_county_wa_code: CHAR(2)
     mother_residence_state_nchs_code: INTEGER
     mother_residence_zip: VARCHAR(10)
     mother_years_at_residence: INTEGER
