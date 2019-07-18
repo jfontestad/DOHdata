@@ -623,9 +623,9 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   to.numeric <- function(my.dt){
     my.cols <- names(my.dt)[sapply(my.dt, is.character)] # get vector of all character columns
     my.cols <- setdiff(my.cols, grep("race_nchs", my.cols, value = TRUE)) # These race vars should remain characters
-    my.cols <- setdiff(my.cols, grep("_year$", my.cols, value = TRUE))  # Alastair coded all years as characters
     my.cols <- setdiff(my.cols, grep("_month$", my.cols, value = TRUE)) # Alastair coded all months as characters
     my.cols <- setdiff(my.cols, grep("_day$", my.cols, value = TRUE))   # Alastair coded all days as characters
+    my.cols <- setdiff(my.cols, c("birthplace_county_city_wa_code", "birthplace_county_wa_code", "mother_residence_city_wa_code", "mother_residence_county_wa_code"))
     for(i in 1:length(my.cols)){
       
       message(paste0("Testing ", i, " of ", length(my.cols), ": ", my.cols[i], " ...", gsub(Sys.Date(), "", Sys.time())))
@@ -649,18 +649,23 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   date.cols <- c("date_first_prenatal_visit",	"date_last_menses",	"date_last_prenatal_visit",	"father_date_of_birth",	"mother_date_of_birth")
   bir_combined[, (date.cols) := lapply(.SD, as.Date), .SDcols = date.cols]
   
+#### FINAL SMALL DATA TWEAKS ----
+# Fix year for 2009 because needed for automated recoding that follows ----
+  bir_combined[date_of_birth_year=="09  ", date_of_birth_year := "2009"]  
   
-#### LOAD INITIAL APPENDED VERSION TO SQL ####
-# Drop vars that are 100% missing, not in the Whales standards, and not useful
+ # FIX CERT NUMBER FOR 2012 ----
+  # Warning: max integer size is 2147483648 so this code will break in ~140 years
+  bir_combined[date_of_birth_year == 2012, 
+               birth_cert_encrypt := as.integer(paste0(2012L, birth_cert_encrypt))]   
 
-# Fix year for 2009 because needed for automated recoding that follows
-  bir_combined[date_of_birth_year==9, date_of_birth_year := 2009 ]
-  
+#### LOAD INITIAL APPENDED VERSION TO SQL ####
 # Ensure that the "type" is correct when comparing R data.table to SQL shell
   r.table <- data.table(name = names(bir_combined), r.class = tolower(sapply(bir_combined, class)))
+    r.table[r.class == "integer", r.class := "numeric"]
   yaml.table <- data.table(name = names(table_config_stage_bir_wa$vars), yaml.class = as.character(table_config_stage_bir_wa$vars))
     yaml.table[, yaml.class := tolower(yaml.class)]
     yaml.table[yaml.class %like% "char", yaml.class := "character"]
+    yaml.table[yaml.class == "integer", yaml.class := "numeric"]
   compare <- merge(r.table, yaml.table, by = "name", all = TRUE)
   View(compare[r.class != yaml.class ])
   
@@ -675,11 +680,6 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
              field.types = paste(names(table_config_stage_bir_wa$vars), 
                                  table_config_stage_bir_wa$vars, 
                                  collapse = ", ", sep = " = "))
-
-#### FIX CERT NUMBER FOR 2012 ####
-# Warning: max integer size is 2147483648 so this code will break in ~140 years
-bir_combined[date_of_birth_year == 2012, 
-             birth_cert_encrypt := as.integer(paste0(2012L, birth_cert_encrypt))]
 
 #### DELETE OBJECTS TO FREE MEMORY ----
   rm(list = setdiff(ls(), c("tbl_id_2003_20xx", "bir_combined", "db_apde")))
