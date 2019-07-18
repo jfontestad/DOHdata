@@ -6,7 +6,7 @@ vars:
     birth_cert_type: CHAR(1)
     sex: CHAR(1)
     date_of_birth_month: CHAR(2)
-    date_of_birth_year: CHAR(4)
+    date_of_birth_year: INTEGER
     time_of_birth: VARCHAR(5)
     mother_marital_status: CHAR(1)
     facility_type: INTEGER
@@ -167,11 +167,11 @@ vars:
     date_first_prenatal_visit: DATE
     first_prenatal_visit_month: CHAR(2)
     first_prenatal_visit_day: CHAR(2)
-    first_prenatal_visit_year: CHAR(4)
+    first_prenatal_visit_year: INTEGER
     date_last_prenatal_visit: DATE
     last_prenatal_visit_month: CHAR(2)
     last_prenatal_visit_day: CHAR(2)
-    last_prenatal_visit_year: CHAR(4)
+    last_prenatal_visit_year: INTEGER
     month_prenatal_care_began: INTEGER
     nchs_month_prenatal_care_began: INTEGER
     number_prenatal_visits: INTEGER
@@ -179,14 +179,14 @@ vars:
     prior_live_births_living: INTEGER
     prior_live_births_deceased: INTEGER
     last_live_birth_month: CHAR(2)
-    last_live_birth_year: CHAR(4)
+    last_live_birth_year: INTEGER
     other_preg_outcomes: INTEGER
     other_preg_outcomes_month: CHAR(2)
-    other_preg_outcomes_year: CHAR(4)
+    other_preg_outcomes_year: INTEGER
     date_last_menses: DATE
     last_menses_month: CHAR(2)
     last_menses_day: CHAR(2)
-    last_menses_year: CHAR(4)
+    last_menses_year: INTEGER
     gestation_estimate: INTEGER
     calculated_gestation: INTEGER
     gestation_calculated_flag: INTEGER
