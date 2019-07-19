@@ -669,17 +669,12 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   compare <- merge(r.table, yaml.table, by = "name", all = TRUE)
   View(compare[r.class != yaml.class ])
   
-# Need to manually truncate table so can use overwrite = F below (so column types work)
-  dbGetQuery(db_apde, glue::glue_sql("TRUNCATE TABLE {`table_config_stage_bir_wa$schema`}.{`table_config_stage_bir_wa$table`}",
-                            .con = db_apde))  
-  
-# Write table to SQL
+#### LOAD TO SQL ####
+  tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
+                              table = table_config_stage_bir_wa$table)
   dbWriteTable(db_apde, tbl_id_2003_20xx, value = as.data.frame(bir_combined),
-             overwrite = F,
-             append = T,
-             field.types = paste(names(table_config_stage_bir_wa$vars), 
-                                 table_config_stage_bir_wa$vars, 
-                                 collapse = ", ", sep = " = "))
+               overwrite = T, append = F,
+               field.types = unlist(table_config_stage_bir_wa$vars))
 
 #### DELETE OBJECTS TO FREE MEMORY ----
   rm(list = setdiff(ls(), c("tbl_id_2003_20xx", "bir_combined", "db_apde")))
