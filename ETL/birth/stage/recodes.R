@@ -15,15 +15,12 @@
 ## Set up environment ----
     pacman::p_load(apdeRecodes, odbc, data.table, RCurl)
     rm(list=ls())
-    #source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/enact_recoding_function.R")
-    source("C:/Users/dcolombara/code/DOHdata/ETL/birth/stage/enact_recoding_function.R")
-    
+    source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/stage/enact_recoding_function.R")
+
 ## Load reference data ----    
-    #recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_recodes_simple.csv")
-    recodes <- fread("C:/Users/dcolombara/code/DOHdata/ETL/birth/ref/ref.bir_recodes_simple.csv")
-    
-    #table_config_stage_bir_wa <- yaml::yaml.load(getURL("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
-    table_config_stage_bir_wa <- yaml::read_yaml("C:/Users/dcolombara/code/DOHdata/ETL/birth/stage/create_stage.bir_wa.yaml")
+    recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/ref/ref.bir_recodes_simple.csv")
+
+    table_config_stage_bir_wa <- yaml::yaml.load(getURL("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
 ## Identify vars to be pulled in from SQL ----
     complete.varlist <- names(table_config_stage_bir_wa$vars) # all column names from YAML that made SQL table
@@ -35,45 +32,25 @@
 ## Pull minimal staged data from SQL ----
   db_apde <- dbConnect(odbc(), "APDESQL50") ##Connect to SQL server
 
-  bir_combined <- setDT(DBI::dbGetQuery(db_apde, 
-                             query.string))
-  
-  # tbl_id_2003_20xx <- DBI::Id(schema = "stage", 
-  #                             table = "bir_wa")  
-  # 
-  # bir_combined <- setDT(DBI::dbReadTable(db_apde, tbl_id_2003_20xx))
-    
+  bir_recodes.dt <- setDT(DBI::dbGetQuery(db_apde, query.string))
+
 ## Convert select character cols to numeric ----
-  bir_combined[, mother_residence_county_wa_code := as.numeric(mother_residence_county_wa_code)]
-  bir_combined[, birthplace_county_wa_code := as.numeric(birthplace_county_wa_code)]
-  bir_combined[, mother_residence_zip := as.numeric(mother_residence_zip)]
+  bir_recodes.dt[, mother_residence_county_wa_code := as.numeric(mother_residence_county_wa_code)]
+  bir_recodes.dt[, birthplace_county_wa_code := as.numeric(birthplace_county_wa_code)]
+  bir_recodes.dt[, mother_residence_zip := as.numeric(mother_residence_zip)]
   
-## Prep recode data ----
-    #recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_recodes_simple.csv")
-    recodes <- fread("C:/Users/dcolombara/code/DOHdata/ETL/birth/ref/ref.bir_recodes_simple.csv")
-    recodes <- recodes[recode_type != "complex"]
-    recodes <- recodes[, .(old_var, new_var, old_value, new_value, new_label, start_year, end_year, var_label)]
-    #recodes <- recodes[c(1:112), ]
+## Prep simple recode instructions ----
+    complex.vars <- recodes[recode_type=="complex"]$new_var # save list of vars made with complex recodes
+    recodes <- recodes[recode_type != "complex"] # drop complex recodes from list of simple recodes
+    recodes <- recodes[, .(old_var, new_var, old_value, new_value, new_label, start_year, end_year, var_label)] # keep columns needed for function
 
-## Process with recoding functions / package ----
-    # Test a single recode
-      # my.recode <- unlist(parse_recode_instructions(recodes, catch_NAs = T), recursive = F)
-      # data = copy(x)
-      # year = 2006
-      # recode = my.recode
-      # bir_combined <- apply_recode(data = data, year = year, recode = my.recode, jump_scope = T, return_vector = F) # one at a time
+## Process simple recodes with package ----
+    bir_recodes.dt <- enact_recoding(data = bir_recodes.dt, 
+                   year = 2006, 
+                   parse_recode_instructions(recodes, catch_NAs = T), 
+                   ignore_case = T, 
+                   hypothetical = F)  
     
-    # Test a list of recodes
-      DT = copy(bir_combined)
-      year = 2006
-      ignore_case = T
-      hypothetical = F
-      recodes.list <- parse_recode_instructions(recodes, catch_NAs = T)
-      dots = recodes.list
-      x <- enact_recoding(data = DT, year = year, recodes.list, ignore_case = ignore_case, hypothetical = hypothetical)
-
-
-      
 ## Custom code for complex recoding ----
     # Create copy of raw data ----
       custom <- copy(bir_combined)
