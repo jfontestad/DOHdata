@@ -651,7 +651,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   
 #### FINAL SMALL DATA TWEAKS ----
 # Fix year for 2009 because needed for automated recoding that follows ----
-  bir_combined[date_of_birth_year=="09  ", date_of_birth_year := "2009"]  
+  bir_combined[date_of_birth_year==9, date_of_birth_year := 2009]  
   
  # FIX CERT NUMBER FOR 2012 ----
   # Warning: max integer size is 2147483648 so this code will break in ~140 years
