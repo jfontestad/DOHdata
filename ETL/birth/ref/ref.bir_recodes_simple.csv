@@ -121,15 +121,18 @@ del,simple,fetal_pres,string,B,fetal_pres,categorical,2,Breech,"Method of Delive
 del,simple,fetal_pres,string,O,fetal_pres,categorical,3,Other,"Method of Delivery, Fetal Presentation",2003,2017,
 del,simple,fetal_pres,string,U,fetal_pres,categorical,NA,NA,"Method of Delivery, Fetal Presentation",2003,2017,
 del,simple,fetal_pres,string,9,fetal_pres,categorical,NA,NA,"Method of Delivery, Fetal Presentation",2003,2017,
+risk,binning,cigarettes_smoked_3_months_prior,continuous,"[0, 0]",smokeprior,categorical,0,No,Smoke 1st Trimester,2003,2017,
+risk,binning,cigarettes_smoked_3_months_prior,continuous,"[1, 98]",smokeprior,categorical,1,Yes,Smoke 1st Trimester,2003,2017,
+risk,complex,,,,smokeprior,categorical,,,Smoke 1st Trimester,2003,2017,correct # to be zero when when cigarettes == NA
 risk,binning,cigarettes_smoked_1st_tri,continuous,"[0, 0]",smoke1,categorical,0,No,Smoke 1st Trimester,2003,2017,
 risk,binning,cigarettes_smoked_1st_tri,continuous,"[1, 98]",smoke1,categorical,1,Yes,Smoke 1st Trimester,2003,2017,
-risk,complex,,,,smoke1,categorical,,,Smoke 1st Trimester,2003,2017,correct # cigarettes when pack==0 & cigarettes == NA
+risk,complex,,,,smoke1,categorical,,,Smoke 1st Trimester,2003,2017,correct # to be zero when when cigarettes == NA
 risk,binning,cigarettes_smoked_2nd_tri,continuous,"[0, 0]",smoke2,categorical,0,No,Smoke 2nd Trimester,2003,2017,
 risk,binning,cigarettes_smoked_2nd_tri,continuous,"[1, 98]",smoke2,categorical,1,Yes,Smoke 2nd Trimester,2003,2017,
-risk,complex,,,,smoke2,categorical,,,Smoke 2nd Trimester,2003,2017,correct # cigarettes when pack==0 & cigarettes == NA
+risk,complex,,,,smoke2,categorical,,,Smoke 2nd Trimester,2003,2017,correct # to be zero when when cigarettes == NA
 risk,binning,cigarettes_smoked_3rd_tri,continuous,"[0, 0]",smoke3,categorical,0,No,Smoke 3rd Trimester,2003,2017,
 risk,binning,cigarettes_smoked_3rd_tri,continuous,"[1, 98]",smoke3,categorical,1,Yes,Smoke 3rd Trimester,2003,2017,
-risk,complex,,,,smoke3,categorical,,,Smoke 3rd Trimester,2003,2017,correct # cigarettes when pack==0 & cigarettes == NA
+risk,complex,,,,smoke3,categorical,,,Smoke 3rd Trimester,2003,2017,correct # to be zero when when cigarettes == NA
 risk,complex,,,,smoking_dur,categorical,,,Smoking During Pregnancy,2003,2017,
 risk,complex,,,,smoking,categorical,,,Smoking (before & during pregnancy),2003,2017,
 risk,complex,,,,diab_no,categorical,,,Diabetes-No,2003,2017,
