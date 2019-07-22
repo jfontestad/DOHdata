@@ -135,9 +135,11 @@ risk,binning,cigarettes_smoked_3rd_tri,continuous,"[1, 98]",smoke3,categorical,1
 risk,complex,,,,smoke3,categorical,,,Smoke 3rd Trimester,2003,2017,correct # to be zero when when cigarettes == NA
 risk,complex,,,,smoking_dur,categorical,,,Smoking During Pregnancy,2003,2017,
 risk,complex,,,,smoking,categorical,,,Smoking (before & during pregnancy),2003,2017,
+risk,simple,prepreg_diabetes,string,N,diab_prepreg,categorical,0,No,Diabetes-Pre Pregnancy,2003,2017,
+risk,simple,prepreg_diabetes,string,Y,diab_prepreg,categorical,1,Yes,Diabetes-Pre Pregnancy,2003,2017,
+risk,simple,gestational_diabetes,string,N,diab_gest,categorical,0,No,Diabetes-Gestational,2003,2017,
+risk,simple,gestational_diabetes,string,Y,diab_gest,categorical,1,Yes,Diabetes-Gestational,2003,2017,
 risk,complex,,,,diab_no,categorical,,,Diabetes-No,2003,2017,
-risk,complex,,,,diab_prepreg,categorical,,,Diabetes-Pre Pregnancy,2003,2017,
-risk,complex,,,,diab_gest,categorical,,,Diabetes-Gestational,2003,2017,
 risk,complex,,,,htn_no,categorical,,,Hypertension-No,2003,2017,
 risk,complex,,,,htn_prepreg,categorical,,,Hypertension-Pre Pregnancy,2003,2017,
 risk,complex,,,,htn_gest,categorical,,,Hypertension-Gestational,2003,2017,
