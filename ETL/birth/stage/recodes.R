@@ -25,7 +25,15 @@
 ## Identify vars to be pulled in from SQL ----
     complete.varlist <- names(table_config_stage_bir_wa$vars) # all column names from YAML that made SQL table
     old.varlist <- setdiff(unique(recodes$old_var), "") # all column names that will be recoded with the code below
-    query.varlist <- paste(setdiff(old.varlist, setdiff(old.varlist, complete.varlist)), collapse=", ") # just the column names for the SQL data that will be recoded
+    
+    query.varlist <- paste(setdiff(old.varlist, setdiff(old.varlist, complete.varlist)), collapse=", ") # column names for the SQL data that will be recoded with simple recode function
+    
+    query.varlist <- c(query.varlist, # manually add vars needed for complex recodes 
+                       "non_vertex_presentation", "mother_bmi", "mother_weight_gain", 
+                       "prior_live_births_living", "prior_live_births_deceased"
+                       )
+    
+    query.varlist <- paste(query.varlist, collapse=", ") # the final list of vars that we need to pull from SQL
     
     query.string <- paste("SELECT", query.varlist, "FROM stage.bir_wa")
 
@@ -52,106 +60,104 @@
                    hypothetical = F)  
     
 ## Custom code for complex recoding ----
+    # Not in alphabetical order because some vars are dependant upon other vars
     # Create copy of raw data ----
-      custom <- copy(bir_combined)
-    
-    # vertex (vertex birth position) ----
-      custom[year %in% c(2003:2015) & (fetal_presentation == "C"), vertex := 0]
-      custom[year %in% c(2003:2015) & (fetal_presentation %in% c("B", "o")), vertex := 1]
-      custom[year %in% c(2003:2015) & (labchar1==3 | labchar2==3 | labchar3==3 | labchar4==3 | labchar5==3 | labchar6==3 | labchar7==3), vertex := 1]
-      custom[, vertex := factor(vertex, levels = c(0, 1), labels = c("Breech/Oth", "Vertex"))]
+      custom <- copy(bir_recodes.dt)
 
-    # smoking (Smoking-Yes (before & during pregnancy)) ----
-      custom[year %in% c(2003:2015), smoking := NA_integer_]
-      custom[year %in% c(2003:2015) & (cigarettes_smoked_3_months_prior==0 & cigarettes_smoked_1st_tri==0 & cigarettes_smoked_2nd_tri==0 & cigarettes_smoked_3rd_tri==0), smoking := 0]
-      custom[year %in% c(2003:2015) & (cigarettes_smoked_3_months_prior %in% c(1:98) | cigarettes_smoked_1st_tri %in% c(1:98) | cigarettes_smoked_2nd_tri %in% c(1:98) | cigarettes_smoked_3rd_tri %in% c(1:98)), smoking := 1]
-      custom[, smoking := factor(smoking, levels = c(0, 1), labels = c("No", "Yes"))]
-
-    # smoking_dur (whether mother smoked at all during pregnancy) ----
-      custom[year %in% c(2000:2002) & smoking=="N", smoking_dur := 0]
-      custom[year %in% c(2000:2002) & smoking=="Y", smoking_dur := 1]
-
-      custom[year %in% c(2003:2015), smoking_dur := NA_integer_]
-      custom[year %in% c(2003:2015) & (cigarettes_smoked_1st_tri==0 & cigarettes_smoked_2nd_tri==0 & cigarettes_smoked_3rd_tri==0), smoking_dur := 0]
-      custom[year %in% c(2003:2015) & (cigarettes_smoked_1st_tri %in% c(1:98) | cigarettes_smoked_2nd_tri %in% c(1:98) | cigarettes_smoked_3rd_tri %in% c(1:98)), smoking_dur := 1]
+    # cigarettes_smoked_3_months_prior ----
+      custom[is.na(cigarettes_smoked_3_months_prior) & year >=2017, cigarettes_smoked_3_months_prior := 0]
+      custom[cigarettes_smoked_3_months_prior == 0, smokeprior := 0]
       
-      custom[, smoking_dur := factor(smoking_dur, levels = c(0, 1), labels = c("No", "Yes"))]
-
-    # wtgain (CHAT categories of maternal weight gain) ----
-            custom[year %in% c(2000:2015) &
-                     ((mother_bmi<18.5 & mother_weight_gain<28) | 
-                     (mother_bmi>=18.5 & mother_bmi<=24.99 & mother_weight_gain<25) | 
-                     (mother_bmi>=25.0 & mother_bmi<=29.99 & mother_weight_gain<15) | 
-                     (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain<11)), 
-                   wtgain := 1]
-            
-            custom[year %in% c(2000:2015) & is.na(wtgain) & 
-                     ((mother_bmi<18.5 & mother_weight_gain>=28 & mother_weight_gain<=40) | 
-                     (mother_bmi>=18.5 & mother_bmi<=24.9 & mother_weight_gain>=25 & mother_weight_gain<=35) | 
-                     (mother_bmi>=25.0 & mother_bmi<=29.9 & mother_weight_gain>=15 & mother_weight_gain<=25) | 
-                     (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain>=11 & mother_weight_gain<=20)), 
-                   wtgain := 2]
-            
-            custom[year %in% c(2000:2015) & is.na(wtgain) & 
-                     ((mother_bmi<18.5 & mother_weight_gain>40) | 
-                        (mother_bmi>=18.5 & mother_bmi<=24.9 & mother_weight_gain>35) | 
-                        (mother_bmi>=25.0 & mother_bmi<=29.9 & mother_weight_gain>25) | 
-                        (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain>20 & mother_weight_gain<999)), 
-                   wtgain := 3]       
-            
-            custom[, wtgain := factor(wtgain, levels = c(1:3), labels = c("below recommended", "recommended", "above recommended"))]
-    
-    # wtgain_rec (WT Gain-Recommended) ----
-            custom[year %in% c(2000:2015) & (wtgain %in% c("below recommended", "above recommended")),  wtgain_rec := 0]
-            custom[year %in% c(2000:2015) & (wtgain=="recommended"), wtgain_rec := 1]
-            custom[, wtgain_rec := factor(wtgain_rec, levels = c(0, 1), labels = c("No", "Yes"))]
+    # cigarettes_smoked_1st_tri ----
+      custom[is.na(cigarettes_smoked_1st_tri) & year >=2017, cigarettes_smoked_1st_tri := 0]
+      custom[cigarettes_smoked_1st_tri == 0, smoke1 := 0]
+      
+    # cigarettes_smoked_2nd_tri ----
+      custom[is.na(cigarettes_smoked_2nd_tri) & year >=2017, cigarettes_smoked_2nd_tri := 0]
+      custom[cigarettes_smoked_2nd_tri == 0, smoke2 := 0]
+      
+    # cigarettes_smoked_3rd_tri ----
+      custom[is.na(cigarettes_smoked_3rd_tri) & year >=2017, cigarettes_smoked_3rd_tri := 0]      
+      custom[cigarettes_smoked_3rd_tri == 0, smoke3 := 0]       
 
     # diab_no (Diabetes-No) ----
-          custom[year %in% c(2000:2015) & (diabetes %in% c("E", "G", "U")), diab_no := 0]
-          custom[year %in% c(2000:2015) & (is.na(diabetes)), diab_no := 1] # blank means no diabetes
-          custom[, diab_no := factor(diab_no, levels = c(0, 1), labels = c("No", "Yes"))]
-
-    # diab_prepreg (Diabetes-Pre Pregnancy) ----
-          custom[year %in% c(2000:2015) & (is.na(diabetes) | diabetes == "G"), diab_prepreg := 0] # it is is unknown type, can't categorize it
-          custom[year %in% c(2000:2015) & (diabetes == "E"), diab_prepreg := 1] # blank means no diabetes
-          custom[, diab_prepreg := factor(diab_prepreg, levels = c(0, 1), labels = c("No", "Yes"))]
-
-    # diab_gest (Diabetes-Gestational) ----
-          custom[year %in% c(2000:2015) & (is.na(diabetes) | diabetes == "E"), diab_gest := 0] # it is is unknown type, can't categorize it
-          custom[year %in% c(2000:2015) & (diabetes == "G"), diab_gest := 1] # blank means no diabetes
-          custom[, diab_gest := factor(diab_gest, levels = c(0, 1), labels = c("No", "Yes"))]
+      custom[diab_gest == 0 & diab_prepreg == 0, diab_no := 1] 
+      custom[diab_gest == 1 | diab_prepreg == 1, diab_no := 0]
 
     # htn_no (Hypertension-No) ----
-          custom[year %in% c(2003:2015) & (hyperflg %in% c("E", "G", "U")), htn_no := 0]
-          custom[year %in% c(2003:2015) & (is.na(hyperflg)), htn_no := 1] # blank means no diabetes
-          custom[, htn_no := factor(htn_no, levels = c(0, 1), labels = c("No", "Yes"))]
-
-    # htn_prepreg (Hypertension-Pre Pregnancy) ----
-          custom[year %in% c(2003:2015) & (is.na(hyperflg) | hyperflg == "G"), htn_prepreg := 0] # it is is unknown type, can't categorize it
-          custom[year %in% c(2003:2015) & (hyperflg == "E"), htn_prepreg := 1] # blank means no hypertension
-          custom[, htn_prepreg := factor(htn_prepreg, levels = c(0, 1), labels = c("No", "Yes"))]
-
-    # htn_gest (Hypertension-Gestational) ----
-          custom[year %in% c(2003:2015) & (is.na(hyperflg) | hyperflg == "E"), htn_gest := 0] # it is is unknown type, can't categorize it
-          custom[year %in% c(2003:2015) & (hyperflg == "G"), htn_gest := 1] # blank means no hypertension
-          custom[, htn_gest := factor(htn_gest, levels = c(0, 1), labels = c("No", "Yes"))]
+      custom[htn_gest == 0 & htn_prepreg == 0, htn_no := 1] 
+      custom[htn_gest == 1 | htn_prepreg == 1, htn_no := 0]
 
     # nullip (nulliparous) ----
-      custom[year %in% c(1989:2015) & (prior_live_births_living == 0 & prior_live_births_deceased == 0), nullip := 1]
-      custom[year %in% c(1989:2015) & (prior_live_births_living %in% c(1:98)), nullip := 0]
-      custom[year %in% c(1989:2015) & (prior_live_births_deceased %in% c(1:98)), nullip := 0]
-      custom[, nullip := factor(nullip, levels = c(0, 1), labels = c("No", "Yes"))]
+      custom[prior_live_births_living == 0 & prior_live_births_deceased == 0, nullip := 1]
+      custom[prior_live_births_living %in% c(1:98) | prior_live_births_deceased %in% c(1:98), nullip := 0]
+      
+    # vertex (vertex birth position) ----
+      custom[fetal_pres == 1, vertex := 0]
+      custom[fetal_pres %in% 2:3, vertex := 1]
+      custom[non_vertex_presentation=="N", vertex := 1]
+      custom[, vertex := factor(vertex, levels = c(0, 1), labels = c("Breech/Oth", "Vertex"))]
       
     # ntsv (nulliparous, term, singleton, vertex birth) ----
-      custom[year %in% c(2003:2015), ntsv := 0] 
-      custom[year %in% c(2003:2015) & (nullip == "Yes" & preterm == "No" & plural == 1 & vertex == "Vertex"), ntsv := 1]
-      custom[, ntsv := factor(ntsv, levels = c(0, 1), labels = c("No", "Yes"))]
-          
+      custom[, ntsv := 0] 
+      custom[(nullip == 1 & term == 1 & plurality == 1 & vertex == "Vertex"), ntsv := 1]
+
+    # csec_lowrisk (Cesarean section among low risk deliveries) ----
+      custom[delivery_final %in% c(4:6), csec_lowrisk := 0] # any c-section == 0 
+      custom[delivery_final %in% c(4:6) & ntsv==1, csec_lowrisk:=1]    
       
     # pnc_lateno (Late or no prenatal care) ----
       custom[month_prenatal_care_began %in% c(1:6), pnc_lateno := 0]
       custom[month_prenatal_care_began %in% c(0, 7:10), pnc_lateno := 1]
+    
+    # smoking (Smoking-Yes (before &|or during pregnancy)) ----
+      custom[, smoking := NA_integer_]
+      custom[(smokeprior==0 & smoke1==0 & smoke2==0 & smoke3==0), smoking := 0]
+      custom[(smokeprior==1 & smoke1==1 & smoke2==1 & smoke3==1), smoking := 1]
+
+    # smoking_dur (whether mother smoked at all during pregnancy) ----
+      custom[, smoking_dur := NA_integer_]
+      custom[(smoke1==0 & smoke2==0 & smoke3==0), smoking_dur := 0]
+      custom[(smoke1 == 1 | smoke2 == 1 | smoke3 == 1), smoking_dur := 1]
+
+    # wtgain (CHAT categories of maternal weight gain) ----
+      custom[
+               ((mother_bmi<18.5 & mother_weight_gain<28) | 
+               (mother_bmi>=18.5 & mother_bmi<=24.99 & mother_weight_gain<25) | 
+               (mother_bmi>=25.0 & mother_bmi<=29.99 & mother_weight_gain<15) | 
+               (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain<11)), 
+             wtgain := 1]
       
+      custom[is.na(wtgain) & 
+               ((mother_bmi<18.5 & mother_weight_gain>=28 & mother_weight_gain<=40) | 
+               (mother_bmi>=18.5 & mother_bmi<=24.9 & mother_weight_gain>=25 & mother_weight_gain<=35) | 
+               (mother_bmi>=25.0 & mother_bmi<=29.9 & mother_weight_gain>=15 & mother_weight_gain<=25) | 
+               (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain>=11 & mother_weight_gain<=20)), 
+             wtgain := 2]
+      
+      custom[is.na(wtgain) & 
+               ((mother_bmi<18.5 & mother_weight_gain>40) | 
+                  (mother_bmi>=18.5 & mother_bmi<=24.9 & mother_weight_gain>35) | 
+                  (mother_bmi>=25.0 & mother_bmi<=29.9 & mother_weight_gain>25) | 
+                  (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain>20 & mother_weight_gain<999)), 
+             wtgain := 3]       
+      
+      custom[, wtgain := factor(wtgain, levels = c(1:3), labels = c("below recommended", "recommended", "above recommended"))]
+    
+    # wtgain_rec (WT Gain-Recommended) ----
+      custom[wtgain %in% c("below recommended", "above recommended"),  wtgain_rec := 0]
+      custom[wtgain=="recommended", wtgain_rec := 1]
+
+    # Kotelchuck Index explanation ----
+    	# In 2019 we spent a long time trying to figure out the correct Kotelchuck index
+    	# We created three indices:
+    	#	  1) Translating the original SAS code produced by Kotelchuck into R
+    	#   2) Translating the SQL code produced by WA DOH into R
+    	#   3) Alastair's method, based on a table founding online (xxx)
+    	# The end result is that Alastair's method is the simplest and the most comparable
+    	# to the results founding in CHAT. For this reason, we are going to use Alastair's method
+    	# unless directed to do otherwise. 
+
     # kotel.am (Kotelchuck Index) Alastair Method ----
       kotelchuck <- matrix(c(rep(1, 4), rep(2, 4), rep(3, 4), rep(4, 4), rep(5, 4), rep(6, 4),
                              rep(7, 2), rep(8, 2), rep(9, 2), 10, 11, seq(12, 24),
@@ -422,12 +428,6 @@
           custom[indexsum %in% c(3, 4), kotel := 1] # kotelchuck adequate (>= 80% of expected visits)
           custom[indexsum %in% c(1, 2), kotel := 0] # kotelchuck adequate (< 80% of expected visits)
           custom[, kotel := factor(kotel, levels = c(0, 1), labels = c("No", "Yes"))]
-          
-    # csec_lowrisk (Cesarean section among low risk deliveries) ----
-          custom[delivery_method_final %in% c(4, 5), csec_lowrisk := 0] # any c-section == 0 
-          custom[delivery_method_final %in% c(4, 5) & ntsv=="Yes", csec_lowrisk:=1]
-          custom[, csec_lowrisk := factor(csec_lowrisk, levels = c(0, 1), labels = c("No", "Yes"))]
-          
           
 ## Check output vis a vis CHAT ----
           custom[mother_calculated_age==25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(kotel)] # 681 adequate / 173 inadequate in 2015 for age 25
