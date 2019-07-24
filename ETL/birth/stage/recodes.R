@@ -22,19 +22,21 @@
 
     table_config_stage_bir_wa <- yaml::yaml.load(getURL("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
+    table_config_final_bir_wa <- yaml::yaml.load(getURL("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/final/create_final.bir_wa.yaml"))
+
 ## Identify vars to be pulled in from SQL ----
     complete.varlist <- names(table_config_stage_bir_wa$vars) # all column names from YAML that made SQL table
     old.varlist <- setdiff(unique(recodes$old_var), "") # all column names that will be recoded with the code below
     
-    query.varlist <- paste(setdiff(old.varlist, setdiff(old.varlist, complete.varlist)), collapse=", ") # column names for the SQL data that will be recoded with simple recode function
+    query.varlist <- setdiff(old.varlist, setdiff(old.varlist, complete.varlist)) # column names for the SQL data that will be recoded with simple recode function
     
-    query.varlist <- c(query.varlist, # manually add vars needed for complex recodes 
-                       "non_vertex_presentation", "mother_bmi", 
-                       "prior_live_births_living", "prior_live_births_deceased", 
-                       "number_prenatal_visits"
-                       )
-    
-    query.varlist <- paste(query.varlist, collapse=", ") # the final list of vars that we need to pull from SQL
+    query.varlist <- paste(
+      c(query.varlist, # manually add vars needed for complex recodes 
+        "non_vertex_presentation", "mother_bmi", 
+        "prior_live_births_living", "prior_live_births_deceased", 
+        "number_prenatal_visits"
+      )
+      , collapse=", ")
     
     query.string <- paste("SELECT", query.varlist, "FROM stage.bir_wa")
 
@@ -216,8 +218,36 @@
           bir_recodes.dt[mother_calculated_age==25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(kotelchuck)] 
           bir_recodes.dt[mother_calculated_age == 25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(apncu)]
 
-## Save output ----
+## Consolidate staged & recoded data ----
+    # Pull all staged data that is not recoded ----
+        new.query.varlist <- paste(
+          setdiff(complete.varlist, 
+                  unlist(strsplit(query.varlist, ", "))), 
+          collapse=", ")
+          
+        new.query.string <- paste("SELECT", query.varlist, "FROM stage.bir_wa")
+        
+        staged.dt <- setDT(DBI::dbGetQuery(db_apde, query.string))
+        
+    # Combine two datasets into one wider dataset ----
+        staged.dt <- cbind(staged.dt, bir_recodes.dt)
+        rm(bir_recodes.dt)
+          
+    # Order columns of final dataset to match SQL ----
+        column.order <- names(table_config_final_bir_wa$vars)
+        setcolorder(staged.dt, column.order)
+        
+#### LOAD TO SQL: Final complete dataset ####
+    tbl_id_2003_20xx <- DBI::Id(schema = table_config_final_bir_wa$schema, 
+                                table = table_config_final_bir_wa$table)
     
+    dbWriteTable(db_apde, 
+                 tbl_id_2003_20xx, 
+                 value = as.data.frame(staged.dt),
+                 overwrite = T, append = F, 
+                 field.types = unlist(table_config_final_bir_wa$vars))
+    
+
 ## The end! ----
 
           
