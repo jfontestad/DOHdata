@@ -62,92 +62,89 @@
     
 ## Custom code for complex recoding ----
     # Not in alphabetical order because some vars are dependant upon other vars
-    # Create copy of raw data ----
-      custom <- copy(bir_recodes.dt)
-
     # cigarettes_smoked_3_months_prior ----
-      custom[is.na(cigarettes_smoked_3_months_prior) & year >=2017, cigarettes_smoked_3_months_prior := 0]
-      custom[cigarettes_smoked_3_months_prior == 0, smokeprior := 0]
+      bir_recodes.dt[is.na(cigarettes_smoked_3_months_prior) & year >=2017, cigarettes_smoked_3_months_prior := 0]
+      bir_recodes.dt[cigarettes_smoked_3_months_prior == 0, smokeprior := 0]
       
     # cigarettes_smoked_1st_tri ----
-      custom[is.na(cigarettes_smoked_1st_tri) & year >=2017, cigarettes_smoked_1st_tri := 0]
-      custom[cigarettes_smoked_1st_tri == 0, smoke1 := 0]
+      bir_recodes.dt[is.na(cigarettes_smoked_1st_tri) & year >=2017, cigarettes_smoked_1st_tri := 0]
+      bir_recodes.dt[cigarettes_smoked_1st_tri == 0, smoke1 := 0]
       
     # cigarettes_smoked_2nd_tri ----
-      custom[is.na(cigarettes_smoked_2nd_tri) & year >=2017, cigarettes_smoked_2nd_tri := 0]
-      custom[cigarettes_smoked_2nd_tri == 0, smoke2 := 0]
+      bir_recodes.dt[is.na(cigarettes_smoked_2nd_tri) & year >=2017, cigarettes_smoked_2nd_tri := 0]
+      bir_recodes.dt[cigarettes_smoked_2nd_tri == 0, smoke2 := 0]
       
     # cigarettes_smoked_3rd_tri ----
-      custom[is.na(cigarettes_smoked_3rd_tri) & year >=2017, cigarettes_smoked_3rd_tri := 0]      
-      custom[cigarettes_smoked_3rd_tri == 0, smoke3 := 0]       
+      bir_recodes.dt[is.na(cigarettes_smoked_3rd_tri) & year >=2017, cigarettes_smoked_3rd_tri := 0]      
+      bir_recodes.dt[cigarettes_smoked_3rd_tri == 0, smoke3 := 0]       
 
     # diab_no (Diabetes-No) ----
-      custom[diab_gest == 0 & diab_prepreg == 0, diab_no := 1] 
-      custom[diab_gest == 1 | diab_prepreg == 1, diab_no := 0]
+      bir_recodes.dt[diab_gest == 0 & diab_prepreg == 0, diab_no := 1] 
+      bir_recodes.dt[diab_gest == 1 | diab_prepreg == 1, diab_no := 0]
 
     # htn_no (Hypertension-No) ----
-      custom[htn_gest == 0 & htn_prepreg == 0, htn_no := 1] 
-      custom[htn_gest == 1 | htn_prepreg == 1, htn_no := 0]
+      bir_recodes.dt[htn_gest == 0 & htn_prepreg == 0, htn_no := 1] 
+      bir_recodes.dt[htn_gest == 1 | htn_prepreg == 1, htn_no := 0]
 
     # nullip (nulliparous) ----
-      custom[prior_live_births_living == 0 & prior_live_births_deceased == 0, nullip := 1]
-      custom[prior_live_births_living %in% c(1:98) | prior_live_births_deceased %in% c(1:98), nullip := 0]
+      bir_recodes.dt[prior_live_births_living == 0 & prior_live_births_deceased == 0, nullip := 1]
+      bir_recodes.dt[prior_live_births_living %in% c(1:98) | prior_live_births_deceased %in% c(1:98), nullip := 0]
       
     # vertex (vertex birth position) ----
-      custom[fetal_pres == 1, vertex := 0]
-      custom[fetal_pres %in% 2:3, vertex := 1]
-      custom[non_vertex_presentation=="N", vertex := 1]
-      custom[, vertex := factor(vertex, levels = c(0, 1), labels = c("Breech/Oth", "Vertex"))]
+      bir_recodes.dt[fetal_pres == 1, vertex := 0]
+      bir_recodes.dt[fetal_pres %in% 2:3, vertex := 1]
+      bir_recodes.dt[non_vertex_presentation=="N", vertex := 1]
+      bir_recodes.dt[, vertex := factor(vertex, levels = c(0, 1), labels = c("Breech/Oth", "Vertex"))]
       
     # ntsv (nulliparous, term, singleton, vertex birth) ----
-      custom[, ntsv := 0] 
-      custom[(nullip == 1 & term == 1 & plurality == 1 & vertex == "Vertex"), ntsv := 1]
+      bir_recodes.dt[, ntsv := 0] 
+      bir_recodes.dt[(nullip == 1 & term == 1 & plurality == 1 & vertex == "Vertex"), ntsv := 1]
 
     # csec_lowrisk (Cesarean section among low risk deliveries) ----
-      custom[delivery_final %in% c(4:6), csec_lowrisk := 0] # any c-section == 0 
-      custom[delivery_final %in% c(4:6) & ntsv==1, csec_lowrisk:=1]    
+      bir_recodes.dt[delivery_final %in% c(4:6), csec_lowrisk := 0] # any c-section == 0 
+      bir_recodes.dt[delivery_final %in% c(4:6) & ntsv==1, csec_lowrisk:=1]    
       
     # pnc_lateno (Late or no prenatal care) ----
-      custom[month_prenatal_care_began %in% c(1:6), pnc_lateno := 0]
-      custom[month_prenatal_care_began %in% c(0, 7:10), pnc_lateno := 1]
+      bir_recodes.dt[month_prenatal_care_began %in% c(1:6), pnc_lateno := 0]
+      bir_recodes.dt[month_prenatal_care_began %in% c(0, 7:10), pnc_lateno := 1]
     
     # smoking (Smoking-Yes (before &|or during pregnancy)) ----
-      custom[, smoking := NA_integer_]
-      custom[(smokeprior==0 & smoke1==0 & smoke2==0 & smoke3==0), smoking := 0]
-      custom[(smokeprior==1 & smoke1==1 & smoke2==1 & smoke3==1), smoking := 1]
+      bir_recodes.dt[, smoking := NA_integer_]
+      bir_recodes.dt[(smokeprior==0 & smoke1==0 & smoke2==0 & smoke3==0), smoking := 0]
+      bir_recodes.dt[(smokeprior==1 & smoke1==1 & smoke2==1 & smoke3==1), smoking := 1]
 
     # smoking_dur (whether mother smoked at all during pregnancy) ----
-      custom[, smoking_dur := NA_integer_]
-      custom[(smoke1==0 & smoke2==0 & smoke3==0), smoking_dur := 0]
-      custom[(smoke1 == 1 | smoke2 == 1 | smoke3 == 1), smoking_dur := 1]
+      bir_recodes.dt[, smoking_dur := NA_integer_]
+      bir_recodes.dt[(smoke1==0 & smoke2==0 & smoke3==0), smoking_dur := 0]
+      bir_recodes.dt[(smoke1 == 1 | smoke2 == 1 | smoke3 == 1), smoking_dur := 1]
 
     # wtgain (CHAT categories of maternal weight gain) ----
-      custom[
+      bir_recodes.dt[
                ((mother_bmi<18.5 & mother_weight_gain<28) | 
                (mother_bmi>=18.5 & mother_bmi<=24.99 & mother_weight_gain<25) | 
                (mother_bmi>=25.0 & mother_bmi<=29.99 & mother_weight_gain<15) | 
                (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain<11)), 
              wtgain := 1]
       
-      custom[is.na(wtgain) & 
+      bir_recodes.dt[is.na(wtgain) & 
                ((mother_bmi<18.5 & mother_weight_gain>=28 & mother_weight_gain<=40) | 
                (mother_bmi>=18.5 & mother_bmi<=24.9 & mother_weight_gain>=25 & mother_weight_gain<=35) | 
                (mother_bmi>=25.0 & mother_bmi<=29.9 & mother_weight_gain>=15 & mother_weight_gain<=25) | 
                (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain>=11 & mother_weight_gain<=20)), 
              wtgain := 2]
       
-      custom[is.na(wtgain) & 
+      bir_recodes.dt[is.na(wtgain) & 
                ((mother_bmi<18.5 & mother_weight_gain>40) | 
                   (mother_bmi>=18.5 & mother_bmi<=24.9 & mother_weight_gain>35) | 
                   (mother_bmi>=25.0 & mother_bmi<=29.9 & mother_weight_gain>25) | 
                   (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain>20 & mother_weight_gain<999)), 
              wtgain := 3]       
       
-      custom[, wtgain := factor(wtgain, levels = c(1:3), labels = c("below recommended", "recommended", "above recommended"))]
+      bir_recodes.dt[, wtgain := factor(wtgain, levels = c(1:3), labels = c("below recommended", "recommended", "above recommended"))]
     
     # wtgain_rec (WT Gain-Recommended) ----
-      custom[wtgain %in% c("below recommended", "above recommended"),  wtgain_rec := 0]
-      custom[wtgain=="recommended", wtgain_rec := 1]
+      bir_recodes.dt[wtgain %in% c("below recommended", "above recommended"),  wtgain_rec := 0]
+      bir_recodes.dt[wtgain=="recommended", wtgain_rec := 1]
 
     # Explanation of Kotelchuck Index ----
     	# In 2019 we spent a long time trying to figure out the correct Kotelchuck index
@@ -179,24 +176,24 @@
               dimnames = list(seq(from = 6, to = 50), seq(from = 1, to = 4)))
       
       # Step 2: merge expected number of visits onto the main dataset, based on month PNC began and gestational age at birth 
-          custom$expected.pnc <- expected.pnc[cbind(
-            match(custom$calculated_gestation, rownames(expected.pnc)), 
-            match(custom$month_prenatal_care_began, colnames(expected.pnc))
+          bir_recodes.dt$expected.pnc <- expected.pnc[cbind(
+            match(bir_recodes.dt$calculated_gestation, rownames(expected.pnc)), 
+            match(bir_recodes.dt$month_prenatal_care_began, colnames(expected.pnc))
             )]
       
       # Step 3: Compare actual to the expected to calculate Adequacy of PNC based on kotelchuck          
           # Determin adequacy of prenatal care
-            custom[month_prenatal_care_began %in% c(0, 5:14), apncu := 0]  # inadequate
-            custom[number_prenatal_visits < 0.8 * expected.pnc, apncu := 0] # less than 80% of expected is inadequate
-            custom[number_prenatal_visits >= 0.8 * expected.pnc, apncu := 1] # greater than or equal to 80% is adequate
+            bir_recodes.dt[month_prenatal_care_began %in% c(0, 5:14), apncu := 0]  # inadequate
+            bir_recodes.dt[number_prenatal_visits < 0.8 * expected.pnc, apncu := 0] # less than 80% of expected is inadequate
+            bir_recodes.dt[number_prenatal_visits >= 0.8 * expected.pnc, apncu := 1] # greater than or equal to 80% is adequate
           
           # Set to NA when underlying variables are missing or illogical
-            custom[is.na(number_prenatal_visits) | is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0 , apncu := NA]
-            custom[(month_prenatal_care_began > (calculated_gestation/4)), apncu := NA]
-            custom[(month_prenatal_care_began=0 & number_prenatal_visits >=1) | (number_prenatal_visits=0 & month_prenatal_care_began >= 1), apncu := NA]
-            custom[is.na(expected.pnc), apncu := NA]
+            bir_recodes.dt[is.na(number_prenatal_visits) | is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0 , apncu := NA]
+            bir_recodes.dt[(month_prenatal_care_began > (calculated_gestation/4)), apncu := NA]
+            bir_recodes.dt[(month_prenatal_care_began=0 & number_prenatal_visits >=1) | (number_prenatal_visits=0 & month_prenatal_care_began >= 1), apncu := NA]
+            bir_recodes.dt[is.na(expected.pnc), apncu := NA]
           
-          custom <- custom %>% mutate(
+          bir_recodes.dt <- bir_recodes.dt %>% mutate(
             kotelchuck = case_when(
               # Set to missing when underlying variables are missing or illogical
                 is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0 ~ NA_real_,
@@ -213,11 +210,11 @@
               TRUE ~ NA_real_
             ))
 
-      setDT(custom)
+      setDT(bir_recodes.dt)
       
-## Check output vis a vis CHAT ----
-          custom[mother_calculated_age==25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(kotelchuck)] # 681 adequate / 173 inadequate in 2015 for age 25
-          custom[mother_calculated_age == 25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(apncu)]
+    # Check kotelchuck output vis a vis CHAT ----
+          bir_recodes.dt[mother_calculated_age==25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(kotelchuck)] 
+          bir_recodes.dt[mother_calculated_age == 25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(apncu)]
 
 ## Save output ----
     
