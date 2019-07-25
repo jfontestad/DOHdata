@@ -570,7 +570,6 @@ bir_2003_2016<-merge(bir_2003_2016, nchs.country, by = "father_birthplace_cntry_
 ### Remove objects
 rm(iso_3166, nchs, ref_country, bir_place)
 
-
 #### ALIGN VARIABLE TYPES ####
 bir_2003_2016 <- bir_2003_2016 %>%
   mutate_at(vars(mother_years_at_residence, mother_months_at_residence,
@@ -650,10 +649,10 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   bir_combined[, (date.cols) := lapply(.SD, as.Date), .SDcols = date.cols]
   
 #### FINAL SMALL DATA TWEAKS ----
-# Fix year for 2009 because needed for automated recoding that follows ----
-  bir_combined[date_of_birth_year==9, date_of_birth_year := 2009]  
+  # FIX YEAR FOR 2009 because needed for automated recoding that follows ----
+    bir_combined[date_of_birth_year==9, date_of_birth_year := 2009]  
   
- # FIX CERT NUMBER FOR 2012 ----
+  # FIX CERT NUMBER FOR 2012 ----
   # Warning: max integer size is 2147483648 so this code will break in ~140 years
   bir_combined[date_of_birth_year == 2012, 
                birth_cert_encrypt := as.integer(paste0(2012L, birth_cert_encrypt))]   
