@@ -190,18 +190,19 @@
             bir_recodes.dt[number_prenatal_visits >= 0.8 * expected.pnc, apncu := 1] # greater than or equal to 80% is adequate
           
           # Set to NA when underlying variables are missing or illogical
-            bir_recodes.dt[is.na(number_prenatal_visits) | is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0 , apncu := NA]
+            bir_recodes.dt[is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0, apncu := NA]
+            bir_recodes.dt[is.na(number_prenatal_visits) | number_prenatal_visits == 99, apncu := NA]
             bir_recodes.dt[(month_prenatal_care_began > (calculated_gestation/4)), apncu := NA]
-            bir_recodes.dt[(month_prenatal_care_began=0 & number_prenatal_visits >=1) | (number_prenatal_visits=0 & month_prenatal_care_began >= 1), apncu := NA]
+            bir_recodes.dt[(month_prenatal_care_began == 0 & number_prenatal_visits >=1) | (number_prenatal_visits == 0 & month_prenatal_care_began >= 1), apncu := NA]
             bir_recodes.dt[is.na(expected.pnc), apncu := NA]
-          
+
           bir_recodes.dt <- bir_recodes.dt %>% mutate(
             kotelchuck = case_when(
               # Set to missing when underlying variables are missing or illogical
                 is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0 ~ NA_real_,
                 is.na(number_prenatal_visits) | number_prenatal_visits == 99 ~ NA_real_,
                 (month_prenatal_care_began > (calculated_gestation/4)) ~ NA_real_,
-                (month_prenatal_care_began=0 & number_prenatal_visits >=1) | (number_prenatal_visits=0 & month_prenatal_care_began >= 1) ~ NA_real_,
+                (month_prenatal_care_began==0 & number_prenatal_visits >=1) | (number_prenatal_visits==0 & month_prenatal_care_began >= 1) ~ NA_real_,
               # Met/did not meet the threshold
                 month_prenatal_care_began > 4 & month_prenatal_care_began < 15 ~ 0, # after 4th month automatically inadequate
                 number_prenatal_visits < 0.8 * expected.pnc ~ 0, # less than 80% of expected is inadequate
@@ -213,10 +214,20 @@
             ))
 
       setDT(bir_recodes.dt)
-      
+          
+          View(bir_recodes.dt[(kotelchuck != apncu) | (is.na(kotelchuck) + is.na(apncu)==1), 
+                              .(kotelchuck, apncu, month_prenatal_care_began, calculated_gestation, number_prenatal_visits, expected.pnc)])    
+          
+          
     # Check kotelchuck output vis a vis CHAT ----
+          # CHAT 295/505
           bir_recodes.dt[mother_calculated_age==25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(kotelchuck)] 
           bir_recodes.dt[mother_calculated_age == 25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(apncu)]
+
+          # CHAT 269/691
+          bir_recodes.dt[mother_calculated_age==30 & date_of_birth_year == 2005 & mother_residence_county_wa_code==17, table(kotelchuck)] 
+          bir_recodes.dt[mother_calculated_age == 30 & date_of_birth_year == 2005 & mother_residence_county_wa_code==17, table(apncu)]
+
 
 ## Consolidate staged & recoded data ----
     # Pull all staged data that is not recoded ----
