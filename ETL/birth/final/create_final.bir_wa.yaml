@@ -308,6 +308,7 @@ vars:
     diab_prepreg: 
     dlp_medicaid: 
     edu_mom: 
+    facility_type_recode: 
     fetal_pres: 
     gender: 
     hispanic: 
