@@ -236,13 +236,18 @@
                   unlist(strsplit(query.varlist, ", "))), 
           collapse=", ")
           
-        new.query.string <- paste("SELECT", query.varlist, "FROM stage.bir_wa")
+        new.query.string <- paste("SELECT", new.query.varlist, "FROM stage.bir_wa")
         
-        staged.dt <- setDT(DBI::dbGetQuery(db_apde, query.string))
+        staged.dt <- setDT(DBI::dbGetQuery(db_apde, new.query.string))
         
     # Combine two datasets into one wider dataset ----
-        staged.dt <- cbind(staged.dt, bir_recodes.dt)
-        rm(bir_recodes.dt)
+        staged.dt <- cbind(staged.dt, bir_recodes.dt[, !c("blankblank", "expected.pnc", "kotelchuck")])
+        rm(bir_recodes.dt) # combined with staged data, so delete to free memory
+        gc() # garbage collection to free up memory
+    
+    # Check that columns in R == columns in SQL ----
+        setdiff(names(staged.dt), column.order)
+        setdiff(column.order, names(staged.dt))
           
     # Order columns of final dataset to match SQL ----
         column.order <- names(table_config_final_bir_wa$vars)
