@@ -55,7 +55,7 @@ enact_recoding = function(data, year, ..., ignore_case = T, hypothetical = F){
   }
   
   #remove recodes that don't match the year
-  btween  = vapply(dots, function(x) between(year, x$year_bound[1], x$year_bound[2]), FALSE)
+    # btween  = vapply(dots, function(x) between(year, x$year_bound[1], x$year_bound[2]), FALSE)
   
   #list the variables about to be changes (e.g. old_var) that are not in names(data)
   if(hypothetical){
