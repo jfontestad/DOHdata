@@ -1,4 +1,4 @@
-schema: dbo
+schema: stage
 table: bir_wa
 years:
 vars:
