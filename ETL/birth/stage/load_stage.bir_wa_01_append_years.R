@@ -17,7 +17,7 @@ library(RCurl) # Read files from Github
 library(tidyverse) # Manipulate data
 library(data.table) # Manipulate data quickly / efficiently
 
-db_apde <- dbConnect(odbc(), "APDESQL50") ##Connect to SQL server
+db_apde <- dbConnect(odbc(), "PH_APDEStore50") ##Connect to SQL server
 
 #### PULL IN TABLE CONFIG FILE FOR VAR TYPE INFO ####
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(

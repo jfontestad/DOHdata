@@ -48,7 +48,7 @@
     query.string <- paste("SELECT", query.varlist, "FROM stage.bir_wa")
 
 ## Pull minimal staged data from SQL ----
-  db_apde <- dbConnect(odbc(), "APDESQL50") ##Connect to SQL server
+  db_apde <- dbConnect(odbc(), "PH_APDEStore50") ##Connect to SQL server
 
   bir_recodes.dt <- setDT(DBI::dbGetQuery(db_apde, query.string))
 
