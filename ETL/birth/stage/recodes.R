@@ -24,6 +24,10 @@
 
     table_config_final_bir_wa <- yaml::yaml.load(getURL("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/final/create_final.bir_wa.yaml"))
 
+    iso_3166 <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv", colClasses="character")
+    iso_3166.us <- iso_3166[iso3166_1_name == "United States", ]
+    iso_3166.us <- iso_3166.us[!iso3166_2_name %in% c("American Samoa",	"Guam",	"Northern Mariana Islands", "Puerto Rico", "United States Minor Outlying Islands", "Virgin Islands")]$iso3166_2_code
+    
 ## Identify vars to be pulled in from SQL ----
     complete.varlist <- names(table_config_stage_bir_wa$vars) # all column names from YAML that made SQL table
     old.varlist <- setdiff(unique(recodes$old_var), "") # all column names that will be recoded with the code below
@@ -34,7 +38,7 @@
       c(query.varlist, # manually add vars needed for complex recodes 
         "non_vertex_presentation", "mother_bmi", 
         "prior_live_births_living", "prior_live_births_deceased", 
-        "number_prenatal_visits"
+        "number_prenatal_visits", "mother_birthplace_country", "mother_birthplace_state_fips"
       )
       , collapse=", ")
     
@@ -57,13 +61,20 @@
 
 ## Process simple recodes with package ----
     bir_recodes.dt <- enact_recoding(data = bir_recodes.dt, 
-                   year = 2006, 
-                   parse_recode_instructions(recodes, catch_NAs = T), 
-                   ignore_case = T, 
-                   hypothetical = F)  
+                                     parse_recode_instructions(recodes, catch_NAs = T), 
+                                     ignore_case = T, 
+                                     hypothetical = F) 
     
 ## Custom code for complex recoding ----
     # Not in alphabetical order because some vars are dependant upon other vars
+    # bw_low_sing ----
+      bir_recodes.dt[!is.na(bw_low), bw_low_sing := 0]
+      bir_recodes.dt[bw_low == 1 & singleton == 1, bw_low_sing := 1]
+    
+    # bw_vlow_sing ----
+      bir_recodes.dt[!is.na(bw_vlow), bw_vlow_sing := 0]
+      bir_recodes.dt[bw_vlow == 1 & singleton == 1, bw_vlow_sing := 1]
+      
     # cigarettes_smoked_3_months_prior ----
       bir_recodes.dt[is.na(cigarettes_smoked_3_months_prior) & year >=2017, cigarettes_smoked_3_months_prior := 0]
       bir_recodes.dt[cigarettes_smoked_3_months_prior == 0, smokeprior := 0]
@@ -105,6 +116,15 @@
     # csec_lowrisk (Cesarean section among low risk deliveries) ----
       bir_recodes.dt[delivery_final %in% c(4:6), csec_lowrisk := 0] # any c-section == 0 
       bir_recodes.dt[delivery_final %in% c(4:6) & ntsv==1, csec_lowrisk:=1]    
+      
+    # mother_birthplace_usa ----
+      bir_recodes.dt[is.na(mother_birthplace_country) + is.na(mother_birthplace_state_fips) != 0, mother_birthplace_usa := 0] # default to zero if have mother birth location data
+      bir_recodes.dt[mother_birthplace_country == "UNITED STATES", mother_birthplace_usa := 1]
+      bir_recodes.dt[mother_birthplace_state_fips %in% iso_3166.us, mother_birthplace_usa := 1]
+      
+    # mother_birthplace_foreign ----
+      bir_recodes.dt[mother_birthplace_usa == 1, mother_birthplace_foreign := 0]
+      bir_recodes.dt[mother_birthplace_usa == 0, mother_birthplace_foreign := 1]
       
     # pnc_lateno (Late or no prenatal care) ----
       bir_recodes.dt[month_prenatal_care_began %in% c(1:6), pnc_lateno := 0]
@@ -165,6 +185,7 @@
       #     http://publichealth.lacounty.gov/mch/fhop/FHOP06/FHOP06_pdf/Appendix.pdf and
       #     https://web.archive.org/web/20060816041014/https:/www.doh.wa.gov/EHSPHL/CHS/Vista/Statistical_calculations.htm#KOTELCHUCK INDEX
       #     These links stop at gestational age of 38. For gestational age of 39-50, assume that need a weekly prenatal care visit
+      #     Though I was unable to find a similar table in an ACOG publication, the pattern matches ACOG recommentations 
       
       # Step 1: created matrix of expected number of visits given month PNC began and the gestational age
           expected.pnc <- matrix(
@@ -185,52 +206,25 @@
       
       # Step 3: Compare actual to the expected to calculate Adequacy of PNC based on kotelchuck          
           # Determin adequacy of prenatal care
-            bir_recodes.dt[month_prenatal_care_began %in% c(0, 5:14), apncu := 0]  # inadequate
-            bir_recodes.dt[number_prenatal_visits < 0.8 * expected.pnc, apncu := 0] # less than 80% of expected is inadequate
-            bir_recodes.dt[number_prenatal_visits >= 0.8 * expected.pnc, apncu := 1] # greater than or equal to 80% is adequate
+            bir_recodes.dt[month_prenatal_care_began %in% c(0, 5:14), kotelchuck := 0]  # inadequate
+            bir_recodes.dt[number_prenatal_visits < 0.8 * expected.pnc, kotelchuck := 0] # less than 80% of expected is inadequate
+            bir_recodes.dt[number_prenatal_visits >= 0.8 * expected.pnc, kotelchuck := 1] # greater than or equal to 80% is adequate
           
           # Set to NA when underlying variables are missing or illogical
-            bir_recodes.dt[is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0, apncu := NA]
-            bir_recodes.dt[is.na(number_prenatal_visits) | number_prenatal_visits == 99, apncu := NA]
-            bir_recodes.dt[(month_prenatal_care_began > (calculated_gestation/4)), apncu := NA]
-            bir_recodes.dt[(month_prenatal_care_began == 0 & number_prenatal_visits >=1) | (number_prenatal_visits == 0 & month_prenatal_care_began >= 1), apncu := NA]
-            bir_recodes.dt[is.na(expected.pnc), apncu := NA]
+            bir_recodes.dt[is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0, kotelchuck := NA]
+            bir_recodes.dt[is.na(number_prenatal_visits) | number_prenatal_visits == 99, kotelchuck := NA]
+            bir_recodes.dt[(month_prenatal_care_began > (calculated_gestation/4)), kotelchuck := NA]
+            bir_recodes.dt[(month_prenatal_care_began == 0 & number_prenatal_visits >=1) | (number_prenatal_visits == 0 & month_prenatal_care_began >= 1), kotelchuck := NA]
 
-          bir_recodes.dt <- bir_recodes.dt %>% mutate(
-            kotelchuck = case_when(
-              # Set to missing when underlying variables are missing or illogical
-                is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0 ~ NA_real_,
-                is.na(number_prenatal_visits) | number_prenatal_visits == 99 ~ NA_real_,
-                (month_prenatal_care_began > (calculated_gestation/4)) ~ NA_real_,
-                (month_prenatal_care_began==0 & number_prenatal_visits >=1) | (number_prenatal_visits==0 & month_prenatal_care_began >= 1) ~ NA_real_,
-              # Met/did not meet the threshold
-                month_prenatal_care_began > 4 & month_prenatal_care_began < 15 ~ 0, # after 4th month automatically inadequate
-                number_prenatal_visits < 0.8 * expected.pnc ~ 0, # less than 80% of expected is inadequate
-                number_prenatal_visits >= 0.8 * expected.pnc ~ 1, # greater than or equal to 80% is adequate
-                number_prenatal_visits == 0 ~ 0,
-              # If the expected is missing, means it is off the charts (literally) and cannot be calculated
-                is.na(expected.pnc) ~ NA_real_,
-              TRUE ~ NA_real_
-            ))
-
-      setDT(bir_recodes.dt)
-          
-          View(bir_recodes.dt[(kotelchuck != apncu) | (is.na(kotelchuck) + is.na(apncu)==1), 
-                              .(kotelchuck, apncu, month_prenatal_care_began, calculated_gestation, number_prenatal_visits, expected.pnc)])    
-          
-          
     # Check kotelchuck output vis a vis CHAT ----
           # CHAT 295/505
-          bir_recodes.dt[mother_calculated_age==25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(kotelchuck)] 
-          bir_recodes.dt[mother_calculated_age == 25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(apncu)]
+            #bir_recodes.dt[mother_calculated_age==25 & date_of_birth_year == 2015 & mother_residence_county_wa_code==17, table(kotelchuck)] 
 
           # CHAT 269/691
-          bir_recodes.dt[mother_calculated_age==30 & date_of_birth_year == 2005 & mother_residence_county_wa_code==17, table(kotelchuck)] 
-          bir_recodes.dt[mother_calculated_age == 30 & date_of_birth_year == 2005 & mother_residence_county_wa_code==17, table(apncu)]
-
+            #bir_recodes.dt[mother_calculated_age==30 & date_of_birth_year == 2005 & mother_residence_county_wa_code==17, table(kotelchuck)] 
 
 ## Consolidate staged & recoded data ----
-    # Pull all staged data that is not recoded ----
+    # Pull all staged data that has not been recoded ----
         new.query.varlist <- paste(
           setdiff(complete.varlist, 
                   unlist(strsplit(query.varlist, ", "))), 
@@ -241,16 +235,14 @@
         staged.dt <- setDT(DBI::dbGetQuery(db_apde, new.query.string))
         
     # Combine two datasets into one wider dataset ----
-        staged.dt <- cbind(staged.dt, bir_recodes.dt[, !c("blankblank", "expected.pnc", "kotelchuck")])
+        staged.dt <- cbind(staged.dt, bir_recodes.dt[, !c("blankblank", "expected.pnc")])
         rm(bir_recodes.dt) # combined with staged data, so delete to free memory
         gc() # garbage collection to free up memory
     
-    # Check that columns in R == columns in SQL ----
-        setdiff(names(staged.dt), column.order)
-        setdiff(column.order, names(staged.dt))
-          
     # Order columns of final dataset to match SQL ----
         column.order <- names(table_config_final_bir_wa$vars)
+        setdiff(names(staged.dt), column.order)
+        setdiff(column.order, names(staged.dt))        
         setcolorder(staged.dt, column.order)
         
 #### LOAD TO SQL: Final complete dataset ####
