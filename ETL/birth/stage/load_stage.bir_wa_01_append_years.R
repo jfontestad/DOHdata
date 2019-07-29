@@ -643,14 +643,18 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   
   to.numeric(bir_combined)
   
-  
-#### CHANGE DATE COLUMNS TO DATE TYPE ----
-  date.cols <- c("date_first_prenatal_visit",	"date_last_menses",	"date_last_prenatal_visit",	"father_date_of_birth",	"mother_date_of_birth")
-  bir_combined[, (date.cols) := lapply(.SD, as.Date), .SDcols = date.cols]
-  
 #### FINAL SMALL DATA TWEAKS ----
   # FIX YEAR FOR 2009 because needed for automated recoding that follows ----
     bir_combined[date_of_birth_year==9, date_of_birth_year := 2009]  
+  
+  # CHANGE DATE COLUMNS TO DATE TYPE ----
+    date.cols <- c("date_first_prenatal_visit",	"date_last_menses",	"date_last_prenatal_visit",	"father_date_of_birth",	"mother_date_of_birth")
+    bir_combined[, (date.cols) := lapply(.SD, as.Date), .SDcols = date.cols]
+    
+    # clean dates -- replace with NA when date is after the year of birth (not possible)
+      for(i in 1:length(date.cols)){
+        bir_combined[year(get(date.cols[i])) > date_of_birth_year, date.cols[i] := NA]
+      }  
   
   # FIX CERT NUMBER FOR 2012 ----
   # Warning: max integer size is 2147483648 so this code will break in ~140 years
