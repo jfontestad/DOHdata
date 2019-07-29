@@ -1,17 +1,18 @@
 ## Header ####
-# Author: Danny Colombara
-# 
-# R version: 3.5.3
-#
-# Purpose: Use the recoding functions created by Daniel for HYS
-# 
-# Notes: Copied from https://github.com/PHSKC-APDE/svy_hys_new/blob/dev/util/enact_recoding.R on 7/19/2019
-#        Dropped all code that was HYS specific
-# 
-#        This function takes the dataset, the year the dataset represents, and a series of recode instructions (via ...) and applies them
-# 
+  # Author: Danny Colombara
+  # 
+  # R version: 3.5.3
+  #
+  # Purpose: Use the recoding functions created by Daniel for HYS
+  # 
+  # Notes: Based on https://github.com/PHSKC-APDE/svy_hys_new/blob/dev/util/enact_recoding.R on 7/19/2019
+  #        Dropped all code that was HYS specific
+  #        Added code to limit recoding to years specified by start and end years
+  #        This function takes the dataset, the year the dataset represents, and a series of recode instructions (via ...) and applies them
+  # 
 
-enact_recoding = function(data, year, ..., ignore_case = T, hypothetical = F){
+## Function ----
+enact_recoding = function(data, ..., ignore_case = T, hypothetical = F){
   
   #copy data here so the scope is protected, but so that we can also use scope jumping when applying recodes
   data = copy(data)
@@ -54,20 +55,13 @@ enact_recoding = function(data, year, ..., ignore_case = T, hypothetical = F){
     setnames(data, tolower(names(data)))
   }
   
-  #remove recodes that don't match the year
-  btween  = vapply(dots, function(x) between(year, x$year_bound[1], x$year_bound[2]), FALSE)
-  
-  #list the variables about to be changes (e.g. old_var) that are not in names(data)
-  if(hypothetical){
-    oldvars = vapply(dots[btween], function(x) x$old_var, 'a')
-    mis = setdiff(oldvars, names(data))
-    return(mis)
-  }
-  
-  
-  for(dot in dots[btween]){
-    #print(dot$old_var)
-    val = tryCatch(apply_recode(data, year, dot, jump_scope = F, return_vector = T),
+
+  for(dot in dots){
+    
+    val = tryCatch(apply_recode(data[date_of_birth_year>= dot[["year_bounds"]][1] & date_of_birth_year<= dot[["year_bounds"]][2],], 
+                                dot, 
+                                jump_scope = F, 
+                                return_vector = T),
                    error = function(x){
                      message(dot$old_var)
                      stop(x)
@@ -76,7 +70,12 @@ enact_recoding = function(data, year, ..., ignore_case = T, hypothetical = F){
                      message(paste(paste0(dot$old_var, ' -> ', dot$new_var), '|', x))
                    })
     
-    set(data, NULL, dot$new_var, val)
+    my.rows <- which(data$date_of_birth_year>= dot[["year_bounds"]][1] & data$date_of_birth_year<= dot[["year_bounds"]][2])
+    
+    set(data, 
+        i = my.rows, 
+        j = dot$new_var, 
+        value = val)
   }
   
   #return the results
