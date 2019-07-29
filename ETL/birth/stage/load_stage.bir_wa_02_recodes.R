@@ -9,6 +9,9 @@
     #        Complex (custom) recoding is performed below, after usign the functions
     #        
 
+## NOTE!!! ----
+    # This should be run after running load_stage.bir_wa_01_append_years.R
+
 ## Update recoding functions created by Daniel Casey ----
     # devtools::install_local("C:/Users/dcolombara/code/apdeRecodes/", force=T)
 
