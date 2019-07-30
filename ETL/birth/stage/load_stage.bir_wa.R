@@ -9,18 +9,30 @@
 # Standardize missing to be NULL
 # Standardize country/county/state/city codes (not needed as there is literal and code now)
 
+#### Set-up environment ----
+rm(list=ls())
+
+library(odbc) # Read to and write from SQL
+library(RCurl) # Read files from Github
+library(tidyverse) # Manipulate data
+library(data.table) # Manipulate data quickly / efficiently
+
+db_apde <- dbConnect(odbc(), "APDESQL50") ##Connect to SQL server
 
 #### PULL IN TABLE CONFIG FILE FOR VAR TYPE INFO ####
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
+#### SET UP PATH to SQL OUTPUT TABLE ---- 
+    tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
+                            table = table_config_stage_bir_wa$table)
 
 #### PULL IN BOTH DATA SETS ####
-tbl_id_2003_2016 <- DBI::Id(schema = "load_raw", table = "bir_wa_2003_2016")
-bir_2003_2016 <- DBI::dbReadTable(db_apde, tbl_id_2003_2016)
-
-tbl_id_2017_20xx <- DBI::Id(schema = "load_raw", table = "bir_wa_2017_20xx")
-bir_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_2017_20xx)
+    tbl_id_2003_2016 <- DBI::Id(schema = "load_raw", table = "bir_wa_2003_2016")
+    bir_2003_2016 <- DBI::dbReadTable(db_apde, tbl_id_2003_2016)
+    
+    tbl_id_2017_20xx <- DBI::Id(schema = "load_raw", table = "bir_wa_2017_20xx")
+    bir_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_2017_20xx)
 
 
 #### REMOVE FIELDS IN BEDROCK NOT COLLECTED AFTER 2003 ####
@@ -28,7 +40,7 @@ bir_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_2017_20xx)
 ###   WIC variables are created
 ### Remove variables not collected after 2003 or are 100% missing
 bir_2003_2016 <- bir_2003_2016 %>%
-  select(-priorprg, -fd_lt20, -fd_ge20, -apgar1, -ind_num, -malf_sam, -herpes, 
+  select(-fd_lt20, -fd_ge20, -apgar1, -ind_num, -malf_sam, -herpes, 
          -smokenum, -drinknum, -contains("amnio"), -dmeth2, -dmeth3, -dmeth4, 
          -contains("complab"), -racecdes, -hispcdes, -carepay, -wic, -firsteps, 
          -afdc, -localhd, -contains("ubleed"), -smoking, -drinking, -lb_f_nl, 
@@ -42,12 +54,11 @@ bir_2003_2016 <- bir_2003_2016 %>%
 
 #### STANDARDIZE NAMES FROM BEDROCK TO WHALES ####
 ### Bring in reference table
-field_maps <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_field_name_map.csv")
+field_maps <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_field_name_map.csv")
 
 data.table::setnames(bir_2003_2016, 
                      field_maps$field_name_apde[match(names(bir_2003_2016), 
                                                       field_maps$field_name_bedrock)])
-
 
 #### SPLIT OUT VARIABLES THAT ARE NOW INDIVIDUAL FLAGS ####
 #### Medical risk factors ####
@@ -490,15 +501,18 @@ rm(malf_name, malf_num, malf_f, malf_out)
 
 
 
+#### RENAME FIELDS THAT DO NOT EXIST IN THE NEW SYSTEM ####
+
 #### FIX UP MOTHER/FATHER PLACE OF BIRTH ####
 # birplmom and birpldad need to be converted to ISO-3166 codes and renamed to mother/father_birthplace_state_fips
 
 ### Bring in reference tables
-iso_3166 <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv")
-nchs <- vroom::vroom("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.nchs_country_state.csv")
+iso_3166 <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv", colClasses="character")
+nchs <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.nchs_country_state.csv", colClasses="character")
 
 # Restrict to relevant level
 iso_3166 <- iso_3166 %>% filter(iso3166_1_name == "United States")
+nchs.country <- nchs %>% filter(nchs_level == "country")
 nchs <- nchs %>% filter(nchs_level == "state")
 
 ### Join together and make some manual additions
@@ -544,6 +558,15 @@ bir_place <- bir_2003_2016 %>% select(birth_cert_encrypt, birplmom, birpldad) %>
 bir_2003_2016 <- left_join(bir_2003_2016, bir_place, by = "birth_cert_encrypt") %>%
   select(-birplmom, -birpldad)
 
+#### Identify the countries whose ids are given as mother_birthplace_cntry_wa_code ----
+setDT(nchs.country) # convert to data.table
+nchs.country[, nchs_level := NULL]
+nchs.country[, nchs_name := toupper(nchs_name)]
+setnames(nchs.country, names(nchs.country), c("mother_birthplace_cntry_wa_code", "mother_birthplace_country"))
+bir_2003_2016<-merge(bir_2003_2016, nchs.country, by = "mother_birthplace_cntry_wa_code", all.x = TRUE, all.y = FALSE)
+setnames(nchs.country, names(nchs.country), c("father_birthplace_cntry_wa_code", "father_birthplace_country"))
+bir_2003_2016<-merge(bir_2003_2016, nchs.country, by = "father_birthplace_cntry_wa_code", all.x = TRUE, all.y = FALSE)
+
 ### Remove objects
 rm(iso_3166, nchs, ref_country, bir_place)
 
@@ -552,111 +575,109 @@ rm(iso_3166, nchs, ref_country, bir_place)
 bir_2003_2016 <- bir_2003_2016 %>%
   mutate_at(vars(mother_years_at_residence, mother_months_at_residence,
                  delivery_method_calculation, attendant_class, certifier_class),
-            funs(as.numeric(.)))
-
+            list( ~ as.numeric(.)))
 
 bir_2017_20xx <- bir_2017_20xx %>%
   mutate_at(vars(gestation_calculated_flag),
-            funs(as.numeric(.)))
-
-
-
-
+            list( ~ as.numeric(.)))
 
 #### BRING NEW AND OLD DATA TOGETHER ####
-bir_combined <- bind_rows(bir_2017_20xx, bir_2003_2016)
-bir_combined <- setDT(bir_combined)
-
+bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 
 #### STANDARDIZE MISSING TO BE NULL ####
 # Can catch a lot of variables in one go 
-col_char <- names(bir_combined)[sapply(bir_combined, is.character)]
-for (j in col_char) {
-  set(bir_combined, i = which(bir_combined[[j]] %in% c("U", "XX", "ZZ", "99:99", "99")), 
-      j = j, value = NA_character_)
-}
-
-col_num <- names(bir_combined)[sapply(bir_combined, is.numeric)]
-col_num <- col_num[!col_num == "mother_weight_gain"] # Remove as 99 is legitimate 
-for (j in col_num) {
-  set(bir_combined, i = which(bir_combined[[j]] %in% c(9999, 999, 99.9, 99)), 
-      j = j, value = NA_integer_)
-}
-
+    col_char <- names(bir_combined)[sapply(bir_combined, is.character)]
+    for (j in col_char) {
+      set(bir_combined, i = which(bir_combined[[j]] %in% c("U", "XX", "ZZ", "99:99", "99")), 
+          j = j, value = NA_character_)
+    }
+    
+    col_num <- names(bir_combined)[sapply(bir_combined, is.numeric)]
+    col_num <- col_num[!col_num == "mother_weight_gain"] # Remove as 99 is legitimate 
+    for (j in col_num) {
+      set(bir_combined, i = which(bir_combined[[j]] %in% c(9999, 999, 99.9, 99)), 
+          j = j, value = NA_integer_)
+    }
 
 # Now get specific variables
-# (can't use 9 in the catch-all above because it is a non-NA code for some vars)
-col_char_9 <- c("child_calculated_race", "mother_race_calculation", "father_race_calculation")
-for (j in col_char_9) {
-  set(bir_combined, i = which(bir_combined[[j]] %in% c("9", "09")), j = j, value = NA_character_)
-}
+    # (can't use 9 in the catch-all above because it is a non-NA code for some vars)
+    col_char_9 <- c("child_calculated_race", "mother_race_calculation", "father_race_calculation")
+    for (j in col_char_9) {
+      set(bir_combined, i = which(bir_combined[[j]] %in% c("9", "09")), j = j, value = NA_character_)
+    }
+    
+    col_num_9 <- c("facility_type", "intended_facility", "child_calculated_ethnicity",
+                   "mother_hispanic", "mother_education", "mother_educ_8th_grade_or_less",
+                   "father_hispanic", "father_education", "father_educ_8th_grade_or_less",
+                   "mother_height_feet", "source_of_payment", "plurality", "birth_order",
+                   "attendant_class", "certifier_class")
+    for (j in col_num_9) {
+      set(bir_combined, i = which(bir_combined[[j]] == 9), j = j, value = NA_integer_)
+    }
 
-col_num_9 <- c("facility_type", "intended_facility", "child_calculated_ethnicity",
-               "mother_hispanic", "mother_education", "mother_educ_8th_grade_or_less",
-               "father_hispanic", "father_education", "father_educ_8th_grade_or_less",
-               "mother_height_feet", "source_of_payment", "plurality", "birth_order",
-               "attendant_class", "certifier_class")
-for (j in col_num_9) {
-  set(bir_combined, i = which(bir_combined[[j]] == 9), j = j, value = NA_integer_)
-}
-
-
-# Clean up objects
-rm(col_char, col_num, col_char_9, col_num_9)
-
-
+# Clean up objects to free memory
+  rm(col_char, col_num, col_char_9, col_num_9, bir_2003_2016, bir_2017_20xx)
+  gc() 
 
 #### CHANGE COLUMN TYPES TO INTEGER WHERE POSSIBLE ####
-data.table::setDT(bir_combined) # be certain that it is a data.table object
-
-to.numeric <- function(my.dt){
-  my.cols <- names(my.dt)[sapply(my.dt, is.character)] # get vector of all character columns
-  for(i in 1:length(my.cols)){
+  to.numeric <- function(my.dt){
+    my.cols <- names(my.dt)[sapply(my.dt, is.character)] # get vector of all character columns
+    my.cols <- setdiff(my.cols, grep("race_nchs", my.cols, value = TRUE)) # These race vars should remain characters
+    my.cols <- setdiff(my.cols, grep("_month$", my.cols, value = TRUE)) # Alastair coded all months as characters
+    my.cols <- setdiff(my.cols, grep("_day$", my.cols, value = TRUE))   # Alastair coded all days as characters
+    my.cols <- setdiff(my.cols, c("birthplace_county_city_wa_code", "birthplace_county_wa_code", "mother_residence_city_wa_code", "mother_residence_county_wa_code"))
+    for(i in 1:length(my.cols)){
+      
+      message(paste0("Testing ", i, " of ", length(my.cols), ": ", my.cols[i], " ...", gsub(Sys.Date(), "", Sys.time())))
     
-    message(glue("Testing {i} of {length(my.cols)}: {my.cols[i]} ...", 
-                 "{gsub(Sys.Date(), '', Sys.time())}"))
+      added.NAs <- nrow(my.dt[is.na(get(my.cols[i])), ]) - 
+        suppressWarnings(nrow(my.dt[is.na(as.numeric(gsub(" ", "", get(my.cols[i])))), ])) # Additional NAs if converted to numeric
+      
+      if(added.NAs==0){
+        message(paste0("     Converting ", my.cols[i], " to numeric"))
+        my.dt[, my.cols[i] := suppressWarnings(as.numeric(get(my.cols[i])))]
+      }
+    }    
     
-    added.NAs <- nrow(my.dt[is.na(get(my.cols[i])), ]) - 
-      suppressWarnings(nrow(my.dt[is.na(as.numeric(gsub(" ", "", get(my.cols[i])))), ])) # Additional NAs if converted to numeric
-    
-    if(added.NAs==0){
-      message(glue("     Converting {my.cols[i]} to numeric"))
-      my.dt[, my.cols[i] := suppressWarnings(as.numeric(get(my.cols[i])))]
-    }
-  }    
+    #return(my.dt)
+  }
   
-  #return(my.dt)
-}
-
-to.numeric(bir_combined)
-
-
+  to.numeric(bir_combined)
+  
+  
 #### CHANGE DATE COLUMNS TO DATE TYPE ----
-date.cols <- c("date_first_prenatal_visit",	"date_last_menses",	
-               "date_last_prenatal_visit",	"father_date_of_birth",	
-               "mother_date_of_birth")
-bir_combined[, (date.cols) := lapply(.SD, as.Date), .SDcols = date.cols]
+  date.cols <- c("date_first_prenatal_visit",	"date_last_menses",	"date_last_prenatal_visit",	"father_date_of_birth",	"mother_date_of_birth")
+  bir_combined[, (date.cols) := lapply(.SD, as.Date), .SDcols = date.cols]
+  
+#### FINAL SMALL DATA TWEAKS ----
+# Fix year for 2009 because needed for automated recoding that follows ----
+  bir_combined[date_of_birth_year=="09  ", date_of_birth_year := "2009"]  
+  
+ # FIX CERT NUMBER FOR 2012 ----
+  # Warning: max integer size is 2147483648 so this code will break in ~140 years
+  bir_combined[date_of_birth_year == 2012, 
+               birth_cert_encrypt := as.integer(paste0(2012L, birth_cert_encrypt))]   
 
-
-#### FIX YEAR OF BIRTH FOR 2009 ####
-bir_combined[date_of_birth_year == 9, date_of_birth_year := 2009 ]
-
-#### FIX CERT NUMBER FOR 2012 ####
-# Warning: max integer size is 2147483648 so this code will break in ~140 years
-bir_combined[date_of_birth_year == 2012, 
-             birth_cert_encrypt := as.integer(paste0(2012L, birth_cert_encrypt))]
-
-
+#### LOAD INITIAL APPENDED VERSION TO SQL ####
+# Ensure that the "type" is correct when comparing R data.table to SQL shell
+  r.table <- data.table(name = names(bir_combined), r.class = tolower(sapply(bir_combined, class)))
+    r.table[r.class == "integer", r.class := "numeric"]
+  yaml.table <- data.table(name = names(table_config_stage_bir_wa$vars), yaml.class = as.character(table_config_stage_bir_wa$vars))
+    yaml.table[, yaml.class := tolower(yaml.class)]
+    yaml.table[yaml.class %like% "char", yaml.class := "character"]
+    yaml.table[yaml.class == "integer", yaml.class := "numeric"]
+  compare <- merge(r.table, yaml.table, by = "name", all = TRUE)
+  View(compare[r.class != yaml.class ])
+  
 #### LOAD TO SQL ####
-tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
-                            table = table_config_stage_bir_wa$table)
-dbWriteTable(db_apde, tbl_id_2003_20xx, value = as.data.frame(bir_combined),
-             overwrite = T, append = F,
-             field.types = unlist(table_config_stage_bir_wa$vars))
+  tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
+                              table = table_config_stage_bir_wa$table)
+  dbWriteTable(db_apde, tbl_id_2003_20xx, value = as.data.frame(bir_combined),
+               overwrite = T, append = F,
+               field.types = unlist(table_config_stage_bir_wa$vars))
 
+#### DELETE OBJECTS TO FREE MEMORY ----
+  rm(list = setdiff(ls(), c("tbl_id_2003_20xx", "bir_combined", "db_apde")))
+  gc()
 
-#### CLEAN UP ####
-rm(tbl_id_2003_2016, bir_2003_2016)
-rm(tbl_id_2003_20xx, bir_combined)
-rm(tbl_id_2017_20xx, bir_2017_20xx)
-rm(table_config_stage_bir_wa)
+#### THE END ----

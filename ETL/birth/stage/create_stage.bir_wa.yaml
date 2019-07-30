@@ -10,18 +10,18 @@ vars:
     time_of_birth: VARCHAR(5)
     mother_marital_status: CHAR(1)
     facility_type: INTEGER
-    facility: CHAR(4)
+    facility: INTEGER
     intended_facility: INTEGER
     birthplace_city: VARCHAR(28)
     birthplace_county: VARCHAR(28)
     birthplace_county_city_wa_code: CHAR(4)
     birthplace_county_wa_code: CHAR(2)
-    birthplace_state_nchs_code: CHAR(2)
+    birthplace_state_nchs_code: INTEGER
     mother_residence_city: VARCHAR(112)
     mother_residence_county: VARCHAR(112)
     mother_residence_city_wa_code: CHAR(4)
     mother_residence_county_wa_code: CHAR(2)
-    mother_residence_state_nchs_code: CHAR(2)
+    mother_residence_state_nchs_code: INTEGER
     mother_residence_zip: VARCHAR(10)
     mother_years_at_residence: INTEGER
     mother_months_at_residence: INTEGER
@@ -30,7 +30,7 @@ vars:
     mother_birthplace_state: VARCHAR(112)
     mother_birthplace_state_fips: CHAR(2)
     mother_birthplace_country: VARCHAR(64)
-    mother_birthplace_cntry_wa_code: CHAR(3)
+    mother_birthplace_cntry_wa_code: INTEGER
     child_calculated_race: CHAR(1)
     child_calculated_ethnicity: INTEGER
     mother_race_white: CHAR(1)
@@ -84,7 +84,7 @@ vars:
     mother_hispanic_nchs_ecodes: INTEGER
     mother_hispanic_nchs_ccodes: INTEGER
     mother_hispanic: INTEGER
-    mother_occupation_milham: CHAR(3)
+    mother_occupation_milham: INTEGER
     mother_education: INTEGER
     mother_educ_8th_grade_or_less: INTEGER
     father_date_of_birth: DATE
@@ -92,7 +92,7 @@ vars:
     father_birthplace_state: VARCHAR(112)
     father_birthplace_state_fips: CHAR(2)
     father_birthplace_country: VARCHAR(256)
-    father_birthplace_cntry_wa_code: CHAR(3)
+    father_birthplace_cntry_wa_code: INTEGER
     father_race_white: CHAR(1)
     father_race_black: CHAR(1)
     father_race_amer_indian_alaskan: CHAR(1)
@@ -144,7 +144,7 @@ vars:
     father_hispanic_nchs_ecodes: INTEGER
     father_hispanic_nchs_ccodes: INTEGER
     father_hispanic: INTEGER
-    father_occupation_milham: CHAR(3)
+    father_occupation_milham: INTEGER
     father_education: INTEGER
     father_educ_8th_grade_or_less: INTEGER
     mother_height_feet: INTEGER
@@ -167,25 +167,26 @@ vars:
     date_first_prenatal_visit: DATE
     first_prenatal_visit_month: CHAR(2)
     first_prenatal_visit_day: CHAR(2)
-    first_prenatal_visit_year: CHAR(4)
+    first_prenatal_visit_year: INTEGER
     date_last_prenatal_visit: DATE
     last_prenatal_visit_month: CHAR(2)
     last_prenatal_visit_day: CHAR(2)
-    last_prenatal_visit_year: CHAR(4)
+    last_prenatal_visit_year: INTEGER
     month_prenatal_care_began: INTEGER
     nchs_month_prenatal_care_began: INTEGER
     number_prenatal_visits: INTEGER
+    priorprg: INTEGER
     prior_live_births_living: INTEGER
     prior_live_births_deceased: INTEGER
     last_live_birth_month: CHAR(2)
-    last_live_birth_year: CHAR(4)
+    last_live_birth_year: INTEGER
     other_preg_outcomes: INTEGER
     other_preg_outcomes_month: CHAR(2)
-    other_preg_outcomes_year: CHAR(4)
+    other_preg_outcomes_year: INTEGER
     date_last_menses: DATE
     last_menses_month: CHAR(2)
     last_menses_day: CHAR(2)
-    last_menses_year: CHAR(4)
+    last_menses_year: INTEGER
     gestation_estimate: INTEGER
     calculated_gestation: INTEGER
     gestation_calculated_flag: INTEGER
