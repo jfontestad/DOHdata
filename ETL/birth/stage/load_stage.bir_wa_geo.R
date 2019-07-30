@@ -13,8 +13,8 @@ table_config_stage_bir_wa_geo <- yaml::yaml.load(getURL(
 tbl_id_geo_2013_2016 <- DBI::Id(schema = "load_raw", table = "bir_wa_geo_2003_2016")
 bir_geo_2013_2016 <- DBI::dbReadTable(db_apde, tbl_id_geo_2013_2016)
 
-tbl_id_2017_20xx <- DBI::Id(schema = "load_raw", table = "bir_wa_geo_2017_20xx")
-bir_geo_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_2017_20xx)
+tbl_id_geo_2017_20xx <- DBI::Id(schema = "load_raw", table = "bir_wa_geo_2017_20xx")
+bir_geo_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_geo_2017_20xx)
 
 
 #### REMOVE FIELDS IN BEDROCK NOT COLLECTED AFTER 2003 ####
@@ -58,12 +58,13 @@ bir_geo_combined <- bir_geo_combined %>%
     res_geo_zcta_2010 = case_when(
       between(date_of_birth_year, 2011, 2016) ~ zcta,
       TRUE ~ res_geo_zcta_2010),
-    res_geo_county_2010 = ifelse(!is.na(mother_residence_county_wa_code),
-                                 as.numeric(mother_residence_county_wa_code) * 2 - 1,
-                                 NA),
+    res_geo_county_2010 = case_when(
+      is.na(mother_residence_county_wa_code) ~ NA_character_,
+      as.numeric(mother_residence_county_wa_code) > 0 ~ as.character(as.numeric(mother_residence_county_wa_code) * 2 - 1),
+      TRUE ~ "00"),
     res_geo_census_full_2000 = case_when(
       !is.na(res_geo_census_block_2000) ~ paste0(
-        "530", res_geo_county_2010,
+        "530", res_geo_county_2010, # Keep as 2010 because there is only one county var
         str_replace(res_geo_census_tract_2000, "\\.", ""),
         res_geo_census_block_grp_2000,
         res_geo_census_block_2000),
@@ -112,7 +113,7 @@ dbWriteTable(conn, tbl_id_geo, value = as.data.frame(bir_geo_combined),
 #### TIDY UP ####
 rm(table_config_stage_bir_wa_geo)
 rm(tbl_id_geo_2013_2016)
-rm(tbl_id_2017_20xx)
+rm(tbl_id_geo_2017_20xx)
 rm(bir_geo_2013_2016)
 rm(bir_geo_2017_20xx)
 rm(tbl_id_geo)
