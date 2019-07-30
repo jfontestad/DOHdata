@@ -177,11 +177,6 @@
     staged.dt[, table(nchs_month_prenatal_care_began, pnc_tri_nchs, exclude = NULL)]
     staged.dt[, table(month_prenatal_care_began, pnc_tri, exclude = NULL)]
     staged.dt[, table(priorprg, ch_priorpreg, exclude = NULL)]
-    
-    
-    
-    
-## Save output ----
-    
+  
 ## The end! ----
 
