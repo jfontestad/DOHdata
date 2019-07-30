@@ -133,6 +133,11 @@
       bir_recodes.dt[month_prenatal_care_began %in% c(1:6), pnc_lateno := 0]
       bir_recodes.dt[month_prenatal_care_began %in% c(0, 7:10), pnc_lateno := 1]
     
+    # ch_priorpreg ----
+      # ch_priorpreg 2003-2016 was done with simple recodes, but coding changed starting with 2017
+      bir_recodes.dt[year >=2017, ch_priorpreg := prior_live_births_deceased + prior_live_births_living + other_preg_outcomes]
+      bir_recodes.dt[ch_priorpreg %in% 1:50, ch_priorpreg := 1]
+      
     # smoking (Smoking-Yes (before &|or during pregnancy)) ----
       bir_recodes.dt[, smoking := NA_integer_]
       bir_recodes.dt[(smokeprior==0 & smoke1==0 & smoke2==0 & smoke3==0), smoking := 0]

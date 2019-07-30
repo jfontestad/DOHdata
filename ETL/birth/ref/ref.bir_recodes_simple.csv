@@ -97,6 +97,7 @@ demo,complex,,,,mother_birthplace_foreign,categorical,,,Place of Birth of Mother
 demo,complex,,,,mother_birthplace_usa,categorical,,,Place of Birth of Mother-USA,2003,2017,
 demo,binning,priorprg,continuous,"[1, 998]",ch_priorpreg,categorical,1,Yes,Prior Pregnancy,2003,2016,not available 2017+
 demo,binning,priorprg,continuous,"[0, 0]",ch_priorpreg,categorical,0,No,Prior Pregnancy,2003,2016,not available 2017+
+demo,complex, , , ,ch_priorpreg,categorical, , ,Prior Pregnancy,2017,2017,2017+ complex recode
 del,simple,delivery_method_final,categorical,1,delivery_final,categorical,1,Spontaneous vaginal,Final route and method of delivery,2003,2017,
 del,simple,delivery_method_final,categorical,2,delivery_final,categorical,2,Forceps,Final route and method of delivery,2003,2017,
 del,simple,delivery_method_final,categorical,3,delivery_final,categorical,3,Vacuum,Final route and method of delivery,2003,2017,
