@@ -335,6 +335,7 @@ recodes:
     preterm_v: INTEGER
     race_m: INTEGER
     race3: INTEGER
+    race4: INTEGER
     singleton: INTEGER
     smoke1: INTEGER
     smoke2: INTEGER
@@ -342,6 +343,7 @@ recodes:
     smokeprior: INTEGER
     smoking: INTEGER
     smoking_dur: INTEGER
+    teen: INTEGER
     term: INTEGER
     vertex: VARCHAR(60)
     wa_occ: INTEGER
