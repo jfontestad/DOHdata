@@ -15,9 +15,10 @@
     setwd("C:/temp")
 
 ## Load staged from SQL ----
-    table_config_final_bir_wa <- yaml::yaml.load(getURL("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/final/create_final.bir_wa.yaml"))
+    table_config_stage_bir_wa <- yaml::yaml.load(getURL(
+      "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
     
-    query.varlist <- paste(names(table_config_final_bir_wa$vars), collapse = ", ")
+    query.varlist <- paste(c(names(table_config_stage_bir_wa$vars), names(table_config_stage_bir_wa$recodes)), collapse = ", ")
     
     query.string <- paste("SELECT", query.varlist, "FROM stage.bir_wa")
     
@@ -31,7 +32,7 @@
     print(all.miss[all.missing == TRUE])
     
 ## Identify numeric columns ----
-    numerics <- data.table(name = names(table_config_final_bir_wa$vars), type = as.character(table_config_final_bir_wa$vars))
+    numerics <- data.table(name = names(table_config_stage_bir_wa$vars), type = as.character(table_config_stage_bir_wa$vars))
     numerics <- numerics[type %in% c("DATE", "INTEGER", "NUMERIC")]
     
 ## Check date range -----

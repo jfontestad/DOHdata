@@ -21,15 +21,15 @@ library(data.table) # Manipulate data quickly / efficiently
 # devtools::install_local("C:/Users/dcolombara/code/apdeRecodes/", force=T) # run if package is updated
 library(apdeRecodes) # Recoding function created by Daniel, https://github.com/PHSKC-APDE/apdeRecodes
 
-source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/stage/enact_recoding_function.R")
+source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/enact_recoding_function.R")
 
 db_apde <- dbConnect(odbc(), "PH_APDEStore50") ##Connect to SQL server
 
 #### LOAD REFERENCE DATA ####
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(
-  "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/stage/create_stage.bir_wa.yaml"))
+  "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
-recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/danny/ETL/birth/ref/ref.bir_recodes_simple.csv")
+recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_recodes_simple.csv")
 
 iso_3166 <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv", colClasses="character")
 iso_3166.us <- iso_3166[iso3166_1_name == "United States", ]
