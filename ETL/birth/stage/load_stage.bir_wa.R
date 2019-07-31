@@ -1,13 +1,15 @@
-#### CODE TO COMBINE BIRTH DATA FROM THE BEDROCK (2003-2016) AND WHALES (2017-) SYSTEMS
-# Alastair Matheson, PHSKC (APDE)
-#
-# 2019-06
-
-
-# Recode groups of variables where <group_name>1-<group_nameX> has been replaced
-#     by specific flags rather than codes
-# Standardize missing to be NULL
-# Standardize country/county/state/city codes (not needed as there is literal and code now)
+#### Header ----
+  # Author(s): Alastair Matheson / Danny Colombara, PHSKC (APDE)
+  #
+  # Date: 2019-06
+  #
+  # Purpose: COMBINE BIRTH DATA FROM THE BEDROCK (2003-2016) AND WHALES (2017-) SYSTEMS
+  #          Clean and recode variables needed for APDE analyses
+  
+  # Recode groups of variables where <group_name>1-<group_nameX> has been replaced
+  #     by specific flags rather than codes
+  # Standardize missing to be NULL
+  # Standardize country/county/state/city codes (not needed as there is literal and code now)
 
 #### Set-up environment ----
 rm(list=ls())
@@ -16,16 +18,30 @@ library(odbc) # Read to and write from SQL
 library(RCurl) # Read files from Github
 library(tidyverse) # Manipulate data
 library(data.table) # Manipulate data quickly / efficiently
+# devtools::install_local("C:/Users/dcolombara/code/apdeRecodes/", force=T) # run if package is updated
+library(apdeRecodes) # Recoding function created by Daniel, https://github.com/PHSKC-APDE/apdeRecodes
 
-db_apde <- dbConnect(odbc(), "APDESQL50") ##Connect to SQL server
+source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/enact_recoding_function.R")
 
-#### PULL IN TABLE CONFIG FILE FOR VAR TYPE INFO ####
+db_apde <- dbConnect(odbc(), "PH_APDEStore50") ##Connect to SQL server
+
+#### LOAD REFERENCE DATA ####
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
+
+recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_recodes_simple.csv")
+
+iso_3166 <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv", colClasses="character")
+iso_3166.us <- iso_3166[iso3166_1_name == "United States", ]
+iso_3166.us <- iso_3166.us[!iso3166_2_name %in% c("American Samoa",	"Guam",	"Northern Mariana Islands", "Puerto Rico", "United States Minor Outlying Islands", "Virgin Islands")]$iso3166_2_code
 
 #### SET UP PATH to SQL OUTPUT TABLE ---- 
     tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
                             table = table_config_stage_bir_wa$table)
+
+#### ________________________________________________________----    
+####              COMBINE BEDROCK & WHALES                   ----    
+#### ________________________________________________________----  
 
 #### PULL IN BOTH DATA SETS ####
     tbl_id_2003_2016 <- DBI::Id(schema = "load_raw", table = "bir_wa_2003_2016")
@@ -33,7 +49,6 @@ table_config_stage_bir_wa <- yaml::yaml.load(getURL(
     
     tbl_id_2017_20xx <- DBI::Id(schema = "load_raw", table = "bir_wa_2017_20xx")
     bir_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_2017_20xx)
-
 
 #### REMOVE FIELDS IN BEDROCK NOT COLLECTED AFTER 2003 ####
 ### NB. Need to do this BEFORE renaming variables because otherwise two 
@@ -570,7 +585,6 @@ bir_2003_2016<-merge(bir_2003_2016, nchs.country, by = "father_birthplace_cntry_
 ### Remove objects
 rm(iso_3166, nchs, ref_country, bir_place)
 
-
 #### ALIGN VARIABLE TYPES ####
 bir_2003_2016 <- bir_2003_2016 %>%
   mutate_at(vars(mother_years_at_residence, mother_months_at_residence,
@@ -644,40 +658,250 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   
   to.numeric(bir_combined)
   
-  
-#### CHANGE DATE COLUMNS TO DATE TYPE ----
-  date.cols <- c("date_first_prenatal_visit",	"date_last_menses",	"date_last_prenatal_visit",	"father_date_of_birth",	"mother_date_of_birth")
-  bir_combined[, (date.cols) := lapply(.SD, as.Date), .SDcols = date.cols]
-  
 #### FINAL SMALL DATA TWEAKS ----
-# Fix year for 2009 because needed for automated recoding that follows ----
-  bir_combined[date_of_birth_year=="09  ", date_of_birth_year := "2009"]  
+    # FIX YEAR FOR 2009 because needed for automated recoding that follows ----
+      bir_combined[date_of_birth_year==9, date_of_birth_year := 2009]  
+    
+    # CHANGE DATE COLUMNS TO DATE TYPE ----
+      date.cols <- c("date_first_prenatal_visit",	"date_last_menses",	"date_last_prenatal_visit",	"father_date_of_birth",	"mother_date_of_birth")
+      bir_combined[, (date.cols) := lapply(.SD, as.Date), .SDcols = date.cols]
+      
+      # clean dates -- replace with NA when date is after the year of birth (not possible)
+        for(i in 1:length(date.cols)){
+          bir_combined[year(get(date.cols[i])) > date_of_birth_year, date.cols[i] := NA]
+        }  
+    
+    # FIX CERT NUMBER FOR 2012 ----
+    # Warning: max integer size is 2147483648 so this code will break in ~140 years
+    bir_combined[date_of_birth_year == 2012, 
+                 birth_cert_encrypt := as.integer(paste0(2012L, birth_cert_encrypt))]   
   
- # FIX CERT NUMBER FOR 2012 ----
-  # Warning: max integer size is 2147483648 so this code will break in ~140 years
-  bir_combined[date_of_birth_year == 2012, 
-               birth_cert_encrypt := as.integer(paste0(2012L, birth_cert_encrypt))]   
+#### ________________________________________________________----    
+####                     RECODING                            ----    
+#### ________________________________________________________----    
+    
+#### FREE UP MEMORY ----
+  gc()
 
-#### LOAD INITIAL APPENDED VERSION TO SQL ####
-# Ensure that the "type" is correct when comparing R data.table to SQL shell
-  r.table <- data.table(name = names(bir_combined), r.class = tolower(sapply(bir_combined, class)))
-    r.table[r.class == "integer", r.class := "numeric"]
-  yaml.table <- data.table(name = names(table_config_stage_bir_wa$vars), yaml.class = as.character(table_config_stage_bir_wa$vars))
+#### Convert select character cols to numeric ----
+  bir_combined[, mother_residence_county_wa_code := as.numeric(mother_residence_county_wa_code)]
+  bir_combined[, birthplace_county_wa_code := as.numeric(birthplace_county_wa_code)]
+  bir_combined[, mother_residence_zip := as.numeric(mother_residence_zip)] # needs to be numeric for recoding
+  
+#### Prep simple recode instructions ----
+  complex.vars <- recodes[recode_type=="complex"]$new_var # save list of vars made with complex recodes
+  recodes <- recodes[recode_type != "complex"] # drop complex recodes from list of simple recodes
+  recodes <- recodes[, .(old_var, new_var, old_value, new_value, new_label, start_year, end_year, var_label)] # keep columns needed for function
+  
+#### Process simple recodes with package ----
+  bir_combined <- enact_recoding(data = bir_combined, 
+                                 parse_recode_instructions(recodes, catch_NAs = T), 
+                                 ignore_case = T, 
+                                 hypothetical = F) 
+  
+#### Custom code for complex recoding ----
+  # Not in alphabetical order because some vars are dependant upon other vars
+  # bw_low_sing ----
+    bir_combined[!is.na(bw_low), bw_low_sing := 0]
+    bir_combined[bw_low == 1 & singleton == 1, bw_low_sing := 1]
+  
+  # bw_vlow_sing ----
+    bir_combined[!is.na(bw_vlow), bw_vlow_sing := 0]
+    bir_combined[bw_vlow == 1 & singleton == 1, bw_vlow_sing := 1]
+    
+  # cigarettes_smoked_3_months_prior ----
+    bir_combined[is.na(cigarettes_smoked_3_months_prior) & year >=2017, cigarettes_smoked_3_months_prior := 0]
+    bir_combined[cigarettes_smoked_3_months_prior == 0, smokeprior := 0]
+  
+  # cigarettes_smoked_1st_tri ----
+    bir_combined[is.na(cigarettes_smoked_1st_tri) & year >=2017, cigarettes_smoked_1st_tri := 0]
+    bir_combined[cigarettes_smoked_1st_tri == 0, smoke1 := 0]
+  
+  # cigarettes_smoked_2nd_tri ----
+    bir_combined[is.na(cigarettes_smoked_2nd_tri) & year >=2017, cigarettes_smoked_2nd_tri := 0]
+    bir_combined[cigarettes_smoked_2nd_tri == 0, smoke2 := 0]
+  
+  # cigarettes_smoked_3rd_tri ----
+    bir_combined[is.na(cigarettes_smoked_3rd_tri) & year >=2017, cigarettes_smoked_3rd_tri := 0]      
+    bir_combined[cigarettes_smoked_3rd_tri == 0, smoke3 := 0]       
+  
+  # diab_no (Diabetes-No) ----
+    bir_combined[diab_gest == 0 & diab_prepreg == 0, diab_no := 1] 
+    bir_combined[diab_gest == 1 | diab_prepreg == 1, diab_no := 0]
+  
+  # htn_no (Hypertension-No) ----
+    bir_combined[htn_gest == 0 & htn_prepreg == 0, htn_no := 1] 
+    bir_combined[htn_gest == 1 | htn_prepreg == 1, htn_no := 0]
+  
+  # nullip (nulliparous) ----
+    bir_combined[prior_live_births_living == 0 & prior_live_births_deceased == 0, nullip := 1]
+    bir_combined[prior_live_births_living %in% c(1:98) | prior_live_births_deceased %in% c(1:98), nullip := 0]
+  
+  # vertex (vertex birth position) ----
+    bir_combined[fetal_pres == 1, vertex := 0]
+    bir_combined[fetal_pres %in% 2:3, vertex := 1]
+    bir_combined[non_vertex_presentation=="N", vertex := 1]
+    bir_combined[, vertex := factor(vertex, levels = c(0, 1), labels = c("Breech/Oth", "Vertex"))]
+  
+  # ntsv (nulliparous, term, singleton, vertex birth) ----
+    bir_combined[, ntsv := 0] 
+    bir_combined[(nullip == 1 & term == 1 & plurality == 1 & vertex == "Vertex"), ntsv := 1]
+  
+  # csec_lowrisk (Cesarean section among low risk deliveries) ----
+    bir_combined[delivery_final %in% c(4:6), csec_lowrisk := 0] # any c-section == 0 
+    bir_combined[delivery_final %in% c(4:6) & ntsv==1, csec_lowrisk:=1]    
+  
+  # mother_birthplace_usa ----
+    bir_combined[is.na(mother_birthplace_country) + is.na(mother_birthplace_state_fips) != 0, mother_birthplace_usa := 0] # default to zero if have mother birth location data
+    bir_combined[mother_birthplace_country == "UNITED STATES", mother_birthplace_usa := 1]
+    bir_combined[mother_birthplace_state_fips %in% iso_3166.us, mother_birthplace_usa := 1]
+  
+  # mother_birthplace_foreign ----
+    bir_combined[mother_birthplace_usa == 1, mother_birthplace_foreign := 0]
+    bir_combined[mother_birthplace_usa == 0, mother_birthplace_foreign := 1]
+  
+  # pnc_lateno (Late or no prenatal care) ----
+    bir_combined[month_prenatal_care_began %in% c(1:6), pnc_lateno := 0]
+    bir_combined[month_prenatal_care_began %in% c(0, 7:10), pnc_lateno := 1]
+  
+  # ch_priorpreg ----
+    # ch_priorpreg 2003-2016 was done with simple recodes, but coding changed starting with 2017
+    bir_combined[year >=2017, ch_priorpreg := prior_live_births_deceased + prior_live_births_living + other_preg_outcomes]
+    bir_combined[ch_priorpreg %in% 1:50, ch_priorpreg := 1]
+  
+  # smoking (Smoking-Yes (before &|or during pregnancy)) ----
+    bir_combined[, smoking := NA_integer_]
+    bir_combined[(smokeprior==0 & smoke1==0 & smoke2==0 & smoke3==0), smoking := 0]
+    bir_combined[(smokeprior==1 & smoke1==1 & smoke2==1 & smoke3==1), smoking := 1]
+  
+  # smoking_dur (whether mother smoked at all during pregnancy) ----
+    bir_combined[, smoking_dur := NA_integer_]
+    bir_combined[(smoke1==0 & smoke2==0 & smoke3==0), smoking_dur := 0]
+    bir_combined[(smoke1 == 1 | smoke2 == 1 | smoke3 == 1), smoking_dur := 1]
+  
+  # wtgain (CHAT categories of maternal weight gain) ----
+    bir_combined[
+      ((mother_bmi<18.5 & mother_weight_gain<28) | 
+         (mother_bmi>=18.5 & mother_bmi<=24.99 & mother_weight_gain<25) | 
+         (mother_bmi>=25.0 & mother_bmi<=29.99 & mother_weight_gain<15) | 
+         (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain<11)), 
+      wtgain := 1]
+  
+    bir_combined[is.na(wtgain) & 
+                   ((mother_bmi<18.5 & mother_weight_gain>=28 & mother_weight_gain<=40) | 
+                      (mother_bmi>=18.5 & mother_bmi<=24.9 & mother_weight_gain>=25 & mother_weight_gain<=35) | 
+                      (mother_bmi>=25.0 & mother_bmi<=29.9 & mother_weight_gain>=15 & mother_weight_gain<=25) | 
+                      (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain>=11 & mother_weight_gain<=20)), 
+                 wtgain := 2]
+    
+    bir_combined[is.na(wtgain) & 
+                   ((mother_bmi<18.5 & mother_weight_gain>40) | 
+                      (mother_bmi>=18.5 & mother_bmi<=24.9 & mother_weight_gain>35) | 
+                      (mother_bmi>=25.0 & mother_bmi<=29.9 & mother_weight_gain>25) | 
+                      (mother_bmi>=30.0 & mother_bmi<99.9 & mother_weight_gain>20 & mother_weight_gain<999)), 
+                 wtgain := 3]       
+  
+    bir_combined[, wtgain := factor(wtgain, levels = c(1:3), labels = c("below recommended", "recommended", "above recommended"))]
+  
+  # wtgain_rec (WT Gain-Recommended) ----
+    bir_combined[wtgain %in% c("below recommended", "above recommended"),  wtgain_rec := 0]
+    bir_combined[wtgain=="recommended", wtgain_rec := 1]
+  
+  # Explanation of Kotelchuck Index ----
+    # In 2019 we spent a long time trying to figure out the correct Kotelchuck index
+    # We created three indices:
+    #	  1) Translating the original SAS code produced by Kotelchuck into R
+    #   2) Translating the SQL code produced by WA DOH into R
+    #   3) Alastair's method, based on a table founding online (xxx)
+    # The end result is that Alastair's method is the simplest and the most comparable
+    # to the results founding in CHAT. For this reason, we are going to use Alastair's method
+    # unless directed to do otherwise. 
+  
+  # kotelchuck (Kotelchuck Index Alastair Matheson Method) ----
+    # "Expected number of visits" matrix is what was historically presented on the WA DOH website,
+    #   The top is the month that care began and the row name is the gestational age
+    #   see the following links:
+    #     http://publichealth.lacounty.gov/mch/fhop/FHOP06/FHOP06_pdf/Appendix.pdf and
+    #     https://web.archive.org/web/20060816041014/https:/www.doh.wa.gov/EHSPHL/CHS/Vista/Statistical_calculations.htm#KOTELCHUCK INDEX
+    #     These links stop at gestational age of 38. For gestational age of 39-50, assume that need a weekly prenatal care visit
+    #     Though I was unable to find a similar table in an ACOG publication, the pattern matches ACOG recommentations 
+  
+  # Step 1: created matrix of expected number of visits given month PNC began and the gestational age
+    expected.pnc <- matrix(
+      c(
+        rep(1, 4), rep(2, 4), rep(3, 4), rep(4, 4), rep(5, 4), rep(6, 4), rep(7, 2), rep(8, 2), rep(9, 2), 10, 11, seq(12, 24), # began first month
+        rep(NA, 4), rep(1, 4), rep(2, 4), rep(3, 4), rep(4, 4), rep(5, 4), rep(6, 2), rep(7, 2), rep(8, 2), 9, 10, seq(11, 23), # began second month
+        rep(NA, 8), rep(1, 4), rep(2, 4), rep(3, 4), rep(4, 4), rep(5, 2), rep(6, 2), rep(7, 2), 8, 9, seq(10, 22), # began third month
+        rep(NA, 12), rep(1, 4), rep(2, 4), rep(3, 4), rep(4, 2), rep(5, 2), rep(6, 2), 7, 8, seq(9, 21) # began fourth month
+      ), 
+      nrow = 45, ncol = 4, byrow = FALSE, 
+      dimnames = list(seq(from = 6, to = 50), seq(from = 1, to = 4)))
+    
+  # Step 2: merge expected number of visits onto the main dataset, based on month PNC began and gestational age at birth 
+    bir_combined$expected.pnc <- expected.pnc[cbind(
+      match(bir_combined$calculated_gestation, rownames(expected.pnc)), 
+      match(bir_combined$month_prenatal_care_began, colnames(expected.pnc))
+    )]
+  
+  # Step 3: Compare actual to the expected to calculate Adequacy of PNC based on kotelchuck          
+    # Determine adequacy of prenatal care
+      bir_combined[month_prenatal_care_began %in% c(0, 5:14), kotelchuck := 0]  # inadequate
+      bir_combined[number_prenatal_visits < 0.8 * expected.pnc, kotelchuck := 0] # less than 80% of expected is inadequate
+      bir_combined[number_prenatal_visits >= 0.8 * expected.pnc, kotelchuck := 1] # greater than or equal to 80% is adequate
+    
+    # Set to NA when underlying variables are missing or illogical
+    bir_combined[is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0, kotelchuck := NA]
+    bir_combined[is.na(number_prenatal_visits) | number_prenatal_visits == 99, kotelchuck := NA]
+    bir_combined[(month_prenatal_care_began > (calculated_gestation/4)), kotelchuck := NA]
+    bir_combined[(month_prenatal_care_began == 0 & number_prenatal_visits >=1) | (number_prenatal_visits == 0 & month_prenatal_care_began >= 1), kotelchuck := NA]
+    
+# FINAL CHANGES TO COL CLASS/TYPE ----
+    bir_combined[, fetal_pres := as.numeric(fetal_pres)]  
+    bir_combined[, birthplace_county_wa_code := formatC(birthplace_county_wa_code, width=2, flag="0")] # make a two digit character
+    bir_combined[, mother_residence_county_wa_code := formatC(mother_residence_county_wa_code, width=2, flag="0")] # make a two digit character
+    bir_combined[, zip := as.character(zip)]
+    bir_combined[, mother_residence_zip := as.character(mother_residence_zip)]
+    
+#### ________________________________________________________----    
+####                  PUSH TO SQL                            ----    
+#### ________________________________________________________----    
+    
+#### DROP VARS NOT PUSHED TO SQL ----
+  bir_combined[, c("blankblank", "expected.pnc") := NULL]  
+    
+#### ORDER COLUMNS IN R TO MATCH SQL ----
+  column.order <- c(names(table_config_stage_bir_wa$vars), names(table_config_stage_bir_wa$recodes))
+  setcolorder(bir_combined, column.order)  
+  
+#### Ensure col type/class in R matches SQL ----
+  r.table <- data.table(
+    name = names(bir_combined), 
+    r.class = tolower(sapply(bir_combined, class)))
+  
+    r.table[r.class %in% c("integer", "haven_labelled"), r.class := "numeric"]
+    r.table[r.class == "factor", r.class := "character"]
+    
+  yaml.table <- data.table(
+    name =  c(names(table_config_stage_bir_wa$vars), names(table_config_stage_bir_wa$recodes)), 
+    yaml.class = c(as.character(table_config_stage_bir_wa$vars), as.character(table_config_stage_bir_wa$recodes)))
+  
     yaml.table[, yaml.class := tolower(yaml.class)]
     yaml.table[yaml.class %like% "char", yaml.class := "character"]
     yaml.table[yaml.class == "integer", yaml.class := "numeric"]
-  compare <- merge(r.table, yaml.table, by = "name", all = TRUE)
-  View(compare[r.class != yaml.class ])
+    
+  compare.classes <- merge(r.table, yaml.table, by = "name", all = TRUE)
+  
+  if(nrow(compare.classes[r.class != yaml.class ]) > 0)
+    stop(View(compare.classes[r.class != yaml.class ]))
   
 #### LOAD TO SQL ####
   tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
                               table = table_config_stage_bir_wa$table)
-  dbWriteTable(db_apde, tbl_id_2003_20xx, value = as.data.frame(bir_combined),
-               overwrite = T, append = F,
-               field.types = unlist(table_config_stage_bir_wa$vars))
+  dbWriteTable(db_apde, 
+               tbl_id_2003_20xx, 
+               value = as.data.frame(bir_combined),
+               overwrite = T, 
+               append = F,
+               field.types = c(unlist(table_config_stage_bir_wa$vars), unlist(table_config_stage_bir_wa$recodes)) )
 
-#### DELETE OBJECTS TO FREE MEMORY ----
-  rm(list = setdiff(ls(), c("tbl_id_2003_20xx", "bir_combined", "db_apde")))
-  gc()
-
-#### THE END ----
+#### THE END! ----
