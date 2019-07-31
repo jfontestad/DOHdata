@@ -247,5 +247,60 @@
             staged.dt[, table(priorprg, ch_priorpreg, exclude = NULL)]
           sink()
           
+## Compare row counts by year with raw data ----          
+  rows.raw <- setDT(DBI::dbGetQuery(db_apde, "SELECT *  FROM metadata.qa_bir_values"))       
+  rows.raw <- rows.raw[table_name %in% c("load_raw.bir_wa_2003_2016", "load_raw.bir_wa_2017_20xx")] # limit to tables of interest       
+  rows.raw[, qa_date_max := max(qa_date), by = c("table_name", "date_max")]  # identify the most recent QA for each table/year combo
+  rows.qa <- rows.raw[qa_date_max == qa_date][, year := year(date_min)][, raw := as.numeric(qa_value)] # keep as template for loading new QA to SQL
+  rows.raw <- rows.qa[, .(year, raw)] # keep the most recent
+
+  row.count <- setorder(as.data.table(staged.dt[, table(year)], row.names = TRUE), year)[, year := as.numeric(year)]
+  
+  row.count <- merge(row.count, rows.raw, by = "year"); rm(rows.raw)
+  row.count[, diff := paste0(round(100* (N - raw) / raw, 2), "%")]
+  
+## Write QA row count results to SQL ----
+  if(sum(row.count$N) == sum(row.count$raw)){ 
+    ## WRITE QA RESULTS TO VALUES TABLE ----
+        rows.total <- copy(rows.qa)[, date_min := "2003-01-01"][, date_max := "2017-12-31"][, raw := sum(row.count$N)][1,]
+        rows.qa <- rbind(rows.qa, rows.total)
+        rows.qa[, qa_value := as.character(raw)]
+        rows.qa[, table_name := "stage.bir_wa"]
+        rows.qa[, c("date_min", "date_max") := lapply(.SD, as.Date), .SDcols = c("date_min", "date_max")]
+        rows.qa[, note := paste0("[", year(date_min), ", ", year(date_max), "]")]
+        rows.qa <- rows.qa[, !c("qa_date_max", "year", "raw")]
+        rows.qa[, qa_date := Sys.time()]
+        setorder(rows.qa, date_max, -date_min)
+    
+        tbl_id_qa <- DBI::Id(schema = "metadata", 
+                                    table = "qa_bir_values")
+        dbWriteTable(db_apde, 
+                     tbl_id_qa, 
+                     value = as.data.frame(rows.qa),
+                     overwrite = F, 
+                     append = T )
+        
+    ## WRITE QA RESULTS TO SUMMARY TABLE ----
+        qa_bir <- setDT(DBI::dbGetQuery(db_apde, "SELECT *  FROM metadata.qa_bir"))[1,] # pull in data as a template
+        qa_bir[, etl_batch_id := NA]
+        qa_bir[, last_run := Sys.Date()]
+        qa_bir[, date_min := min(rows.qa$date_min)]
+        qa_bir[, date_max := min(rows.qa$date_max)]
+        qa_bir[, table_name := rows.qa[1, ]$table_name]
+        qa_bir[, qa_item := "Number rows BY YEAR"]
+        qa_bir[, qa_result := "PASS"]
+        qa_bir[, qa_date := max(rows.qa$qa_date)]
+        qa_bir[, note := paste0("# rows in stage == # rows in load_raw for each year in ", min(year(rows.qa$date_min)), ":", max(year(rows.qa$date_max)))]
+        
+        tbl_id_qa_bir <- DBI::Id(schema = "metadata", 
+                             table = "qa_bir")
+        dbWriteTable(db_apde, 
+                     tbl_id_qa_bir, 
+                     value = as.data.frame(qa_bir),
+                     overwrite = F, 
+                     append = T )
+    
+  }
+  
 ## The end! ----
 
