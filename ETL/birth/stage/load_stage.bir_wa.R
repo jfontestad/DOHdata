@@ -902,6 +902,6 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
                value = as.data.frame(bir_combined),
                overwrite = T, 
                append = F,
-               field.types = unlist(table_config_stage_bir_wa$vars))
+               field.types = c(unlist(table_config_stage_bir_wa$vars), unlist(table_config_stage_bir_wa$recodes)) )
 
 #### THE END! ----

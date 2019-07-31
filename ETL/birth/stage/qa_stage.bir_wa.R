@@ -9,7 +9,7 @@
 
 ## Set up environment ----
     rm(list=ls())
-    pacman::p_load(data.table, odbc, lubridate, RCurl)
+    pacman::p_load(data.table, odbc, lubridate, RCurl, glue)
     options("scipen"=10) # turn off scientific notation  
     options(warning.length = 8170) # get lengthy warnings, needed for SQL
     setwd("C:/temp")
@@ -20,7 +20,7 @@
     
     query.varlist <- paste(c(names(table_config_stage_bir_wa$vars), names(table_config_stage_bir_wa$recodes)), collapse = ", ")
     
-    query.string <- paste("SELECT", query.varlist, "FROM stage.bir_wa")
+    query.string <- glue_sql ("SELECT", query.varlist, "FROM stage.bir_wa")
     
     db_apde <- dbConnect(odbc(), "PH_APDEStore50") ##Connect to SQL server
     
