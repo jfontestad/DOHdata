@@ -28,8 +28,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
   }
   
   if (is.null(data_source) | !data_source %in% c("birth", "birth_geo", "bskhs", "death", "hospital")) {
-    stop("Enter a data source (one of the following: 'birth', 'birth_geo', 'bskhs', 
-         'death', 'hospital'")
+    stop("Enter a data source (one of the following: 'birth', 'birth_geo', 'bskhs', 'death', 'hospital'")
   }
   
   if (is.null(date_min) | is.null(date_max)) {
@@ -124,7 +123,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
       
     }
   }
-
+  
   
   if (is.na(proceed)) {
     stop("ETL log load cancelled at user request")
@@ -134,11 +133,21 @@ load_metadata_etl_log_f <- function(conn = NULL,
     
     if (reuse == T) {
       etl_batch_id <- matches$etl_batch_id[1]
-      
       message(glue::glue("Reusing ETL batch #{etl_batch_id}"))
       return(etl_batch_id)
+    } else if (reuse == F) {
       
-    } else {
+      etl_batch_id <- select.list(matches$etl_batch_id, 
+                                  title = "Select an ETL ID to use from the following (or enter 0 to cancel)")
+      
+      if (etl_batch_id == 0L | etl_batch_id == "") {
+        stop("ETL log load cancelled at user request")
+      } else {
+        message(glue::glue("Reusing ETL batch #{etl_batch_id}"))
+        return(etl_batch_id)
+      }
+      
+    } else if (is.na(proceed)) {
       stop("ETL log load cancelled at user request")
     }
     
@@ -159,7 +168,7 @@ load_metadata_etl_log_f <- function(conn = NULL,
     return(etl_batch_id)
   }
   
-
+  
   
 }
 
