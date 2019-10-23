@@ -1,8 +1,8 @@
 category,recode_type,old_var,old_type,old_value,new_var,new_type,new_value,new_label,var_label,start_year,end_year,notes
-baby,copy,date_of_birth_year,continuous,,year,continuous,,NA,Birth Year,2003,2017,old_val & new_val blank to copy variable wholesale
-baby,clean,year,continuous,"[9999, 9999]",year,continuous,NA,NA,Birth Year,2003,2017,
-baby,clean,year,continuous,"[9, 9]",year,continuous,2009,NA,Birth Year,2003,2017,
-baby,clean,plurality,continuous,"[9, 9]",plurality,continuous,NA,NA,pluralityity - number of children born,2003,2017,
+baby,copy,date_of_birth_year,continuous,,year,continuous,,,Birth Year,2003,2017,old_val & new_val blank to copy variable wholesale
+baby,clean,year,continuous,"[9999, 9999]",year,continuous,,,Birth Year,2003,2017,
+baby,clean,year,continuous,"[9, 9]",year,continuous,2009,,Birth Year,2003,2017,
+baby,clean,plurality,continuous,"[9, 9]",plurality,continuous,,,pluralityity - number of children born,2003,2017,
 baby,binning,birth_weight_grams,continuous,"[0, 4499]",bw_vhigh,binary,0,No,Birth WT-Very High (4500-8164 grams),2003,2017,
 baby,binning,birth_weight_grams,continuous,"[4500, 8164]",bw_vhigh,binary,1,Yes,Birth WT-Very High (4500-8164 grams),2003,2017,
 baby,binning,birth_weight_grams,continuous,"[8165, 9998]",bw_vhigh,binary,0,No,Birth WT-Very High (4500-8164 grams),2003,2017,
@@ -18,7 +18,7 @@ baby,binning,birth_weight_grams,continuous,"[2500, 9998]",bw_modlow,binary,0,No,
 baby,binning,birth_weight_grams,continuous,"[0, 2500]",bw_low,binary,1,Yes,Low Birth Weight (< 2500) (all births),2003,2017,
 baby,binning,birth_weight_grams,continuous,"[2501, 9998]",bw_low,binary,0,No,Low Birth Weight (< 2500) (all births),2003,2017,
 baby,complex,,,,bw_low_sing,binary,,,Low Birth Weight (< 2500) (singleton births),2003,2017,
-baby,binning,birth_weight_grams,continuous,"[0, 226]",bw_vlow,binary,NA,NA,Very Low Birth Weight (< 1500) (all births),2003,2017,
+baby,binning,birth_weight_grams,continuous,"[0, 226]",bw_vlow,binary,,,Very Low Birth Weight (< 1500) (all births),2003,2017,
 baby,binning,birth_weight_grams,continuous,"[227, 1500]",bw_vlow,binary,1,Yes,Very Low Birth Weight (< 1500) (all births),2003,2017,
 baby,binning,birth_weight_grams,continuous,"[1501, 9998]",bw_vlow,binary,0,No,Very Low Birth Weight (< 1500) (all births),2003,2017,
 baby,complex,,,,bw_vlow_sing,binary,,,Very Low Birth Weight (< 1500) (singleton births),2003,2017,
@@ -27,8 +27,8 @@ baby,simple,sex,string,M,gender,categorical,1,Male,Sex of baby,2003,2017,
 baby,simple,sex,string,U,gender,categorical,9,Unknown,Sex of baby,2003,2017,
 baby,simple,breastfed,string,N,bf,categorical,0,No,Infant being breastfed,2003,2017,
 baby,simple,breastfed,string,Y,bf,categorical,1,Yes,Infant being breastfed,2003,2017,
-baby,simple,breastfed,string,U,bf,categorical,NA,NA,Infant being breastfed,2003,2017,
-baby,binning,infant_death_flag,string,NA,inf_death,categorical,0,No,Infant death flag (string),2003,2017,"previous notes said not available for 2010 and 2012, but it is in the data and looks reasonable"
+baby,simple,breastfed,string,U,bf,categorical,,,Infant being breastfed,2003,2017,
+baby,binning,infant_death_flag,string,,inf_death,categorical,0,No,Infant death flag (string),2003,2017,"previous notes said not available for 2010 and 2012, but it is in the data and looks reasonable"
 baby,binning,infant_death_flag,string,""" """,inf_death,categorical,0,No,Infant death flag (string),2003,2017,"previous notes said not available for 2010 and 2012, but it is in the data and looks reasonable"
 baby,binning,infant_death_flag,string,X,inf_death,categorical,1,Yes,Infant death flag (string),2003,2017,"previous notes said not available for 2010 and 2012, but it is in the data and looks reasonable"
 demo,binning,mother_race_summary_code,continuous,"[12, 12]",race3,categorical,1,AIAN,Race 3,2003,2017,
@@ -77,10 +77,10 @@ demo,binning,mother_residence_county_wa_code,continuous,"[18, 39]",kc_res,catego
 demo,binning,birthplace_county_wa_code,continuous,"[0, 16]",kc_occ,categorical,0,No,King County occurence (mother),2003,2017,
 demo,binning,birthplace_county_wa_code,continuous,"[17, 17]",kc_occ,categorical,1,Yes,King County occurence (mother),2003,2017,
 demo,binning,birthplace_county_wa_code,continuous,"[18, 39]",kc_occ,categorical,0,No,King County occurence (mother),2003,2017,
-demo,clean,mother_residence_zip,string,,zip,continuous,,NA,Zip code of residence,2003,2017,old_val & new_val blank to copy variable wholesale
-demo,clean,zip,continuous,"[99999, 99999]",zip,continuous,,NA,Zip code of residence,2003,2017,
-demo,copy,mother_calculated_age,continuous,,age,continuous,,NA,Mother's age,2003,2017,old_val & new_val blank to copy variable wholesale
-demo,clean,age,continuous,99,age,continuous,NA,NA,Mother's age,2003,2017,
+demo,clean,mother_residence_zip,string,,zip,continuous,,,Zip code of residence,2003,2017,old_val & new_val blank to copy variable wholesale
+demo,clean,zip,continuous,"[99999, 99999]",zip,continuous,,,Zip code of residence,2003,2017,
+demo,copy,mother_calculated_age,continuous,,age,continuous,,,Mother's age,2003,2017,old_val & new_val blank to copy variable wholesale
+demo,clean,age,continuous,99,age,continuous,,,Mother's age,2003,2017,
 demo,binning,age,continuous,"[0, 14]",teen,continuous,0,No,Teenage birth,2003,2017,
 demo,binning,age,continuous,"[18, 98]",teen,continuous,0,No,Teenage birth,2003,2017,
 demo,binning,age,continuous,"[15, 17]",teen,continuous,1,Yes,Teenage birth,2003,2017,
@@ -92,9 +92,9 @@ demo,simple,mother_education,continuous,5,edu_mom,categorical,5,Associate degree
 demo,simple,mother_education,continuous,6,edu_mom,categorical,6,Bachelor's degree,Mother's education,2003,2017,
 demo,simple,mother_education,continuous,7,edu_mom,categorical,7,Master's degree,Mother's education,2003,2017,
 demo,simple,mother_education,continuous,8,edu_mom,categorical,8,Doctorate/professional degree,Mother's education,2003,2017,
-demo,simple,mother_education,continuous,0,edu_mom,categorical,NA,NA,Mother's education,2003,2017,
-demo,simple,mother_education,continuous,"[9, 99]",edu_mom,categorical,NA,NA,Mother's education,2003,2017,
-demo,simple,mother_marital_status,string,U,marriage,categorical,NA,NA,Mother's marital status,2003,2017,
+demo,simple,mother_education,continuous,0,edu_mom,categorical,,,Mother's education,2003,2017,
+demo,simple,mother_education,continuous,"[9, 99]",edu_mom,categorical,,,Mother's education,2003,2017,
+demo,simple,mother_marital_status,string,U,marriage,categorical,,,Mother's marital status,2003,2017,
 demo,simple,mother_marital_status,string,Y,marriage,categorical,1,Yes,Mother's marital status,2003,2017,
 demo,simple,mother_marital_status,string,N,marriage,categorical,0,No,Mother's marital status,2003,2017,
 demo,simple,mother_marital_status,string,1,marriage,categorical,1,Yes,Mother's marital status,2003,2017,
@@ -103,7 +103,7 @@ demo,simple,mother_marital_status,string,3,marriage,categorical,1,Yes,Mother's m
 demo,simple,mother_marital_status,string,4,marriage,categorical,0,No,Mother's marital status,2003,2017,
 demo,simple,mother_marital_status,string,5,marriage,categorical,0,No,Mother's marital status,2003,2017,
 demo,simple,mother_marital_status,string,6,marriage,categorical,0,No,Mother's marital status,2003,2017,
-demo,simple,mother_marital_status,string,8,marriage,categorical,NA,NA,Mother's marital status,2003,2017,
+demo,simple,mother_marital_status,string,8,marriage,categorical,,,Mother's marital status,2003,2017,
 demo,complex,,,,mother_birthplace_foreign,categorical,,,Place of Birth of Mother-Foreign,2003,2017,
 demo,complex,,,,mother_birthplace_usa,categorical,,,Place of Birth of Mother-USA,2003,2017,
 demo,binning,priorprg,continuous,"[1, 998]",ch_priorpreg,categorical,1,Yes,Prior Pregnancy,2003,2016,not available 2017+
@@ -115,7 +115,7 @@ del,simple,delivery_method_final,categorical,3,delivery_final,categorical,3,Vacu
 del,simple,delivery_method_final,categorical,4,delivery_final,categorical,4,C-section with trial labor,Final route and method of delivery,2003,2017,
 del,simple,delivery_method_final,categorical,5,delivery_final,categorical,5,C-section without trial labor,Final route and method of delivery,2003,2017,
 del,simple,delivery_method_final,categorical,6,delivery_final,categorical,6,C-section with trial labor unknown,Final route and method of delivery,2003,2017,
-del,simple,delivery_method_final,categorical,9,delivery_final,categorical,NA,NA,Final route and method of delivery,2003,2017,
+del,simple,delivery_method_final,categorical,9,delivery_final,categorical,,,Final route and method of delivery,2003,2017,
 del,binning,facility_type,categorical,"[1, 1]",facility_type_recode,categorical,1,Hospital,Facility type for place of birth,2003,2017,
 del,binning,facility_type,categorical,"[2, 2]",facility_type_recode,categorical,2,Enroute,Facility type for place of birth,2003,2017,
 del,binning,facility_type,categorical,"[3, 3]",facility_type_recode,categorical,3,Birth center,Facility type for place of birth,2003,2017,
@@ -123,25 +123,25 @@ del,binning,facility_type,categorical,"[4, 4]",facility_type_recode,categorical,
 del,binning,facility_type,categorical,"[5, 5]",facility_type_recode,categorical,5,Home,Facility type for place of birth,2003,2017,
 del,binning,facility_type,categorical,"[6, 6]",facility_type_recode,categorical,6,Other,Facility type for place of birth,2003,2017,
 del,binning,facility_type,categorical,"[7, 8]",facility_type_recode,categorical,5,Home,Facility type for place of birth,2003,2017,
-del,binning,facility_type,categorical,"[9, 9]",facility_type_recode,categorical,NA,NA,Facility type for place of birth,2003,2017,
-del,copy,fetal_presentation,string,,fetal_pres,categorical,,NA,"Method of Delivery, Fetal Presentation",2003,2017,old_val & new_val blank to copy variable wholesale
+del,binning,facility_type,categorical,"[9, 9]",facility_type_recode,categorical,,,Facility type for place of birth,2003,2017,
+del,copy,fetal_presentation,string,,fetal_pres,categorical,,,"Method of Delivery, Fetal Presentation",2003,2017,old_val & new_val blank to copy variable wholesale
 del,simple,fetal_pres,string,C,fetal_pres,categorical,1,Cephalic,"Method of Delivery, Fetal Presentation",2003,2017,
 del,simple,fetal_pres,string,B,fetal_pres,categorical,2,Breech,"Method of Delivery, Fetal Presentation",2003,2017,
 del,simple,fetal_pres,string,O,fetal_pres,categorical,3,Other,"Method of Delivery, Fetal Presentation",2003,2017,
-del,simple,fetal_pres,string,U,fetal_pres,categorical,NA,NA,"Method of Delivery, Fetal Presentation",2003,2017,
-del,simple,fetal_pres,string,9,fetal_pres,categorical,NA,NA,"Method of Delivery, Fetal Presentation",2003,2017,
+del,simple,fetal_pres,string,U,fetal_pres,categorical,,,"Method of Delivery, Fetal Presentation",2003,2017,
+del,simple,fetal_pres,string,9,fetal_pres,categorical,,,"Method of Delivery, Fetal Presentation",2003,2017,
 risk,binning,cigarettes_smoked_3_months_prior,continuous,"[0, 0]",smokeprior,categorical,0,No,Smoke 1st Trimester,2003,2017,
 risk,binning,cigarettes_smoked_3_months_prior,continuous,"[1, 98]",smokeprior,categorical,1,Yes,Smoke 1st Trimester,2003,2017,
-risk,complex,,,,smokeprior,categorical,,,Smoke 1st Trimester,2003,2017,correct # to be zero when when cigarettes == NA
+risk,complex,,,,smokeprior,categorical,,,Smoke 1st Trimester,2003,2017,correct # to be zero when when cigarettes == 
 risk,binning,cigarettes_smoked_1st_tri,continuous,"[0, 0]",smoke1,categorical,0,No,Smoke 1st Trimester,2003,2017,
 risk,binning,cigarettes_smoked_1st_tri,continuous,"[1, 98]",smoke1,categorical,1,Yes,Smoke 1st Trimester,2003,2017,
-risk,complex,,,,smoke1,categorical,,,Smoke 1st Trimester,2003,2017,correct # to be zero when when cigarettes == NA
+risk,complex,,,,smoke1,categorical,,,Smoke 1st Trimester,2003,2017,correct # to be zero when when cigarettes == 
 risk,binning,cigarettes_smoked_2nd_tri,continuous,"[0, 0]",smoke2,categorical,0,No,Smoke 2nd Trimester,2003,2017,
 risk,binning,cigarettes_smoked_2nd_tri,continuous,"[1, 98]",smoke2,categorical,1,Yes,Smoke 2nd Trimester,2003,2017,
-risk,complex,,,,smoke2,categorical,,,Smoke 2nd Trimester,2003,2017,correct # to be zero when when cigarettes == NA
+risk,complex,,,,smoke2,categorical,,,Smoke 2nd Trimester,2003,2017,correct # to be zero when when cigarettes == 
 risk,binning,cigarettes_smoked_3rd_tri,continuous,"[0, 0]",smoke3,categorical,0,No,Smoke 3rd Trimester,2003,2017,
 risk,binning,cigarettes_smoked_3rd_tri,continuous,"[1, 98]",smoke3,categorical,1,Yes,Smoke 3rd Trimester,2003,2017,
-risk,complex,,,,smoke3,categorical,,,Smoke 3rd Trimester,2003,2017,correct # to be zero when when cigarettes == NA
+risk,complex,,,,smoke3,categorical,,,Smoke 3rd Trimester,2003,2017,correct # to be zero when when cigarettes == 
 risk,complex,,,,smoking_dur,categorical,,,Smoking During Pregnancy,2003,2017,
 risk,complex,,,,smoking,categorical,,,Smoking (before & during pregnancy),2003,2017,
 risk,simple,prepreg_diabetes,string,N,diab_prepreg,categorical,0,No,Diabetes-Pre Pregnancy,2003,2017,
@@ -154,20 +154,20 @@ risk,simple,prepreg_hypertension,string,Y,htn_prepreg,categorical,1,Yes,Hyperten
 risk,simple,gestational_hypertention,string,N,htn_gest,categorical,0,No,Hypertension-Gestational,2003,2017,
 risk,simple,gestational_hypertention,string,Y,htn_gest,categorical,1,Yes,Hypertension-Gestational,2003,2017,
 risk,complex,,,,htn_no,categorical,,,Hypertension-No,2003,2017,
-risk,clean,mother_weight_gain,continuous,"[999, 999]",mother_weight_gain,continuous,NA,NA,Mother's weight gain,2003,2017,
+risk,clean,mother_weight_gain,continuous,"[999, 999]",mother_weight_gain,continuous,,,Mother's weight gain,2003,2017,
 risk,binning,month_prenatal_care_began,continuous,"[0,0]",pnc_tri,categorical,0,No PNC,Prenatal Care Initiation Trimester,2003,2017,
 risk,binning,month_prenatal_care_began,continuous,"[1, 3]",pnc_tri,categorical,1,Trimester 1,Prenatal Care Initiation Trimester,2003,2017,
 risk,binning,month_prenatal_care_began,continuous,"[4, 6]",pnc_tri,categorical,2,Trimester 2,Prenatal Care Initiation Trimester,2003,2017,
 risk,binning,month_prenatal_care_began,continuous,"[7, 10]",pnc_tri,categorical,3,Trimester 3,Prenatal Care Initiation Trimester,2003,2017,
-risk,binning,month_prenatal_care_began,continuous,"[999, 999]",pnc_tri,categorical,NA,NA,NCHS Prenatal Care,2003,2017,
+risk,binning,month_prenatal_care_began,continuous,"[999, 999]",pnc_tri,categorical,,,NCHS Prenatal Care,2003,2017,
 risk,binning,nchs_month_prenatal_care_began,continuous,"[0, 0]",pnc_tri_nchs,categorical,0,NCHS No PNC,NCHS Prenatal Care Initiation Trimester,2011,2017,CHAT has this data for 2003-2017. How? Orig varname pnatfed did not exist prior to 2011
 risk,binning,nchs_month_prenatal_care_began,continuous,"[1, 3]",pnc_tri_nchs,categorical,1,NCHS Trimester 1,NCHS Prenatal Care Initiation Trimester,2011,2017,CHAT has this data for 2003-2017. How? Orig varname pnatfed did not exist prior to 2011
 risk,binning,nchs_month_prenatal_care_began,continuous,"[4, 6]",pnc_tri_nchs,categorical,2,NCHS Trimester 2,NCHS Prenatal Care Initiation Trimester,2011,2017,CHAT has this data for 2003-2017. How? Orig varname pnatfed did not exist prior to 2011
 risk,binning,nchs_month_prenatal_care_began,continuous,"[7, 11]",pnc_tri_nchs,categorical,3,NCHS Trimester 3,NCHS Prenatal Care Initiation Trimester,2011,2017,CHAT has this data for 2003-2017. How? Orig varname pnatfed did not exist prior to 2011
-risk,binning,nchs_month_prenatal_care_began,continuous,"[999, 999]",pnc_tri_nchs,categorical,NA,NA,NCHS Prenatal Care Initiation Trimester,2011,2017,CHAT has this data for 2003-2017. How? Orig varname pnatfed did not exist prior to 2011
+risk,binning,nchs_month_prenatal_care_began,continuous,"[999, 999]",pnc_tri_nchs,categorical,,,NCHS Prenatal Care Initiation Trimester,2011,2017,CHAT has this data for 2003-2017. How? Orig varname pnatfed did not exist prior to 2011
 risk,complex,,,,pnc_lateno,categorical,,,Late or no prenatal care,2003,2017,
 risk,complex,,,,nullip,categorical,,,No prior live births,2003,2017,
-risk,clean,calculated_gestation,continuous,"(50, 999]",calculated_gestation,continuous,NA,NA,Calculated gestational age (months),2003,2017,method changed in 2005
+risk,clean,calculated_gestation,continuous,"(50, 999]",calculated_gestation,continuous,,,Calculated gestational age (months),2003,2017,method changed in 2005
 risk,binning,calculated_gestation,continuous,"[0, 37)",term,categorical,0,No,Term birth (37-41 weeks),2003,2017,
 risk,binning,calculated_gestation,continuous,"[37, 42)",term,categorical,1,Yes,Term birth (37-41 weeks),2003,2017,
 risk,binning,calculated_gestation,continuous,"[42, 50]",term,categorical,0,No,Term birth (37-41 weeks),2003,2017,
