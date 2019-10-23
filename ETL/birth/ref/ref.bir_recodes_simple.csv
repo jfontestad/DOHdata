@@ -185,7 +185,7 @@ risk,binning,plurality,continuous,"[2, 8]",multiple,categorical,1,Yes,Multiple B
 risk,complex,,,,vertex,categorical,,,Vertex birth position,2003,2017,
 risk,complex,,,,ntsv,categorical,,,"NTSV (nulliparous, term, singleton, vertex birth)",2003,2017,
 risk,complex,,,,csec_lowrisk,categorical,,,Cesarean sections among low risk deliveries,2003,2017,
-risk,complex,,,,kotel,categorical,,,Kotelchuck-Adequate (>=80% of expected visits),2003,2017,
+risk,complex,,,,kotelchuck,categorical,,,Kotelchuck-Adequate (>=80% of expected visits),2003,2017,
 risk,complex,,,,wtgain,categorical,,,WT Gain (CHAT categories),2003,2017,
 risk,complex,,,,wtgain_rec,categorical,,,WT Gain-Recommended,2003,2017,
 insur,binning,source_of_payment,continuous,"[1, 1]",dlp_medicaid,categorical,1,Yes,Medicaid payment for delivery,2003,2017,
