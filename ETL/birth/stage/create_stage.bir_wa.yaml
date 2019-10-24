@@ -314,6 +314,7 @@ recodes:
     fetal_pres: INTEGER
     gender: INTEGER
     hispanic: INTEGER
+    hra: VARCHAR(60)
     htn_gest: INTEGER
     htn_no: INTEGER
     htn_prepreg: INTEGER
@@ -336,6 +337,7 @@ recodes:
     race_m: INTEGER
     race3: INTEGER
     race4: INTEGER
+    region: VARCHAR(7)
     singleton: INTEGER
     smoke1: INTEGER
     smoke2: INTEGER
