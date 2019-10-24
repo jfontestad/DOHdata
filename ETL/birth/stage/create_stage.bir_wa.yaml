@@ -292,7 +292,6 @@ vars:
     infant_death_flag: CHAR(1)
     etl_batch_id: INTEGER
 recodes:
-    age: INTEGER
     bf: INTEGER
     bw_high: INTEGER
     bw_low: INTEGER
@@ -302,6 +301,15 @@ recodes:
     bw_vhigh: INTEGER
     bw_vlow: INTEGER
     bw_vlow_sing: INTEGER
+    chi_age: INTEGER
+    chi_edu_mom_8: CHAR(30)
+    chi_geo_kc: INTEGER
+    chi_geo_wastate: INTEGER
+    chi_nativity: CHAR(12)
+    chi_race_7: CHAR(8)
+    chi_race_hisp: CHAR(12)
+    chi_race_eth8: CHAR(8)
+    chi_sex: INTEGER
     ch_priorpreg: INTEGER
     csec_lowrisk: INTEGER
     delivery_final: INTEGER
@@ -309,18 +317,14 @@ recodes:
     diab_no: INTEGER
     diab_prepreg: INTEGER
     dlp_medicaid: INTEGER
-    edu_mom: INTEGER
     facility_type_recode: INTEGER 
     fetal_pres: INTEGER
-    gender: INTEGER
-    hispanic: INTEGER
     hra: VARCHAR(60)
     htn_gest: INTEGER
     htn_no: INTEGER
     htn_prepreg: INTEGER
     inf_death: INTEGER
     kc_occ: INTEGER
-    kc_res: INTEGER
     kotelchuck: INTEGER
     marriage: INTEGER
     mother_birthplace_foreign: INTEGER
@@ -335,8 +339,6 @@ recodes:
     preterm_mod: INTEGER
     preterm_v: INTEGER
     race_m: INTEGER
-    race3: INTEGER
-    race4: INTEGER
     region: VARCHAR(7)
     singleton: INTEGER
     smoke1: INTEGER
@@ -349,7 +351,6 @@ recodes:
     term: INTEGER
     vertex: VARCHAR(60)
     wa_occ: INTEGER
-    wa_res: INTEGER
     wtgain: VARCHAR(20)
     wtgain_rec: INTEGER
     year: INTEGER
