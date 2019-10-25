@@ -303,7 +303,13 @@ recodes:
     bw_vlow_sing: INTEGER
     chi_age: INTEGER
     chi_edu_mom_8: CHAR(30)
+    chi_geo_big_cities: VARCHAR(16)
+    chi_geo_coo_places: VARCHAR(22)
+    chi_geo_hra_short: VARCHAR(40)
+    chi_geo_hra_long: VARCHAR(40)
     chi_geo_kc: INTEGER
+    chi_geo_regions_4: VARCHAR(7)
+    chi_geo_seattle_non: VARCHAR(10)
     chi_geo_wastate: INTEGER
     chi_nativity: CHAR(12)
     chi_race_7: CHAR(8)
@@ -319,7 +325,6 @@ recodes:
     dlp_medicaid: INTEGER
     facility_type_recode: INTEGER 
     fetal_pres: INTEGER
-    hra: VARCHAR(60)
     htn_gest: INTEGER
     htn_no: INTEGER
     htn_prepreg: INTEGER
@@ -339,7 +344,6 @@ recodes:
     preterm_mod: INTEGER
     preterm_v: INTEGER
     race_m: INTEGER
-    region: VARCHAR(7)
     singleton: INTEGER
     smoke1: INTEGER
     smoke2: INTEGER
