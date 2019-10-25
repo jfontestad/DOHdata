@@ -23,13 +23,17 @@ library(apdeRecodes) # Recoding function created by Daniel, https://github.com/P
 
 source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/enact_recoding_function.R")
 
-db_apde <- dbConnect(odbc(), "PH_APDEStore50") ##Connect to SQL server
+db.apde50 <- dbConnect(odbc(), "PH_APDEStore50") ##Connect to SQL server
 
 #### LOAD REFERENCE DATA ####
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
 recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_recodes_simple.csv")
+
+hra.xwalk <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/chi_hra_xwalk.csv")
+
+block.hra.region <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/geocomp_blk10_kps.csv")
 
 iso_3166 <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv", colClasses="character")
 iso_3166.us <- iso_3166[iso3166_1_name == "United States", ]
@@ -45,10 +49,10 @@ iso_3166.us <- iso_3166.us[!iso3166_2_name %in% c("American Samoa",	"Guam",	"Nor
 
 #### PULL IN BOTH DATA SETS ####
     tbl_id_2003_2016 <- DBI::Id(schema = "load_raw", table = "bir_wa_2003_2016")
-    bir_2003_2016 <- DBI::dbReadTable(db_apde, tbl_id_2003_2016)
+    bir_2003_2016 <- DBI::dbReadTable(db.apde50, tbl_id_2003_2016)
     
     tbl_id_2017_20xx <- DBI::Id(schema = "load_raw", table = "bir_wa_2017_20xx")
-    bir_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_2017_20xx)
+    bir_2017_20xx <- DBI::dbReadTable(db.apde50, tbl_id_2017_20xx)
 
 #### REMOVE FIELDS IN BEDROCK NOT COLLECTED AFTER 2003 ####
 ### NB. Need to do this BEFORE renaming variables because otherwise two 
@@ -760,6 +764,10 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     bir_combined[mother_birthplace_usa == 1, mother_birthplace_foreign := 0]
     bir_combined[mother_birthplace_usa == 0, mother_birthplace_foreign := 1]
   
+  # nativity ----
+    bir_combined[mother_birthplace_usa == 0, chi_nativity := "Foreign born"]
+    bir_combined[mother_birthplace_usa == 1, chi_nativity := "Born in US"]
+    
   # pnc_lateno (Late or no prenatal care) ----
     bir_combined[month_prenatal_care_began %in% c(1:6), pnc_lateno := 0]
     bir_combined[month_prenatal_care_began %in% c(0, 7:10), pnc_lateno := 1]
@@ -848,15 +856,44 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
       bir_combined[month_prenatal_care_began %in% c(0, 5:14), kotelchuck := 0]  # inadequate
       bir_combined[number_prenatal_visits < 0.8 * expected.pnc, kotelchuck := 0] # less than 80% of expected is inadequate
       bir_combined[number_prenatal_visits >= 0.8 * expected.pnc, kotelchuck := 1] # greater than or equal to 80% is adequate
+      bir_combined[, expected.pnc := NULL] # no longer needed, just intermediate to get kotelchuck
     
     # Set to NA when underlying variables are missing or illogical
-    bir_combined[is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0, kotelchuck := NA]
-    bir_combined[is.na(number_prenatal_visits) | number_prenatal_visits == 99, kotelchuck := NA]
-    bir_combined[(month_prenatal_care_began > (calculated_gestation/4)), kotelchuck := NA]
-    bir_combined[(month_prenatal_care_began == 0 & number_prenatal_visits >=1) | (number_prenatal_visits == 0 & month_prenatal_care_began >= 1), kotelchuck := NA]
+      bir_combined[is.na(month_prenatal_care_began) | is.na(calculated_gestation) | calculated_gestation == 0, kotelchuck := NA]
+      bir_combined[is.na(number_prenatal_visits) | number_prenatal_visits == 99, kotelchuck := NA]
+      bir_combined[(month_prenatal_care_began > (calculated_gestation/4)), kotelchuck := NA]
+      bir_combined[(month_prenatal_care_began == 0 & number_prenatal_visits >=1) | (number_prenatal_visits == 0 & month_prenatal_care_began >= 1), kotelchuck := NA]
+    
+# CONVERT CHI VARS TO FACTORS AND THEN TO CHARACTERS WHEN POSSIBLE ----
+    for(i in unique(recodes[!is.na(new_value) & !new_label %in% c("No", "Yes", "")]$new_var)){ # Use dictionary to identify factor variables
+      print(i) # helpful for troubleshooting so know where it breaks
+      my.levels <- recodes[new_var== i & !is.na(new_value)]$new_value # get levels for the given factor variable
+      my.labels <- recodes[new_var == i & !is.na(new_value)]$new_label # get labels for the given factor variable      
+      bir_combined[, eval(i) := as.character(factor(get(i), levels = my.levels, labels = my.labels))] # apply the factor label to the factor variable in dt
+    }
+    
+# IDENTIFY & ADD GEOGRAPHIES ----
+    # Pull in geocoded data
+    geo.data <- odbc::dbGetQuery(db.apde50, "SELECT birth_cert_encrypt, res_geo_census_full_2010 FROM [stage].[bir_wa_geo]") # get complete block ids
+    
+    # Merge on block ids
+    bir_combined <- merge(bir_combined, geo.data, by.x = "birth_cert_encrypt", by.y = "birth_cert_encrypt", all.x = T, all.y = F) 
+    
+    # clean block-hra-region linkage key
+    block.hra.region <- unique(block.hra.region[!(is.na(hra_id) & is.na(rgn_id)), .(geo_id_blk10, hra_name, rgn_name)]) # isolate block id, plus hra & region name
+    block.hra.region[, geo_id_blk10 := as.character(geo_id_blk10)]
+    
+    # Merge on HRA and region names
+    bir_combined <- merge(bir_combined, block.hra.region, by.x = "res_geo_census_full_2010", by.y = "geo_id_blk10", all.x = T, all.y = F)
+    bir_combined[, res_geo_census_full_2010 := NULL]
+    
+    # Ascribe standard CHI geography names
+    setnames(bir_combined, c("hra_name", "rgn_name"), c("chi_geo_hra_short", "chi_geo_regions_4"))
+    
+    # Merge on proper HRA name
+    bir_combined <- merge(bir_combined, hra.xwalk, by.x = "chi_geo_hra_short", by.y = "chi_geo_hra_short", all = TRUE)
     
 # FINAL CHANGES TO COL CLASS/TYPE ----
-    bir_combined[, fetal_pres := as.numeric(fetal_pres)]  
     bir_combined[, birthplace_county_wa_code := formatC(birthplace_county_wa_code, width=2, flag="0")] # make a two digit character
     bir_combined[, mother_residence_county_wa_code := formatC(mother_residence_county_wa_code, width=2, flag="0")] # make a two digit character
     bir_combined[, zip := as.character(zip)]
@@ -867,7 +904,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 #### ________________________________________________________----    
     
 #### DROP VARS NOT PUSHED TO SQL ----
-  bir_combined[, c("blankblank", "expected.pnc") := NULL]  
+  bir_combined[, c("blankblank") := NULL]  
     
 #### ORDER COLUMNS IN R TO MATCH SQL ----
   column.order <- c(names(table_config_stage_bir_wa$vars), names(table_config_stage_bir_wa$recodes))
@@ -897,7 +934,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 #### LOAD TO SQL ####
   tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
                               table = table_config_stage_bir_wa$table)
-  dbWriteTable(db_apde, 
+  dbWriteTable(db.apde50, 
                tbl_id_2003_20xx, 
                value = as.data.frame(bir_combined),
                overwrite = T, 
