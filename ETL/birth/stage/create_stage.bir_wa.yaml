@@ -315,16 +315,16 @@ recodes:
     chi_race_7: CHAR(8)
     chi_race_hisp: CHAR(12)
     chi_race_eth8: CHAR(8)
-    chi_sex: INTEGER
+    chi_sex: CHAR(6)
     ch_priorpreg: INTEGER
     csec_lowrisk: INTEGER
-    delivery_final: INTEGER
+    delivery_final: CHAR(34)
     diab_gest: INTEGER
     diab_no: INTEGER
     diab_prepreg: INTEGER
     dlp_medicaid: INTEGER
-    facility_type_recode: INTEGER 
-    fetal_pres: INTEGER
+    facility_type_recode: CHAR(22) 
+    fetal_pres: CHAR(8)
     htn_gest: INTEGER
     htn_no: INTEGER
     htn_prepreg: INTEGER
@@ -338,12 +338,12 @@ recodes:
     ntsv: INTEGER
     nullip: INTEGER
     pnc_lateno: INTEGER
-    pnc_tri: INTEGER
-    pnc_tri_nchs: INTEGER
+    pnc_tri: CHAR(11)
+    pnc_tri_nchs: CHAR(16)
     preterm: INTEGER
     preterm_mod: INTEGER
     preterm_v: INTEGER
-    race_m: INTEGER
+    race_m: CHAR(28)
     singleton: INTEGER
     smoke1: INTEGER
     smoke2: INTEGER
