@@ -80,7 +80,7 @@ demo,binning,birthplace_county_wa_code,continuous,"[18, 39]",kc_occ,categorical,
 demo,clean,mother_residence_zip,string,,zip,continuous,,,Zip code of residence,2003,2017,old_val & new_val blank to copy variable wholesale
 demo,clean,zip,continuous,"[99999, 99999]",zip,continuous,,,Zip code of residence,2003,2017,
 demo,copy,mother_calculated_age,continuous,,chi_age,continuous,,,Mother's age,2003,2017,old_val & new_val blank to copy variable wholesale
-demo,clean,chi_age,continuous,99,age,continuous,,,Mother's age,2003,2017,
+demo,clean,chi_age,continuous,99,chi_age,continuous,,,Mother's age,2003,2017,
 demo,binning,chi_age,continuous,"[0, 14]",teen,continuous,0,No,Teenage birth,2003,2017,
 demo,binning,chi_age,continuous,"[18, 98]",teen,continuous,0,No,Teenage birth,2003,2017,
 demo,binning,chi_age,continuous,"[15, 17]",teen,continuous,1,Yes,Teenage birth,2003,2017,
