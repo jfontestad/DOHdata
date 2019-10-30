@@ -712,19 +712,19 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     bir_combined[bw_vlow == 1 & singleton == 1, bw_vlow_sing := 1]
     
   # cigarettes_smoked_3_months_prior ----
-    bir_combined[is.na(cigarettes_smoked_3_months_prior) & year >=2017, cigarettes_smoked_3_months_prior := 0]
+    bir_combined[is.na(cigarettes_smoked_3_months_prior) & chi_year >=2017, cigarettes_smoked_3_months_prior := 0]
     bir_combined[cigarettes_smoked_3_months_prior == 0, smokeprior := 0]
   
   # cigarettes_smoked_1st_tri ----
-    bir_combined[is.na(cigarettes_smoked_1st_tri) & year >=2017, cigarettes_smoked_1st_tri := 0]
+    bir_combined[is.na(cigarettes_smoked_1st_tri) & chi_year >=2017, cigarettes_smoked_1st_tri := 0]
     bir_combined[cigarettes_smoked_1st_tri == 0, smoke1 := 0]
   
   # cigarettes_smoked_2nd_tri ----
-    bir_combined[is.na(cigarettes_smoked_2nd_tri) & year >=2017, cigarettes_smoked_2nd_tri := 0]
+    bir_combined[is.na(cigarettes_smoked_2nd_tri) & chi_year >=2017, cigarettes_smoked_2nd_tri := 0]
     bir_combined[cigarettes_smoked_2nd_tri == 0, smoke2 := 0]
   
   # cigarettes_smoked_3rd_tri ----
-    bir_combined[is.na(cigarettes_smoked_3rd_tri) & year >=2017, cigarettes_smoked_3rd_tri := 0]      
+    bir_combined[is.na(cigarettes_smoked_3rd_tri) & chi_year >=2017, cigarettes_smoked_3rd_tri := 0]      
     bir_combined[cigarettes_smoked_3rd_tri == 0, smoke3 := 0]       
   
   # diab_no (Diabetes-No) ----
@@ -772,7 +772,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   
   # ch_priorpreg ----
     # ch_priorpreg 2003-2016 was done with simple recodes, but coding changed starting with 2017
-    bir_combined[year >=2017, ch_priorpreg := prior_live_births_deceased + prior_live_births_living + other_preg_outcomes]
+    bir_combined[chi_year >=2017, ch_priorpreg := prior_live_births_deceased + prior_live_births_living + other_preg_outcomes]
     bir_combined[ch_priorpreg %in% 1:50, ch_priorpreg := 1]
   
   # smoking (Smoking-Yes (before &|or during pregnancy)) ----
