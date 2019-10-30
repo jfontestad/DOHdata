@@ -316,6 +316,7 @@ recodes:
     chi_race_hisp: CHAR(12)
     chi_race_eth8: CHAR(8)
     chi_sex: CHAR(6)
+    chi_year: INTEGER
     ch_priorpreg: INTEGER
     csec_lowrisk: INTEGER
     delivery_final: CHAR(34)
@@ -357,5 +358,4 @@ recodes:
     wa_occ: INTEGER
     wtgain: VARCHAR(20)
     wtgain_rec: INTEGER
-    year: INTEGER
     zip: VARCHAR(10)

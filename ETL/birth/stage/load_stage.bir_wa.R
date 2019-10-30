@@ -31,9 +31,7 @@ table_config_stage_bir_wa <- yaml::yaml.load(getURL(
 
 recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_recodes_simple.csv")
 
-hra.xwalk <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/chi_hra_xwalk.csv")
-
-block.hra.region <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/geocomp_blk10_kps.csv")
+chi.geographies <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/chi_hra_xwalk.csv")
 
 iso_3166 <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv", colClasses="character")
 iso_3166.us <- iso_3166[iso3166_1_name == "United States", ]
@@ -876,22 +874,12 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     # Pull in geocoded data
     geo.data <- odbc::dbGetQuery(db.apde50, "SELECT birth_cert_encrypt, res_geo_census_full_2010 FROM [stage].[bir_wa_geo]") # get complete block ids
     
-    # Merge on block ids
-    bir_combined <- merge(bir_combined, geo.data, by.x = "birth_cert_encrypt", by.y = "birth_cert_encrypt", all.x = T, all.y = F) 
+    # Merge on geocoded data to the main birth data
+    bir_combined <- merge(bir_combined, geo.data, by.x = "birth_cert_encrypt", by.y = "birth_cert_encrypt", all.x = T, all.y = T) 
     
-    # clean block-hra-region linkage key
-    block.hra.region <- unique(block.hra.region[!(is.na(hra_id) & is.na(rgn_id)), .(geo_id_blk10, hra_name, rgn_name)]) # isolate block id, plus hra & region name
-    block.hra.region[, geo_id_blk10 := as.character(geo_id_blk10)]
-    
-    # Merge on HRA and region names
-    bir_combined <- merge(bir_combined, block.hra.region, by.x = "res_geo_census_full_2010", by.y = "geo_id_blk10", all.x = T, all.y = F)
-    bir_combined[, res_geo_census_full_2010 := NULL]
-    
-    # Ascribe standard CHI geography names
-    setnames(bir_combined, c("hra_name", "rgn_name"), c("chi_geo_hra_short", "chi_geo_regions_4"))
-    
-    # Merge on proper HRA name
-    bir_combined <- merge(bir_combined, hra.xwalk, by.x = "chi_geo_hra_short", by.y = "chi_geo_hra_short", all = TRUE)
+    # Merge on standard RADS/CHI geographies, linking to 2010 census blocks
+    chi.geographies[, geo_id_blk10 := as.character(geo_id_blk10)]
+    bir_combined <- merge(bir_combined, chi.geographies, by.x = "res_geo_census_full_2010", by.y = "geo_id_blk10", all.x = T, all.y = F)
     
 # FINAL CHANGES TO COL CLASS/TYPE ----
     bir_combined[, birthplace_county_wa_code := formatC(birthplace_county_wa_code, width=2, flag="0")] # make a two digit character
@@ -903,12 +891,15 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 ####                  PUSH TO SQL                            ----    
 #### ________________________________________________________----    
     
-#### DROP VARS NOT PUSHED TO SQL ----
-  bir_combined[, c("blankblank") := NULL]  
-    
 #### ORDER COLUMNS IN R TO MATCH SQL ----
-  column.order <- c(names(table_config_stage_bir_wa$vars), names(table_config_stage_bir_wa$recodes))
-  setcolorder(bir_combined, column.order)  
+  # get list and order of colums from YAML file
+    column.order <- c(names(table_config_stage_bir_wa$vars), names(table_config_stage_bir_wa$recodes))
+  
+  # keep only variales listed in YAML file
+    bir_combined <- bir_combined[, ..column.order]
+    
+  # order the columns
+    setcolorder(bir_combined, column.order)  
   
 #### Ensure col type/class in R matches SQL ----
   r.table <- data.table(
