@@ -688,8 +688,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 #### Convert select character cols to numeric ----
   bir_combined[, mother_residence_county_wa_code := as.numeric(mother_residence_county_wa_code)]
   bir_combined[, birthplace_county_wa_code := as.numeric(birthplace_county_wa_code)]
-  bir_combined[, mother_residence_zip := as.numeric(mother_residence_zip)] # needs to be numeric for recoding
-  
+
 #### Prep simple recode instructions ----
   complex.vars <- recodes[recode_type=="complex"]$new_var # save list of vars made with complex recodes
   recodes <- recodes[recode_type != "complex"] # drop complex recodes from list of simple recodes
@@ -710,6 +709,10 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   # bw_vlow_sing ----
     bir_combined[!is.na(bw_vlow), bw_vlow_sing := 0]
     bir_combined[bw_vlow == 1 & singleton == 1, bw_vlow_sing := 1]
+    
+  # chi_geo_zip5  ----
+    bir_combined[, chi_geo_zip5 := mother_residence_zip]
+    bir_combined[chi_geo_zip5 == "99999", chi_geo_zip5 := NA]
     
   # cigarettes_smoked_3_months_prior ----
     bir_combined[is.na(cigarettes_smoked_3_months_prior) & chi_year >=2017, cigarettes_smoked_3_months_prior := 0]
@@ -884,9 +887,11 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 # FINAL CHANGES TO COL CLASS/TYPE ----
     bir_combined[, birthplace_county_wa_code := formatC(birthplace_county_wa_code, width=2, flag="0")] # make a two digit character
     bir_combined[, mother_residence_county_wa_code := formatC(mother_residence_county_wa_code, width=2, flag="0")] # make a two digit character
-    bir_combined[, zip := as.character(zip)]
-    bir_combined[, mother_residence_zip := as.character(mother_residence_zip)]
     
+# DROP USELESS COLUMNS
+    bir_combined[, blankblank := NULL]
+    bir_combined[, res_geo_census_full_2010 := NULL]
+
 #### ________________________________________________________----    
 ####                  PUSH TO SQL                            ----    
 #### ________________________________________________________----    
@@ -927,7 +932,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
                               table = table_config_stage_bir_wa$table)
   dbWriteTable(db.apde50, 
                tbl_id_2003_20xx, 
-               value = as.data.frame(bir_combined),
+               value = as.data.frame(bir_combined[]),
                overwrite = T, 
                append = F,
                field.types = c(unlist(table_config_stage_bir_wa$vars), unlist(table_config_stage_bir_wa$recodes)) )

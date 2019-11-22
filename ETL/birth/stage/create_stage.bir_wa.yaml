@@ -314,6 +314,19 @@ recodes:
     chi_geo_zip5: VARCHAR(5)
     chi_nativity: VARCHAR(12)
     chi_race_7: VARCHAR(8)
+    chi_race_aic_aian: INTEGER
+    chi_race_aic_asian: INTEGER
+    chi_race_aic_asianother: INTEGER
+    chi_race_aic_black: INTEGER
+    chi_race_aic_chinese: INTEGER
+    chi_race_aic_filipino: INTEGER
+    chi_race_aic_his: INTEGER
+    chi_race_aic_indian: INTEGER
+    chi_race_aic_japanese: INTEGER
+    chi_race_aic_korean: INTEGER
+    chi_race_aic_nhpi: INTEGER
+    chi_race_aic_vietnamese: INTEGER
+    chi_race_aic_wht: INTEGER
     chi_race_hisp: VARCHAR(12)
     chi_race_eth8: VARCHAR(8)
     chi_sex: VARCHAR(6)
