@@ -302,7 +302,7 @@ recodes:
     bw_vlow: INTEGER
     bw_vlow_sing: INTEGER
     chi_age: INTEGER
-    chi_edu_mom_8: CHAR(30)
+    chi_edu_mom_8: VARCHAR(30)
     chi_geo_big_cities: VARCHAR(16)
     chi_geo_coo_places: VARCHAR(22)
     chi_geo_hra_short: VARCHAR(40)
@@ -311,21 +311,21 @@ recodes:
     chi_geo_regions_4: VARCHAR(7)
     chi_geo_seattle_non: VARCHAR(10)
     chi_geo_wastate: INTEGER
-    chi_nativity: CHAR(12)
-    chi_race_7: CHAR(8)
-    chi_race_hisp: CHAR(12)
-    chi_race_eth8: CHAR(8)
-    chi_sex: CHAR(6)
+    chi_nativity: VARCHAR(12)
+    chi_race_7: VARCHAR(8)
+    chi_race_hisp: VARCHAR(12)
+    chi_race_eth8: VARCHAR(8)
+    chi_sex: VARCHAR(6)
     chi_year: INTEGER
     ch_priorpreg: INTEGER
     csec_lowrisk: INTEGER
-    delivery_final: CHAR(34)
+    delivery_final: VARCHAR(34)
     diab_gest: INTEGER
     diab_no: INTEGER
     diab_prepreg: INTEGER
     dlp_medicaid: INTEGER
-    facility_type_recode: CHAR(22) 
-    fetal_pres: CHAR(8)
+    facility_type_recode: VARCHAR(22) 
+    fetal_pres: VARCHAR(8)
     htn_gest: INTEGER
     htn_no: INTEGER
     htn_prepreg: INTEGER
@@ -339,12 +339,12 @@ recodes:
     ntsv: INTEGER
     nullip: INTEGER
     pnc_lateno: INTEGER
-    pnc_tri: CHAR(11)
-    pnc_tri_nchs: CHAR(16)
+    pnc_tri: VARCHAR(11)
+    pnc_tri_nchs: VARCHAR(16)
     preterm: INTEGER
     preterm_mod: INTEGER
     preterm_v: INTEGER
-    race_m: CHAR(28)
+    race_m: VARCHAR(28)
     singleton: INTEGER
     smoke1: INTEGER
     smoke2: INTEGER
