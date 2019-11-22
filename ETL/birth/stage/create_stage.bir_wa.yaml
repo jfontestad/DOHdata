@@ -359,4 +359,4 @@ recodes:
     wa_occ: INTEGER
     wtgain: VARCHAR(20)
     wtgain_rec: INTEGER
-    zip: VARCHAR(10)
+    
