@@ -309,7 +309,7 @@ recodes:
     chi_geo_hra_long: VARCHAR(40)
     chi_geo_kc: INTEGER
     chi_geo_regions_4: VARCHAR(7)
-    chi_geo_seattle_non: VARCHAR(10)
+    chi_geo_seattle: VARCHAR(10)
     chi_geo_wastate: INTEGER
     chi_nativity: VARCHAR(12)
     chi_race_7: VARCHAR(8)
