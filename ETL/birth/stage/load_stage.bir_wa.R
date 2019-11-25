@@ -30,6 +30,7 @@ table_config_stage_bir_wa <- yaml::yaml.load(getURL(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
 recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_recodes_simple.csv")
+recodes[new_label %in% c("", " "), new_label := NA] # CRITICAL, because fread reads empty strings as "" and recode function tries to use "" as a label, which causes it to fail
 
 chi.geographies <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/chi_hra_xwalk.csv")
 
@@ -693,7 +694,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   complex.vars <- recodes[recode_type=="complex"]$new_var # save list of vars made with complex recodes
   recodes <- recodes[recode_type != "complex"] # drop complex recodes from list of simple recodes
   recodes <- recodes[, .(old_var, new_var, old_value, new_value, new_label, start_year, end_year, var_label)] # keep columns needed for function
-  
+
 #### Process simple recodes with package ----
   bir_combined <- enact_recoding(data = bir_combined, 
                                  parse_recode_instructions(recodes, catch_NAs = T), 
@@ -718,37 +719,12 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     bir_combined[is.na(cigarettes_smoked_3_months_prior) & chi_year >=2017, cigarettes_smoked_3_months_prior := 0]
     bir_combined[cigarettes_smoked_3_months_prior == 0, smokeprior := 0]
   
-  # chi_race_aic_aian ----
-    bir_combined[, chi_race_aic_aian := 0]
-    bir_combined[is.na(mother_race_summary_code), chi_race_aic_aian := NA]
-    bir_combined[mother_race_summary_code %in% c(12,21,24,27,28,30,33,34,36,37,39,40,41,43,44,50), chi_race_aic_aian := 1]  
-    
   # chi_race_aic_asian ----
     # no simple way to get this. Use the aic_ variables created with simple recoding above
     bir_combined[is.na(chi_race_aic_asianother) + is.na(chi_race_aic_chinese) + is.na(chi_race_aic_filipino) +
                    is.na(chi_race_aic_japanese) + is.na(chi_race_aic_korean) + is.na(chi_race_aic_vietnamese) < 6, chi_race_aic_asian := 0]
     bir_combined[(chi_race_aic_asianother + chi_race_aic_chinese + chi_race_aic_filipino +
                        chi_race_aic_japanese + chi_race_aic_korean + chi_race_aic_vietnamese) > 0, chi_race_aic_asian := 1]
-    
-  # chi_race_aic_black ----
-    bir_combined[, chi_race_aic_black := 0]
-    bir_combined[is.na(mother_race_summary_code), chi_race_aic_black := NA]
-    bir_combined[mother_race_summary_code %in% c(11,20,24,25,26,30,31,32,36,37,38,40,41,42,44,50), chi_race_aic_black := 1]  
-    
-  # chi_race_aic_indian (Asian Indian) ----
-    bir_combined[, chi_race_aic_indian := 0] 
-    bir_combined[is.na(mother_race_summary_code), chi_race_aic_indian := NA]
-    bir_combined[mother_race_summary_code %in% c(13,22,25,27,29,31,33,35,36,38,39,40,42,43,44,50), chi_race_aic_indian := 1] 
-    
-  # chi_race_aic_nhpi ----
-    bir_combined[, chi_race_aic_nhpi := 0]
-    bir_combined[is.na(mother_race_summary_code), chi_race_aic_nhpi := NA]
-    bir_combined[mother_race_summary_code %in% c(14,23,26,28,29,32,34,35,37,38,39,41,42,43,44,50), chi_race_aic_nhpi := 1]  
-    
-  # chi_race_aic_wht ----
-    bir_combined[, chi_race_aic_wht := 0]
-    bir_combined[is.na(mother_race_summary_code), chi_race_aic_wht := NA]
-    bir_combined[mother_race_summary_code %in% c(10,20,21,22,23,30,31,32,33,34,35,40,41,42,43,50), chi_race_aic_wht := 1]  
     
   # cigarettes_smoked_1st_tri ----
     bir_combined[is.na(cigarettes_smoked_1st_tri) & chi_year >=2017, cigarettes_smoked_1st_tri := 0]
@@ -898,7 +874,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
       bir_combined[(month_prenatal_care_began == 0 & number_prenatal_visits >=1) | (number_prenatal_visits == 0 & month_prenatal_care_began >= 1), kotelchuck := NA]
     
 # CONVERT CHI VARS TO FACTORS AND THEN TO CHARACTERS WHEN POSSIBLE ----
-    for(i in unique(recodes[!is.na(new_value) & !new_label %in% c("No", "Yes", "")]$new_var)){ # Use dictionary to identify factor variables
+    for(i in unique(recodes[!is.na(new_value) & !new_label %in% c(NA, "No", "Yes", "")]$new_var)){ # Use dictionary to identify factor variables
       print(i) # helpful for troubleshooting so know where it breaks
       my.levels <- recodes[new_var== i & !is.na(new_value)]$new_value # get levels for the given factor variable
       my.labels <- recodes[new_var == i & !is.na(new_value)]$new_label # get labels for the given factor variable      
