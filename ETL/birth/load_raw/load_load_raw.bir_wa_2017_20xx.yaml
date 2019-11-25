@@ -157,13 +157,13 @@ vars:
     mother_weight_gain: INTEGER
     mother_bmi: NUMERIC
     cigarettes_smoked_3_months_prior: INTEGER
-    packs_smoked_3_months_prior: INTEGER
+    packs_smoked_3_months_prior: NUMERIC
     cigarettes_smoked_1st_tri: INTEGER
-    packs_smoked_1st_tri: INTEGER
+    packs_smoked_1st_tri: NUMERIC
     cigarettes_smoked_2nd_tri: INTEGER
-    packs_smoked_2nd_tri: INTEGER
+    packs_smoked_2nd_tri: NUMERIC
     cigarettes_smoked_3rd_tri: INTEGER
-    packs_smoked_3rd_tri: INTEGER
+    packs_smoked_3rd_tri: NUMERIC
     mother_transfer: CHAR(1)
     source_of_payment: INTEGER
     wic: CHAR(1)
