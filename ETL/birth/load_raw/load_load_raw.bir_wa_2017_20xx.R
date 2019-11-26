@@ -29,47 +29,43 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
   
   
   #### SET UP LOADING VARIABLES FROM CONFIG FILES ####
-  # Recode list of variables to match format required for importing
-  col_type_list_2017_20xx <- lapply(table_config_load$vars, function(x) {
-    x <- str_replace_all(x, "INTEGER", "i")
-    x <- str_replace_all(x, "VARCHAR\\(\\d+\\)", "c")
-    x <- str_replace_all(x, "CHAR\\(\\d+\\)", "c")
-    x <- str_replace_all(x, "NUMERIC", "d")
-    # Read dates in as characters and convert later
-    x <- str_replace_all(x, "DATE", "c")
-  })
-  
+  # Create a table of apde variable names and variable classes
+  col_type_list_2017_20xx<-data.table(field_name_apde  = names(table_config_load$vars), col.type = unlist(table_config_load$vars))
+  col_type_list_2017_20xx[col.type %like% "CHAR" | col.type %like% "DATE", col.type := "character"]
+  col_type_list_2017_20xx[col.type %like% "INTEGER", col.type := "integer"]
+  col_type_list_2017_20xx[col.type %like% "NUMERIC", col.type := "numeric"]
   
   # Remove fields that will go in the loaded table but aren't in all data files
-  col_type_list_2017_20xx <- col_type_list_2017_20xx[str_detect(names(col_type_list_2017_20xx), "etl_batch_id") == F]
+  col_type_list_2017_20xx <- col_type_list_2017_20xx[!field_name_apde  %in% c("etl_batch_id")]
   
-  
-  # Rename fields to match what is actually loaded from the csv
-  # NB. The 2017 csv file has spelling errors and inconsistencies in the field names.
-  # Ref table updated to reflect this but something to watch in future loads.
-  names(col_type_list_2017_20xx) <- bir_field_map$field_name_whales[match(names(col_type_list_2017_20xx), 
-                                                        bir_field_map$field_name_apde)]
-  
+  # Merge on WHALES variable names that correspond to the APDE variable names
+  col_type_list_2017_20xx <- merge(col_type_list_2017_20xx, unique(setDT(bir_field_map)[, .(field_name_apde, field_name_whales)]), by = "field_name_apde" , all.x = T, all.y = F)
+
+  # Create a vector of column classes named with WHALES names 
+  col.classes <- col_type_list_2017_20xx$col.type
+  names(col.classes) <- col_type_list_2017_20xx$field_name_whales  
   
   #### LOAD 2017-20xx DATA TO R ####
   # Find list of files with years 2017-20xx inclusive
   bir_file_names_2017_20xx <- list.files(path = file.path(bir_path_inner, "DATA/raw"), 
                                          pattern = "birth_20(1[7-9]{1}|2[0-9]{1}).(asc|csv|xls|xlsx)$",
                                          full.names = T)
+  # extract names for each year of data as a list
   bir_names_2017_20xx <- lapply(bir_file_names_2017_20xx, function(x)
     str_sub(x,
             start = str_locate(x, "birth_20")[1], 
             end = str_locate(x, "birth_20[0-9]{2}")[2])
   )
   
-  # Bring in data
-  bir_files_2017_20xx <- lapply(bir_file_names_2017_20xx, function(x) {
-    vroom::vroom(file = x,
-                 col_types = col_type_list_2017_20xx,
-                 .name_repair = ~ janitor::make_clean_names(., case = "snake"))
-  })
-  
-  # Rename list items
+  # Read each year of data and append as item in a list
+  bir_files_2017_20xx <- vector("list", length(bir_file_names_2017_20xx)) # create empty list to fill with data
+  for(i in 1:length(bir_file_names_2017_20xx)){
+    temp <- fread(bir_file_names_2017_20xx[i], colClasses = col.classes) # read CSV data
+    setnames(temp, names(temp), col_type_list_2017_20xx[field_name_whales %in% names(temp)]$field_name_apde) # change names to APDE names
+    bir_files_2017_20xx[[i]] <- temp # append data.table as item in list
+  }
+
+  # Rename list of data.tables
   names(bir_files_2017_20xx) <- bir_names_2017_20xx
   
   
@@ -98,19 +94,19 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
   })
   
   
-  # Combine IDs with data frames in list
+  # Combine IDs with list of data.tables 
   bir_files_2017_20xx <- Map(cbind, bir_files_2017_20xx, etl_batch_id = batch_ids_2017_20xx)
   
   
   #### COMBINE 2017-20xx INTO A SINGLE DATA FRAME ####
   print("Combining years into a single file")
-  bir_2017_20xx <- bind_rows(bir_files_2017_20xx)
+  bir_2017_20xx <- rbindlist(bir_files_2017_20xx, use.names = TRUE, fill = TRUE) 
   
   ## Check snake_case matches what is expected for SQL table
-  if (min(names(bir_2017_20xx[!names(bir_2017_20xx) %in% c("etl_batch_id")])
-          %in% bir_field_map$field_name_apde) == 0) {
+  if(all.equal( sort(names(bir_2017_20xx)), sort(names(table_config_load$vars)) ) != TRUE)
+    {
     stop("There is an error in the fields names of the 2017_20xx combined data.")
-  }
+  } else {setcolorder(bir_2017_20xx, names(table_config_load$vars) )}
   
 
   #### LOAD 2017-20xx DATA TO SQL ####
