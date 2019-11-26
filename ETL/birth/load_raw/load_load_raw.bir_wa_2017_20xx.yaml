@@ -299,7 +299,7 @@ table_2017:
     date_max: 2017-12-31
     date_issue: 2018-11-26
     date_delivery: 2018-12-05
-    note: Retroactively adding older years
+    note: Reprocessed to include improved smoking measure (packs)
 table_2018:
     vars_2018: null
     date_min: 2018-01-01
