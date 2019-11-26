@@ -60,8 +60,11 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
   # Read each year of data and append as item in a list
   bir_files_2017_20xx <- vector("list", length(bir_file_names_2017_20xx)) # create empty list to fill with data
   for(i in 1:length(bir_file_names_2017_20xx)){
-    temp <- fread(bir_file_names_2017_20xx[i], colClasses = col.classes) # read CSV data
-    setnames(temp, names(temp), col_type_list_2017_20xx[field_name_whales %in% names(temp)]$field_name_apde) # change names to APDE names
+    temp <- suppressWarnings(fread(bir_file_names_2017_20xx[i], colClasses = col.classes)) # read CSV data
+    temp.names <- names(temp)
+    setnames(temp, 
+             col_type_list_2017_20xx[field_name_whales %in% temp.names]$field_name_whales, 
+             col_type_list_2017_20xx[field_name_whales %in% temp.names]$field_name_apde)
     bir_files_2017_20xx[[i]] <- temp # append data.table as item in list
   }
 
@@ -101,6 +104,11 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
   #### COMBINE 2017-20xx INTO A SINGLE DATA FRAME ####
   print("Combining years into a single file")
   bir_2017_20xx <- rbindlist(bir_files_2017_20xx, use.names = TRUE, fill = TRUE) 
+  
+  ## Convert dates to column type DATE
+  date.vars<- unlist(table_config_load$vars)
+  date.vars <- names(date.vars[date.vars=="DATE"])
+  bir_2017_20xx[, (date.vars) := lapply(.SD, as.Date, "%m/%d/%y"), .SDcols = date.vars]
   
   ## Check snake_case matches what is expected for SQL table
   if(all.equal( sort(names(bir_2017_20xx)), sort(names(table_config_load$vars)) ) != TRUE)
