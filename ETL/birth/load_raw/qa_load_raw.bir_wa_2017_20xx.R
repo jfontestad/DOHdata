@@ -16,7 +16,7 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
   
   #### PULL OUT VALUES NEEDED MULTIPLE TIMES ####
   # List of years
-  years <- as.list(seq(2017, 2017))
+  years <- as.list(seq(2017, 2018))
   
   # Rows in current table
   row_count_tot <- as.numeric(dbGetQuery(conn, 
@@ -26,7 +26,8 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
   row_count_yr <- dbGetQuery(conn, 
                              "SELECT date_of_birth_year, COUNT (*) AS count FROM load_raw.bir_wa_2017_20xx
                                    GROUP BY date_of_birth_year")
-  
+  row_count_yr <- row_count_yr %>% mutate(date_of_birth_year = as.numeric(date_of_birth_year))
+
   # Min/max etl_batch_id
   etl_batch_id_min <- as.numeric(dbGetQuery(conn, "SELECT MIN (etl_batch_id) FROM load_raw.bir_wa_2017_20xx"))
   etl_batch_id_max <- as.numeric(dbGetQuery(conn, "SELECT MAX (etl_batch_id) FROM load_raw.bir_wa_2017_20xx"))
@@ -259,8 +260,8 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
   
   #### RUN GENERAL QA TASKS ####
   #### RANGE OF YEARS ####
-  min_yr <- min(row_count_yr$date_of_birth_year)
-  max_yr <- max(row_count_yr$date_of_birth_year)
+  min_yr <- as.numeric(min(row_count_yr$date_of_birth_year))
+  max_yr <- as.numeric(max(row_count_yr$date_of_birth_year))
   count_yr <- length(unique(row_count_yr$date_of_birth_year))
   
   if (min_yr != 2017 | max_yr != as.numeric(years[length(years)]) | count_yr != length(years)) {
@@ -281,7 +282,6 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            minimum year of {min_yr} and maximum year of {max_yr} 
                            (should be {length(years)} years from 2017-20xx)
                            (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
-               max_yr = as.numeric(years[length(years)]),
                .con = conn))
     
     stop(glue("Number and range of years outside what was expected. 
@@ -303,7 +303,6 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
                            'There were {count_yr} years included in the data with a 
                            minimum year of {min_yr} and maximum year of {max_yr} (as expected)
                            (maximum etl_batch_id shown, range {etl_batch_id_min}:{etl_batch_id_max})')",
-               max_yr = as.numeric(years[length(years)]),
                .con = conn))
   }
   
