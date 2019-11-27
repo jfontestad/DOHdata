@@ -16,7 +16,7 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
   
   #### PULL OUT VALUES NEEDED MULTIPLE TIMES ####
   # List of years
-  years <- as.list(seq(2017, 2017))
+  years <- as.list(seq(2017, 2018))
   
   # Rows in current table
   row_count_tot <- as.numeric(dbGetQuery(conn, 
@@ -414,7 +414,7 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
                                      'row_count', 
                                      {row_count_tot}, 
                                      {Sys.time()}, 
-                                     '')",
+                                     'overall')",
                        max_yr = as.numeric(years[length(years)]),
                        .con = conn)
   
@@ -426,6 +426,7 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
       lapply(years, function(x) {
     
     row_count_yr_value <- as.numeric(row_count_yr$count[row_count_yr$date_of_birth_year == x])
+    row_year_value <- as.numeric(x)
     
     load_sql <- glue_sql("INSERT INTO metadata.qa_bir_values
                              (table_name, date_min, date_max, qa_item, 
@@ -436,7 +437,7 @@ qa_load_raw_bir_wa_geo_2017_20xx_f <- function(conn = db_apde,
                                      'row_count', 
                                      {row_count_yr_value}, 
                                      {Sys.time()}, 
-                                     '')",
+                                     '{row_year_value}')",
                          .con = conn)
     
     dbGetQuery(conn = conn, load_sql)

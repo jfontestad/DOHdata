@@ -2,7 +2,9 @@
 #
 # Alastair Matheson, PHSKC (APDE)
 #
-# 2019-05
+# Created: 2019-05
+#
+# Updated: 2019-11-27 by Danny Colombara (PHSKC/APDE)
 
 #### SET UP GLOBAL PARAMETERS AND CALL IN LIBRARIES ####
 options(max.print = 350, tibble.print_max = 50, warning.length = 8170, scipen = 999)
