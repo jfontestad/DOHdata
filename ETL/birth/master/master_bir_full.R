@@ -2,7 +2,9 @@
 #
 # Alastair Matheson, PHSKC (APDE)
 #
-# 2019-05
+# Created: 2019-05
+#
+# Updated: 2019-11-27 by Danny Colombara (PHSKC/APDE)
 
 #### SET UP GLOBAL PARAMETERS AND CALL IN LIBRARIES ####
 options(max.print = 350, tibble.print_max = 50, warning.length = 8170, scipen = 999)
@@ -14,6 +16,8 @@ library(RCurl) # Read files from Github
 library(configr) # Read in YAML files
 library(glue) # Safely combine SQL code
 library(data.table) # Manipulate data
+library(apdeRecodes) # Recoding package created by Daniel, https://github.com/PHSKC-APDE/apdeRecodes
+
 
 bir_path <- "//phdata01/DROF_DATA/DOH DATA/Births"
 bir_path_geo <- "//phdata01/EPE_DATA/GEOCODING (restricted)/birth"
@@ -108,7 +112,6 @@ table_config_load_bir_wa_2017_20xx <- yaml::yaml.load(getURL(
 
 ### Run function to import and load data
 load_bir_wa_2017_20xx_output <- load_load_raw.bir_wa_2017_20xx_f(
-  table_config_create = table_config_create_bir_wa_2017_20xx,
   table_config_load = table_config_load_bir_wa_2017_20xx,
   bir_path_inner = bir_path,
   conn = db_apde)
