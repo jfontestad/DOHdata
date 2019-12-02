@@ -9,6 +9,8 @@
 #### SET UP GLOBAL PARAMETERS AND CALL IN LIBRARIES ####
 options(max.print = 350, tibble.print_max = 50, warning.length = 8170, scipen = 999)
 
+rm(list=ls())
+
 library(vroom) # Read in data appropriately
 library(tidyverse) # Manipulate data
 library(odbc) # Read to and write from SQL
@@ -27,7 +29,6 @@ db_apde <- dbConnect(odbc(), "PH_APDEStore50")
 #### SET UP FUNCTIONS ####
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/claims_data/master/claims_db/db_loader/scripts_general/create_table.R")
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/scripts_general/etl_log.R")
-
 
 
 #############################
@@ -154,12 +155,14 @@ rm(table_config_load_bir_wa_geo_2017_20xx, load_load_raw.bir_wa_geo_2017_20xx_f,
 ###############
 #### STAGE ####
 ###############
-#### BIR_WA ####
-devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa.R")
-
 #### BIR_WA_GEO ####
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa_geo.R")
 
-### Need to QA each geo file
+#### BIR_WA ####
+devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa.R")
+
+
+### QA for birth data overall ####
+devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/qa_stage.bir_wa.R")
 
 
