@@ -11,19 +11,13 @@
   # Standardize missing to be NULL
   # Standardize country/county/state/city codes (not needed as there is literal and code now)
 
-#### Set-up environment ----
-rm(list=ls())
 
-library(odbc) # Read to and write from SQL
-library(RCurl) # Read files from Github
-library(tidyverse) # Manipulate data
-library(data.table) # Manipulate data quickly / efficiently
-# devtools::install_local("C:/Users/dcolombara/code/apdeRecodes/", force=T) # run if package is updated
-library(apdeRecodes) # Recoding function created by Daniel, https://github.com/PHSKC-APDE/apdeRecodes
+#### Free memory ####
+  rm(list=setdiff(ls(), "db_apde")) # only keep SQL connection
+  gc()
 
+#### Load additional functions ####
 source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/enact_recoding_function.R")
-
-db.apde50 <- dbConnect(odbc(), "PH_APDEStore50") ##Connect to SQL server
 
 #### LOAD REFERENCE DATA ####
 table_config_stage_bir_wa <- yaml::yaml.load(getURL(
@@ -48,10 +42,10 @@ iso_3166.us <- iso_3166.us[!iso3166_2_name %in% c("American Samoa",	"Guam",	"Nor
 
 #### PULL IN BOTH DATA SETS ####
     tbl_id_2003_2016 <- DBI::Id(schema = "load_raw", table = "bir_wa_2003_2016")
-    bir_2003_2016 <- DBI::dbReadTable(db.apde50, tbl_id_2003_2016)
+    bir_2003_2016 <- DBI::dbReadTable(db_apde, tbl_id_2003_2016)
     
     tbl_id_2017_20xx <- DBI::Id(schema = "load_raw", table = "bir_wa_2017_20xx")
-    bir_2017_20xx <- DBI::dbReadTable(db.apde50, tbl_id_2017_20xx)
+    bir_2017_20xx <- DBI::dbReadTable(db_apde, tbl_id_2017_20xx)
 
 #### REMOVE FIELDS IN BEDROCK NOT COLLECTED AFTER 2003 ####
 ### NB. Need to do this BEFORE renaming variables because otherwise two 
@@ -637,12 +631,20 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   gc() 
 
 #### CHANGE COLUMN TYPES TO INTEGER WHERE POSSIBLE ####
+  # Replace blank with NA in character columns
+  my.cols <- names(bir_combined)[sapply(bir_combined, is.character)] 
+  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]==""), j = jj, v = NA) 
+  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]==" "), j = jj, v = NA)
+  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]=="  "), j = jj, v = NA)
+  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]=="   "), j = jj, v = NA)
+  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]=="    "), j = jj, v = NA)
+  
   to.numeric <- function(my.dt){
     my.cols <- names(my.dt)[sapply(my.dt, is.character)] # get vector of all character columns
     my.cols <- setdiff(my.cols, grep("race_nchs", my.cols, value = TRUE)) # These race vars should remain characters
     my.cols <- setdiff(my.cols, grep("_month$", my.cols, value = TRUE)) # Alastair coded all months as characters
     my.cols <- setdiff(my.cols, grep("_day$", my.cols, value = TRUE))   # Alastair coded all days as characters
-    my.cols <- setdiff(my.cols, c("birthplace_county_city_wa_code", "birthplace_county_wa_code", "mother_residence_city_wa_code", "mother_residence_county_wa_code"))
+    my.cols <- setdiff(my.cols, c("birthplace_county_city_wa_code", "mother_residence_city_wa_code"))
     for(i in 1:length(my.cols)){
       
       message(paste0("Testing ", i, " of ", length(my.cols), ": ", my.cols[i], " ...", gsub(Sys.Date(), "", Sys.time())))
@@ -685,10 +687,6 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     
 #### FREE UP MEMORY ----
   gc()
-
-#### Convert select character cols to numeric ----
-  bir_combined[, mother_residence_county_wa_code := as.numeric(mother_residence_county_wa_code)]
-  bir_combined[, birthplace_county_wa_code := as.numeric(birthplace_county_wa_code)]
 
 #### Prep simple recode instructions ----
   complex.vars <- recodes[recode_type=="complex"]$new_var # save list of vars made with complex recodes
@@ -883,7 +881,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     
 # IDENTIFY & ADD GEOGRAPHIES ----
     # Pull in geocoded data
-    geo.data <- odbc::dbGetQuery(db.apde50, "SELECT birth_cert_encrypt, res_geo_census_full_2010 FROM [stage].[bir_wa_geo]") # get complete block ids
+    geo.data <- odbc::dbGetQuery(db_apde, "SELECT birth_cert_encrypt, res_geo_census_full_2010 FROM [stage].[bir_wa_geo]") # get complete block ids
     
     # Merge on geocoded data to the main birth data
     bir_combined <- merge(bir_combined, geo.data, by.x = "birth_cert_encrypt", by.y = "birth_cert_encrypt", all.x = T, all.y = T) 
@@ -938,7 +936,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 #### LOAD TO SQL ####
   tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
                               table = table_config_stage_bir_wa$table)
-  dbWriteTable(db.apde50, 
+  dbWriteTable(db_apde, 
                tbl_id_2003_20xx, 
                value = as.data.frame(bir_combined[]),
                overwrite = T, 
