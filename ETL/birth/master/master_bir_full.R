@@ -18,6 +18,7 @@ library(RCurl) # Read files from Github
 library(configr) # Read in YAML files
 library(glue) # Safely combine SQL code
 library(data.table) # Manipulate data
+# devtools::install_local("C:/Users/dcolombara/OneDrive - King County/code/apdeRecodes/", force=T) # run if package is updated
 library(apdeRecodes) # Recoding package created by Daniel, https://github.com/PHSKC-APDE/apdeRecodes
 
 
