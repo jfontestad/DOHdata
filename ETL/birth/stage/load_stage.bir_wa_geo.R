@@ -4,6 +4,10 @@
 # 2019-07
 
 
+#### Free memory ####
+rm(list=setdiff(ls(), "db_apde")) # only keep SQL connection
+gc()
+
 #### PULL IN TABLE CONFIG FILE FOR VAR TYPE INFO ####
 table_config_stage_bir_wa_geo <- yaml::yaml.load(getURL(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa_geo.yaml"))
@@ -104,7 +108,7 @@ bir_geo_combined <- bir_geo_combined %>% arrange(birth_cert_encrypt)
 # Need to manually truncate table so can use overwrite = F below (so column types work)
 tbl_id_geo <- DBI::Id(schema = table_config_stage_bir_wa_geo$schema, 
                             table = table_config_stage_bir_wa_geo$table)
-dbWriteTable(conn, tbl_id_geo, value = as.data.frame(bir_geo_combined),
+dbWriteTable(db_apde, tbl_id_geo, value = as.data.frame(bir_geo_combined),
              overwrite = T, append = F,
              field.types = unlist(table_config_stage_bir_wa_geo$vars))
 
