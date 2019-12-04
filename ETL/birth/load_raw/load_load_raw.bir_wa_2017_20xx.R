@@ -108,7 +108,7 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
   ## Convert dates to column type DATE
   date.vars<- unlist(table_config_load$vars)
   date.vars <- names(date.vars[date.vars=="DATE"])
-  bir_2017_20xx[, (date.vars) := lapply(.SD, as.Date, "%m/%d/%y"), .SDcols = date.vars]
+  bir_2017_20xx[, (date.vars) := lapply(.SD, lubridate::mdy), .SDcols = date.vars]
   
   ## Check snake_case matches what is expected for SQL table
   if(all.equal( sort(names(bir_2017_20xx)), sort(names(table_config_load$vars)) ) != TRUE)
