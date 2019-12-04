@@ -162,8 +162,7 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 #### BIR_WA ####
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa.R")
 
-
-### QA for birth data overall ####
+### QA for birth data overall (consider running manually so can assess quality before loading to SQL ####
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/qa_stage.bir_wa.R")
 
 
