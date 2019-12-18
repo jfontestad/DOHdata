@@ -58,7 +58,7 @@ bir_2003_2016 <- bir_2003_2016 %>%
          -afdc, -localhd, -contains("ubleed"), -smoking, -drinking, -lb_f_nl, 
          -lb_f84, -lb_p_nl, -lb_p84, -lb_p_nd, -lb_f_nd, -fd_2036, -fd_ge37, 
          -contains("malficd"), -contains("mrfnon"), -ind_mo, -ind_yr, -lfd_mo, 
-         -lfd_yr, -loth_mo, -loth_yr, -lpp_mo, -lpp_yr, -trib_res,
+         -lfd_yr, -loth_mo, -loth_yr, -lpp_mo, -lpp_yr, 
          -nchsnew) %>%
   # Also remove geozip, which is in the geocoded birth file
   select(-geozip)
@@ -701,6 +701,10 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   
 #### Custom code for complex recoding ----
   # Not in alphabetical order because some vars are dependant upon other vars
+  # bw_norm_sing ----
+    bir_combined[!is.na(bw_norm), bw_norm_sing := 0]
+    bir_combined[bw_norm == 1 & singleton == 1, bw_norm_sing := 1]
+  
   # bw_low_sing ----
     bir_combined[!is.na(bw_low), bw_low_sing := 0]
     bir_combined[bw_low == 1 & singleton == 1, bw_low_sing := 1]
