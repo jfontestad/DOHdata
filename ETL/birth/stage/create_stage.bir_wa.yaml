@@ -50,6 +50,7 @@ vars:
     mother_race_other: CHAR(1)
     mother_race_tribe_1: VARCHAR(120)
     mother_race_tribe_2: VARCHAR(120)
+    trib_res: INTEGER
     mother_race_other_asian_1: VARCHAR(120)
     mother_race_other_asian_2: VARCHAR(120)
     mother_race_other_pi_1: VARCHAR(120)
@@ -298,6 +299,7 @@ recodes:
     bw_low_sing: INTEGER
     bw_modlow: INTEGER
     bw_norm: INTEGER
+    bw_norm_sing: INTEGER
     bw_vhigh: INTEGER
     bw_vlow: INTEGER
     bw_vlow_sing: INTEGER
@@ -313,6 +315,7 @@ recodes:
     chi_geo_wastate: INTEGER
     chi_geo_zip5: VARCHAR(5)
     chi_nativity: VARCHAR(12)
+    chi_race_6: VARCHAR(8)
     chi_race_7: VARCHAR(8)
     chi_race_aic_aian: INTEGER
     chi_race_aic_asian: INTEGER
@@ -328,6 +331,7 @@ recodes:
     chi_race_aic_vietnamese: INTEGER
     chi_race_aic_wht: INTEGER
     chi_race_hisp: VARCHAR(12)
+    chi_race_eth7: VARCHAR(8)
     chi_race_eth8: VARCHAR(8)
     chi_sex: VARCHAR(6)
     chi_year: INTEGER
