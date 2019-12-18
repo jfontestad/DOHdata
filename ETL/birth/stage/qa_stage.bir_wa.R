@@ -41,7 +41,7 @@
         births.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_total_births.csv", 
                             skip = 5, nrows = 15)[, .(chi_year = V1, count.doh = V7)]
         births <- setorder(bir_combined[chi_geo_wastate==1, .N, by = chi_year], chi_year)
-        births <- merge(births, births.doh, by.x = "chi_year", by.y = "year"); rm(births.doh)
+        births <- merge(births, births.doh, by.x = "chi_year", by.y = "chi_year"); rm(births.doh)
         births[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
         births[, indicator := "births"]
         print(births)
@@ -138,7 +138,7 @@
         
         pnc.nchs <- merge(pnc, pnc.doh, by = c("chi_year", "pnc_tri_nchs"), all.x = TRUE); rm(pnc.doh)
         pnc.nchs[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
-        pnc.nchs <- pnc.nchs[pnc_tri_nchs != "NCHS No PNC" & year >= 2011]
+        pnc.nchs <- pnc.nchs[pnc_tri_nchs != "NCHS No PNC" & chi_year >= 2011]
         print(pnc.nchs)
         
     # Prenatal Care compared to CHAT ----
