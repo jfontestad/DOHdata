@@ -304,7 +304,7 @@ recodes:
     bw_vlow: INTEGER
     bw_vlow_sing: INTEGER
     chi_age: INTEGER
-    chi_edu_mom_8: VARCHAR(30)
+    chi_edu_mom_8: VARCHAR(32)
     chi_geo_big_cities: VARCHAR(16)
     chi_geo_coo_places: VARCHAR(22)
     chi_geo_hra_short: VARCHAR(40)
