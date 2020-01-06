@@ -780,8 +780,8 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     bir_combined[mother_birthplace_usa == 1, chi_nativity := "Born in US"]
     
   # parity ----
-    bir_combined[, parity := sum(prior_live_births_living + prior_live_births_deceased, na.rm = T)]
-    
+    bir_combined[ , parity :=rowSums(.SD, na.rm = TRUE), .SDcols = c("prior_live_births_living", "prior_live_births_deceased")]
+
   # pnc_lateno (Late or no prenatal care) ----
     bir_combined[month_prenatal_care_began %in% c(1:6), pnc_lateno := 0]
     bir_combined[month_prenatal_care_began %in% c(0, 7:10), pnc_lateno := 1]
