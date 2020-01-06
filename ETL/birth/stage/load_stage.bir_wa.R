@@ -26,7 +26,7 @@ table_config_stage_bir_wa <- yaml::yaml.load(getURL(
 recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_recodes_simple.csv")
 recodes[new_label %in% c("", " "), new_label := NA] # CRITICAL, because fread reads empty strings as "" and recode function tries to use "" as a label, which causes it to fail
 
-chi.geographies <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/chi_hra_xwalk.csv")
+chi.geographies <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/chi_blocks10_xwalk.csv")
 
 iso_3166 <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/ref/ref.iso_3166_country_subcountry_codes.csv", colClasses="character")
 iso_3166.us <- iso_3166[iso3166_1_name == "United States", ]
