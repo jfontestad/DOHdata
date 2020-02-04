@@ -3,6 +3,7 @@ baby,copy,date_of_birth_year,continuous,,chi_year,continuous,,,Birth Year,2003,2
 baby,clean,chi_year,continuous,"[9999, 9999]",chi_year,continuous,,,Birth Year,2003,2018,
 baby,clean,chi_year,continuous,"[9, 9]",chi_year,continuous,2009,,Birth Year,2003,2018,
 baby,clean,plurality,continuous,"[9, 9]",plurality,continuous,,,pluralityity - number of children born,2003,2018,
+baby,binning,birth_weight_grams,continuous,"[0, 226]",birth_weight_grams,continuous,,,Birth weight in grams,2003,2018,
 baby,binning,birth_weight_grams,continuous,"[0, 4499]",bw_vhigh,binary,0,No,Birth WT-Very High (4500-8164 grams),2003,2018,
 baby,binning,birth_weight_grams,continuous,"[4500, 8164]",bw_vhigh,binary,1,Yes,Birth WT-Very High (4500-8164 grams),2003,2018,
 baby,binning,birth_weight_grams,continuous,"[8165, 9998]",bw_vhigh,binary,0,No,Birth WT-Very High (4500-8164 grams),2003,2018,
