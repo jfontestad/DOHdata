@@ -293,15 +293,15 @@ vars:
     infant_death_flag: CHAR(1)
     etl_batch_id: INTEGER
 recodes:
-    bf: INTEGER
-    bw_high: INTEGER
-    bw_low: INTEGER
+    bf: VARCHAR(3)
+    bw_high: VARCHAR(3)
+    bw_low: VARCHAR(3)
     bw_low_sing: INTEGER
-    bw_modlow: INTEGER
-    bw_norm: INTEGER
+    bw_modlow: VARCHAR(3)
+    bw_norm: VARCHAR(3)
     bw_norm_sing: INTEGER
-    bw_vhigh: INTEGER
-    bw_vlow: INTEGER
+    bw_vhigh: VARCHAR(3)
+    bw_vlow: VARCHAR(3)
     bw_vlow_sing: INTEGER
     chi_age: INTEGER
     chi_edu_mom_8: VARCHAR(32)
@@ -309,10 +309,10 @@ recodes:
     chi_geo_coo_places: VARCHAR(22)
     chi_geo_hra_short: VARCHAR(40)
     chi_geo_hra_long: VARCHAR(40)
-    chi_geo_kc: INTEGER
+    chi_geo_kc: VARCHAR(3)
     chi_geo_regions_4: VARCHAR(7)
     chi_geo_seattle: VARCHAR(11)
-    chi_geo_wastate: INTEGER
+    chi_geo_wastate: VARCHAR(3)
     chi_geo_zip5: VARCHAR(5)
     chi_nativity: VARCHAR(12)
     chi_race_6: VARCHAR(8)
@@ -335,46 +335,46 @@ recodes:
     chi_race_eth8: VARCHAR(8)
     chi_sex: VARCHAR(6)
     chi_year: INTEGER
-    ch_priorpreg: INTEGER
+    ch_priorpreg: VARCHAR(3)
     csec_lowrisk: INTEGER
     delivery_final: VARCHAR(34)
-    diab_gest: INTEGER
+    diab_gest: VARCHAR(3)
     diab_no: INTEGER
-    diab_prepreg: INTEGER
-    dlp_medicaid: INTEGER
+    diab_prepreg: VARCHAR(3)
+    dlp_medicaid: VARCHAR(3)
     facility_type_recode: VARCHAR(22) 
     fetal_pres: VARCHAR(8)
-    htn_gest: INTEGER
+    htn_gest: VARCHAR(3)
     htn_no: INTEGER
-    htn_prepreg: INTEGER
-    inf_death: INTEGER
-    kc_occ: INTEGER
+    htn_prepreg: VARCHAR(3)
+    inf_death: VARCHAR(3)
+    kc_occ: VARCHAR(3)
     kotelchuck: INTEGER
-    marriage: INTEGER
+    marriage: VARCHAR(3)
     mother_birthplace_foreign: INTEGER
     mother_birthplace_usa: INTEGER 
-    multiple: INTEGER
+    multiple: VARCHAR(3)
     ntsv: INTEGER
     nullip: INTEGER
     parity: INTEGER
     pnc_lateno: INTEGER
     pnc_tri: VARCHAR(11)
     pnc_tri_nchs: VARCHAR(16)
-    preterm: INTEGER
-    preterm_mod: INTEGER
-    preterm_v: INTEGER
+    preterm: VARCHAR(3)
+    preterm_mod: VARCHAR(3)
+    preterm_v: VARCHAR(3)
     race_m: VARCHAR(28)
-    singleton: INTEGER
-    smoke1: INTEGER
-    smoke2: INTEGER
-    smoke3: INTEGER
-    smokeprior: INTEGER
+    singleton: VARCHAR(3)
+    smoke1: VARCHAR(3)
+    smoke2: VARCHAR(3)
+    smoke3: VARCHAR(3)
+    smokeprior: VARCHAR(3)
     smoking: INTEGER
     smoking_dur: INTEGER
-    teen: INTEGER
-    term: INTEGER
+    teen: VARCHAR(3)
+    term: VARCHAR(3)
     vertex: VARCHAR(60)
-    wa_occ: INTEGER
+    wa_occ: VARCHAR(3)
     wtgain: VARCHAR(20)
     wtgain_rec: INTEGER
     
