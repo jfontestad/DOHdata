@@ -40,25 +40,33 @@ iso_3166.us <- iso_3166.us[!iso3166_2_name %in% c("American Samoa",	"Guam",	"Nor
   to.numeric <- function(my.dt){
     # identify factor vars and convert to strings / characters
       factor.vars <- names(my.dt)[sapply(my.dt, is.factor)]
-      my.dt[, (factor.vars) := lapply(.SD, as.character), .SDcols = factor.vars]
+      if(length(factor.vars) >0){
+        my.dt[, (factor.vars) := lapply(.SD, as.character), .SDcols = factor.vars]
+      }
     
     # identify character vars
       char.vars <- names(my.dt)[sapply(my.dt, is.character)]
     
     # remove all white space before or after character
+      print("Removing white space from characters ... be patient!")
       my.dt[, (char.vars) := lapply(.SD, trimws, which = "both"), .SDcols = char.vars] 
-      
-    # Replace any empty ("") cells with NA
-      for (jj in 1:ncol(my.dt)) set(my.dt, i = which(my.dt[[jj]]==""), j = jj, v = NA)
-    
+
     # Identify vars that want to keep as characters ----
       char.vars <- setdiff(char.vars, grep("race_nchs", char.vars, value = TRUE)) # These race vars should remain characters
       char.vars <- setdiff(char.vars, grep("_month$", char.vars, value = TRUE)) # Alastair coded all months as characters
       char.vars <- setdiff(char.vars, grep("_day$", char.vars, value = TRUE))   # Alastair coded all days as characters
       char.vars <- setdiff(char.vars, c("birthplace_county_city_wa_code", "mother_residence_city_wa_code"))
       
+    # Replace any empty ("") cells with NA in character columns
+      print("Replacing empty strings (i.e., '') with NA ... be patient!")
+      char.dt <- copy(my.dt[, ..char.vars]) # split off character columns
+      char.dt[char.dt=="", ] <- NA # convert "" to NA for character columns
+      my.dt <- my.dt[, c(char.vars) := NULL] # keep non-character columns for later      
+      my.dt <- cbind(my.dt, char.dt)
+      rm(char.dt)
+      
     # Loop where characters are converted to numeric, if can be done without introduction of additional NAs
-      for(i in 1:length(char.vars)){
+      for(i in 1:length(char.vars)){ 
         
         message(paste0("Testing ", i, " of ", length(char.vars), ": ", char.vars[i], " ...", gsub(Sys.Date(), "", Sys.time())))
       
@@ -70,6 +78,8 @@ iso_3166.us <- iso_3166.us[!iso3166_2_name %in% c("American Samoa",	"Guam",	"Nor
           my.dt[, char.vars[i] := suppressWarnings(as.numeric(get(char.vars[i])))]
         } # close if
       } # close for loop    
+      
+      return(my.dt)
   } # close function
 
 #### ________________________________________________________----    
@@ -667,7 +677,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   gc() 
 
 #### CHANGE COLUMN TYPES TO INTEGER WHERE POSSIBLE ####
-  to.numeric(bir_combined)
+  bir_combined <- to.numeric(bir_combined)
   
 #### FINAL SMALL DATA TWEAKS ----
     # FIX YEAR FOR 2009 because needed for automated recoding that follows ----
@@ -706,7 +716,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
                                  hypothetical = F) 
   
 #### Run to.numeric() again because recoding changed some column type ----
-  to.numeric(bir_combined)
+  bir_combined <- to.numeric(bir_combined)
 
 #### Custom code for complex recoding ----
   # Not in alphabetical order because some vars are dependant upon other vars
@@ -887,14 +897,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
       bir_combined[(month_prenatal_care_began > (calculated_gestation/4)), kotelchuck := NA]
       bir_combined[(month_prenatal_care_began == 0 & number_prenatal_visits >=1) | (number_prenatal_visits == 0 & month_prenatal_care_began >= 1), kotelchuck := NA]
     
-# CONVERT CHI VARS TO FACTORS AND THEN TO CHARACTERS WHEN POSSIBLE ----
-    for(i in unique(recodes[!is.na(new_value) & !new_label %in% c(NA, "No", "Yes", "")]$new_var)){ # Use dictionary to identify factor variables
-      print(i) # helpful for troubleshooting so know where it breaks
-      my.levels <- recodes[new_var== i & !is.na(new_value)]$new_value # get levels for the given factor variable
-      my.labels <- recodes[new_var == i & !is.na(new_value)]$new_label # get labels for the given factor variable      
-      bir_combined[, eval(i) := as.character(factor(get(i), levels = my.levels, labels = my.labels))] # apply the factor label to the factor variable in dt
-    }
-    
+
 # IDENTIFY & ADD GEOGRAPHIES ----
     # Pull in geocoded data
     geo.data <- odbc::dbGetQuery(db_apde, "SELECT birth_cert_encrypt, res_geo_census_full_2010 FROM [stage].[bir_wa_geo]") # get complete block ids
