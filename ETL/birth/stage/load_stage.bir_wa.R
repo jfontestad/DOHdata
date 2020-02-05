@@ -36,6 +36,42 @@ iso_3166.us <- iso_3166.us[!iso3166_2_name %in% c("American Samoa",	"Guam",	"Nor
     tbl_id_2003_20xx <- DBI::Id(schema = table_config_stage_bir_wa$schema, 
                             table = table_config_stage_bir_wa$table)
 
+#### Create function go change factor/string to numeric when possible ----
+  to.numeric <- function(my.dt){
+    # identify factor vars and convert to strings / characters
+      factor.vars <- names(my.dt)[sapply(my.dt, is.factor)]
+      my.dt[, (factor.vars) := lapply(.SD, as.character), .SDcols = factor.vars]
+    
+    # identify character vars
+      char.vars <- names(my.dt)[sapply(my.dt, is.character)]
+    
+    # remove all white space before or after character
+      my.dt[, (char.vars) := lapply(.SD, trimws, which = "both"), .SDcols = char.vars] 
+      
+    # Replace any empty ("") cells with NA
+      for (jj in 1:ncol(my.dt)) set(my.dt, i = which(my.dt[[jj]]==""), j = jj, v = NA)
+    
+    # Identify vars that want to keep as characters ----
+      char.vars <- setdiff(char.vars, grep("race_nchs", char.vars, value = TRUE)) # These race vars should remain characters
+      char.vars <- setdiff(char.vars, grep("_month$", char.vars, value = TRUE)) # Alastair coded all months as characters
+      char.vars <- setdiff(char.vars, grep("_day$", char.vars, value = TRUE))   # Alastair coded all days as characters
+      char.vars <- setdiff(char.vars, c("birthplace_county_city_wa_code", "mother_residence_city_wa_code"))
+      
+    # Loop where characters are converted to numeric, if can be done without introduction of additional NAs
+      for(i in 1:length(char.vars)){
+        
+        message(paste0("Testing ", i, " of ", length(char.vars), ": ", char.vars[i], " ...", gsub(Sys.Date(), "", Sys.time())))
+      
+        added.NAs <- nrow(my.dt[is.na(get(char.vars[i])), ]) - 
+          suppressWarnings(nrow(my.dt[is.na(as.numeric(gsub(" ", "", get(char.vars[i])))), ])) # Additional NAs if converted to numeric
+        
+        if(added.NAs==0){
+          message(paste0("     Converting ", char.vars[i], " to numeric"))
+          my.dt[, char.vars[i] := suppressWarnings(as.numeric(get(char.vars[i])))]
+        } # close if
+      } # close for loop    
+  } # close function
+
 #### ________________________________________________________----    
 ####              COMBINE BEDROCK & WHALES                   ----    
 #### ________________________________________________________----  
@@ -631,36 +667,6 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   gc() 
 
 #### CHANGE COLUMN TYPES TO INTEGER WHERE POSSIBLE ####
-  # Replace blank with NA in character columns
-  my.cols <- names(bir_combined)[sapply(bir_combined, is.character)] 
-  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]==""), j = jj, v = NA) 
-  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]==" "), j = jj, v = NA)
-  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]=="  "), j = jj, v = NA)
-  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]=="   "), j = jj, v = NA)
-  for (jj in 1:ncol(bir_combined)) set(bir_combined, i = which(bir_combined[[jj]]=="    "), j = jj, v = NA)
-  
-  to.numeric <- function(my.dt){
-    my.cols <- names(my.dt)[sapply(my.dt, is.character)] # get vector of all character columns
-    my.cols <- setdiff(my.cols, grep("race_nchs", my.cols, value = TRUE)) # These race vars should remain characters
-    my.cols <- setdiff(my.cols, grep("_month$", my.cols, value = TRUE)) # Alastair coded all months as characters
-    my.cols <- setdiff(my.cols, grep("_day$", my.cols, value = TRUE))   # Alastair coded all days as characters
-    my.cols <- setdiff(my.cols, c("birthplace_county_city_wa_code", "mother_residence_city_wa_code"))
-    for(i in 1:length(my.cols)){
-      
-      message(paste0("Testing ", i, " of ", length(my.cols), ": ", my.cols[i], " ...", gsub(Sys.Date(), "", Sys.time())))
-    
-      added.NAs <- nrow(my.dt[is.na(get(my.cols[i])), ]) - 
-        suppressWarnings(nrow(my.dt[is.na(as.numeric(gsub(" ", "", get(my.cols[i])))), ])) # Additional NAs if converted to numeric
-      
-      if(added.NAs==0){
-        message(paste0("     Converting ", my.cols[i], " to numeric"))
-        my.dt[, my.cols[i] := suppressWarnings(as.numeric(get(my.cols[i])))]
-      }
-    }    
-    
-    #return(my.dt)
-  }
-  
   to.numeric(bir_combined)
   
 #### FINAL SMALL DATA TWEAKS ----
@@ -699,6 +705,9 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
                                  ignore_case = T, 
                                  hypothetical = F) 
   
+#### Run to.numeric() again because recoding changed some column type ----
+  to.numeric(bir_combined)
+
 #### Custom code for complex recoding ----
   # Not in alphabetical order because some vars are dependant upon other vars
   # bw_norm_sing ----
@@ -719,14 +728,14 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     
   # cigarettes_smoked_3_months_prior ----
     bir_combined[is.na(cigarettes_smoked_3_months_prior) & chi_year >=2017, cigarettes_smoked_3_months_prior := 0]
-    bir_combined[cigarettes_smoked_3_months_prior == 0, smokeprior := 0]
+    bir_combined[cigarettes_smoked_3_months_prior == 0, smokeprior := "No"]
   
   # chi_race_aic_asian ----
     # no simple way to get this. Use the aic_ variables created with simple recoding above
     bir_combined[is.na(chi_race_aic_asianother) + is.na(chi_race_aic_chinese) + is.na(chi_race_aic_filipino) +
                    is.na(chi_race_aic_japanese) + is.na(chi_race_aic_korean) + is.na(chi_race_aic_vietnamese) < 6, chi_race_aic_asian := 0]
-    bir_combined[(chi_race_aic_asianother + chi_race_aic_chinese + chi_race_aic_filipino +
-                       chi_race_aic_japanese + chi_race_aic_korean + chi_race_aic_vietnamese) > 0, chi_race_aic_asian := 1]
+    bir_combined[(as.integer(chi_race_aic_asianother) + as.integer(chi_race_aic_chinese) + as.integer(chi_race_aic_filipino) +
+                    as.integer(chi_race_aic_japanese) + as.integer(chi_race_aic_korean) + as.integer(chi_race_aic_vietnamese)) > 0, chi_race_aic_asian := 1]
     
   # cigarettes_smoked_1st_tri ----
     bir_combined[is.na(cigarettes_smoked_1st_tri) & chi_year >=2017, cigarettes_smoked_1st_tri := 0]
@@ -734,11 +743,11 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   
   # cigarettes_smoked_2nd_tri ----
     bir_combined[is.na(cigarettes_smoked_2nd_tri) & chi_year >=2017, cigarettes_smoked_2nd_tri := 0]
-    bir_combined[cigarettes_smoked_2nd_tri == 0, smoke2 := 0]
+    bir_combined[cigarettes_smoked_2nd_tri == 0, smoke2 := "No"]
   
   # cigarettes_smoked_3rd_tri ----
     bir_combined[is.na(cigarettes_smoked_3rd_tri) & chi_year >=2017, cigarettes_smoked_3rd_tri := 0]      
-    bir_combined[cigarettes_smoked_3rd_tri == 0, smoke3 := 0]       
+    bir_combined[cigarettes_smoked_3rd_tri == 0, smoke3 := "No"]       
   
   # diab_no (Diabetes-No) ----
     bir_combined[diab_gest == 0 & diab_prepreg == 0, diab_no := 1] 
