@@ -722,24 +722,32 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   # Not in alphabetical order because some vars are dependant upon other vars
   # bw_norm_sing ----
     bir_combined[!is.na(bw_norm), bw_norm_sing := 0]
-    bir_combined[bw_norm == 1 & singleton == 1, bw_norm_sing := 1]
+    bir_combined[bw_norm == "Yes" & singleton == "Yes", bw_norm_sing := 1]
+    bir_combined[, table(bw_norm_sing)]
   
   # bw_low_sing ----
     bir_combined[!is.na(bw_low), bw_low_sing := 0]
-    bir_combined[bw_low == 1 & singleton == 1, bw_low_sing := 1]
-  
+    bir_combined[bw_low == "Yes" & singleton == "Yes", bw_low_sing := 1]
+    bir_combined[, table(bw_low_sing)]
+    
   # bw_vlow_sing ----
     bir_combined[!is.na(bw_vlow), bw_vlow_sing := 0]
-    bir_combined[bw_vlow == 1 & singleton == 1, bw_vlow_sing := 1]
+    bir_combined[bw_vlow == "Yes" & singleton == "Yes", bw_vlow_sing := 1]
+    bir_combined[, table(bw_vlow_sing)]
     
   # chi_geo_zip5  ----
     bir_combined[, chi_geo_zip5 := mother_residence_zip]
     bir_combined[chi_geo_zip5 == "99999", chi_geo_zip5 := NA]
+    bir_combined[, table(chi_geo_zip5)]
     
   # cigarettes_smoked_3_months_prior ----
     bir_combined[is.na(cigarettes_smoked_3_months_prior) & chi_year >=2017, cigarettes_smoked_3_months_prior := 0]
-    bir_combined[cigarettes_smoked_3_months_prior == 0, smokeprior := "No"]
-  
+    bir_combined[, table(cigarettes_smoked_3_months_prior)]
+
+  # smokeprior ----
+    bir_combined[cigarettes_smoked_3_months_prior == 0, smokeprior := "No"] # partially recoded with recode function above
+    bir_combined[, table(smokeprior)]
+    
   # chi_race_aic_asian ----
     # no simple way to get this. Use the aic_ variables created with simple recoding above
     bir_combined[is.na(chi_race_aic_asianother) + is.na(chi_race_aic_chinese) + is.na(chi_race_aic_filipino) +
@@ -747,79 +755,98 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     bir_combined[(as.integer(chi_race_aic_asianother) + as.integer(chi_race_aic_chinese) + as.integer(chi_race_aic_filipino) +
                     as.integer(chi_race_aic_japanese) + as.integer(chi_race_aic_korean) + as.integer(chi_race_aic_vietnamese)) > 0, chi_race_aic_asian := 1]
     
-  # cigarettes_smoked_1st_tri ----
+    bir_combined[, table(chi_race_aic_asian)]
+    
+  # cigarettes_smoked_1st_tri / smoke1----
     bir_combined[is.na(cigarettes_smoked_1st_tri) & chi_year >=2017, cigarettes_smoked_1st_tri := 0]
-    bir_combined[cigarettes_smoked_1st_tri == 0, smoke1 := 0]
-  
+    bir_combined[cigarettes_smoked_1st_tri == 0, smoke1 := "No"]
+    bir_combined[, table(smoke1)]
+    
   # cigarettes_smoked_2nd_tri ----
     bir_combined[is.na(cigarettes_smoked_2nd_tri) & chi_year >=2017, cigarettes_smoked_2nd_tri := 0]
     bir_combined[cigarettes_smoked_2nd_tri == 0, smoke2 := "No"]
-  
+    bir_combined[, table(smoke2)]
+    
   # cigarettes_smoked_3rd_tri ----
     bir_combined[is.na(cigarettes_smoked_3rd_tri) & chi_year >=2017, cigarettes_smoked_3rd_tri := 0]      
     bir_combined[cigarettes_smoked_3rd_tri == 0, smoke3 := "No"]       
-  
+    bir_combined[, table(smoke3)]
+    
   # diab_no (Diabetes-No) ----
-    bir_combined[diab_gest == 0 & diab_prepreg == 0, diab_no := 1] 
-    bir_combined[diab_gest == 1 | diab_prepreg == 1, diab_no := 0]
+    bir_combined[diab_gest == "No" & diab_prepreg == "No", diab_no := 1] 
+    bir_combined[diab_gest == "Yes" | diab_prepreg == "Yes", diab_no := 0]
+    bir_combined[, table(diab_no)]
   
   # htn_no (Hypertension-No) ----
-    bir_combined[htn_gest == 0 & htn_prepreg == 0, htn_no := 1] 
-    bir_combined[htn_gest == 1 | htn_prepreg == 1, htn_no := 0]
-  
+    bir_combined[htn_gest == "No" & htn_prepreg == "No", htn_no := 1] 
+    bir_combined[htn_gest == "Yes" | htn_prepreg == "Yes", htn_no := 0]
+    bir_combined[, table(htn_no)]
+    
   # nullip (nulliparous) ----
     bir_combined[prior_live_births_living == 0 & prior_live_births_deceased == 0, nullip := 1]
     bir_combined[prior_live_births_living %in% c(1:98) | prior_live_births_deceased %in% c(1:98), nullip := 0]
-  
+    bir_combined[, table(nullip)]
+    
   # vertex (vertex birth position) ----
-    bir_combined[fetal_pres == 1, vertex := 0]
-    bir_combined[fetal_pres %in% 2:3, vertex := 1]
+    bir_combined[fetal_pres == "Cephalic", vertex := 0]
+    bir_combined[fetal_pres %in% c("Breech", "Other"), vertex := 1]
     bir_combined[non_vertex_presentation=="N", vertex := 1]
     bir_combined[, vertex := factor(vertex, levels = c(0, 1), labels = c("Breech/Oth", "Vertex"))]
+    bir_combined[, table(vertex)]
   
   # ntsv (nulliparous, term, singleton, vertex birth) ----
     bir_combined[, ntsv := 0] 
-    bir_combined[(nullip == 1 & term == 1 & plurality == 1 & vertex == "Vertex"), ntsv := 1]
+    bir_combined[(nullip == 1 & term == "Yes" & plurality == 1 & vertex == "Vertex"), ntsv := 1]
+    bir_combined[, table(ntsv)]
   
   # csec_lowrisk (Cesarean section among low risk deliveries) ----
-    bir_combined[delivery_final %in% c(4:6), csec_lowrisk := 0] # any c-section == 0 
-    bir_combined[delivery_final %in% c(4:6) & ntsv==1, csec_lowrisk:=1]    
-  
+    bir_combined[delivery_final %in% c("C-section with trial labor", "C-section with trial labor unknown", "C-section without trial labor"), csec_lowrisk := 0] # any c-section == 0 
+    bir_combined[csec_lowrisk==0 & ntsv==1, csec_lowrisk:=1]    
+    bir_combined[, table(csec_lowrisk)]
+    
   # mother_birthplace_usa ----
     bir_combined[is.na(mother_birthplace_country) + is.na(mother_birthplace_state_fips) != 0, mother_birthplace_usa := 0] # default to zero if have mother birth location data
     bir_combined[mother_birthplace_country == "UNITED STATES", mother_birthplace_usa := 1]
     bir_combined[mother_birthplace_state_fips %in% iso_3166.us, mother_birthplace_usa := 1]
-  
+    bir_combined[, table(mother_birthplace_usa)]
+    
   # mother_birthplace_foreign ----
     bir_combined[mother_birthplace_usa == 1, mother_birthplace_foreign := 0]
     bir_combined[mother_birthplace_usa == 0, mother_birthplace_foreign := 1]
-  
+    bir_combined[, table(mother_birthplace_foreign)]
+    
   # nativity ----
     bir_combined[mother_birthplace_usa == 0, chi_nativity := "Foreign born"]
     bir_combined[mother_birthplace_usa == 1, chi_nativity := "Born in US"]
+    bir_combined[, table(chi_nativity)]
     
   # parity ----
     bir_combined[ , parity :=rowSums(.SD, na.rm = TRUE), .SDcols = c("prior_live_births_living", "prior_live_births_deceased")]
-
+    bir_combined[, table(parity)]
+    
   # pnc_lateno (Late or no prenatal care) ----
     bir_combined[month_prenatal_care_began %in% c(1:6), pnc_lateno := 0]
     bir_combined[month_prenatal_care_began %in% c(0, 7:10), pnc_lateno := 1]
-  
+    bir_combined[, table(pnc_lateno)]
+    
   # ch_priorpreg ----
     # ch_priorpreg 2003-2016 was done with simple recodes, but coding changed starting with 2017
     bir_combined[chi_year >=2017, ch_priorpreg := prior_live_births_deceased + prior_live_births_living + other_preg_outcomes]
     bir_combined[ch_priorpreg %in% 1:50, ch_priorpreg := 1]
-  
+    bir_combined[, table(ch_priorpreg)]
+    
   # smoking (Smoking-Yes (before &|or during pregnancy)) ----
-    bir_combined[, smoking := NA_integer_]
-    bir_combined[(smokeprior==0 & smoke1==0 & smoke2==0 & smoke3==0), smoking := 0]
-    bir_combined[(smokeprior==1 & smoke1==1 & smoke2==1 & smoke3==1), smoking := 1]
-  
+    bir_combined[, smoking := NULL]
+    bir_combined[(smokeprior=="No" & smoke1=="No" & smoke2=="No" & smoke3=="No"), smoking := "No"]
+    bir_combined[(smokeprior=="Yes" & smoke1=="Yes" & smoke2=="Yes" & smoke3=="Yes"), smoking := "Yes"]
+    bir_combined[, table(smoking)]
+    
   # smoking_dur (whether mother smoked at all during pregnancy) ----
-    bir_combined[, smoking_dur := NA_integer_]
-    bir_combined[(smoke1==0 & smoke2==0 & smoke3==0), smoking_dur := 0]
-    bir_combined[(smoke1 == 1 | smoke2 == 1 | smoke3 == 1), smoking_dur := 1]
-  
+    bir_combined[, smoking_dur := NULL]
+    bir_combined[(smoke1=="No" & smoke2=="No" & smoke3=="No"), smoking_dur := "No"]
+    bir_combined[(smoke1 == "Yes" | smoke2 == "Yes" | smoke3 == "Yes"), smoking_dur := "Yes"]
+    bir_combined[, table(smoking_dur)]
+    
   # wtgain (CHAT categories of maternal weight gain) ----
     bir_combined[
       ((mother_bmi<18.5 & mother_weight_gain<28) | 
@@ -843,11 +870,14 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
                  wtgain := 3]       
   
     bir_combined[, wtgain := factor(wtgain, levels = c(1:3), labels = c("below recommended", "recommended", "above recommended"))]
-  
+    bir_combined[, table(wtgain)]
+    
   # wtgain_rec (WT Gain-Recommended) ----
     bir_combined[wtgain %in% c("below recommended", "above recommended"),  wtgain_rec := 0]
     bir_combined[wtgain=="recommended", wtgain_rec := 1]
-  
+    bir_combined[, table(wtgain_rec)]
+    
+    
   # Explanation of Kotelchuck Index ----
     # In 2019 we spent a long time trying to figure out the correct Kotelchuck index
     # We created three indices:
@@ -896,7 +926,9 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
       bir_combined[is.na(number_prenatal_visits) | number_prenatal_visits == 99, kotelchuck := NA]
       bir_combined[(month_prenatal_care_began > (calculated_gestation/4)), kotelchuck := NA]
       bir_combined[(month_prenatal_care_began == 0 & number_prenatal_visits >=1) | (number_prenatal_visits == 0 & month_prenatal_care_began >= 1), kotelchuck := NA]
-    
+      
+    bir_combined[, table(kotelchuck)]
+      
 
 # IDENTIFY & ADD GEOGRAPHIES ----
     # Pull in geocoded data
