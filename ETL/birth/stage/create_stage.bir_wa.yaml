@@ -369,8 +369,8 @@ recodes:
     smoke2: VARCHAR(3)
     smoke3: VARCHAR(3)
     smokeprior: VARCHAR(3)
-    smoking: INTEGER
-    smoking_dur: INTEGER
+    smoking: VARCHAR(3)
+    smoking_dur: VARCHAR(3)
     teen: VARCHAR(3)
     term: VARCHAR(3)
     vertex: VARCHAR(60)
