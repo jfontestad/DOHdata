@@ -9,6 +9,8 @@
 
 ## Set up environment ----
     rm(list=setdiff(ls(), c("db_apde", "bir_combined")))
+ 
+    #  db_apde <- dbConnect(odbc(), "PH_APDEStore50")
 
 ## Load staged from SQL ----
     table_config_stage_bir_wa <- yaml::yaml.load(getURL(
@@ -40,14 +42,14 @@
     # Births compared to CHAT ----
         births.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_total_births.csv", 
                             skip = 5, nrows = 15)[, .(chi_year = V1, count.doh = V7)]
-        births <- setorder(bir_combined[chi_geo_wastate==1, .N, by = chi_year], chi_year)
+        births <- setorder(bir_combined[chi_geo_wastate=="Yes", .N, by = chi_year], chi_year)
         births <- merge(births, births.doh, by.x = "chi_year", by.y = "chi_year"); rm(births.doh)
         births[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
         births[, indicator := "births"]
         print(births)
         
     # Race compared to CHAT ----
-        race <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, chi_race_7)], row.names = TRUE), chi_year, chi_race_7)    
+        race <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, chi_race_7)], row.names = TRUE), chi_year, chi_race_7)    
         
         race.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_race.csv", 
                           skip = 5, nrows = 84)[, .(chi_year = as.character(V1), race3 = V4, count.doh = V7)]
@@ -63,7 +65,7 @@
         print(race)
         
     # Hispanic compared to CHAT ----
-        hispanic <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, chi_race_hisp)], row.names = TRUE), chi_year)
+        hispanic <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, chi_race_hisp)], row.names = TRUE), chi_year)
         hispanic <- hispanic[chi_race_hisp=="Hispanic"]
         
         hispanic.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_hispanic.csv", 
@@ -75,11 +77,11 @@
         
     # Birthweight compared to CHAT ----
         bw <- rbind(
-          setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, bw_vlow)], row.names = TRUE), chi_year)[bw_vlow==1,][, bw_vlow := NULL][, bw := "bw_vlow"],
-          setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, bw_modlow)], row.names = TRUE), chi_year)[bw_modlow==1,][, bw_modlow := NULL][, bw := "bw_modlow"],
-          setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, bw_norm)], row.names = TRUE), chi_year)[bw_norm==1,][, bw_norm := NULL][, bw := "bw_norm"],
-          setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, bw_high)], row.names = TRUE), chi_year)[bw_high==1,][, bw_high := NULL][, bw := "bw_high"],
-          setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, bw_vhigh)], row.names = TRUE), chi_year)[bw_vhigh==1,][, bw_vhigh := NULL][, bw := "bw_vhigh"]
+          setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, bw_vlow)], row.names = TRUE), chi_year)[bw_vlow=="Yes",][, bw_vlow := NULL][, bw := "bw_vlow"],
+          setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, bw_modlow)], row.names = TRUE), chi_year)[bw_modlow=="Yes",][, bw_modlow := NULL][, bw := "bw_modlow"],
+          setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, bw_norm)], row.names = TRUE), chi_year)[bw_norm=="Yes",][, bw_norm := NULL][, bw := "bw_norm"],
+          setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, bw_high)], row.names = TRUE), chi_year)[bw_high=="Yes",][, bw_high := NULL][, bw := "bw_high"],
+          setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, bw_vhigh)], row.names = TRUE), chi_year)[bw_vhigh=="Yes",][, bw_vhigh := NULL][, bw := "bw_vhigh"]
         )
         
         bw.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_birthweight.csv", 
@@ -95,7 +97,7 @@
         print(bw)
         
     # Premature compared to CHAT ----
-        preterm <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, preterm)], row.names = TRUE), chi_year)[preterm==1, -c("preterm")]
+        preterm <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, preterm)], row.names = TRUE), chi_year)[preterm=="Yes", -c("preterm")]
         
         preterm.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_premature.csv", 
                               skip = 5, nrows = 15)[, .(chi_year = as.character(V1), count.doh = V7)]
@@ -105,7 +107,7 @@
         print(preterm)
     
     # Mom born in USA compared to CHAT ----
-        mother_birthplace_usa <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, mother_birthplace_usa)], row.names = TRUE), chi_year)[mother_birthplace_usa==1, -c("mother_birthplace_usa")]
+        mother_birthplace_usa <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, mother_birthplace_usa)], row.names = TRUE), chi_year)[mother_birthplace_usa==1, -c("mother_birthplace_usa")]
         
         mother_birthplace_usa.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_usa.csv", 
                              skip = 5, nrows = 15)[, .(chi_year = as.character(V1), count.doh = V7)]
@@ -115,7 +117,7 @@
         print(mother_birthplace_usa)        
         
     # Prior pregnancy compared to CHAT ----
-        ch_priorpreg <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, ch_priorpreg)], row.names = TRUE), chi_year)[ch_priorpreg==1, -c("ch_priorpreg")]
+        ch_priorpreg <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, ch_priorpreg)], row.names = TRUE), chi_year)[ch_priorpreg==1, -c("ch_priorpreg")]
         
         ch_priorpreg.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_priorpreg.csv", 
                                            skip = 5, nrows = 15)[, .(chi_year = as.character(V1), count.doh = V7)]
@@ -125,7 +127,7 @@
         print(ch_priorpreg)   
         
     # NCHS Prenatal Care compared to CHAT (only availble >=2011) ----
-        pnc <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, pnc_tri_nchs)], row.names = TRUE), chi_year, pnc_tri_nchs)    
+        pnc <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, pnc_tri_nchs)], row.names = TRUE), chi_year, pnc_tri_nchs)    
         pnc <- pnc[chi_year>=2011]
         
         pnc.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_pnc_nchs.csv", 
@@ -142,7 +144,7 @@
         print(pnc.nchs)
         
     # Prenatal Care compared to CHAT ----
-        pnc <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, pnc_tri)], row.names = TRUE), chi_year, pnc_tri)    
+        pnc <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, pnc_tri)], row.names = TRUE), chi_year, pnc_tri)    
         
         pnc.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_pnc.csv", 
                          skip = 5, nrows = 60)[, .(chi_year = as.character(V1), pnc.doh=V6, count.doh = V7)]
@@ -157,7 +159,7 @@
         print(pnc)
         
     # Hypertension - gestational compared to CHAT ----
-        htn_gest <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, htn_gest)], row.names = TRUE), chi_year)[htn_gest==1, -c("htn_gest")]
+        htn_gest <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, htn_gest)], row.names = TRUE), chi_year)[htn_gest=="Yes", -c("htn_gest")]
         
         htn_gest.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_htn_gest.csv", 
                                            skip = 5, nrows = 15)[, .(chi_year = as.character(V1), count.doh = V7)]
@@ -167,7 +169,7 @@
         print(htn_gest)  
         
     # Hypertension - Prepregnancy compared to CHAT ----
-        htn_prepreg <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, htn_prepreg)], row.names = TRUE), chi_year)[htn_prepreg==1, -c("htn_prepreg")]
+        htn_prepreg <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, htn_prepreg)], row.names = TRUE), chi_year)[htn_prepreg=="Yes", -c("htn_prepreg")]
         
         htn_prepreg.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_htn_prepreg.csv", 
                               skip = 5, nrows = 15)[, .(chi_year = as.character(V1), count.doh = V7)]
@@ -177,7 +179,7 @@
         print(htn_prepreg)      
         
     # Kotelchuck Index (adequate PNC) compared to CHAT ----
-        kotelchuck <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, kotelchuck)], row.names = TRUE), chi_year)[kotelchuck==1, -c("kotelchuck")]
+        kotelchuck <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, kotelchuck)], row.names = TRUE), chi_year)[kotelchuck==1, -c("kotelchuck")]
         
         kotelchuck.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_kotelchuck_adequate.csv", 
                                  skip = 5, nrows = 15)[, .(chi_year = as.character(V1), count.doh = V7)]
@@ -187,7 +189,7 @@
         print(kotelchuck) 
         
     # Kotelchuck Index (inadequate PNC) compared to CHAT ----
-        kotelchuck.inadequate <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, kotelchuck)], row.names = TRUE), chi_year)[kotelchuck==0, -c("kotelchuck")]
+        kotelchuck.inadequate <- setorder(as.data.table(bir_combined[chi_geo_wastate=="Yes", table(chi_year, kotelchuck)], row.names = TRUE), chi_year)[kotelchuck==0, -c("kotelchuck")]
         
         kotelchuck.inadequate.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_kotelchuck_inadequate.csv", 
                                 skip = 5, nrows = 15)[, .(chi_year = as.character(V1), count.doh = V7)]
@@ -199,7 +201,7 @@
     # Births in KC compared to CHAT ----
         kc.births.doh <- fread("//phdata01/DROF_DATA/DOH DATA/Births/DATA/BIRTH/DOH_Birth_Tables_Summary_for_Comparison/2003_2017_total_births_kc.csv", 
                             skip = 5, nrows = 15)[, .(chi_year = V1, count.doh = V7)]
-        kc.births <- setorder(bir_combined[chi_geo_kc==1, .N, by = chi_year], chi_year)
+        kc.births <- setorder(bir_combined[chi_geo_kc==, .N, by = chi_year], chi_year)
         kc.births <- merge(kc.births, kc.births.doh, by = "chi_year"); rm(kc.births.doh)
         kc.births[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
         print(kc.births)
