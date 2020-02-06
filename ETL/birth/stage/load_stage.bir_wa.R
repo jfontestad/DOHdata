@@ -703,6 +703,9 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     
 #### FREE UP MEMORY ----
   gc()
+  
+#### Make a copy to avoid repeating the previous steps if there are errors below ----
+ # pre.recodes <- copy(bir_combined)      
 
 #### Prep simple recode instructions ----
   complex.vars <- recodes[recode_type=="complex"]$new_var # save list of vars made with complex recodes
@@ -718,6 +721,9 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 #### Run to.numeric() again because recoding changed some column type ----
   bir_combined <- to.numeric(bir_combined)
 
+#### Make copy in case data gets garbeled below ----  
+  # post.recodes <- copy(bir_combined)
+  
 #### Custom code for complex recoding ----
   # Not in alphabetical order because some vars are dependant upon other vars
   # bw_norm_sing ----
