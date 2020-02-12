@@ -293,15 +293,15 @@ vars:
     infant_death_flag: CHAR(1)
     etl_batch_id: INTEGER
 recodes:
-    bf: VARCHAR(3)
-    bw_high: VARCHAR(3)
-    bw_low: VARCHAR(3)
+    bf: TINYINT
+    bw_high: TINYINT
+    bw_low: TINYINT
     bw_low_sing: INTEGER
-    bw_modlow: VARCHAR(3)
-    bw_norm: VARCHAR(3)
+    bw_modlow: TINYINT
+    bw_norm: TINYINT
     bw_norm_sing: INTEGER
-    bw_vhigh: VARCHAR(3)
-    bw_vlow: VARCHAR(3)
+    bw_vhigh: TINYINT
+    bw_vlow: TINYINT
     bw_vlow_sing: INTEGER
     chi_age: INTEGER
     chi_edu_mom_8: VARCHAR(32)
@@ -309,10 +309,10 @@ recodes:
     chi_geo_coo_places: VARCHAR(22)
     chi_geo_hra_short: VARCHAR(40)
     chi_geo_hra_long: VARCHAR(40)
-    chi_geo_kc: VARCHAR(3)
+    chi_geo_kc: TINYINT
     chi_geo_regions_4: VARCHAR(7)
     chi_geo_seattle: VARCHAR(11)
-    chi_geo_wastate: VARCHAR(3)
+    chi_geo_wastate: TINYINT
     chi_geo_zip5: VARCHAR(5)
     chi_nativity: VARCHAR(12)
     chi_race_6: VARCHAR(8)
@@ -335,46 +335,46 @@ recodes:
     chi_race_eth8: VARCHAR(8)
     chi_sex: VARCHAR(6)
     chi_year: INTEGER
-    ch_priorpreg: VARCHAR(3)
+    ch_priorpreg: TINYINT
     csec_lowrisk: INTEGER
     delivery_final: VARCHAR(34)
-    diab_gest: VARCHAR(3)
+    diab_gest: TINYINT
     diab_no: INTEGER
-    diab_prepreg: VARCHAR(3)
-    dlp_medicaid: VARCHAR(3)
+    diab_prepreg: TINYINT
+    dlp_medicaid: TINYINT
     facility_type_recode: VARCHAR(22) 
     fetal_pres: VARCHAR(8)
-    htn_gest: VARCHAR(3)
+    htn_gest: TINYINT
     htn_no: INTEGER
-    htn_prepreg: VARCHAR(3)
-    inf_death: VARCHAR(3)
-    kc_occ: VARCHAR(3)
+    htn_prepreg: TINYINT
+    inf_death: TINYINT
+    kc_occ: TINYINT
     kotelchuck: INTEGER
-    marriage: VARCHAR(3)
+    marriage: TINYINT
     mother_birthplace_foreign: INTEGER
     mother_birthplace_usa: INTEGER 
-    multiple: VARCHAR(3)
+    multiple: TINYINT
     ntsv: INTEGER
     nullip: INTEGER
     parity: INTEGER
     pnc_lateno: INTEGER
     pnc_tri: VARCHAR(11)
     pnc_tri_nchs: VARCHAR(16)
-    preterm: VARCHAR(3)
-    preterm_mod: VARCHAR(3)
-    preterm_v: VARCHAR(3)
+    preterm: TINYINT
+    preterm_mod: TINYINT
+    preterm_v: TINYINT
     race_m: VARCHAR(28)
-    singleton: VARCHAR(3)
-    smoke1: VARCHAR(3)
-    smoke2: VARCHAR(3)
-    smoke3: VARCHAR(3)
-    smokeprior: VARCHAR(3)
-    smoking: VARCHAR(3)
-    smoking_dur: VARCHAR(3)
-    teen: VARCHAR(3)
-    term: VARCHAR(3)
+    singleton: TINYINT
+    smoke1: TINYINT
+    smoke2: TINYINT
+    smoke3: TINYINT
+    smokeprior: TINYINT
+    smoking: TINYINT
+    smoking_dur: TINYINT
+    teen: TINYINT
+    term: TINYINT
     vertex: VARCHAR(60)
-    wa_occ: VARCHAR(3)
+    wa_occ: TINYINT
     wtgain: VARCHAR(20)
     wtgain_rec: INTEGER
     
