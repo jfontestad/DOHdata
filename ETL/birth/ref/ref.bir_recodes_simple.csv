@@ -1,7 +1,7 @@
 category,recode_type,old_var,old_type,old_value,new_var,new_type,new_value,new_label,var_label,start_year,end_year,notes
 baby,copy,date_of_birth_year,continuous,,chi_year,continuous,,,Birth Year,2003,2018,old_val & new_val blank to copy variable wholesale
-baby,clean,chi_year,continuous,[9999],chi_year,continuous,,,Birth Year,,,
-baby,clean,chi_year,continuous,[9],chi_year,continuous,,,Birth Year,,,
+baby,clean,date_of_birth_year,continuous,[9999],chi_year,continuous,,,Birth Year,,,
+baby,clean,date_of_birth_year,continuous,[9],chi_year,continuous,,,Birth Year,,,
 baby,clean,plurality,continuous,"[9, 9]",plurality,continuous,,,plurality - number of children born,2003,2018,
 baby,binning,birth_weight_grams,continuous,"[0, 226]",birth_weight_grams,continuous,,,Birth weight in grams,2003,2018,
 baby,binning,birth_weight_grams,continuous,"[0, 4499]",bw_vhigh,binary,0,,Birth WT-Very High (4500-8164 grams),2003,2018,
