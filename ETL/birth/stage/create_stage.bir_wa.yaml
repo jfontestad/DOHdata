@@ -330,7 +330,7 @@ recodes:
     chi_race_aic_nhpi: INTEGER
     chi_race_aic_vietnamese: INTEGER
     chi_race_aic_wht: INTEGER
-    chi_race_hisp: VARCHAR(12)
+    chi_race_hisp: TINYINT
     chi_race_eth7: VARCHAR(8)
     chi_race_eth8: VARCHAR(8)
     chi_sex: VARCHAR(6)
