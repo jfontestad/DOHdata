@@ -960,7 +960,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
   # get list and order of colums from YAML file
     column.order <- c(names(yaml_config$vars), names(yaml_config$recodes))
 
-  # keep only variales listed in YAML file
+  # keep only variables listed in YAML file
     bir_combined <- bir_combined[, ..column.order]
 
   # order the columns
