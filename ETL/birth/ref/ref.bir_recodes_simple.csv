@@ -259,9 +259,9 @@ demo,binning,birthplace_county_wa_code,continuous,"[18, 39]",kc_occ,categorical,
 demo,complex,,,,chi_geo_zip5,string,,,Zip code (5 digit) of residence,2003,2018,
 demo,copy,mother_calculated_age,continuous,,chi_age,continuous,,,Mother's age,2003,2018,old_val & new_val blank to copy variable wholesale
 demo,clean,chi_age,continuous,99,chi_age,continuous,,,Mother's age,2003,2018,
-demo,binning,chi_age,continuous,"[0, 14]",teen,continuous,0,,Teenage birth,2003,2018,
-demo,binning,chi_age,continuous,"[18, 98]",teen,continuous,0,,Teenage birth,2003,2018,
-demo,binning,chi_age,continuous,"[15, 17]",teen,continuous,1,,Teenage birth,2003,2018,
+demo,binning,chi_age,continuous,"[0, 14]",teen1517,continuous,0,,Teenage birth,2003,2018,
+demo,binning,chi_age,continuous,"[18, 98]",teen1517,continuous,0,,Teenage birth,2003,2018,
+demo,binning,chi_age,continuous,"[15, 17]",teen1517,continuous,1,,Teenage birth,2003,2018,
 demo,simple,mother_education,continuous,"[1, 1]",chi_edu_mom_8,factor,1,<= 8th grade,Mother's education,2003,2018,
 demo,simple,mother_education,continuous,"[2, 2]",chi_edu_mom_8,factor,2,"9th-12th grade, no diploma",Mother's education,2003,2018,
 demo,simple,mother_education,continuous,"[3, 3]",chi_edu_mom_8,factor,3,High school graduate or GED,Mother's education,2003,2018,
@@ -305,16 +305,16 @@ del,simple,fetal_pres,string,B,fetal_pres,factor,2,Breech,"Method of Delivery, F
 del,simple,fetal_pres,string,O,fetal_pres,factor,3,Other,"Method of Delivery, Fetal Presentation",2003,2018,
 risk,binning,cigarettes_smoked_3_months_prior,continuous,"[0, 0]",smokeprior,categorical,0,,Smoke 1st Trimester,2003,2018,
 risk,binning,cigarettes_smoked_3_months_prior,continuous,"[1, 98]",smokeprior,categorical,1,,Smoke 1st Trimester,2003,2018,
-risk,complex,,,,smokeprior,categorical,,,Smoke 1st Trimester,2003,2018,correct # to be zero when when cigarettes == 
+risk,complex,,,,smokeprior,categorical,,,Smoke 1st Trimester,2003,2018,correct # to be zero when when cigarettes ==
 risk,binning,cigarettes_smoked_1st_tri,continuous,"[0, 0]",smoke1,categorical,0,,Smoke 1st Trimester,2003,2018,
 risk,binning,cigarettes_smoked_1st_tri,continuous,"[1, 98]",smoke1,categorical,1,,Smoke 1st Trimester,2003,2018,
-risk,complex,,,,smoke1,categorical,,,Smoke 1st Trimester,2003,2018,correct # to be zero when when cigarettes == 
+risk,complex,,,,smoke1,categorical,,,Smoke 1st Trimester,2003,2018,correct # to be zero when when cigarettes ==
 risk,binning,cigarettes_smoked_2nd_tri,continuous,"[0, 0]",smoke2,categorical,0,,Smoke 2nd Trimester,2003,2018,
 risk,binning,cigarettes_smoked_2nd_tri,continuous,"[1, 98]",smoke2,categorical,1,,Smoke 2nd Trimester,2003,2018,
-risk,complex,,,,smoke2,categorical,,,Smoke 2nd Trimester,2003,2018,correct # to be zero when when cigarettes == 
+risk,complex,,,,smoke2,categorical,,,Smoke 2nd Trimester,2003,2018,correct # to be zero when when cigarettes ==
 risk,binning,cigarettes_smoked_3rd_tri,continuous,"[0, 0]",smoke3,categorical,0,,Smoke 3rd Trimester,2003,2018,
 risk,binning,cigarettes_smoked_3rd_tri,continuous,"[1, 98]",smoke3,categorical,1,,Smoke 3rd Trimester,2003,2018,
-risk,complex,,,,smoke3,categorical,,,Smoke 3rd Trimester,2003,2018,correct # to be zero when when cigarettes == 
+risk,complex,,,,smoke3,categorical,,,Smoke 3rd Trimester,2003,2018,correct # to be zero when when cigarettes ==
 risk,complex,,,,smoking_dur,categorical,,,Smoking During Pregnancy,2003,2018,
 risk,complex,,,,smoking,categorical,,,Smoking (before & during pregnancy),2003,2018,
 risk,simple,prepreg_diabetes,string,N,diab_prepreg,categorical,0,,Diabetes-Pre Pregnancy,2003,2018,
