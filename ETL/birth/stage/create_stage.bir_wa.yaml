@@ -342,7 +342,7 @@ recodes:
     diab_no: INTEGER
     diab_prepreg: TINYINT
     dlp_medicaid: TINYINT
-    facility_type_recode: VARCHAR(22) 
+    facility_type_recode: VARCHAR(22)
     fetal_pres: VARCHAR(8)
     htn_gest: TINYINT
     htn_no: INTEGER
@@ -352,7 +352,7 @@ recodes:
     kotelchuck: INTEGER
     marriage: TINYINT
     mother_birthplace_foreign: INTEGER
-    mother_birthplace_usa: INTEGER 
+    mother_birthplace_usa: INTEGER
     multiple: TINYINT
     ntsv: INTEGER
     nullip: INTEGER
@@ -371,10 +371,9 @@ recodes:
     smokeprior: TINYINT
     smoking: TINYINT
     smoking_dur: TINYINT
-    teen: TINYINT
+    teen1517: TINYINT
     term: TINYINT
     vertex: VARCHAR(60)
     wa_occ: TINYINT
     wtgain: VARCHAR(20)
     wtgain_rec: INTEGER
-    
