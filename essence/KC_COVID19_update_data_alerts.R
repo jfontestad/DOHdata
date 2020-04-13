@@ -51,7 +51,7 @@ if (historical == F) {
 s_end_date <- format(today() - 1, "%d%b%Y")
 
 ### Set up folder to work in
-setwd("//phshare01/cdi_share/Analytics and Informatics Team/Data Requests/2020/372_nCoV Essence Extract/From Natasha on March 13")
+output_path <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Requests/2020/372_nCoV Essence Extract/From Natasha on March 13"
 
 
 #### FUNCTIONS ####
@@ -66,32 +66,32 @@ if (historical == F) {
   # Daily pneumonia person-level data - ED visits
   pdly_full_pneumo_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "pneumonia", ed = T,
                                                      sdate = s_start_date, edate = s_end_date)
-  write_csv(pdly_full_pneumo_ed, "pdly-pneumonia.csv")
+  write_csv(pdly_full_pneumo_ed, file.path(output_path, "pdly-pneumonia.csv"))
   
   # Daily Pneumonia person-level data - hospitalizations
   pdly_full_pneumo_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "pneumonia", inpatient = T,
                                                        sdate = s_start_date, edate = s_end_date)
-  write_csv(pdly_full_pneumo_hosp, "pdly-pneumonia-hosp.csv")
+  write_csv(pdly_full_pneumo_hosp, file.path(output_path, "pdly-pneumonia-hosp.csv"))
   
   # Daily ILI person-level data - ED visits
   pdly_full_ili_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "ili", ed = T,
                                                   sdate = s_start_date, edate = s_end_date)
-  write_csv(pdly_full_ili_ed, "pdly-ILI.csv")
+  write_csv(pdly_full_ili_ed, file.path(output_path, "pdly-ILI.csv"))
   
   # Daily ILI person-level data - hospitalalizations
   pdly_full_ili_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "ili", inpatient = T,
                                                     sdate = s_start_date, edate = s_end_date)
-  write_csv(pdly_full_ili_hosp, "pdly-ILI-hosp.csv")
+  write_csv(pdly_full_ili_hosp, file.path(output_path, "pdly-ILI-hosp.csv"))
   
   # Daily CLI person-level data - ED Visits 
   pdly_full_cli_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "cli", ed = T,
                                                   sdate = s_start_date, edate = s_end_date)
-  write_csv(pdly_full_cli_ed, "pdly-CLI.csv")
+  write_csv(pdly_full_cli_ed, file.path(output_path, "pdly-CLI.csv"))
   
   # Daily CLI person-level data - hospitalalizations
   pdly_full_cli_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "cli", inpatient = T,
                                                     sdate = s_start_date, edate = s_end_date)
-  write_csv(pdly_full_cli_hosp, "pdly-CLI-hosp.csv")
+  write_csv(pdly_full_cli_hosp, file.path(output_path, "pdly-CLI-hosp.csv"))
 }
 
 
@@ -269,7 +269,7 @@ message("Bringing together and saving daily data")
 ### Combine data
 if (historical == F) {
   ### Load existing data and remove overlapping weeks
-  dly <- readRDS("dly.RData")
+  dly <- readRDS(file.path(output_path, "dly.RData"))
   dly <- dly %>% filter(date < dmy(s_start_date))
   
   ndly <- bind_rows(
@@ -319,10 +319,10 @@ dly <- left_join(dly, dly_date, by = c("date" = "dly_date")) %>%
 
 ### Write out data
 if (historical == F) {
-  saveRDS(ndly, file = "ndly.RData")
-  write_csv(ndly, "ndly.csv")
+  saveRDS(ndly, file = file.path(output_path, "ndly.RData"))
+  write_csv(ndly, file.path(output_path, "ndly.csv"))
 } else {
-  saveRDS(dly, file = "dly.RData")
+  saveRDS(dly, file = file.path(output_path, "dly.RData"))
 }
 
 
@@ -512,7 +512,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   ### Combine data
   if (historical == F) {
     ### Load existing data and remove overlapping weeks
-    wkly <- readRDS("wkly.RData")
+    wkly <- readRDS(file.path(output_path, "wkly.RData"))
     wkly <- wkly %>% filter(date < dmy(s_start_date))
 
     nwkly <- bind_rows(
@@ -562,10 +562,10 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
 
   
   if (historical == F) {
-    saveRDS(nwkly, file = "nwkly.RData")
-    write_csv(nwkly, "nwkly.csv")
+    saveRDS(nwkly, file = file.path(output_path, "nwkly.RData"))
+    write_csv(nwkly, file.path(output_path, "nwkly.csv"))
   } else {
-    saveRDS(wkly, file = "wkly.RData")
+    saveRDS(wkly, file = file.path(output_path, "wkly.RData"))
   }
   
   
