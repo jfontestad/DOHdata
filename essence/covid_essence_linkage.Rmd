@@ -1,0 +1,44 @@
+---
+title: "Characteristics of COVID-19 patients"
+author: "Public Health - Seattle & King County"
+date: '`r Sys.Date()`'
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{makecell}
+  - \usepackage{multirow}
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(knitr.kable.NA = '')
+```
+
+## Introduction
+
+This document shows demographics and clinical aspects of COVID-19 cases who have been linked to RHINO IDs. There were 
+`r format(nrow(covid_orig), big.mark = ',')` clinical encounters among `r format(length(unique(covid_orig$case_id)), big.mark = ',')` linked cases.
+Of those, `r format(matched$encounters, big.mark = ',')` encounters from `r format(matched$people, big.mark = ',')` individuals were found in RHINO.
+
+
+## Demographics
+
+```{r demogs, echo=FALSE}
+demogs_tot %>%
+    kable() %>%
+  collapse_rows(columns = 1, valign = "top") %>%
+  kable_styling(bootstrap_options = c("striped"), full_width = F, position = "left")
+
+```
+
+## Clinical outcomes
+
+```{r events, echo=FALSE}
+clinic_tot %>%
+    kable() %>%
+  collapse_rows(columns = 1, valign = "top") %>%
+  kable_styling(bootstrap_options = c("striped"), full_width = F, position = "left")
+
+```
+

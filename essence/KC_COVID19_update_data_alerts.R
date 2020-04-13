@@ -1,0 +1,485 @@
+# ESSENCE and NRVESS pulls are automated here. 
+# NRVESS is only updated Fridays - you can use lubridate::wday(today(), label = TRUE) == "Fri" to check day if needed.
+# generation of plots should be doable here too, depending on needs of plots. 
+# question is, should this script be loaded as an environment for the app every time? There must be a smart way of doing that. It can be run in the middle of the night every night
+# or whatever, then be loaded into the environment, then the load balancing can take place to handle whatever the needs are there.
+
+# IMPORTANT ###############################################################################################################
+#BEFORE RUNNING THE SCRIPT, SAVE YOUR ESSENCE CREDENTIALS TO THE WINDOW CREDENTIAL MANAGER - this prevents the need from typing them into the code below
+# 1. Search for Credential Manager on your computer
+# 2. Click "Windows Credentials"
+# 3. Click "Add a generic credential"
+# 4. For Internet or network address, type: essence
+# 5. For user name, type: yourESSENCEusername
+# 6. For Password, type: yourESSENCEpw
+# 7. If you update your ESSENCE password, you will need to come into the credential manager and update it here as well
+#######################################################################################################################
+
+#install.packages("janitor")
+#install.packages("MMWRweek")
+#install.packages("lubridate")
+#install.packages("tidyverse")
+#install.packages("knitr")
+#install.packages("httr")
+#install.packages("jsonlite")
+#install.packages("keyring")
+
+
+library(janitor)
+library(MMWRweek)
+library(lubridate)
+library(tidyverse)
+library(knitr)
+library(httr)
+httr::set_config(config(ssl_verifypeer = 0L))
+library(jsonlite)
+library(keyring)
+
+
+
+
+# date objects for ESSENCE queries and NRVESS data pull
+### SET WHETHER THIS IS A HISTORICAL RUN OR NOT
+historical <- F
+
+if (historical == F) {
+  s_start_date <- format(as_date("2019-09-29"), "%d%b%Y")
+} else {
+  s_start_date <- format(as_date("2017-08-01"), "%d%b%Y") 
+}
+
+s_end_date <- format(today() - 1, "%d%b%Y")
+
+### Set up folder to work in
+setwd("//phshare01/cdi_share/Analytics and Informatics Team/Data Requests/2020/372_nCoV Essence Extract/From Natasha on March 13")
+
+
+#### FUNCTIONS ####
+# Call in from Github repo
+source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/essence/essence_query_functions.R")
+
+
+#### DAILY RUN ####
+#### PERSON-LEVEL DATA ####
+if (historical == F) {
+  message("Running person-level section")
+  # Daily pneumonia person-level data - ED visits
+  pdly_full_pneumo_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "pneumonia", ed = T)
+  write_csv(pdly_full_pneumo_ed, "pdly-pneumonia.csv")
+  
+  # Daily Pneumonia person-level data - hospitalizations
+  pdly_full_pneumo_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "pneumonia", inpatient = T)
+  write_csv(pdly_full_pneumo_hosp, "pdly-pneumonia-hosp.csv")
+  
+  # Daily ILI person-level data - ED visits
+  pdly_full_ili_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "ili", ed = T)
+  write_csv(pdly_full_ili_ed, "pdly-ILI.csv")
+  
+  # Daily ILI person-level data - hospitalalizations
+  pdly_full_ili_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "ili", inpatient = T)
+  write_csv(pdly_full_ili_hosp, "pdly-ILI-hosp.csv")
+  
+  # Daily CLI person-level data - ED Visits 
+  pdly_full_cli_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "cli", ed = T)
+  write_csv(pdly_full_cli_ed, "pdly-CLI.csv")
+  
+  # Daily CLI person-level data - hospitalalizations
+  pdly_full_cli_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "cli", inpatient = T)
+  write_csv(pdly_full_cli_hosp, "pdly-CLI-hosp.csv")
+}
+
+
+
+#### DAILY - ALL AGE ####
+message("Running daily all-ages section")
+
+all_age_ed_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli", "influenza"), function(x) {
+  # Run both queries
+  pct <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, hospital = F, value = "percent")
+  cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, hospital = F, value = "count")
+  # Bring together
+  output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+  return(output)
+}))
+
+all_age_ed_uc_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+  # Run both queries
+  pct <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, hospital = F, value = "percent")
+  cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, hospital = F, value = "count")
+  # Bring together
+  output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+  return(output)
+}))
+
+all_age_hosp_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli", "influenza"), function(x) {
+  # Run both queries
+  pct <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, hospital = F, value = "percent")
+  cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, hospital = F, value = "count")
+  # Bring together
+  output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+  return(output)
+}))
+
+
+#### DAILY - BY HOSPITAL ####
+all_age_ed_byhosp_daily <- bind_rows(lapply(c("cli"), function(x) {
+  # Run both queries
+  pct <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, hospital = T, value = "percent")
+  cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, hospital = T, value = "count")
+  # Bring together
+  output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+  return(output)
+}))
+
+
+#### DAILY - AGE SPECIFIC ####
+message("Running daily age-specific section")
+
+### ED visits
+age_specific_ed_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+  # Run queries
+  pct04 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "00-04", hospital = F, value = "percent")
+  cnt04 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "00-04", hospital = F, value = "count")
+  pct517 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "05-17", hospital = F, value = "percent")
+  cnt517 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "05-17", hospital = F, value = "count")
+  pct1844 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "18-44", hospital = F, value = "percent")
+  cnt1844 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "18-44", hospital = F, value = "count")
+  pct4564 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "45-64", hospital = F, value = "percent")
+  cnt4564 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "45-64", hospital = F, value = "count")
+  pct65 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "65-1000", hospital = F, value = "percent")
+  cnt65 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "65-1000", hospital = F, value = "count")
+  pctunk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "unknown", hospital = F, value = "percent")
+  cntunk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "unknown", hospital = F, value = "count")
+  # Bring together
+  output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct517, cnt517, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct1844, cnt1844, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct4564, cnt4564, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct65, cnt65, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pctunk, cntunk, by = c("date", "age", "setting", "query", "syndrome", "hospital")))
+  return(output)
+}))
+
+
+### ED and urgent care
+age_specific_ed_uc_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+  # Run queries
+  pct04 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "00-04", hospital = F, value = "percent")
+  cnt04 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "00-04", hospital = F, value = "count")
+  pct517 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "05-17", hospital = F, value = "percent")
+  cnt517 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "05-17", hospital = F, value = "count")
+  pct1844 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "18-44", hospital = F, value = "percent")
+  cnt1844 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "18-44", hospital = F, value = "count")
+  pct4564 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "45-64", hospital = F, value = "percent")
+  cnt4564 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "45-64", hospital = F, value = "count")
+  pct65 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "65-1000", hospital = F, value = "percent")
+  cnt65 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "65-1000", hospital = F, value = "count")
+  pctunk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "unknown", hospital = F, value = "percent")
+  cntunk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "unknown", hospital = F, value = "count")
+  # Bring together
+  output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct517, cnt517, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct1844, cnt1844, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct4564, cnt4564, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct65, cnt65, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pctunk, cntunk, by = c("date", "age", "setting", "query", "syndrome", "hospital")))
+  return(output)
+}))
+
+### Hospitalization
+age_specific_hosp_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+  # Run queries
+  pct04 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "00-04", hospital = F, value = "percent")
+  cnt04 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "00-04", hospital = F, value = "count")
+  pct517 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "05-17", hospital = F, value = "percent")
+  cnt517 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "05-17", hospital = F, value = "count")
+  pct1844 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "18-44", hospital = F, value = "percent")
+  cnt1844 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "18-44", hospital = F, value = "count")
+  pct4564 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "45-64", hospital = F, value = "percent")
+  cnt4564 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "45-64", hospital = F, value = "count")
+  pct65 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "65-1000", hospital = F, value = "percent")
+  cnt65 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "65-1000", hospital = F, value = "count")
+  pctunk <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "unknown", hospital = F, value = "percent")
+  cntunk <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "unknown", hospital = F, value = "count")
+  # Bring together
+  output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct517, cnt517, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct1844, cnt1844, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct4564, cnt4564, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct65, cnt65, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                      left_join(pctunk, cntunk, by = c("date", "age", "setting", "query", "syndrome", "hospital")))
+  return(output)
+}))
+
+
+
+#### DAILY - MAKE AND SAVE COMBNIED DATASET ####
+message("Bringing together and saving daily data")
+
+### Combine data
+if (historical == F) {
+  ### Load existing data and remove overlapping weeks
+  dly <- readRDS("dly.RData")
+  dly <- dly %>% filter(date < dmy(s_start_date))
+  
+  ndly <- bind_rows(
+    # EXISTING DATA
+    dly,
+    # DAILY ALL AGE
+    all_age_ed_daily, all_age_ed_uc_daily, all_age_hosp_daily,
+    # BY HOSPITAL
+    all_age_ed_byhosp_daily,
+    # AGE SPECIFIC
+    age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily)
+} else {
+  dly <- bind_rows(
+    # DAILY ALL AGE
+    all_age_ed_daily, all_age_ed_uc_daily, all_age_hosp_daily,
+    # BY HOSPITAL
+    all_age_ed_byhosp_daily,
+    # AGE SPECIFIC
+    age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily)
+}
+
+
+### Pull out dates and convert to get weeks
+dly_date <- sort(unique(dly$date))
+dly_date <- cbind(dly_date, MMWRweek(dly_date))
+
+
+### Finish making new variables
+dly <- left_join(dly, dly_date, by = c("date" = "dly_date")) %>%
+  rename(year = MMWRyear, week = MMWRweek, day = MMWRday) %>%
+  mutate(frequency = "daily",
+         season = case_when(
+           year == 2017 & week >= 30 ~ "2017-2018",
+           year == 2018 & week < 30 ~ "2017-2018",
+           year == 2018 & week >= 30 ~ "2018-2019",
+           year == 2019 & week < 30 ~ "2018-2019",
+           year == 2019 & week >= 30 ~ "2019-2020",
+           year == 2020 & week < 30 ~ "2019-2020"),
+         week = as.factor(week),
+         week = factor(week, levels(week)[c(30:52, 1:29)], ordered = TRUE),
+         essence_refresh_date = today()) %>%
+  filter(!is.na(season)) %>%
+  mutate_at(vars(pct, expected_pct, levels_pct, colorID_pct,
+                 cnt, expected_cnt, levels_cnt, colorID_cnt),
+            list(~ as.numeric(.)))
+
+
+### Write out data
+if (historical == F) {
+  saveRDS(ndly, file = "ndly.RData")
+  write_csv(ndly, "ndly.csv")
+} else {
+  saveRDS(dly, file = "dly.RData")
+}
+
+
+#### DAILY - CLEAN UP ####
+rm(pdly_full_pneumo_ed, pdly_full_pneumo_hosp, pdly_full_ili_ed, pdly_full_cli_ed, pdly_full_cli_hosp)
+
+rm(dly,
+   all_age_ed_daily, all_age_ed_byhosp_daily, all_age_ed_uc_daily, all_age_hosp_daily,
+   age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily)
+
+
+#### WEEKLY RUN ####
+### ONLY RUN THIS IF IT'S A MONDAY
+if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 1) {
+  message("It's Monday, time to run the weekly counts")
+  
+  #### WEEKLY - ALL AGE ####
+  message("Running weekly all-ages section")
+  
+  all_age_ed_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli", "influenza"), function(x) {
+    # Run both queries
+    pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = F, value = "percent")
+    cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = F, value = "count")
+    # Bring together
+    output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+    return(output)
+  }))
+  
+  all_age_ed_uc_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+    # Run both queries
+    pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, hospital = F, value = "percent")
+    cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, hospital = F, value = "count")
+    # Bring together
+    output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+    return(output)
+  }))
+  
+  all_age_hosp_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli", "influenza"), function(x) {
+    # Run both queries
+    pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, hospital = F, value = "percent")
+    cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, hospital = F, value = "count")
+    # Bring together
+    output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+    return(output)
+  }))
+  
+  
+  #### WEEKLY - BY HOSPITAL ####
+  all_age_ed_byhosp_weekly <- bind_rows(lapply(c("cli"), function(x) {
+    # Run both queries
+    pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = T, value = "percent")
+    cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = T, value = "count")
+    # Bring together
+    output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+    return(output)
+  }))
+  
+  
+  #### WEEKLY - AGE SPECIFIC ####
+  message("Running weekly age-specific section")
+  
+  ### ED visits
+  age_specific_ed_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+    # Run queries
+    pct04 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "00-04", hospital = F, value = "percent")
+    cnt04 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "00-04", hospital = F, value = "count")
+    pct517 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "05-17", hospital = F, value = "percent")
+    cnt517 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "05-17", hospital = F, value = "count")
+    pct1844 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "18-44", hospital = F, value = "percent")
+    cnt1844 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "18-44", hospital = F, value = "count")
+    pct4564 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "45-64", hospital = F, value = "percent")
+    cnt4564 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "45-64", hospital = F, value = "count")
+    pct65 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "65-1000", hospital = F, value = "percent")
+    cnt65 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "65-1000", hospital = F, value = "count")
+    pctunk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "unknown", hospital = F, value = "percent")
+    cntunk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "unknown", hospital = F, value = "count")
+    # Bring together
+    output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct517, cnt517, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct1844, cnt1844, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct4564, cnt4564, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct65, cnt65, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pctunk, cntunk, by = c("date", "age", "setting", "query", "syndrome", "hospital")))
+    return(output)
+  }))
+  
+  
+  ### ED and urgent care
+  age_specific_ed_uc_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+    # Run queries
+    pct04 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "00-04", hospital = F, value = "percent")
+    cnt04 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "00-04", hospital = F, value = "count")
+    pct517 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "05-17", hospital = F, value = "percent")
+    cnt517 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "05-17", hospital = F, value = "count")
+    pct1844 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "18-44", hospital = F, value = "percent")
+    cnt1844 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "18-44", hospital = F, value = "count")
+    pct4564 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "45-64", hospital = F, value = "percent")
+    cnt4564 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "45-64", hospital = F, value = "count")
+    pct65 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "65-1000", hospital = F, value = "percent")
+    cnt65 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "65-1000", hospital = F, value = "count")
+    pctunk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "unknown", hospital = F, value = "percent")
+    cntunk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "unknown", hospital = F, value = "count")
+    # Bring together
+    output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct517, cnt517, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct1844, cnt1844, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct4564, cnt4564, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct65, cnt65, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pctunk, cntunk, by = c("date", "age", "setting", "query", "syndrome", "hospital")))
+    return(output)
+  }))
+  
+  ### Hospitalization
+  age_specific_hosp_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+    # Run queries
+    pct04 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "00-04", hospital = F, value = "percent")
+    cnt04 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "00-04", hospital = F, value = "count")
+    pct517 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "05-17", hospital = F, value = "percent")
+    cnt517 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "05-17", hospital = F, value = "count")
+    pct1844 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "18-44", hospital = F, value = "percent")
+    cnt1844 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "18-44", hospital = F, value = "count")
+    pct4564 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "45-64", hospital = F, value = "percent")
+    cnt4564 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "45-64", hospital = F, value = "count")
+    pct65 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "65-1000", hospital = F, value = "percent")
+    cnt65 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "65-1000", hospital = F, value = "count")
+    pctunk <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "unknown", hospital = F, value = "percent")
+    cntunk <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "unknown", hospital = F, value = "count")
+    # Bring together
+    output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct517, cnt517, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct1844, cnt1844, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct4564, cnt4564, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct65, cnt65, by = c("date", "age", "setting", "query", "syndrome", "hospital")),
+                        left_join(pctunk, cntunk, by = c("date", "age", "setting", "query", "syndrome", "hospital")))
+    return(output)
+  }))
+  
+  
+  
+  #### WEEKLY - MAKE AND SAVE COMBNIED DATASET ####
+  message("Bringing together and saving weekly data")
+  
+  ### Combine data
+  if (historical == F) {
+    ### Load existing data and remove overlapping weeks
+    wkly <- readRDS("wkly.RData")
+    wkly <- wkly %>% filter(date < dmy(s_start_date))
+
+    nwkly <- bind_rows(
+      # EXISTING DATA
+      wkly,
+      # WEEKLY ALL AGE
+      all_age_ed_weekly, all_age_ed_uc_weekly, all_age_hosp_weekly,
+      # BY HOSPITAL
+      all_age_ed_byhosp_weekly,
+      # AGE SPECIFIC
+      age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly)
+  } else {
+    wkly <- bind_rows(
+      # WEEKLY ALL AGE
+      all_age_ed_weekly, all_age_ed_uc_weekly, all_age_hosp_weekly,
+      # BY HOSPITAL
+      all_age_ed_byhosp_weekly,
+      # AGE SPECIFIC
+      age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly)
+  }
+  
+  
+  ### Pull out dates and convert to get weeks
+  wkly_date <- sort(unique(wkly$date))
+  wkly_date <- cbind(wkly_date, MMWRweek(wkly_date))
+  
+  
+  ### Finish making new variables
+  wkly <- left_join(wkly, wkly_date, by = c("date" = "wkly_date")) %>%
+    rename(year = MMWRyear, week = MMWRweek, day = MMWRday) %>%
+    mutate(frequency = "weekly",
+           season = case_when(
+             year == 2017 & week >= 30 ~ "2017-2018",
+             year == 2018 & week < 30 ~ "2017-2018",
+             year == 2018 & week >= 30 ~ "2018-2019",
+             year == 2019 & week < 30 ~ "2018-2019",
+             year == 2019 & week >= 30 ~ "2019-2020",
+             year == 2020 & week < 30 ~ "2019-2020"),
+           week = as.factor(week),
+           week = factor(week, levels(week)[c(30:52, 1:29)], ordered = TRUE),
+           essence_refresh_date = today()) %>%
+    filter(!is.na(season)) %>%
+    mutate_at(vars(pct, expected_pct, levels_pct, colorID_pct,
+                   cnt, expected_cnt, levels_cnt, colorID_cnt),
+              list(~ as.numeric(.)))
+  
+
+  
+  if (historical == F) {
+    saveRDS(nwkly, file = "nwkly.RData")
+    write_csv(nwkly, "nwkly.csv")
+  } else {
+    saveRDS(wkly, file = "wkly.RData")
+  }
+  
+  
+  #### WEEKLY - CLEAN UP ####
+  rm(nwkly,
+     all_age_ed_weekly, all_age_ed_byhosp_weekly, all_age_ed_uc_weekly, all_age_hosp_weekly,
+     age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly)
+  
+}
+
+message("Alert code completed")
