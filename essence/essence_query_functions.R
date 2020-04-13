@@ -83,6 +83,7 @@ event_query <- function(event_id = NULL) {
                 # Add in clinical fields
                 "&field=Facility_Type_Description",
                 "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class",
+                "&field=TriageNotesParsed",
                 "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
                 "&field=Onset_Date&field=Initial_Temp_Calc&field=HighestTemp_Calc&field=Initial_Pulse_Oximetry_Calc",
                 "&field=Systolic_Blood_Pressure&field=Diastolic_Blood_Pressure&field=Systolic_Diastolic_Blood_Pressure",
@@ -170,6 +171,7 @@ event_query_bulk <- function(bulk_id = NULL) {
                   # Add in clinical fields
                   "&field=Facility_Type_Description",
                   "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class",
+                  "&field=TriageNotesParsed",
                   "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
                   "&field=Onset_Date&field=Initial_Temp_Calc&field=HighestTemp_Calc&field=Initial_Pulse_Oximetry_Calc",
                   "&field=Systolic_Blood_Pressure&field=Diastolic_Blood_Pressure&field=Systolic_Diastolic_Blood_Pressure",
@@ -188,9 +190,12 @@ event_query_bulk <- function(bulk_id = NULL) {
     
     if (!is.null(nrow(data_load$dataDetails))) {
       df <- left_join(df, data_load$dataDetails, by = c("rhino_id" = "C_BioSense_ID"))
+      message("Matched ", as.integer(df %>% filter(!is.na(PID)) %>% summarise(count = n())), " IDs \n ")
+    } else {
+      message("Matched 0 IDs \n ")
     }
     
-    message("Matched ", as.integer(df %>% filter(!is.na(PID)) %>% summarise(count = n())), " IDs")
+    
     
     df
   })
