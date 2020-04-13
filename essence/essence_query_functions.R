@@ -21,21 +21,20 @@
 person_query <- function(pid = NULL, sdate = "2019-01-01", edate = today() - 1) {
   
   # Format dates properly
-  # Throw an error if not formatted properly
+  # Throw an error if input not in expected format
   if (is.na(as.Date(sdate, format = "%Y-%m-%d"))) {
     stop("sdate must be %Y-%m-%d format")
   }
-  
   if (is.na(as.Date(edate, format = "%Y-%m-%d"))) {
     stop("sdate must be %Y-%m-%d format")
   }
   
-  s_start_date <- format(as.Date(sdate, "%Y-%m-%d"), "%d%b%Y")
-  s_end_date <- format(as.Date(edate, "%Y-%m-%d"), "%d%b%Y")
+  start_date <- format(as.Date(sdate, "%Y-%m-%d"), "%d%b%Y")
+  end_date <- format(as.Date(edate, "%Y-%m-%d"), "%d%b%Y")
   
   url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?", 
                 # Add in dates and geographies
-                "endDate=", s_end_date, "&startDate=", s_start_date, 
+                "startDate=", start_date, "&endDate=", end_date,
                 "&geography=wa&geographySystem=hospitalstate", 
                 # Add in a few other fields including userID
                 "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=3544",
@@ -207,16 +206,31 @@ event_query_bulk <- function(bulk_id = NULL) {
 
 
 ### Use this query to return syndrome counts/percentages plus alerts
-syndrome_alert_query <- function(user_id = 520, frequency = c("weekly", "daily"), 
-                        syndrome = c("ili", "cli", "pneumonia", "influenza"),
-                        ed = F, inpatient = F, ed_uc = F,
-                        age = c("None", "00-04", "05-17", "18-44", "45-64", "65-1000", "unknown"),
-                        hospital = F, value = c("percent", "count")) {
+syndrome_alert_query <- function(user_id = 520, 
+                                 sdate = "2019-09-29", edate = today() - 1,
+                                 frequency = c("weekly", "daily"), 
+                                 syndrome = c("ili", "cli", "pneumonia", "influenza"),
+                                 ed = F, inpatient = F, ed_uc = F,
+                                 age = c("None", "00-04", "05-17", "18-44", "45-64", "65-1000", "unknown"),
+                                 hospital = F, value = c("percent", "count")) {
   
   frequency <- match.arg(frequency)
   syndrome <- match.arg(syndrome)
   age <- match.arg(age)
   value <- match.arg(value)
+  
+  # Format dates properly
+  # Throw an error if input not in expected format
+  if (is.na(as.Date(sdate, format = "%Y-%m-%d"))) {
+    stop("sdate must be %Y-%m-%d format")
+  }
+  if (is.na(as.Date(edate, format = "%Y-%m-%d"))) {
+    stop("sdate must be %Y-%m-%d format")
+  }
+  
+  start_date <- format(as.Date(sdate, "%Y-%m-%d"), "%d%b%Y")
+  end_date <- format(as.Date(edate, "%Y-%m-%d"), "%d%b%Y")
+  
   
   # Restrict to only one filter type
   # Need to check we never want more than one
@@ -309,7 +323,7 @@ syndrome_alert_query <- function(user_id = 520, frequency = c("weekly", "daily")
   output <- bind_rows(lapply(geogs, function(x) {
     url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?", 
                   # Add in dates and geographies
-                  "endDate=", s_end_date, "&startDate=", s_start_date, 
+                  "startDate=", start_date, "&endDate=", end_date,
                   "&geographySystem=", geog_system, "&geography=", x,
                   # Add in a few other fields including userID
                   "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=", user_id, 
@@ -390,12 +404,27 @@ syndrome_alert_query <- function(user_id = 520, frequency = c("weekly", "daily")
 
 
 ### Use this querty to get record-level details for each syndrome
-syndrome_person_level_query <- function(user_id = 2769, frequency = c("weekly", "daily"), 
-                               syndrome = c("none", "ili", "cli", "pneumonia"),
-                               ed = F, inpatient = F) {
+syndrome_person_level_query <- function(user_id = 2769, 
+                                        frequency = c("weekly", "daily"), 
+                                        sdate = "2019-09-29", edate = today() - 1,
+                                        syndrome = c("none", "ili", "cli", "pneumonia"),
+                                        ed = F, inpatient = F) {
   
   frequency <- match.arg(frequency)
   syndrome <- match.arg(syndrome)
+  
+  # Format dates properly
+  # Throw an error if input not in expected format
+  if (is.na(as.Date(sdate, format = "%Y-%m-%d"))) {
+    stop("sdate must be %Y-%m-%d format")
+  }
+  if (is.na(as.Date(edate, format = "%Y-%m-%d"))) {
+    stop("sdate must be %Y-%m-%d format")
+  }
+  
+  start_date <- format(as.Date(sdate, "%Y-%m-%d"), "%d%b%Y")
+  end_date <- format(as.Date(edate, "%Y-%m-%d"), "%d%b%Y")
+  
   
   if (syndrome == "ili") {
     category <- "&ccddCategory=ili%20ccdd%20v1"
@@ -461,7 +490,7 @@ syndrome_person_level_query <- function(user_id = 2769, frequency = c("weekly", 
   
   url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?", 
                 # Add in dates and geographies
-                "endDate=", s_end_date, "&startDate=", s_start_date, 
+                "startDate=", start_date, "&endDate=", end_date,
                 "&geography=wa_king&geographySystem=hospitalregion", 
                 # Add in a few other fields including userID
                 "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=", user_id, 
