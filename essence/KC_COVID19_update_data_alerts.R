@@ -43,12 +43,12 @@ library(keyring)
 historical <- F
 
 if (historical == F) {
-  s_start_date <- format(as_date("2019-09-29"), "%d%b%Y")
+  s_start_date <- as_date("2019-09-29", "%Y-%m-%d")
 } else {
-  s_start_date <- format(as_date("2017-08-01"), "%d%b%Y") 
+  s_start_date <- as_date("2017-08-01", "%Y-%m-%d") 
 }
 
-s_end_date <- format(today() - 1, "%d%b%Y")
+s_end_date <- today() - 1
 
 ### Set up folder to work in
 output_path <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Requests/2020/372_nCoV Essence Extract/From Natasha on March 13"
@@ -262,54 +262,35 @@ age_specific_hosp_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), functi
 }))
 
 
-
 #### DAILY - MAKE AND SAVE COMBNIED DATASET ####
 message("Bringing together and saving daily data")
 
 ### Combine data
-if (historical == F) {
-  ### Load existing data and remove overlapping weeks
-  dly <- readRDS(file.path(output_path, "dly.RData"))
-  dly <- dly %>% filter(date < dmy(s_start_date))
-  
-  ndly <- bind_rows(
-    # EXISTING DATA
-    dly,
-    # DAILY ALL AGE
-    all_age_ed_daily, all_age_ed_uc_daily, all_age_hosp_daily,
-    # BY HOSPITAL
-    all_age_ed_byhosp_daily,
-    # AGE SPECIFIC
-    age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily)
-} else {
-  dly <- bind_rows(
-    # DAILY ALL AGE
-    all_age_ed_daily, all_age_ed_uc_daily, all_age_hosp_daily,
-    # BY HOSPITAL
-    all_age_ed_byhosp_daily,
-    # AGE SPECIFIC
-    age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily)
-}
-
+ndly <- bind_rows(
+  # DAILY ALL AGE
+  all_age_ed_daily, all_age_ed_uc_daily, all_age_hosp_daily,
+  # BY HOSPITAL
+  all_age_ed_byhosp_daily,
+  # AGE SPECIFIC
+  age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily)
 
 ### Pull out dates and convert to get weeks
-dly_date <- sort(unique(dly$date))
-dly_date <- cbind(dly_date, MMWRweek(dly_date))
-
+ndly_date <- sort(unique(ndly$date))
+ndly_date <- cbind(ndly_date, MMWRweek(ndly_date))
 
 ### Finish making new variables
-dly <- left_join(dly, dly_date, by = c("date" = "dly_date")) %>%
+ndly <- left_join(ndly, ndly_date, by = c("date" = "ndly_date")) %>%
   rename(year = MMWRyear, week = MMWRweek, day = MMWRday) %>%
   mutate(frequency = "daily",
          season = case_when(
-           year == 2017 & week >= 30 ~ "2017-2018",
-           year == 2018 & week < 30 ~ "2017-2018",
-           year == 2018 & week >= 30 ~ "2018-2019",
-           year == 2019 & week < 30 ~ "2018-2019",
-           year == 2019 & week >= 30 ~ "2019-2020",
-           year == 2020 & week < 30 ~ "2019-2020"),
+           year == 2017 & week >= 40 ~ "2017-2018",
+           year == 2018 & week < 40 ~ "2017-2018",
+           year == 2018 & week >= 40 ~ "2018-2019",
+           year == 2019 & week < 40 ~ "2018-2019",
+           year == 2019 & week >= 40 ~ "2019-2020",
+           year == 2020 & week < 40 ~ "2019-2020"),
          week = as.factor(week),
-         week = factor(week, levels(week)[c(30:52, 1:29)], ordered = TRUE),
+         week = factor(week, levels(week)[c(40:52, 1:39)], ordered = TRUE),
          essence_refresh_date = today()) %>%
   filter(!is.na(season)) %>%
   mutate_at(vars(pct, expected_pct, levels_pct, colorID_pct,
@@ -317,12 +298,29 @@ dly <- left_join(dly, dly_date, by = c("date" = "dly_date")) %>%
             list(~ as.numeric(.)))
 
 
+### Combine with historical data
+if (historical == F) {
+  dly <- readRDS(file.path(output_path, "dly.RData"))
+  dly <- dly %>% filter(date < s_start_date)
+  
+  ndly <- bind_rows(dly, ndly)
+}
+
+
+### Set up sort order for Tableau
+ndly <- ndly %>%
+  arrange(frequency, date, query, season, setting, age, hospital) %>%
+  group_by(frequency, query, season, setting, age, hospital) %>%
+  mutate(date_sort = row_number()) %>%
+  ungroup()
+
+
 ### Write out data
 if (historical == F) {
   saveRDS(ndly, file = file.path(output_path, "ndly.RData"))
   write_csv(ndly, file.path(output_path, "ndly.csv"))
 } else {
-  saveRDS(dly, file = file.path(output_path, "dly.RData"))
+  saveRDS(ndly, file = file.path(output_path, "dly.RData"))
 }
 
 
@@ -510,62 +508,60 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   message("Bringing together and saving weekly data")
   
   ### Combine data
-  if (historical == F) {
-    ### Load existing data and remove overlapping weeks
-    wkly <- readRDS(file.path(output_path, "wkly.RData"))
-    wkly <- wkly %>% filter(date < dmy(s_start_date))
-
-    nwkly <- bind_rows(
-      # EXISTING DATA
-      wkly,
-      # WEEKLY ALL AGE
-      all_age_ed_weekly, all_age_ed_uc_weekly, all_age_hosp_weekly,
-      # BY HOSPITAL
-      all_age_ed_byhosp_weekly,
-      # AGE SPECIFIC
-      age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly)
-  } else {
-    wkly <- bind_rows(
-      # WEEKLY ALL AGE
-      all_age_ed_weekly, all_age_ed_uc_weekly, all_age_hosp_weekly,
-      # BY HOSPITAL
-      all_age_ed_byhosp_weekly,
-      # AGE SPECIFIC
-      age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly)
-  }
-  
+  nwkly <- bind_rows(
+    # weekly ALL AGE
+    all_age_ed_weekly, all_age_ed_uc_weekly, all_age_hosp_weekly,
+    # BY HOSPITAL
+    all_age_ed_byhosp_weekly,
+    # AGE SPECIFIC
+    age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly)
   
   ### Pull out dates and convert to get weeks
-  wkly_date <- sort(unique(wkly$date))
-  wkly_date <- cbind(wkly_date, MMWRweek(wkly_date))
-  
+  nwkly_date <- sort(unique(nwkly$date))
+  nwkly_date <- cbind(nwkly_date, MMWRweek(nwkly_date))
   
   ### Finish making new variables
-  wkly <- left_join(wkly, wkly_date, by = c("date" = "wkly_date")) %>%
+  nwkly <- left_join(nwkly, nwkly_date, by = c("date" = "nwkly_date")) %>%
     rename(year = MMWRyear, week = MMWRweek, day = MMWRday) %>%
     mutate(frequency = "weekly",
            season = case_when(
-             year == 2017 & week >= 30 ~ "2017-2018",
-             year == 2018 & week < 30 ~ "2017-2018",
-             year == 2018 & week >= 30 ~ "2018-2019",
-             year == 2019 & week < 30 ~ "2018-2019",
-             year == 2019 & week >= 30 ~ "2019-2020",
-             year == 2020 & week < 30 ~ "2019-2020"),
+             year == 2017 & week >= 40 ~ "2017-2018",
+             year == 2018 & week < 40 ~ "2017-2018",
+             year == 2018 & week >= 40 ~ "2018-2019",
+             year == 2019 & week < 40 ~ "2018-2019",
+             year == 2019 & week >= 40 ~ "2019-2020",
+             year == 2020 & week < 40 ~ "2019-2020"),
            week = as.factor(week),
-           week = factor(week, levels(week)[c(30:52, 1:29)], ordered = TRUE),
+           week = factor(week, levels(week)[c(40:52, 1:39)], ordered = TRUE),
            essence_refresh_date = today()) %>%
     filter(!is.na(season)) %>%
     mutate_at(vars(pct, expected_pct, levels_pct, colorID_pct,
                    cnt, expected_cnt, levels_cnt, colorID_cnt),
               list(~ as.numeric(.)))
   
-
   
+  ### Combine with historical data
+  if (historical == F) {
+    wkly <- readRDS(file.path(output_path, "wkly.RData"))
+    wkly <- wkly %>% filter(date < s_start_date)
+    
+    nwkly <- bind_rows(wkly, nwkly)
+  }
+  
+  ### Set up sort order for Tableau
+  nwkly <- nwkly %>%
+    arrange(frequency, date, query, season, setting, age, hospital) %>%
+    group_by(frequency, query, season, setting, age, hospital) %>%
+    mutate(date_sort = row_number()) %>%
+    ungroup()
+  
+  
+  ### Write out data
   if (historical == F) {
     saveRDS(nwkly, file = file.path(output_path, "nwkly.RData"))
     write_csv(nwkly, file.path(output_path, "nwkly.csv"))
   } else {
-    saveRDS(wkly, file = file.path(output_path, "wkly.RData"))
+    saveRDS(nwkly, file = file.path(output_path, "wkly.RData"))
   }
   
   

@@ -81,7 +81,7 @@ event_query <- function(event_id = NULL) {
                 "&field=PregnancyStatus",
                 # Add in clinical fields
                 "&field=Facility_Type_Description",
-                "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class",
+                "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class&field=PatientClassList",
                 "&field=TriageNotesParsed",
                 "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
                 "&field=Onset_Date&field=Initial_Temp_Calc&field=HighestTemp_Calc&field=Initial_Pulse_Oximetry_Calc",
