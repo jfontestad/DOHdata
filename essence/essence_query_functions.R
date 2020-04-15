@@ -115,8 +115,8 @@ event_query <- function(event_id = NULL, bulk = F) {
 
   } else if (bulk == T) {
     ### Break up the query into smaller date ranges to ease load on server
-    ids <- data.frame(rhino_id = bulk_id, 
-                      rhino_date = as.Date(str_sub(bulk_id, 1, 10), format = "%Y.%m.%d"),
+    ids <- data.frame(rhino_id = event_id, 
+                      rhino_date = as.Date(str_sub(event_id, 1, 10), format = "%Y.%m.%d"),
                       stringsAsFactors = F)
     
     # Check all were dates
