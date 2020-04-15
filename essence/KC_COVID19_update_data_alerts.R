@@ -337,6 +337,9 @@ rm(dly,
 if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 1) {
   message("It's Monday, time to run the weekly counts")
   
+  ### Look 2 days back so we don't capture the start of this week
+  s_end_date <- today() - 2
+  
   #### WEEKLY - ALL AGE ####
   message("Running weekly all-ages section")
   

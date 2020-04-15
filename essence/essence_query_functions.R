@@ -58,151 +58,147 @@ person_query <- function(pid = NULL, sdate = "2019-01-01", edate = today() - 1) 
 }
 
 
-### Use this query to look up an individual event using C_Biosense_ID
-event_query <- function(event_id = NULL) {
-  # Pull out start and end dates from event ID to make query faster
-  # However, BiosenseID != Date so need to add time
-  sdate <- format(as.Date(str_sub(event_id, 1, 10), format = "%Y.%m.%d") - 14, "%d%b%Y")
-  edate <- format(as.Date(str_sub(event_id, 1, 10), format = "%Y.%m.%d") + 14, "%d%b%Y") 
+### Use this query to look up events using C_Biosense_ID
+event_query <- function(event_id = NULL, bulk = F) {
   
-  url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?", 
-                # Add in dates and geographies
-                "startDate=", sdate, "&endDate=", edate,
-                "&geography=wa&geographySystem=hospitalstate", 
-                # Add in a few other fields including userID
-                "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=3544",
-                "&aqtTarget=DataDetails", 
-                # Add in percent param, frequency, and detector
-                "&percentParam=noPercent&timeResolution=daily&detector=nodetectordetector",
-                # Add in rowFields
-                "&field=C_BioSense_ID&field=PID&field=Date&field=Age&field=AgeGroup&field=Birth_Date_Time&field=Sex&field=Zipcode",
-                "&field=Race_flat&field=Ethnicity_flat&field=Height&field=Height_Units",
-                "&field=Weight&field=Weight_Units&field=Body_Mass_Index&field=Smoking_Status_Code",
-                "&field=PregnancyStatus",
-                # Add in clinical fields
-                "&field=Facility_Type_Description",
-                "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class&field=PatientClassList",
-                "&field=TriageNotesParsed",
-                "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
-                "&field=Onset_Date&field=Initial_Temp_Calc&field=HighestTemp_Calc&field=Initial_Pulse_Oximetry_Calc",
-                "&field=Systolic_Blood_Pressure&field=Diastolic_Blood_Pressure&field=Systolic_Diastolic_Blood_Pressure",
-                "&field=Discharge_Date_Time&field=DischargeDisposition&field=DispositionCategory&field=MinutesFromVisitToDischarge",
-                "&field=C_Death&field=C_Death_Source",
-                # Add in patient ID
-                "&cBiosenseID=", event_id)
-  print(url)
-  data_load <- jsonlite::fromJSON(httr::content(
-    httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2], 
-                          keyring::key_get("essence", keyring::key_list("essence")[1, 2]))), 
-    as = "text")) #, encoding = "UTF-8"))
-  
-  # Keep track of input ID
-  df <- data.frame(rhino_id = event_id, stringsAsFactors = F)
-  df <- bind_cols(df, data_load$dataDetails)
-  
-  return(df)
-}
-
-
-### Use this query to look up multiple events using C_Biosense_ID
-event_query_bulk <- function(bulk_id = NULL) {
-  ### Break up the query into smaller date ranges to ease load on server
-  ids <- data.frame(rhino_id = bulk_id, 
-                    rhino_date = as.Date(str_sub(bulk_id, 1, 10), format = "%Y.%m.%d"),
-                    stringsAsFactors = F)
-  
-  # Check all were dates
-  if (is.na(min(ids$rhino_date)) | is.na(max(ids$rhino_date))) {
-    stop("Something went wrong extracting dates to use. Check IDs")
+  # Check how many IDs were provided
+  if (length(event_id) > 1 & bulk == F) {
+    event_id <- event_id[1]
+    warning("Multiple IDs were provided but only the first was used. \n
+            Use bulk = T to search for multiple IDs")
   }
   
-  # Build a list of 1-week dates that covers the range
-  min_dates <- seq(min(ids$rhino_date), max(ids$rhino_date), by = '1 week')
-  # Add in final if needed since sequence may miss it
-  if (max(min_dates) < max(ids$rhino_date)) {min_dates <- c(min_dates, max(min_dates) + weeks(1))}
+   # Set up fields common to both types of query
+  fields <- paste0(# Add in rowFields
+    "&field=C_BioSense_ID&field=PID&field=Date&field=Age&field=AgeGroup&field=Birth_Date_Time&field=Sex&field=Zipcode",
+    "&field=Race_flat&field=Ethnicity_flat&field=Height&field=Height_Units",
+    "&field=Weight&field=Weight_Units&field=Body_Mass_Index&field=Smoking_Status_Code",
+    "&field=PregnancyStatus",
+    # Add in clinical fields
+    "&field=Facility_Type_Description",
+    "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class&field=PatientClassList",
+    "&field=TriageNotesParsed",
+    "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
+    "&field=Onset_Date&field=Initial_Temp_Calc&field=HighestTemp_Calc&field=Initial_Pulse_Oximetry_Calc",
+    "&field=Systolic_Blood_Pressure&field=Diastolic_Blood_Pressure&field=Systolic_Diastolic_Blood_Pressure",
+    "&field=Discharge_Date_Time&field=DischargeDisposition&field=DispositionCategory&field=MinutesFromVisitToDischarge",
+    "&field=C_Death&field=C_Death_Source")
   
-  date_range <- interval(start = min_dates, end = min_dates + days(6))
   
-  # Join to each date and restrict to desired period
-  dates <- data.frame(rhino_date = rep(unique(ids$rhino_date), length(date_range)),
-                      int = rep(date_range, each = length(unique(ids$rhino_date))),
-                      int_num = rep(seq(1, length(date_range)), each = length(unique(ids$rhino_date))),
-                      stringsAsFactors = F) %>%
-    arrange(rhino_date, int) %>%
-    filter(rhino_date %within% int) %>%
-    dplyr::mutate(int_start = int_start(int), int_end = int_end(int)) %>%
-    dplyr::select(-int)
-  
-  # Join back to main data
-  ids <- left_join(ids, dates, by = "rhino_date")
-  
-  # Figure out how many groups we need
-  group_ids <- paste0("group", sort(unique(ids$int_num)))
-  message("Dividing into ", length(group_ids), " groups")
-  
-  # Run query over each group
-  output <- lapply(seq_along(group_ids), function(x) {
+  if (bulk == F) {
+    # Pull out start and end dates from event ID to make query faster
+    # However, BiosenseID != Date so need to add time
+    sdate <- format(as.Date(str_sub(event_id, 1, 10), format = "%Y.%m.%d") - 14, "%d%b%Y")
+    edate <- format(as.Date(str_sub(event_id, 1, 10), format = "%Y.%m.%d") + 14, "%d%b%Y") 
     
-    message("Working on group ", x, " of ", length(group_ids), " (group name: ", group_ids[x], ")")
-    
-    input <- ids %>% filter(int_num == sort(unique(ids$int_num))[x])
-    sdate <- format(min(input$int_start) - days(7), "%d%b%Y")
-    edate <- format(min(input$int_end) + days(7), "%d%b%Y")
-    
-    message("Start date of interval: ", sdate)
-    message("End date of interval: ", edate)
-    message("There are ", length(unique(input$rhino_id)), " IDs to check")
-    
-    url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?",
+    url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?", 
                   # Add in dates and geographies
                   "startDate=", sdate, "&endDate=", edate,
-                  "&geography=wa&geographySystem=hospitalstate",
+                  "&geography=wa&geographySystem=hospitalstate", 
                   # Add in a few other fields including userID
                   "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=3544",
-                  "&aqtTarget=DataDetails",
+                  "&aqtTarget=DataDetails", 
                   # Add in percent param, frequency, and detector
                   "&percentParam=noPercent&timeResolution=daily&detector=nodetectordetector",
-                  # Add in rowFields
-                  "&field=C_BioSense_ID&field=PID&field=Date&field=Age&field=AgeGroup&field=Birth_Date_Time&field=Sex&field=Zipcode",
-                  "&field=Race_flat&field=Ethnicity_flat&field=Height&field=Height_Units",
-                  "&field=Weight&field=Weight_Units&field=Body_Mass_Index&field=Smoking_Status_Code",
-                  "&field=PregnancyStatus",
-                  # Add in clinical fields
-                  "&field=Facility_Type_Description",
-                  "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class",
-                  "&field=TriageNotesParsed",
-                  "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
-                  "&field=Onset_Date&field=Initial_Temp_Calc&field=HighestTemp_Calc&field=Initial_Pulse_Oximetry_Calc",
-                  "&field=Systolic_Blood_Pressure&field=Diastolic_Blood_Pressure&field=Systolic_Diastolic_Blood_Pressure",
-                  "&field=Discharge_Date_Time&field=DischargeDisposition&field=DispositionCategory&field=MinutesFromVisitToDischarge",
-                  "&field=C_Death&field=C_Death_Source",
+                  fields,
                   # Add in patient ID
-                  "&cBiosenseID=", glue_collapse(input$rhino_id, sep = ",or,"))
-    
+                  "&cBiosenseID=", event_id)
+    print(url)
     data_load <- jsonlite::fromJSON(httr::content(
-      httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2],
-                            keyring::key_get("essence", keyring::key_list("essence")[1, 2]))),
-      as = "text"))
+      httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2], 
+                                        keyring::key_get("essence", keyring::key_list("essence")[1, 2]))), 
+      as = "text")) #, encoding = "UTF-8"))
     
     # Keep track of input ID
-    df <- input %>% dplyr::select(rhino_id, rhino_date)
+    output <- data.frame(rhino_id = event_id, stringsAsFactors = F)
+    output <- bind_cols(output, data_load$dataDetails)
+
+  } else if (bulk == T) {
+    ### Break up the query into smaller date ranges to ease load on server
+    ids <- data.frame(rhino_id = bulk_id, 
+                      rhino_date = as.Date(str_sub(bulk_id, 1, 10), format = "%Y.%m.%d"),
+                      stringsAsFactors = F)
     
-    if (!is.null(nrow(data_load$dataDetails))) {
-      df <- left_join(df, data_load$dataDetails, by = c("rhino_id" = "C_BioSense_ID"))
-      message("Matched ", as.integer(df %>% filter(!is.na(PID)) %>% summarise(count = n())), " IDs \n ")
-    } else {
-      message("Matched 0 IDs \n ")
+    # Check all were dates
+    if (is.na(min(ids$rhino_date)) | is.na(max(ids$rhino_date))) {
+      stop("Something went wrong extracting dates to use. Check IDs")
     }
     
+    # Build a list of 1-week dates that covers the range
+    min_dates <- seq(min(ids$rhino_date), max(ids$rhino_date), by = '1 week')
+    # Add in final if needed since sequence may miss it
+    if (max(min_dates) < max(ids$rhino_date)) {min_dates <- c(min_dates, max(min_dates) + weeks(1))}
     
+    date_range <- interval(start = min_dates, end = min_dates + days(6))
     
-    df
-  })
+    # Join to each date and restrict to desired period
+    dates <- data.frame(rhino_date = rep(unique(ids$rhino_date), length(date_range)),
+                        int = rep(date_range, each = length(unique(ids$rhino_date))),
+                        int_num = rep(seq(1, length(date_range)), each = length(unique(ids$rhino_date))),
+                        stringsAsFactors = F) %>%
+      arrange(rhino_date, int) %>%
+      filter(rhino_date %within% int) %>%
+      dplyr::mutate(int_start = int_start(int), int_end = int_end(int)) %>%
+      dplyr::select(-int)
+    
+    # Join back to main data
+    ids <- left_join(ids, dates, by = "rhino_date")
+    
+    # Figure out how many groups we need
+    group_ids <- paste0("group", sort(unique(ids$int_num)))
+    message("Dividing into ", length(group_ids), " groups")
+    
+    # Run query over each group
+    output <- lapply(seq_along(group_ids), function(x) {
+      
+      message("Working on group ", x, " of ", length(group_ids), " (group name: ", group_ids[x], ")")
+      
+      input <- ids %>% filter(int_num == sort(unique(ids$int_num))[x])
+      sdate <- format(min(input$int_start) - days(7), "%d%b%Y")
+      edate <- format(min(input$int_end) + days(7), "%d%b%Y")
+      
+      message("Start date of interval: ", sdate)
+      message("End date of interval: ", edate)
+      message("There are ", length(unique(input$rhino_id)), " IDs to check")
+      
+      url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?",
+                    # Add in dates and geographies
+                    "startDate=", sdate, "&endDate=", edate,
+                    "&geography=wa&geographySystem=hospitalstate",
+                    # Add in a few other fields including userID
+                    "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=3544",
+                    "&aqtTarget=DataDetails",
+                    # Add in percent param, frequency, and detector
+                    "&percentParam=noPercent&timeResolution=daily&detector=nodetectordetector",
+                    fields,
+                    # Add in patient ID
+                    "&cBiosenseID=", glue_collapse(input$rhino_id, sep = ",or,"))
+      
+      data_load <- jsonlite::fromJSON(httr::content(
+        httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2],
+                                          keyring::key_get("essence", keyring::key_list("essence")[1, 2]))),
+        as = "text"))
+      
+      # Keep track of input ID
+      df <- input %>% dplyr::select(rhino_id, rhino_date)
+      
+      if (!is.null(nrow(data_load$dataDetails))) {
+        df <- left_join(df, data_load$dataDetails, by = c("rhino_id" = "C_BioSense_ID"))
+        message("Matched ", as.integer(df %>% filter(!is.na(PID)) %>% summarise(count = n())), " IDs \n ")
+      } else {
+        message("Matched 0 IDs \n ")
+      }
+      
+      df
+    })
+    
+    # Label groups
+    names(output) <- group_ids
+  }
   
-  # Label groups
-  names(output) <- group_ids
   return(output)
 }
+
 
 
 ### Use this query to return syndrome counts/percentages plus alerts
