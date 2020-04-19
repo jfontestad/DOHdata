@@ -99,7 +99,8 @@ if (historical == F) {
 #### DAILY - ALL AGE ####
 message("Running daily all-ages section")
 
-all_age_ed_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli", "influenza"), function(x) {
+
+all_age_ed_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "influenza"), function(x) {
   # Run both queries
   pct <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, hospital = F, 
                               value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -110,7 +111,7 @@ all_age_ed_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli", "influenza"), 
   return(output)
 }))
 
-all_age_ed_uc_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+all_age_ed_uc_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
   # Run both queries
   pct <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, hospital = F, 
                               value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -121,7 +122,7 @@ all_age_ed_uc_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x
   return(output)
 }))
 
-all_age_hosp_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli", "influenza"), function(x) {
+all_age_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "influenza"), function(x) {
   # Run both queries
   pct <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, hospital = F, 
                               value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -150,7 +151,7 @@ all_age_ed_byhosp_daily <- bind_rows(lapply(c("cli"), function(x) {
 message("Running daily age-specific section")
 
 ### ED visits
-age_specific_ed_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+age_specific_ed_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
   # Run queries
   pct04 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "00-04", hospital = F, 
                                 value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -188,7 +189,7 @@ age_specific_ed_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function
 
 
 ### ED and urgent care
-age_specific_ed_uc_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+age_specific_ed_uc_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
   # Run queries
   pct04 <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "00-04", hospital = F, 
                                 value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -225,7 +226,7 @@ age_specific_ed_uc_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), funct
 }))
 
 ### Hospitalization
-age_specific_hosp_daily <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+age_specific_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
   # Run queries
   pct04 <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "00-04", hospital = F, 
                                 value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -343,7 +344,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   #### WEEKLY - ALL AGE ####
   message("Running weekly all-ages section")
   
-  all_age_ed_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli", "influenza"), function(x) {
+  all_age_ed_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "influenza"), function(x) {
     # Run both queries
     pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = F, 
                                 value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -354,7 +355,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     return(output)
   }))
   
-  all_age_ed_uc_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+  all_age_ed_uc_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
     # Run both queries
     pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, hospital = F, 
                                 value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -365,7 +366,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     return(output)
   }))
   
-  all_age_hosp_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli", "influenza"), function(x) {
+  all_age_hosp_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "influenza"), function(x) {
     # Run both queries
     pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, hospital = F, 
                                 value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -394,7 +395,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   message("Running weekly age-specific section")
   
   ### ED visits
-  age_specific_ed_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+  age_specific_ed_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
     # Run queries
     pct04 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "00-04", hospital = F, 
                                   value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -432,7 +433,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   
   
   ### ED and urgent care
-  age_specific_ed_uc_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+  age_specific_ed_uc_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
     # Run queries
     pct04 <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "00-04", hospital = F, 
                                   value = "percent", sdate = s_start_date, edate = s_end_date)
@@ -469,7 +470,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   }))
   
   ### Hospitalization
-  age_specific_hosp_weekly <- bind_rows(lapply(c("pneumonia", "ili", "cli"), function(x) {
+  age_specific_hosp_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
     # Run queries
     pct04 <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "00-04", hospital = F, 
                                   value = "percent", sdate = s_start_date, edate = s_end_date)

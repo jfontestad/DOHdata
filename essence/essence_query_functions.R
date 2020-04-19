@@ -205,7 +205,7 @@ event_query <- function(event_id = NULL, bulk = F) {
 syndrome_alert_query <- function(user_id = 520, 
                                  sdate = "2019-09-29", edate = today() - 1,
                                  frequency = c("weekly", "daily"), 
-                                 syndrome = c("ili", "cli", "pneumonia", "influenza"),
+                                 syndrome = c("all", "ili", "cli", "pneumonia", "influenza"),
                                  ed = F, inpatient = F, ed_uc = F,
                                  age = c("None", "00-04", "05-17", "18-44", "45-64", "65-1000", "unknown"),
                                  hospital = F, value = c("percent", "count")) {
@@ -234,7 +234,11 @@ syndrome_alert_query <- function(user_id = 520,
     stop("Select only one of 'ED', 'inpatient', and 'ed_uc'")
   }
   
-  if (syndrome == "ili") {
+  if (syndrome == "all") {
+    category <- ""
+    query <- "all"
+    syndrome_text <- "all"
+  } else if (syndrome == "ili") {
     category <- "&ccddCategory=ili%20ccdd%20v1"
     query <- "ili"
     syndrome_text <- "ILI"
@@ -259,10 +263,10 @@ syndrome_alert_query <- function(user_id = 520,
   } else if (syndrome %in% c("influenza") & value == "count") {
     detector <- "&detector=probrepswitch"
     percent <- "&percentParam=noPercent"
-  } else if (syndrome %in% c("ili", "pneumonia", "cli") & value == "percent") {
+  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli") & value == "percent") {
     detector <- "&detector=c2"
     percent <- "&percentParam=ccddCategory"
-  } else if (syndrome %in% c("ili", "pneumonia", "cli") & value == "count") {
+  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli") & value == "count") {
     detector <- "&detector=probregv2"
     percent <- "&percentParam=noPercent"
   }
