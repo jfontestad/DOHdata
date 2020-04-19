@@ -41,6 +41,7 @@ library(keyring)
 # date objects for ESSENCE queries and NRVESS data pull
 ### SET WHETHER THIS IS A HISTORICAL RUN OR NOT
 historical <- F
+historical_current <- T # Set to T if you want the historical run to also overwrite current data
 
 if (historical == F) {
   s_start_date <- as_date("2019-09-29", "%Y-%m-%d")
@@ -320,7 +321,12 @@ ndly <- ndly %>%
 if (historical == F) {
   saveRDS(ndly, file = file.path(output_path, "ndly.RData"))
   write_csv(ndly, file.path(output_path, "ndly.csv"))
-} else {
+} else if (historical == T & historical_current == T) {
+  saveRDS(ndly, file = file.path(output_path, "ndly.RData"))
+  write_csv(ndly, file.path(output_path, "ndly.csv"))
+  
+  saveRDS(ndly, file = file.path(output_path, "dly.RData"))
+} else if (historical == T & historical_current == F) {
   saveRDS(ndly, file = file.path(output_path, "dly.RData"))
 }
 
@@ -338,8 +344,16 @@ rm(dly,
 if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 1) {
   message("It's Monday, time to run the weekly counts")
   
-  ### Look 2 days back so we don't capture the start of this week
-  s_end_date <- today() - 2
+  ### Look back to find the most recent Saturday so we don't capture this week's data
+  # Could just use s_end_date <- today() - 2 but this way is more robust in case
+  #   the code is manually run on a non-Monday
+  sat_diff <- 6 - wday(today(), label = F, week_start = getOption("lubridate.week.start", 1))
+  if (sat_diff > 0) {
+    s_end_date <- today() - (7 - sat_diff)
+  } else {
+    s_end_date <- today() - abs(sat_diff)
+  }
+  
   
   #### WEEKLY - ALL AGE ####
   message("Running weekly all-ages section")
@@ -564,10 +578,14 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   if (historical == F) {
     saveRDS(nwkly, file = file.path(output_path, "nwkly.RData"))
     write_csv(nwkly, file.path(output_path, "nwkly.csv"))
-  } else {
-    saveRDS(nwkly, file = file.path(output_path, "wkly.RData"))
-  }
+  } else if (historical == T & historical_current == T) {
+  saveRDS(nwkly, file = file.path(output_path, "nwkly.RData"))
+  write_csv(nwkly, file.path(output_path, "nwkly.csv"))
   
+  saveRDS(nwkly, file = file.path(output_path, "wkly.RData"))
+} else if (historical == T & historical_current == F) {
+  saveRDS(nwkly, file = file.path(output_path, "wkly.RData"))
+}
   
   #### WEEKLY - CLEAN UP ####
   rm(nwkly,
