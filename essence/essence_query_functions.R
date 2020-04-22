@@ -212,7 +212,7 @@ syndrome_alert_query <- function(user_id = 520,
   
   frequency <- match.arg(frequency)
   syndrome <- match.arg(syndrome)
-  age <- match.arg(age)
+  age <- match.arg(age, several.ok = T)
   value <- match.arg(value)
   
   # Format dates properly
@@ -301,10 +301,25 @@ syndrome_alert_query <- function(user_id = 520,
   }
   
   # Catch all for age
-  if (age == "None") {
+  if ("None" %in% age) {
     age_grp <- ""
+    age_text <- "all age"
   } else {
-    age_grp <- paste0("&age=", age)
+    age_grp <- paste0("&age=", age, collapse = "")
+    if (length(age) > 1) {
+      age_text <- ifelse(max(c("None", "00-04", "05-17", "unknown") %in% age) == 0 &
+                           min(c("18-44", "45-64", "65-1000") %in% age) == 1,
+                         "all adult",
+                         paste0(age, collapse = ", "))
+    } else {
+      age_text <- case_when(age == "None" ~ "all age",
+                            age == "00-04" ~ "0-4",
+                            age == "05-17" ~ "5-17",
+                            age == "18-44" ~ "18-44",
+                            age == "45-64" ~ "45-64",
+                            age == "65-1000" ~ "65+",
+                            age == "unknown" ~ "Unk")
+    }
   }
   
   # Set things up for hospitals
@@ -320,7 +335,7 @@ syndrome_alert_query <- function(user_id = 520,
   }
   
   
-  output <- bind_rows(lapply(geogs, function(x) {
+  output <- dplyr::bind_rows(lapply(geogs, function(x) {
     url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?", 
                   # Add in dates and geographies
                   "startDate=", start_date, "&endDate=", end_date,
@@ -357,14 +372,8 @@ syndrome_alert_query <- function(user_id = 520,
     
     # Add in specifics for this data run
     df <- df %>%
-      dplyr::mutate(date = ymd(date),
-             age = case_when(age == "None" ~ "all age",
-                             age == "00-04" ~ "0-4",
-                             age == "05-17" ~ "5-17",
-                             age == "18-44" ~ "18-44",
-                             age == "45-64" ~ "45-64",
-                             age == "65-1000" ~ "65+",
-                             age == "unknown" ~ "Unk"),
+      dplyr::mutate(date = lubridate::ymd(date),
+             age = age_text,
              setting = setting,
              query = query,
              syndrome = syndrome_text) %>%

@@ -148,6 +148,47 @@ all_age_ed_byhosp_daily <- bind_rows(lapply(c("cli"), function(x) {
 }))
 
 
+#### DAILY - ALL ADULTS ####
+all_adult_ed_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "influenza"), function(x) {
+  # Run both queries
+  pct <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, 
+                              age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                              value = "percent", sdate = s_start_date, edate = s_end_date)
+  cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, 
+                              age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                              value = "count", sdate = s_start_date, edate = s_end_date)
+  # Bring together
+  output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+  return(output)
+}))
+
+all_adult_ed_uc_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
+  # Run both queries
+  pct <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, 
+                              age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                              value = "percent", sdate = s_start_date, edate = s_end_date)
+  cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, 
+                              age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                              value = "count", sdate = s_start_date, edate = s_end_date)
+  # Bring together
+  output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+  return(output)
+}))
+
+all_adult_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "influenza"), function(x) {
+  # Run both queries
+  pct <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, 
+                              age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                              value = "percent", sdate = s_start_date, edate = s_end_date)
+  cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, 
+                              age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                              value = "count", sdate = s_start_date, edate = s_end_date)
+  # Bring together
+  output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+  return(output)
+}))
+
+
 #### DAILY - AGE SPECIFIC ####
 message("Running daily age-specific section")
 
@@ -273,6 +314,8 @@ ndly <- bind_rows(
   all_age_ed_daily, all_age_ed_uc_daily, all_age_hosp_daily,
   # BY HOSPITAL
   all_age_ed_byhosp_daily,
+  # DAILY ALL ADULT
+  all_adult_ed_daily, all_adult_ed_uc_daily, all_adult_hosp_daily,
   # AGE SPECIFIC
   age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily)
 
@@ -336,6 +379,7 @@ rm(pdly_full_pneumo_ed, pdly_full_pneumo_hosp, pdly_full_ili_ed, pdly_full_cli_e
 
 rm(dly,
    all_age_ed_daily, all_age_ed_byhosp_daily, all_age_ed_uc_daily, all_age_hosp_daily,
+   all_adult_ed_daily, all_adult_ed_uc_daily, all_adult_hosp_daily,
    age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily)
 
 
@@ -398,6 +442,47 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = T, 
                                 value = "percent", sdate = s_start_date, edate = s_end_date)
     cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = T, 
+                                value = "count", sdate = s_start_date, edate = s_end_date)
+    # Bring together
+    output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+    return(output)
+  }))
+  
+  
+  #### WEEKLY - ALL ADULTS ####
+  all_adult_ed_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "influenza"), function(x) {
+    # Run both queries
+    pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, 
+                                age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                                value = "percent", sdate = s_start_date, edate = s_end_date)
+    cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, 
+                                age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                                value = "count", sdate = s_start_date, edate = s_end_date)
+    # Bring together
+    output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+    return(output)
+  }))
+  
+  all_adult_ed_uc_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
+    # Run both queries
+    pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, 
+                                age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                                value = "percent", sdate = s_start_date, edate = s_end_date)
+    cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, 
+                                age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                                value = "count", sdate = s_start_date, edate = s_end_date)
+    # Bring together
+    output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
+    return(output)
+  }))
+  
+  all_adult_hosp_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "influenza"), function(x) {
+    # Run both queries
+    pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, 
+                                age = c("18-44", "45-64", "65-1000"), hospital = F, 
+                                value = "percent", sdate = s_start_date, edate = s_end_date)
+    cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, 
+                                age = c("18-44", "45-64", "65-1000"), hospital = F, 
                                 value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
     output <- left_join(pct, cnt, by = c("date", "age", "setting", "query", "syndrome", "hospital"))
@@ -531,6 +616,8 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     all_age_ed_weekly, all_age_ed_uc_weekly, all_age_hosp_weekly,
     # BY HOSPITAL
     all_age_ed_byhosp_weekly,
+    # DAILY ALL ADULT
+    all_adult_ed_weekly, all_adult_ed_uc_weekly, all_adult_hosp_weekly,
     # AGE SPECIFIC
     age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly)
   
@@ -590,6 +677,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   #### WEEKLY - CLEAN UP ####
   rm(nwkly,
      all_age_ed_weekly, all_age_ed_byhosp_weekly, all_age_ed_uc_weekly, all_age_hosp_weekly,
+     all_adult_ed_weekly, all_adult_ed_uc_weekly, all_adult_hosp_weekly,
      age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly)
   
 }
