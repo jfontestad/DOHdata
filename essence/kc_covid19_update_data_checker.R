@@ -27,7 +27,7 @@ output_path <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Reques
 
 #### CHECK FILES ####
 ### See when the daily file was last updated
-last_mod <- file.mtime(file.path(output_path, "ndly.csv"))
+last_mod <- file.mtime(file.path(output_path, "From Natasha on March 13", "ndly.csv"))
 
 # Also check weekly file if today is Monday
 if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 1) {
@@ -77,9 +77,9 @@ if (daily_error == T | weekly_error == T) {
   "<br>If the daily file was modified but the weekly one was not, look in the weekly section of the code.</p>")
 } else {
   subject <- "Daily syndromic data refresh completed successfully"
-  body_text <- paste0("Go to <a href = 'https://tableau.kingcounty.gov/#/site/DPH_CDIMMS/views/Essence-SummaryofRespiratorySyndromes-internal/Pg1-CLIED?Set%20frequency=Daily'>", 
+  body_text <- paste0("<p>Go to <a href = 'https://tableau.kingcounty.gov/#/site/DPH_CDIMMS/views/Essence-SummaryofRespiratorySyndromes-internal/Pg1-CLIED?Set%20frequency=Daily'>", 
                       "https://tableau.kingcounty.gov/#/site/DPH_CDIMMS/views/Essence-SummaryofRespiratorySyndromes-internal/Pg1-CLIED?Set%20frequency=Daily</a>", 
-                      " to see the dashboard, check the data extract also completed, and download a PDF for the daily email")
+                      " to see the dashboard and check the data extract also completed.</p>")
 }
 
 
@@ -118,9 +118,11 @@ if (daily_error == F | daily_error == T) {
                  add_headers("x-tableau-auth" = api_cred$token),
                  write_disk(path = paste0(output_path, "/Reports - daily/KC_SYNDROMIC_", Sys.Date(), "_DAILY.pdf"), overwrite = T))
   
+  
+  
   body_text <- paste0(body_text, "<p>An exported pdf of the DAILY version of the Tableau workbook can be found here: <br>",
-                      "<a href = '\\phshare01\CDI_SHARE\Analytics and Informatics Team\Data Requests\2020\372_nCoV Essence Extract\Reports - daily'>", 
-                      "\\phshare01\CDI_SHARE\Analytics and Informatics Team\Data Requests\2020\372_nCoV Essence Extract\Reports - daily</a></p>")
+                      "<a href = 'file:\\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\Reports - daily'>", 
+                      "\\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\Reports - daily</a></p>")
 }
 
 
