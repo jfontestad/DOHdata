@@ -10,8 +10,8 @@
 ##
 ## ---------------------------
 ##
-## Notes:
-##   
+## Notes: Requires a credential for Tableau server (called tableau_server) 
+##   to be stored in Windows credential manager and accessed via keyring package.
 ##
 ## ---------------------------
 
@@ -19,10 +19,10 @@
 options(scipen = 6, digits = 4, warning.length = 8170)
 
 if (!require("pacman")) {install.packages("pacman")}
-pacman::p_load(tidyverse, glue, RDCOMClient, lubridate)
+pacman::p_load(tidyverse, glue, RDCOMClient, lubridate, keyring, jsonlite, httr)
 
 ### Set up folder to check
-output_path <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Requests/2020/372_nCoV Essence Extract/From Natasha on March 13"
+output_path <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Requests/2020/372_nCoV Essence Extract"
 
 
 #### CHECK FILES ####
@@ -83,6 +83,47 @@ if (daily_error == T | weekly_error == T) {
 }
 
 
+#### AUTOMATICALLY EXPORT PDF OF DAILY DATA ####
+# NB. The Tableau API does not currently allow for a parameter filter to be applied
+#     to a workbook before downloading as a PDF. So only daily data can be automated this way
+
+# Also NB. This approach assumes that the datasource in Tableau is refreshed on schedule.
+
+if (daily_error == F | daily_error == T) {
+  ### Connect to REST API
+  server_name <- "tableau.kingcounty.gov"
+  api <- 3.5
+  
+  auth_creds <- jsonlite::toJSON(list(credentials = list(
+    name = key_list("tableau_server")[["username"]], 
+    password = key_get("tableau_server", key_list("tableau_server")[["username"]]), 
+    site = list(contentUrl = "DPH_CDIMMS"))), auto_unbox = T)
+  
+  auth_req <- POST(paste0("https://", server_name, "/", "api/", api, "/", "auth/signin"), 
+                   body = auth_creds,
+                   config = add_headers(c(accept="application/json", `content-type`="application/json")),
+                   encode = "json") %>% stop_for_status(auth_req)
+  
+  auth_pload <- content(auth_req, "text") %>% fromJSON()
+  
+  message("Sign in successful")
+  
+  api_cred <- list(site_id = auth_pload$credentials$site$id, token = auth_pload$credentials$token)
+  
+  
+  # Note: hard coding ESSENCE workbook ID for now, could use another query to dynamically get it
+  # Set up query
+  pdf_req <- GET(paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/workbooks/",
+                        "3a1dce3f-4d89-48fb-96ad-e16d5e35add5", "/pdf?type=Letter&orientation=Portrait"),
+                 add_headers("x-tableau-auth" = api_cred$token),
+                 write_disk(path = paste0(output_path, "/Reports - daily/KC_SYNDROMIC_", Sys.Date(), "_DAILY.pdf"), overwrite = T))
+  
+  body_text <- paste0(body_text, "<p>An exported pdf of the DAILY version of the Tableau workbook can be found here: <br>",
+                      "<a href = '\\phshare01\CDI_SHARE\Analytics and Informatics Team\Data Requests\2020\372_nCoV Essence Extract\Reports - daily'>", 
+                      "\\phshare01\CDI_SHARE\Analytics and Informatics Team\Data Requests\2020\372_nCoV Essence Extract\Reports - daily</a></p>")
+}
+
+
 #### SEND EMAIL ####
 # Set up COM API
 outlook_app <- COMCreate("Outlook.Application")
@@ -100,4 +141,5 @@ outlook_mail[["htmlbody"]] <- paste0(
 # Send email
 outlook_mail$Send()
 
+message("Daily check complete")
 
