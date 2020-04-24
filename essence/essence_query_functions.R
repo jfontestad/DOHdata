@@ -326,7 +326,8 @@ syndrome_alert_query <- function(user_id = 520,
   if (hospital == T) {
     geog_system <- "hospital"
     geogs <- c("1255", "1297", "1298", "1247", "27090", "1252", "1269", "30509", 
-               "1272", "1277", "1294", "1302", "1303", "1304", "1305", "1307", "1313")
+               "1272", "1277", "30529", "1294", "1302", "1303", "1304", "1305", 
+               "1307", "1313", "1316")
     fields <- "&multiStratVal=geography&graphOptions=multipleSmall"
   } else {
     geog_system <- "hospitalregion"
@@ -395,13 +396,15 @@ syndrome_alert_query <- function(user_id = 520,
         x == 30509 ~ "MultiCare Covington Medical Center",
         x == 1272 ~ "Northwest Hospital and Medical Center",
         x == 1277 ~ "Overlake Hospital Medical Center",
+        x == 30529 ~ "Seattle Children's Hospital",
         x == 1294 ~ "Snoqualmie Valley Hospital",
         x == 1302 ~ "Swedish Medical Center - Ballard",
         x == 1303 ~ "Swedish Medical Center - Cherry Hill",
         x == 1304 ~ "Swedish Medical Center - First Hill",
         x == 1305 ~ "Swedish Medical Center - Issaquah",
         x == 1307 ~ "Swedish Medical Center - Redmond",
-        x == 1313 ~ "University of Washington Medical Center"
+        x == 1313 ~ "University of Washington Medical Center",
+        x == 1316 ~ "Virginia Mason Medical Center"
       ))
     }
     
