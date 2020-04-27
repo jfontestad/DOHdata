@@ -33,7 +33,7 @@ last_mod <- file.mtime(file.path(output_path, "From Natasha on March 13", "ndly.
 if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 1) {
   monday <- T
   
-  last_mod_wkly <- file.mtime(file.path(output_path, "nwkly.csv"))
+  last_mod_wkly <- file.mtime(file.path(output_path, "From Natasha on March 13", "nwkly.csv"))
   
   if (date(last_mod_wkly) != today()) {
     weekly_error <- T
