@@ -384,13 +384,13 @@ rm(dly,
 
 
 #### WEEKLY RUN ####
-### ONLY RUN THIS IF IT'S A MONDAY
-if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 1) {
-  message("It's Monday, time to run the weekly counts")
+### ONLY RUN THIS IF IT'S A TUESDAY
+if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 2) {
+  message("It's Tuesday, time to run the weekly counts")
   
   ### Look back to find the most recent Saturday so we don't capture this week's data
-  # Could just use s_end_date <- today() - 2 but this way is more robust in case
-  #   the code is manually run on a non-Monday
+  # Could just use s_end_date <- today() - 3 but this way is more robust in case
+  #   the code is manually run on a non-Tuesday
   sat_diff <- 6 - wday(today(), label = F, week_start = getOption("lubridate.week.start", 1))
   if (sat_diff > 0) {
     s_end_date <- today() - (7 - sat_diff)

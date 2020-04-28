@@ -29,9 +29,9 @@ output_path <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Reques
 ### See when the daily file was last updated
 last_mod <- file.mtime(file.path(output_path, "From Natasha on March 13", "ndly.csv"))
 
-# Also check weekly file if today is Monday
-if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 1) {
-  monday <- T
+# Also check weekly file if today is Tuesday
+if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 2) {
+  tuesday <- T
   
   last_mod_wkly <- file.mtime(file.path(output_path, "From Natasha on March 13", "nwkly.csv"))
   
@@ -41,7 +41,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     weekly_error <- F
   }
 } else {
-  monday <- F
+  tuesday <- F
   weekly_error <- F
 }
 
@@ -53,18 +53,18 @@ if (date(last_mod) != today()) {
 
 
 #### GENERATE TEXT ####
-if (daily_error == T & monday == F) {
+if (daily_error == T & tuesday == F) {
   error_text <- "the daily syndromic data file (ndly.csv) was not updated today."
-} else if (daily_error == T & monday == T & weekly_error == F) {
+} else if (daily_error == T & tuesday == T & weekly_error == F) {
   error_text <- paste0("the daily syndromic data file (ndly.csv) was not updated today ", 
                        "(and the weekly code likely failed to even start).")
 } else if (daily_error == T & weekly_error == T) {
   error_text <- "both the daily (ndly.csv) and weekly (nwkly.csv) syndromic data files were not updated today."
 } else if (daily_error == F & weekly_error == T) {
   error_text <- "the weekly syndromic data file (nwkly.csv) was not updated today (but the daily file (ndly.csv) was)."
-} else if (daily_error == F & monday == F) {
+} else if (daily_error == F & tuesday == F) {
   error_text <- "the daily syndromic data file (ndly.csv) was updated today"
-} else if (daily_error == F & monday == T & weekly_error == F) {
+} else if (daily_error == F & tuesday == T & weekly_error == F) {
   error_text <- "both the daily (ndly.csv) and weekly (wkly.csv) syndromic data files were updated today"
 }
 
@@ -137,7 +137,7 @@ outlook_mail[["subject"]] <- subject
 additional_msg <- ""
 outlook_mail[["htmlbody"]] <- paste0(
   "<p>This is an automatically generated email to let you know that ", error_text,  "</p>",
-  "<p>As a reminder, the daily file should be updated shortly after 4 PM each day and the weekly file each Monday at 4 PM. ", 
+  "<p>As a reminder, the daily file should be updated shortly after 4 PM each day and the weekly file each Tuesday at 4 PM. ", 
   body_text)
 
 # Send email
