@@ -18,7 +18,22 @@
 
 
 ### Use this query to find demographics specific to this person
-person_query <- function(pid = NULL, sdate = "2019-01-01", edate = today() - 1) {
+# Can also pull in DX codes to look for chronic conditions over the time period (dx = T)
+#    (used to find people with chronic conditions)
+# Look for one PID (bulk = F) or many (bulk = T)
+# If using bulk, can set the size of the group to search at the same time (group_size)
+person_query <- function(pid = NULL, sdate = "2019-01-01", edate = today() - 1,
+                         dx = F, bulk = F, group_size = 100) {
+  
+  # Check how many IDs were provided
+  if (length(pid) > 1 & bulk == F) {
+    pid <- pid[1]
+    warning("Multiple IDs were provided but only the first was used. \n
+            Use bulk = T to search for multiple IDs")
+  }
+  
+  # Ensure that group_size is an integer
+  group_size <- round(group_size)
   
   # Format dates properly
   # Throw an error if input not in expected format
@@ -32,27 +47,69 @@ person_query <- function(pid = NULL, sdate = "2019-01-01", edate = today() - 1) 
   start_date <- format(as.Date(sdate, "%Y-%m-%d"), "%d%b%Y")
   end_date <- format(as.Date(edate, "%Y-%m-%d"), "%d%b%Y")
   
-  url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?", 
-                # Add in dates and geographies
-                "startDate=", start_date, "&endDate=", end_date,
-                "&geography=wa&geographySystem=hospitalstate", 
-                # Add in a few other fields including userID
-                "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=3544",
-                "&aqtTarget=DataDetails", 
-                # Add in percent param, frequency, and detector
-                "&percentParam=noPercent&timeResolution=daily&detector=nodetectordetector",
-                # Add in demographic fields
-                "&field=PID&field=Date&field=Age&field=Birth_Date_Time&field=Sex&field=Zipcode",
-                "&field=Race_flat&field=Ethnicity_flat&field=Height&field=Height_Units",
-                "&field=Weight&field=Weight_Units&field=Body_Mass_Index&field=Smoking_Status_Code",
-                # Add in patient ID
-                "&cBiosenseID=%5E", pid)
   
-  data_load <- jsonlite::fromJSON(httr::content(
-    httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2], 
-                          keyring::key_get("essence", keyring::key_list("essence")[1, 2]))), as = "text"))
+  if (dx == T) {
+    dx_fields <- "&field=dischargeDiagnosis&field=Diagnosis_Combo&field=HasBeenE&field=HasBeenI"
+  } else {
+    dx_fields <- ""
+  }
   
-  df <- data_load$dataDetails
+  # Set up fields common to both types of query
+  fields <- paste0(# Add in dates and geographies
+    "startDate=", start_date, "&endDate=", end_date,
+    "&geography=wa&geographySystem=hospitalstate", 
+    # Add in a few other fields including userID
+    "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=3544",
+    "&aqtTarget=DataDetails", 
+    # Add in percent param, frequency, and detector
+    "&percentParam=noPercent&timeResolution=daily&detector=nodetectordetector",
+    # Add in demographic fields
+    "&field=PID&field=Date&field=Age&field=Birth_Date_Time&field=Sex&field=Zipcode",
+    "&field=Race_flat&field=Ethnicity_flat&field=Height&field=Height_Units",
+    "&field=Weight&field=Weight_Units&field=Body_Mass_Index&field=Smoking_Status_Code",
+    # Add in DX fields if desired
+    dx_fields)
+  
+  
+  if (bulk == F) {
+    url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?", 
+                  fields,
+                  # Add in patient ID
+                  "&cBiosenseID=%5E", pid)
+    
+    data_load <- jsonlite::fromJSON(httr::content(
+      httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2], 
+                                        keyring::key_get("essence", keyring::key_list("essence")[1, 2]))), as = "text"))
+    
+    df <- data_load$dataDetails
+  } else if (bulk == T) {
+    # Make sure IDs are unique
+    pid <- unique(pid)
+    
+    # Split up queries into smaller batches to avoid overloading the system
+    num_ids <- length(pid)
+    input_split <- split(pid, rep(1:ceiling(num_ids/group_size), each = group_size, length.out = num_ids))
+    
+    # Run each group through the query
+    df <- bind_rows(lapply(seq_along(input_split), function(x) {
+      message(paste0("Working on group ", x, " of ", length(input_split)))
+      ids <- paste0("%5E", input_split[[x]], collapse = ",")
+      
+      url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?", 
+                    fields,
+                    # Add in patient ID
+                    "&cBiosenseID=", ids)
+      
+      data_load <- jsonlite::fromJSON(httr::content(
+        httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2], 
+                                          keyring::key_get("essence", keyring::key_list("essence")[1, 2]))), as = "text"))
+      
+      output <- data_load$dataDetails
+      output
+    }))
+  }
+  
+  df <- df %>% arrange(PID, Date)
   
   return(df)
 }
@@ -68,7 +125,7 @@ event_query <- function(event_id = NULL, bulk = F) {
             Use bulk = T to search for multiple IDs")
   }
   
-   # Set up fields common to both types of query
+  # Set up fields common to both types of query
   fields <- paste0(# Add in rowFields
     "&field=C_BioSense_ID&field=PID&field=Date&field=Age&field=AgeGroup&field=Birth_Date_Time&field=Sex&field=Zipcode",
     "&field=Race_flat&field=Ethnicity_flat&field=Height&field=Height_Units",
@@ -79,9 +136,10 @@ event_query <- function(event_id = NULL, bulk = F) {
     "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class&field=PatientClassList",
     "&field=TriageNotesParsed",
     "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
+    "&field=CCDDCategory_flat",
     "&field=Onset_Date&field=Initial_Temp_Calc&field=HighestTemp_Calc&field=Initial_Pulse_Oximetry_Calc",
     "&field=Systolic_Blood_Pressure&field=Diastolic_Blood_Pressure&field=Systolic_Diastolic_Blood_Pressure",
-    "&field=Discharge_Date_Time&field=DischargeDisposition&field=DispositionCategory&field=MinutesFromVisitToDischarge",
+    "&field=Admit_Date_Time&field=Discharge_Date_Time&field=DischargeDisposition&field=DispositionCategory&field=MinutesFromVisitToDischarge",
     "&field=C_Death&field=C_Death_Source")
   
   
