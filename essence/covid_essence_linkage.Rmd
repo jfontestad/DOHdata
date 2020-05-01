@@ -18,7 +18,7 @@ options(knitr.kable.NA = '')
 ## Introduction
 
 This document shows demographics and clinical aspects of COVID-19 cases who have been linked to RHINO IDs. There were 
-`r format(nrow(covid_orig), big.mark = ',')` clinical encounters among `r format(length(unique(covid_orig$case_id)), big.mark = ',')` linked cases.
+`r format(nrow(covid_orig), big.mark = ',')` clinical encounters among `r format(length(unique(covid_orig$CASE_ID)), big.mark = ',')` linked cases.
 Of those, `r format(matched$encounters, big.mark = ',')` encounters from `r format(matched$people, big.mark = ',')` individuals were found in RHINO.
 
 
