@@ -518,13 +518,13 @@ chronic_report <- first %>% select(PID, starts_with("ccw")) %>% distinct() %>%
 
 
 # Combine into one data frame
-demogs_tot <- bind_rows(age, race, ethn, sex, obese, obese_severe, smoker_current) %>%
+demogs_tot <- bind_rows(age, race, ethn, sex, obese, obese_severe, smoker_current, chronic_report) %>%
   mutate(Number = paste0(format(count, big.mark = ','), " (", pct, "%)")) %>%
   select(Demographic, Group, Number)
 
 
 #### Clinical features ####
-stay_length <- case_data_recodes %>% filter(!is.na(time_discharge_cat)) %>% 
+stay_length <- case_data_recodes %>% filter(!is.na(time_discharge_cat) & HasBeenI == 1) %>% 
   group_by(time_discharge_cat) %>% 
   summarise(count = n()) %>% ungroup() %>% 
   mutate(total = sum(count),
