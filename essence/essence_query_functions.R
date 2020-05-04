@@ -329,7 +329,7 @@ syndrome_alert_query <- function(user_id = 520,
   } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new", "cli") & value == "percent") {
     detector <- "&detector=c2"
     percent <- "&percentParam=ccddCategory"
-  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new") & value == "count") {
+  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new", "cli") & value == "count") {
     detector <- "&detector=probregv2"
     percent <- "&percentParam=noPercent"
   }
