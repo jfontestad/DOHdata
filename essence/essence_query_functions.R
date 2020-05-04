@@ -263,7 +263,7 @@ event_query <- function(event_id = NULL, bulk = F) {
 syndrome_alert_query <- function(user_id = 520, 
                                  sdate = "2019-09-29", edate = today() - 1,
                                  frequency = c("weekly", "daily"), 
-                                 syndrome = c("all", "ili", "cli_new", "cli_old", 
+                                 syndrome = c("all", "ili", "cli_new", "cli_old", "cli", 
                                               "pneumonia", "influenza"),
                                  ed = F, inpatient = F, ed_uc = F,
                                  age = c("None", "00-04", "05-17", "18-44", "45-64", "65-1000", "unknown"),
@@ -305,7 +305,7 @@ syndrome_alert_query <- function(user_id = 520,
     category <- "&ccddCategory=fever%20and%20cough-sob-diffbr%20v1"
     query <- "cli_old"
     syndrome_text <- "CLI - old definition"
-  } else if (syndrome == "cli_new") {
+  } else if (syndrome %in% c("cli_new", "cli")) {
     category <- "&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v1"
     query <- "cli"
     syndrome_text <- "CLI"
@@ -326,7 +326,7 @@ syndrome_alert_query <- function(user_id = 520,
   } else if (syndrome %in% c("influenza") & value == "count") {
     detector <- "&detector=probrepswitch"
     percent <- "&percentParam=noPercent"
-  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new") & value == "percent") {
+  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new", "cli") & value == "percent") {
     detector <- "&detector=c2"
     percent <- "&percentParam=ccddCategory"
   } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new") & value == "count") {
@@ -483,7 +483,7 @@ syndrome_person_level_query <- function(user_id = 2769,
                                         frequency = c("weekly", "daily"), 
                                         sdate = "2019-09-29", edate = today() - 1,
                                         syndrome = c("none", "ili", "cli_new", 
-                                                     "cli_old", "pneumonia"),
+                                                     "cli_old", "cli", "pneumonia"),
                                         ed = F, inpatient = F) {
   
   frequency <- match.arg(frequency)
@@ -510,10 +510,10 @@ syndrome_person_level_query <- function(user_id = 2769,
     category <- "&ccddCategory=fever%20and%20cough-sob-diffbr%20v1"
     query <- "fevcough"
     condition <- "cli_old"
-  } else if (syndrome == "cli_new") {
+  } else if (syndrome %in% c("cli_new", "cli")) {
     category <- "&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v1"
-    query <- "fevcough"
-    condition <- "cli_old"
+    query <- "cli"
+    condition <- "cli"
   } else if (syndrome == "pneumonia") {
     category <- paste0("&dischargeDiagnosisApplyTo=subsyndromeFreeText&dischargeDiagnosis=", 
                        "%5Epneumonia%5E,or,%5E%5B;/%20%5DJ12.%5B89%5D%5E,or,%5E%5B;/%20%5DJ12%5B89%5D%5E,or,",
@@ -548,7 +548,7 @@ syndrome_person_level_query <- function(user_id = 2769,
   }
   
   # Catch all for percentParam types
-  if (syndrome %in% c("ili", "cli", "none")) {
+  if (syndrome %in% c("ili", "cli_new", "cli_old", "cli", "none")) {
     percent <- "&percentParam=ccddCategory"
   } else if (syndrome %in% c("pneumonia")) {
     percent <- "&percentParam=dischargeDiagnosis"
@@ -557,12 +557,12 @@ syndrome_person_level_query <- function(user_id = 2769,
   # Catch all for visit types
   if (syndrome %in% c("none")) {
     visit_types <- "&hospFacilityType=emergency%20care&hospFacilityType=urgent%20care&hospFacilityType=primary%20care"
-  } else if (syndrome %in% c("ili", "cli", "pneumonia")) {
+  } else if (syndrome %in% c("ili", "cli_new", "cli_old", "cli", "pneumonia")) {
     visit_types <- "&hospFacilityType=emergency%20care"
   }
   
   # Catch all for detector types
-  if (syndrome %in% c("cli", "none")) {
+  if (syndrome %in% c("cli_new", "cli_old", "cli", "none")) {
     detector <- "&detector=nodetectordetector"
   } else if (syndrome %in% c("ili", "pneumonia")) {
     detector <- "&detector=c2"
