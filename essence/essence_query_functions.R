@@ -132,7 +132,7 @@ event_query <- function(event_id = NULL, bulk = F) {
     "&field=Weight&field=Weight_Units&field=Body_Mass_Index&field=Smoking_Status_Code",
     "&field=PregnancyStatus",
     # Add in clinical fields
-    "&field=Facility_Type_Description",
+    "&field=Facility&field=Facility_Type_Description",
     "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class&field=PatientClassList",
     "&field=TriageNotesParsed",
     "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
@@ -140,7 +140,7 @@ event_query <- function(event_id = NULL, bulk = F) {
     "&field=Onset_Date&field=Initial_Temp_Calc&field=HighestTemp_Calc&field=Initial_Pulse_Oximetry_Calc",
     "&field=Systolic_Blood_Pressure&field=Diastolic_Blood_Pressure&field=Systolic_Diastolic_Blood_Pressure",
     "&field=Admit_Date_Time&field=Discharge_Date_Time&field=DischargeDisposition&field=DispositionCategory&field=MinutesFromVisitToDischarge",
-    "&field=C_Death&field=C_Death_Source")
+    "&field=C_Death&field=C_Death_Source&field=Death_Date_Time")
   
   
   if (bulk == F) {
@@ -263,7 +263,8 @@ event_query <- function(event_id = NULL, bulk = F) {
 syndrome_alert_query <- function(user_id = 520, 
                                  sdate = "2019-09-29", edate = today() - 1,
                                  frequency = c("weekly", "daily"), 
-                                 syndrome = c("all", "ili", "cli", "pneumonia", "influenza"),
+                                 syndrome = c("all", "ili", "cli_new", "cli_old", 
+                                              "pneumonia", "influenza"),
                                  ed = F, inpatient = F, ed_uc = F,
                                  age = c("None", "00-04", "05-17", "18-44", "45-64", "65-1000", "unknown"),
                                  hospital = F, value = c("percent", "count")) {
@@ -300,8 +301,12 @@ syndrome_alert_query <- function(user_id = 520,
     category <- "&ccddCategory=ili%20ccdd%20v1"
     query <- "ili"
     syndrome_text <- "ILI"
-  } else if (syndrome == "cli") {
+  } else if (syndrome == "cli_old") {
     category <- "&ccddCategory=fever%20and%20cough-sob-diffbr%20v1"
+    query <- "cli_old"
+    syndrome_text <- "CLI - old definition"
+  } else if (syndrome == "cli_new") {
+    category <- "&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v1"
     query <- "cli"
     syndrome_text <- "CLI"
   } else if (syndrome == "pneumonia") {
@@ -321,10 +326,10 @@ syndrome_alert_query <- function(user_id = 520,
   } else if (syndrome %in% c("influenza") & value == "count") {
     detector <- "&detector=probrepswitch"
     percent <- "&percentParam=noPercent"
-  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli") & value == "percent") {
+  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new") & value == "percent") {
     detector <- "&detector=c2"
     percent <- "&percentParam=ccddCategory"
-  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli") & value == "count") {
+  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new") & value == "count") {
     detector <- "&detector=probregv2"
     percent <- "&percentParam=noPercent"
   }
@@ -477,7 +482,8 @@ syndrome_alert_query <- function(user_id = 520,
 syndrome_person_level_query <- function(user_id = 2769, 
                                         frequency = c("weekly", "daily"), 
                                         sdate = "2019-09-29", edate = today() - 1,
-                                        syndrome = c("none", "ili", "cli", "pneumonia"),
+                                        syndrome = c("none", "ili", "cli_new", 
+                                                     "cli_old", "pneumonia"),
                                         ed = F, inpatient = F) {
   
   frequency <- match.arg(frequency)
@@ -500,10 +506,14 @@ syndrome_person_level_query <- function(user_id = 2769,
     category <- "&ccddCategory=ili%20ccdd%20v1"
     query <- "ili"
     condition <- "ili"
-  } else if (syndrome == "cli") {
+  } else if (syndrome == "cli_old") {
     category <- "&ccddCategory=fever%20and%20cough-sob-diffbr%20v1"
     query <- "fevcough"
-    condition <- "cli"
+    condition <- "cli_old"
+  } else if (syndrome == "cli_new") {
+    category <- "&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v1"
+    query <- "fevcough"
+    condition <- "cli_old"
   } else if (syndrome == "pneumonia") {
     category <- paste0("&dischargeDiagnosisApplyTo=subsyndromeFreeText&dischargeDiagnosis=", 
                        "%5Epneumonia%5E,or,%5E%5B;/%20%5DJ12.%5B89%5D%5E,or,%5E%5B;/%20%5DJ12%5B89%5D%5E,or,",
