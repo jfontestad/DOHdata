@@ -267,11 +267,15 @@ syndrome_alert_query <- function(user_id = 520,
                                               "pneumonia", "influenza"),
                                  ed = F, inpatient = F, ed_uc = F,
                                  age = c("None", "00-04", "05-17", "18-44", "45-64", "65-1000", "unknown"),
+                                 race = c("all", "aian", "asian", "black", "nhpi", "other", "white", "unknown"),
+                                 ethnicity = c("all", "latino", "non-latino", "unknown"),
                                  hospital = F, value = c("percent", "count")) {
   
   frequency <- match.arg(frequency)
   syndrome <- match.arg(syndrome)
   age <- match.arg(age, several.ok = T)
+  race <- match.arg(race, several.ok = T)
+  ethnicity <- match.arg(ethnicity, several.ok = T)
   value <- match.arg(value)
   
   # Format dates properly
@@ -385,6 +389,41 @@ syndrome_alert_query <- function(user_id = 520,
     }
   }
   
+  # Catch all for race
+  if ("all" %in% race) {
+    race_grp <- ""
+    race_text <- "all"
+  } else {
+    race_text <- paste(race, sep = ", ")
+    
+    if ("aian" %in% race) {race_grp_aian <- "&race=1002-5"} else {race_grp_aian <- ""}
+    if ("asian" %in% race) {race_grp_asian <- "&race=2028-9"} else {race_grp_asian <- ""}
+    if ("black" %in% race) {race_grp_black <- "&race=2054-5"} else {race_grp_black <- ""}
+    if ("nhpi" %in% race) {race_grp_nhpi <- "&race=2076-8"} else {race_grp_nhpi <- ""}
+    if ("other" %in% race) {race_grp_other <- "&race=2131-1"} else {race_grp_other <- ""}
+    if ("white" %in% race) {race_grp_white <- "&race=2106-3"} else {race_grp_white <- ""}
+    if ("unknown" %in% race) {race_grp_unk<- "&raace=phc1175&race=unk&race=nr"} else {race_grp_unk <- ""}
+    
+    race_grp <- paste0(race_grp_aian, race_grp_asian, race_grp_black, race_grp_nhpi,
+                       race_grp_other, race_grp_white, race_grp_unk)
+  }
+  
+  # Catch all for ethnicity
+  if ("all" %in% ethnicity) {
+    eth_grp <- ""
+    eth_text <- "all"
+  } else {
+    eth_text <- paste(ethnicity, sep = ", ")
+    
+    if ("latino" %in% ethnicity) {eth_grp_latino <- "&ethnicity=2135-2"} else {eth_grp_latino <- ""}
+    if ("non-latino" %in% ethnicity) {eth_grp_nonlat <- "&ethnicity=2028-9"} else {eth_grp_nonlat <- ""}
+    if ("unknown" %in% ethnicity) {eth_grp_unk <- "&ethnicity=unk&ethnicity=nr"} else {eth_grp_unk <- ""}
+    
+    eth_grp <- paste0(eth_grp_latino, eth_grp_nonlat, eth_grp_unk)
+  }
+  
+ 
+  
   # Set things up for hospitals
   if (hospital == T) {
     geog_system <- "hospital"
@@ -411,8 +450,8 @@ syndrome_alert_query <- function(user_id = 520,
                   percent, visit_type, "&timeResolution=", frequency, detector,
                   # Add in other config fields
                   config,
-                  # Add in syndrome, filter, and age
-                  category, filter, age_grp,
+                  # Add in syndrome, filter, age, race, and ethnicity
+                  category, filter, age_grp, race_grp, eth_grp,
                   # Add in hospital grouping
                   "&stratVal=&graphOnly=true&numSeries=0", fields,
                   "&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January"
@@ -438,6 +477,8 @@ syndrome_alert_query <- function(user_id = 520,
     df <- df %>%
       dplyr::mutate(date = lubridate::ymd(date),
              age = age_text,
+             race = race_text,
+             ethnicity = eth_text,
              setting = setting,
              query = query,
              syndrome = syndrome_text) %>%
