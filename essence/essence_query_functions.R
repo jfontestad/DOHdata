@@ -117,8 +117,9 @@ person_query <- function(pid = NULL, sdate = "2019-01-01", edate = today() - 1,
 
 
 ### Use this query to look up events using C_Biosense_ID
-event_query <- function(event_id = NULL, bulk = F) {
+event_query <- function(event_id = NULL, bulk = F, group_size = 5000) {
   
+ 
   # Check how many IDs were provided
   if (length(event_id) > 1 & bulk == F) {
     event_id <- event_id[1]
@@ -143,34 +144,40 @@ event_query <- function(event_id = NULL, bulk = F) {
     "&field=Admit_Date_Time&field=Discharge_Date_Time&field=DischargeDisposition&field=DispositionCategory&field=MinutesFromVisitToDischarge",
     "&field=C_Death&field=C_Death_Source&field=Death_Date_Time")
   
+  # Set up a common URL and call
+  url_call <- function(sdate_inner, edate_inner, id_inner) {
+    url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?",
+                  # Add in dates and geographies
+                  "startDate=", sdate_inner, "&endDate=", edate_inner,
+                  "&geography=wa&geographySystem=hospitalstate",
+                  # Add in a few other fields including userID
+                  "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=3544",
+                  "&aqtTarget=DataDetails",
+                  # Add in percent param, frequency, and detector
+                  "&percentParam=noPercent&timeResolution=daily&detector=nodetectordetector",
+                  fields,
+                  # Add in patient ID
+                  "&cBiosenseID=", glue_collapse(id_inner, sep = ",or,"))
+    
+    data_load <- jsonlite::fromJSON(httr::content(
+      httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2],
+                                        keyring::key_get("essence", keyring::key_list("essence")[1, 2]))),
+      as = "text"))
+    
+    data_load
+  }
   
   if (bulk == F) {
     # Pull out start and end dates from event ID to make query faster
     # However, BiosenseID != Date so need to add time
     sdate <- format(as.Date(str_sub(event_id, 1, 10), format = "%Y.%m.%d") - 14, "%d%b%Y")
     edate <- format(as.Date(str_sub(event_id, 1, 10), format = "%Y.%m.%d") + 14, "%d%b%Y") 
-    
-    url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?", 
-                  # Add in dates and geographies
-                  "startDate=", sdate, "&endDate=", edate,
-                  "&geography=wa&geographySystem=hospitalstate", 
-                  # Add in a few other fields including userID
-                  "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=3544",
-                  "&aqtTarget=DataDetails", 
-                  # Add in percent param, frequency, and detector
-                  "&percentParam=noPercent&timeResolution=daily&detector=nodetectordetector",
-                  fields,
-                  # Add in patient ID
-                  "&cBiosenseID=", event_id)
-    print(url)
-    data_load <- jsonlite::fromJSON(httr::content(
-      httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2], 
-                                        keyring::key_get("essence", keyring::key_list("essence")[1, 2]))), 
-      as = "text")) #, encoding = "UTF-8"))
+
+    reply <- url_call(sdate_inner = sdate, edate_inner = edate, id_inner = event_id)
     
     # Keep track of input ID
     output <- data.frame(rhino_id = event_id, stringsAsFactors = F)
-    output <- bind_cols(output, data_load$dataDetails)
+    output <- bind_cols(output, reply$dataDetails)
 
   } else if (bulk == T) {
     ### Break up the query into smaller date ranges to ease load on server
@@ -209,7 +216,6 @@ event_query <- function(event_id = NULL, bulk = F) {
     
     # Run query over each group
     output <- lapply(seq_along(group_ids), function(x) {
-      
       message("Working on group ", x, " of ", length(group_ids), " (group name: ", group_ids[x], ")")
       
       input <- ids %>% filter(int_num == sort(unique(ids$int_num))[x])
@@ -218,31 +224,43 @@ event_query <- function(event_id = NULL, bulk = F) {
       
       message("Start date of interval: ", sdate)
       message("End date of interval: ", edate)
-      message("There are ", length(unique(input$rhino_id)), " IDs to check")
       
-      url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?",
-                    # Add in dates and geographies
-                    "startDate=", sdate, "&endDate=", edate,
-                    "&geography=wa&geographySystem=hospitalstate",
-                    # Add in a few other fields including userID
-                    "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=3544",
-                    "&aqtTarget=DataDetails",
-                    # Add in percent param, frequency, and detector
-                    "&percentParam=noPercent&timeResolution=daily&detector=nodetectordetector",
-                    fields,
-                    # Add in patient ID
-                    "&cBiosenseID=", glue_collapse(input$rhino_id, sep = ",or,"))
+      # Check to see if there are a massive number of IDs in this time period
+      # If so, split up into smaller batches to avoid overloading the system
+      num_ids <- nrow(input)
       
-      data_load <- jsonlite::fromJSON(httr::content(
-        httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2],
-                                          keyring::key_get("essence", keyring::key_list("essence")[1, 2]))),
-        as = "text"))
+      if (num_ids > group_size) {
+        input_split <- split(input, rep(1:ceiling(num_ids/group_size), each = group_size, length.out = num_ids))
+        
+        message("There are ", length(unique(input$rhino_id)), " IDs to check. ",
+                "Because of the large number of IDs, the group will be subdivided into lots of ", 
+                group_size, ".")
+        
+        # Run each group through the query
+        reply_details <- bind_rows(lapply(seq_along(input_split), function(x) {
+          message(paste0("Working on subgroup ", x, " of ", length(input_split)))
+          
+          reply <- url_call(sdate_inner = sdate, edate_inner = edate, 
+                            id_inner = input_split[[x]][["rhino_id"]])
+          
+          
+          reply_details_inner <- reply$dataDetails
+          reply_details_inner
+        }))
+        
+      } else {
+        message("There are ", length(unique(input$rhino_id)), " IDs to check")
+        
+        reply <- url_call(sdate_inner = sdate, edate_inner = edate, id_inner = input$rhino_id)
+        reply_details <- reply$dataDetails
+      }
       
+      # Process bulk data regardless of whether it was subdivided
       # Keep track of input ID
       df <- input %>% dplyr::select(rhino_id, rhino_date)
       
-      if (!is.null(nrow(data_load$dataDetails))) {
-        df <- left_join(df, data_load$dataDetails, by = c("rhino_id" = "C_BioSense_ID"))
+      if (!is.null(nrow(reply_details))) {
+        df <- left_join(df, reply_details, by = c("rhino_id" = "C_BioSense_ID"))
         message("Matched ", as.integer(df %>% filter(!is.na(PID)) %>% summarise(count = n())), " IDs \n ")
       } else {
         message("Matched 0 IDs \n ")
