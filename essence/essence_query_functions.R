@@ -49,7 +49,8 @@ person_query <- function(pid = NULL, sdate = "2019-01-01", edate = today() - 1,
   
   
   if (dx == T) {
-    dx_fields <- "&field=dischargeDiagnosis&field=Diagnosis_Combo&field=HasBeenE&field=HasBeenI"
+    dx_fields <- paste0("&field=dischargeDiagnosis&field=Diagnosis_Combo&field=CCDDCategory_flat", 
+                        "&field=HasBeenE&field=HasBeenI")
   } else {
     dx_fields <- ""
   }
