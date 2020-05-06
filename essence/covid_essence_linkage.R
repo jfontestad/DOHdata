@@ -150,52 +150,15 @@ case_demogs <- person_query(pid = covid_orig$pid, sdate = "2017-01-01",
 
 
 #### RECODE DEMOGRAPHIC DATA ####
+### Only chronic conditions are coming from this process so only need a few fields
 case_demogs_recodes <- case_demogs %>%
-  mutate_at(vars(Age, Height, Weight), list(~ as.numeric(.))) %>%
+  select(PID, Date, DischargeDiagnosis, HasBeenE, HasBeenI) %>%
   # Fix up some formating so join works
-  mutate(Ethnicity_flat = str_replace_all(Ethnicity_flat, ";", ""),
-         dx = str_replace_all(DischargeDiagnosis, "\\.", ""),
+  mutate(dx = str_replace_all(DischargeDiagnosis, "\\.", ""),
          # Replace leading and final semicolon
          dx = str_replace(dx, ";", ""),
          dx = str_sub(dx, 1, nchar(dx) - 1)) %>%
-  left_join(., filter(recodes, category == "ethnicity_flat") %>% select(code, value_display),
-            by = c("Ethnicity_flat" = "code")) %>% rename(ethnicity_text = value_display) %>%
-  left_join(., filter(recodes, category == "Smoking_Status_Code") %>% select(code, value_display),
-            by = c("Smoking_Status_Code" = "code")) %>% rename(smoking_text = value_display) %>%
-  mutate(Date = format(as.Date(Date, format = "%m/%d/%Y"), "%Y-%m-%d"),
-         age_grp = case_when(Age < 18 ~ "<18",
-                             between(Age, 18, 29) ~ "18-29",
-                             between(Age, 30, 39) ~ "30-39",
-                             between(Age, 40, 49) ~ "40-49",
-                             between(Age, 50, 59) ~ "50-59",
-                             between(Age, 60, 69) ~ "60-69",
-                             between(Age, 70, 79) ~ "70-79",
-                             Age >= 80 ~ "80+",
-                             TRUE ~ "Unknown"),
-         age_grp = factor(age_grp, levels = c("<18", "18-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+", "Unknown")),
-         Sex = case_when(Sex == "F" ~ "Female", Sex == "M" ~ "Male"),
-         race_text = case_when(str_detect(Race_flat, "1002-5") ~ "AI/AN",
-                               str_detect(Race_flat, "2028-9") ~ "Asian",
-                               str_detect(Race_flat, "2054-5") ~ "Black",
-                               str_detect(Race_flat, "2076-8") ~ "NH/PI",
-                               str_detect(Race_flat, "2131-1") ~ "Other race",
-                               str_detect(Race_flat, "2106-3") ~ "White"),
-         height_m = case_when(tolower(Height_Units) == "centimeter" ~ Height / 100,
-                              tolower(Height_Units) == "meter" ~ Height,
-                              tolower(Height_Units) %in% c("inch", "inch [length]") ~ Height * 0.0254,
-                              tolower(Height_Units) %in% c("foot", "foot [length]") ~ Height * 0.3048),
-         weight_kg = case_when(tolower(Weight_Units) %in% c("kilogram", "kilogram [si mass units]") ~ Weight,
-                               tolower(Weight_Units) == "pound" ~ Weight / 2.2,
-                               tolower(Weight_Units) == "ounce" ~ Weight / 0.0283495),
-         bmi = ifelse(!is.na(height_m) & !is.na(weight_kg) & Age >= 20,
-                      round(weight_kg / height_m ^ 2, 3), NA),
-         overweight = case_when(bmi >= 25 ~ 1L, bmi < 25 ~ 0L),
-         obese = case_when(bmi >= 30 ~ 1L, bmi < 30 ~ 0L),
-         obese_severe = case_when(bmi >= 40 ~ 1L, bmi < 40 ~ 0L),
-         smoker_current = case_when(smoking_text %in% c("Current every day smoker",
-                                                        "Current light tobacco smoker",
-                                                        "Current some day smoker") ~ 1L,
-                                    smoking_text %in% c("Never smoker", "Former smoker") ~ 0L)) %>%
+  mutate(Date = format(as.Date(Date, format = "%m/%d/%Y"), "%Y-%m-%d")) %>%
   group_by(PID) %>%
   mutate(date_max = as.Date(max(Date, na.rm = T))) %>%
   ungroup()
@@ -332,12 +295,6 @@ chronic <- left_join(chronic, chronic_combine, by = c("PID", "condition")) %>%
   spread(key = condition, value = has_condition)
 
 
-#### BRING ALL DEMOGRAPHICS TOGETHER ####
-case_demogs_chronic <- left_join(case_demogs_recodes, chronic, by = "PID") %>%
-  select(PID, Age, age_grp, Sex, race_text, ethnicity_text, starts_with("ccw_")) %>%
-  distinct()
-
-
 
 #### RETRIEVE CLINICAL DATA ####
 case_data <- bind_rows(event_query(event_id = covid_orig$RHINO_ID, bulk = T))
@@ -349,6 +306,8 @@ case_data_recodes <- left_join(covid_orig, case_data, by = c("RHINO_ID" = "rhino
                  Systolic_Blood_Pressure, Diastolic_Blood_Pressure, 
                  MinutesFromVisitToDischarge), 
             list(~ as.numeric(.))) %>%
+  mutate_at(vars(Admit_Date_Time, Birth_Date_Time, Discharge_Date_Time, Death_Date_Time),
+            list(~ as.POSIXct(., format = "%Y-%m-%d %H:%M:%OS"))) %>%
   # Only keep matched
   filter(!is.na(PID)) %>%
   # Fix up some formating so join works
@@ -359,7 +318,7 @@ case_data_recodes <- left_join(covid_orig, case_data, by = c("RHINO_ID" = "rhino
             by = c("Smoking_Status_Code" = "code")) %>% rename(smoking_text = value_display) %>%
   left_join(., filter(recodes, category == "DischargeDisposition") %>% select(code, value_display),
             by = c("DischargeDisposition" = "code")) %>% rename(discharge_text = value_display) %>%
-  mutate(Date = as.Date(Date, format = "%m/%d/%Y"),
+  mutate(Date = format(as.Date(Date, format = "%m/%d/%Y"), "%Y-%m-%d"),
          age_grp = case_when(Age < 18 ~ "<18",
                              between(Age, 18, 29) ~ "18-29",
                              between(Age, 30, 39) ~ "30-39",
@@ -580,6 +539,48 @@ clinic_tot <- bind_rows(stay_length, pneumonia, hypoxic, ventilate, died) %>%
 
 
 
+#### SET UP WDRS ROSTER DATA ####
+wdrs_output <- case_data_recodes %>%
+  mutate(BIRTH_DATE = as.Date(Birth_Date_Time),
+         HOSPITALIZED_LEAST_OVERNIGHT_ILLNESS_FACILITY_NAME_HOSPITAL_ADMISSION_DATE = case_when(
+           HasBeenI == 1 ~ as.Date(Admit_Date_Time)),
+         HOSPITALIZED_LEAST_OVERNIGHT_ILLNESS_FACILITY_NAME_HOSPITAL_DISCHARGE_DATE = case_when(
+           HasBeenI == 1 ~ as.Date(Discharge_Date_Time)),
+         COPY_DEATH_DATE = as.Date(Death_Date_Time),
+         CARDIAC_DISEASE = case_when(
+           ccw_heart_failure == 1 | ccw_ischemic_heart_dis == 1 | ccw_mi == 1 ~ 1L,
+           TRUE ~ 0L),
+         CORONAVIRUS_TESTING_PERFORMED = case_when(
+           str_detect(Procedure_Combo, "(87635%)|(86328)|(86769)|(covid)") ~ 1L,
+           TRUE ~ 0L),
+         HOSPITALIZED_LEAST_OVERNIGHT_ILLNESS_STILL_HOSPITALIZED = case_when(
+           HasBeenI == 1 & discharge_text == "Still Patient" ~ 1L,
+           TRUE ~ 0L),
+         HOSPITALIZED_LEAST_OVERNIGHT_ILLNESS_STILL_HOSPITALIZED_DATE = case_when(
+           HOSPITALIZED_LEAST_OVERNIGHT_ILLNESS_STILL_HOSPITALIZED == 1 ~ Date)
+         ) %>%
+  rename(AGE_YEARS = Age,
+         RACE = race_text,
+         ETHNICITY = ethnicity_text,
+         POSTAL_CODE = ZipCode,
+         DIED_ILLNESS = C_Death,
+         PNEUMONIA = pneumonia,
+         CHRONIC_KIDNEY_DISEASE = ccw_chr_kidney_dis,
+         DIABETES = ccw_diabetes,
+         HIGH_BLOOD_PRESSURE = ccw_hypertension,
+         CURRENT_SMOKER = smoker_current,
+         ASTHMA = ccw_asthma) %>%
+  select(CASE_ID, BIRTH_DATE, AGE_YEARS, RACE, ETHNICITY, POSTAL_CODE,
+         HOSPITALIZED_LEAST_OVERNIGHT_ILLNESS_FACILITY_NAME_HOSPITAL_ADMISSION_DATE,
+         HOSPITALIZED_LEAST_OVERNIGHT_ILLNESS_FACILITY_NAME_HOSPITAL_DISCHARGE_DATE,
+         DIED_ILLNESS, COPY_DEATH_DATE,
+         PNEUMONIA, CARDIAC_DISEASE, CHRONIC_KIDNEY_DISEASE, DIABETES, HIGH_BLOOD_PRESSURE,
+         CURRENT_SMOKER, ASTHMA, HOSPITALIZED_LEAST_OVERNIGHT_ILLNESS_STILL_HOSPITALIZED,
+         HOSPITALIZED_LEAST_OVERNIGHT_ILLNESS_STILL_HOSPITALIZED_DATE)
+
+
+
+
 #### WRITE OUT DATA ####
 # Want to pull in Rmd file from Github, using a clunky approach found here: https://gist.github.com/mages/3968939
 # plus a function to temporarily create a local Rmd file (https://github.com/rstudio/rmarkdown/issues/110)
@@ -594,3 +595,16 @@ render_text = function(text, ...) {
 }
 
 render_text(rmd_data, output_file = file.path(shared_path, "covid_essence_linkage.html"))
+
+
+# Write out all case data
+write.csv(case_demogs_recodes, file = paste0(shared_path, "/covid_essence_linkage.csv"))
+# Keep track of case data to date
+write.csv(case_demogs_recodes, file = paste0(shared_path, "/covid_essence_linkage_as_of_", Sys.Date(), ".csv"))
+
+
+### Write out for use in WDRS roster uploads
+# Write out all case data
+write.csv(wdrs_output, file = paste0(shared_path, "/covid_essence_linkage_wdrs.csv"))
+# Keep track of case data to date
+write.csv(wdrs_output, file = paste0(shared_path, "/covid_essence_linkage_wdrs_as_of_", Sys.Date(), ".csv"))
