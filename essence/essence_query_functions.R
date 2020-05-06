@@ -638,7 +638,7 @@ syndrome_person_level_query <- function(user_id = 2769,
                 # Add in percent param, types of visits, frequency, detector
                 percent, visit_types, "&timeResolution=", frequency, detector,
                 # Add in rowFields
-                "&field=age&field=ChiefComplaintParsed&field=DateTime&field=FacilityName&field=Zipcode",
+                "&field=C_BioSense_ID&field=age&field=ChiefComplaintParsed&field=DateTime&field=FacilityName&field=Zipcode",
                 "&field=Sex&field=Date&field=HospitalName&field=Age&field=CCDD&field=CCDDCategory_flat",
                 "&field=WeekYear",
                 # Add in syndrome and filter
@@ -657,5 +657,3 @@ syndrome_person_level_query <- function(user_id = 2769,
   
   return(df)
 }
-
-
