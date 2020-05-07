@@ -421,7 +421,7 @@ syndrome_alert_query <- function(user_id = 520,
     if ("nhpi" %in% race) {race_grp_nhpi <- "&race=2076-8"} else {race_grp_nhpi <- ""}
     if ("other" %in% race) {race_grp_other <- "&race=2131-1"} else {race_grp_other <- ""}
     if ("white" %in% race) {race_grp_white <- "&race=2106-3"} else {race_grp_white <- ""}
-    if ("unknown" %in% race) {race_grp_unk<- "&raace=phc1175&race=unk&race=nr"} else {race_grp_unk <- ""}
+    if ("unknown" %in% race) {race_grp_unk<- "&race=phc1175&race=unk&race=nr"} else {race_grp_unk <- ""}
     
     race_grp <- paste0(race_grp_aian, race_grp_asian, race_grp_black, race_grp_nhpi,
                        race_grp_other, race_grp_white, race_grp_unk)
