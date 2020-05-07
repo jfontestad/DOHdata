@@ -400,7 +400,7 @@ race_specific_ed_daily <- bind_rows(lapply(c("cli"), function(x) {
 
 
 ### Hospitalization
-race_specific_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "cli"), function(x) {
+race_specific_hosp_daily <- bind_rows(lapply(c("cli"), function(x) {
   message("Working on ", x)
   # Run queries
   pct_aian <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "aian", hospital = F, 
@@ -862,7 +862,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   
   
   ### Hospitalization
-  race_specific_hosp_weekly <- bind_rows(lapply(c("all", "pneumonia", "cli"), function(x) {
+  race_specific_hosp_weekly <- bind_rows(lapply(c("cli"), function(x) {
     message("Working on ", x)
     # Run queries
     pct_aian <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "aian", hospital = F, 
