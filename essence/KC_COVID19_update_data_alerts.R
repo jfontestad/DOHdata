@@ -36,8 +36,6 @@ library(jsonlite)
 library(keyring)
 
 
-
-
 # date objects for ESSENCE queries and NRVESS data pull
 ### SET WHETHER THIS IS A HISTORICAL RUN OR NOT
 historical <- F
@@ -46,7 +44,7 @@ historical_current <- T # Set to T if you want the historical run to also overwr
 if (historical == F) {
   s_start_date <- as_date("2019-09-29", "%Y-%m-%d")
 } else {
-  s_start_date <- as_date("2017-08-01", "%Y-%m-%d") 
+  s_start_date <- as_date("2017-08-01", "%Y-%m-%d")
 }
 
 s_end_date <- today() - 1
@@ -55,8 +53,16 @@ s_end_date <- today() - 1
 output_path <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Requests/2020/372_nCoV Essence Extract/From Natasha on March 13"
 
 ### Bring in ZIP data
-zips <- fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/zip_to_region.csv")
-zips <- zips %>% mutate(zip = as.character(zip))
+zips <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/zip_to_region.csv")
+zips <- zips %>% mutate(zip = as.character(zip),
+                        cc_region = case_when(
+                          cc_region == 'east' ~ "East",
+                          cc_region == 'north' ~ "North",
+                          cc_region == 'seattle' ~ "Seattle",
+                          cc_region == 'south' ~ "South",
+                          TRUE ~ cc_region
+                        ))
+
 
 #### FUNCTIONS ####
 # Call in from Github repo
@@ -91,6 +97,14 @@ pdly_full_cli_ed <- syndrome_person_level_query(frequency = "daily", syndrome = 
 # Daily CLI person-level data - hospitalalizations
 pdly_full_cli_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "cli", inpatient = T,
                                                   sdate = s_start_date, edate = s_end_date)
+
+# # Daily person-level data - ALL ED visits
+# pdly_full_all_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "all", ed = T,
+#                                                    sdate = s_start_date, edate = s_end_date)
+# 
+# # Daily person-level data - ALL hospitalalizations
+# pdly_full_all_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "all", inpatient = T,
+#                                                   sdate = s_start_date, edate = s_end_date)
 
 if (historical == F) {
   write_csv(pdly_full_pneumo_ed, file.path(output_path, "pdly-pneumonia.csv"))
@@ -194,28 +208,31 @@ all_age_ed_byhosp_daily <- bind_rows(lapply(c("cli"), function(x) {
 }))
 
 
-#### DAILY - BY ZIP ####
+#### DAILY - BY ZIP/REGION ####
+# Collapsing to region for now because of small numbers each week in some ZIPs
+
 # Aggregate the person-level query and fit to the format
-all_age_byzip_daily <- bind_rows(mget(ls(pattern = "pdly_full"))) %>%
-  mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d")) %>%
+all_age_byzip_daily <- bind_rows(mget(ls(pattern = "pdly_full_(cli|ili|pneumo)"))) %>%
+  mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d"),
+         query = case_when(condition == "pneumonia" ~ "pneumo", TRUE ~ condition)) %>%
   rename(zip = ZipCode) %>%
-  left_join(., select(zips, zip) %>% mutate(kc_zip = 1), by = c("zip")) %>%
-  arrange(condition, setting, zip, date) %>%
-  group_by(condition, setting, zip, date, kc_zip) %>%
+  left_join(., select(zips, zip, cc_region) %>% mutate(kc_zip = 1), by = c("zip")) %>%
+  filter(!is.na(cc_region)) %>%
+  arrange(query, setting, cc_region, date) %>%
+  group_by(query, setting, cc_region, date, kc_zip) %>%
   summarise(cnt = n()) %>% ungroup() %>%
   # Add in matching columns
-  mutate(query = case_when(condition == "pneumonia" ~ "pneumo", TRUE ~ condition),
-         age = "all age", race = "all", ethnicity = "all", hospital = "all")
+  mutate(age = "all age", race = "all", ethnicity = "all", hospital = "all")
 
 # Subtract hospitalizations from ED visits so people aren't double counted in the maps
 all_age_byzip_daily_hosp <- all_age_byzip_daily %>%
   filter(setting == "hosp") %>%
-  select(condition, zip, date, cnt) %>% 
+  select(query, cc_region, date, cnt) %>% 
   rename(cnt_hosp = cnt)
 
 all_age_byzip_daily <- left_join(all_age_byzip_daily, all_age_byzip_daily_hosp,
-                                  by = c("condition", "zip", "date")) %>%
-  mutate(cnt = case_when(setting == "ed" ~ cnt - cnt_hosp,
+                                  by = c("query", "cc_region", "date")) %>%
+  mutate(cnt = case_when(setting == "ed" & !is.na(cnt_hosp) ~ cnt - cnt_hosp,
                          TRUE ~ cnt)) %>%
   select(-cnt_hosp)
 
@@ -458,6 +475,23 @@ race_specific_hosp_daily <- bind_rows(lapply(c("cli"), function(x) {
 }))
 
 
+### Add in multiple race
+# Aggregate the person-level query and fit to the format
+race_specific_multi_daily <- bind_rows(mget(ls(pattern = "pdly_full_(cli|ili|pneumo)"))) %>%
+  # Keep only those with multiple entries for race
+  filter(str_count(Race_flat, ";") > 2) %>%
+  mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d"),
+         race = "multiple") %>%
+  arrange(condition, setting, race, date) %>%
+  group_by(condition, setting, race, date) %>%
+  summarise(cnt = n()) %>% ungroup() %>%
+  # Add in matching columns
+  mutate(query = case_when(condition == "pneumonia" ~ "pneumo", TRUE ~ condition),
+         age = "all age", ethnicity = "all", hospital = "all")
+
+
+
+
 #### DAILY - MAKE AND SAVE COMBINED DATASET ####
 message("Bringing together and saving daily data")
 
@@ -469,7 +503,7 @@ ndly <- bind_rows(
   all_adult_ed_daily, all_adult_ed_uc_daily, all_adult_hosp_daily,
   # BY HOSPITAL
   all_age_ed_byhosp_daily,
-  # BY ZIP
+  # BY ZIP/REGION
   all_age_byzip_daily,
   # AGE SPECIFIC
   age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily,
@@ -512,8 +546,8 @@ if (historical == F) {
 
 ### Set up sort order for Tableau
 ndly <- ndly %>%
-  arrange(frequency, date, query, season, setting, age, race, ethnicity, zip, hospital) %>%
-  group_by(frequency, query, season, setting, age, race, ethnicity, zip, hospital) %>%
+  arrange(frequency, date, query, season, setting, age, race, ethnicity, cc_region, hospital) %>%
+  group_by(frequency, query, season, setting, age, race, ethnicity, cc_region, hospital) %>%
   mutate(date_sort = row_number()) %>%
   ungroup()
 
@@ -650,36 +684,38 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   }))
   
   
-  #### WEEKLY - BY ZIP ####
+  #### WEEKLY - BY ZIP/REGION ####
+  # Collapsing to region for now because of small numbers each week in some ZIPs
+  
   # Aggregate the person-level query and fit to the format
-  all_age_byzip_weekly <- bind_rows(mget(ls(pattern = "pdly_full"))) %>%
-    mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d")) %>%
+  all_age_byzip_weekly <- bind_rows(mget(ls(pattern = "pdly_full_(cli|ili|pneumo)"))) %>%
+    mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d"),
+           query = case_when(condition == "pneumonia" ~ "pneumo", TRUE ~ condition)) %>%
     rename(zip = ZipCode) %>%
-    left_join(., select(zips, zip) %>% mutate(kc_zip = 1), by = c("zip")) %>%
+    left_join(., select(zips, zip, cc_region) %>% mutate(kc_zip = 1), by = c("zip")) %>%
+    filter(!is.na(cc_region)) %>%
     # Remove data from the most recent, incomplete week
     filter(date <= s_end_date) %>%
     # Need to find the start date for the week
     group_by(WeekYear) %>%
     mutate(date = min(date, na.rm = T)) %>% ungroup() %>%
-    arrange(condition, setting, zip, date) %>%
-    group_by(condition, setting, zip, date, kc_zip) %>%
+    arrange(query, setting, cc_region, date) %>%
+    group_by(query, setting, cc_region, date, kc_zip) %>%
     summarise(cnt = n()) %>% ungroup() %>%
     # Add in matching columns
-    mutate(query = case_when(condition == "pneumonia" ~ "pneumo", TRUE ~ condition),
-           age = "all age", race = "all", ethnicity = "all", hospital = "all")
+    mutate(age = "all age", race = "all", ethnicity = "all", hospital = "all")
   
   # Subtract hospitalizations from ED visits so people aren't double counted in the maps
   all_age_byzip_weekly_hosp <- all_age_byzip_weekly %>%
     filter(setting == "hosp") %>%
-    select(condition, zip, date, cnt) %>% 
+    select(query, cc_region, date, cnt) %>% 
     rename(cnt_hosp = cnt)
   
   all_age_byzip_weekly <- left_join(all_age_byzip_weekly, all_age_byzip_weekly_hosp,
-                                    by = c("condition", "zip", "date")) %>%
-    mutate(cnt = case_when(setting == "ed" ~ cnt - cnt_hosp,
+                                    by = c("query", "cc_region", "date")) %>%
+    mutate(cnt = case_when(setting == "ed" & !is.na(cnt_hosp) ~ cnt - cnt_hosp,
                            TRUE ~ cnt)) %>%
     select(-cnt_hosp)
-  
   
   
   #### WEEKLY - AGE SPECIFIC ####
@@ -931,7 +967,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     all_adult_ed_weekly, all_adult_ed_uc_weekly, all_adult_hosp_weekly,
     # BY HOSPITAL
     all_age_ed_byhosp_weekly,
-    # BY ZIP
+    # BY ZIP/REGION
     all_age_byzip_weekly,
     # AGE SPECIFIC
     age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly,
@@ -973,8 +1009,8 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   
   ### Set up sort order for Tableau
   nwkly <- nwkly %>%
-    arrange(frequency, date, query, season, setting, age, race, ethnicity, zip, hospital) %>%
-    group_by(frequency, query, season, setting, age, race, ethnicity, zip, hospital) %>%
+    arrange(frequency, date, query, season, setting, age, race, ethnicity, cc_region, hospital) %>%
+    group_by(frequency, query, season, setting, age, race, ethnicity, cc_region, hospital) %>%
     mutate(date_sort = row_number()) %>%
     ungroup()
   
