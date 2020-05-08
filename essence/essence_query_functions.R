@@ -285,7 +285,7 @@ syndrome_alert_query <- function(user_id = 520,
                                  syndrome = c("all", "ili", "cli_new", "cli_old", "cli", 
                                               "pneumonia", "influenza"),
                                  ed = F, inpatient = F, ed_uc = F,
-                                 age = c("None", "00-04", "05-17", "18-44", "45-64", "65-1000", "unknown"),
+                                 age = c("all", "00-04", "05-17", "18-44", "45-64", "65-1000", "unknown"),
                                  race = c("all", "aian", "asian", "black", "nhpi", "other", "white", "unknown"),
                                  ethnicity = c("all", "latino", "non-latino", "unknown"),
                                  hospital = F, value = c("percent", "count")) {
@@ -387,18 +387,18 @@ syndrome_alert_query <- function(user_id = 520,
   }
   
   # Catch all for age
-  if ("None" %in% age) {
+  if ("all" %in% age) {
     age_grp <- ""
     age_text <- "all age"
   } else {
     age_grp <- paste0("&age=", age, collapse = "")
     if (length(age) > 1) {
-      age_text <- ifelse(max(c("None", "00-04", "05-17", "unknown") %in% age) == 0 &
+      age_text <- ifelse(max(c("all", "00-04", "05-17", "unknown") %in% age) == 0 &
                            min(c("18-44", "45-64", "65-1000") %in% age) == 1,
                          "all adult",
                          paste0(age, collapse = ", "))
     } else {
-      age_text <- case_when(age == "None" ~ "all age",
+      age_text <- case_when(age == "all" ~ "all age",
                             age == "00-04" ~ "0-4",
                             age == "05-17" ~ "5-17",
                             age == "18-44" ~ "18-44",
@@ -435,7 +435,7 @@ syndrome_alert_query <- function(user_id = 520,
     eth_text <- paste(ethnicity, sep = ", ")
     
     if ("latino" %in% ethnicity) {eth_grp_latino <- "&ethnicity=2135-2"} else {eth_grp_latino <- ""}
-    if ("non-latino" %in% ethnicity) {eth_grp_nonlat <- "&ethnicity=2028-9"} else {eth_grp_nonlat <- ""}
+    if ("non-latino" %in% ethnicity) {eth_grp_nonlat <- "&ethnicity=2186-5"} else {eth_grp_nonlat <- ""}
     if ("unknown" %in% ethnicity) {eth_grp_unk <- "&ethnicity=unk&ethnicity=nr"} else {eth_grp_unk <- ""}
     
     eth_grp <- paste0(eth_grp_latino, eth_grp_nonlat, eth_grp_unk)
@@ -542,7 +542,7 @@ syndrome_alert_query <- function(user_id = 520,
 syndrome_person_level_query <- function(user_id = 2769, 
                                         frequency = c("weekly", "daily"), 
                                         sdate = "2019-09-29", edate = today() - 1,
-                                        syndrome = c("none", "ili", "cli_new", 
+                                        syndrome = c("all", "ili", "cli_new", 
                                                      "cli_old", "cli", "pneumonia"),
                                         ed = F, inpatient = F) {
   
@@ -566,14 +566,17 @@ syndrome_person_level_query <- function(user_id = 2769,
     category <- "&ccddCategory=ili%20ccdd%20v1"
     query <- "ili"
     condition <- "ili"
+    syndrome_text <- "ILI"
   } else if (syndrome == "cli_old") {
     category <- "&ccddCategory=fever%20and%20cough-sob-diffbr%20v1"
     query <- "fevcough"
     condition <- "cli_old"
+    syndrome_text <- "CLI - old definition"
   } else if (syndrome %in% c("cli_new", "cli")) {
     category <- "&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v1"
     query <- "cli"
     condition <- "cli"
+    syndrome_text <- "CLI"
   } else if (syndrome == "pneumonia") {
     category <- paste0("&dischargeDiagnosisApplyTo=subsyndromeFreeText&dischargeDiagnosis=", 
                        "%5Epneumonia%5E,or,%5E%5B;/%20%5DJ12.%5B89%5D%5E,or,%5E%5B;/%20%5DJ12%5B89%5D%5E,or,",
@@ -591,9 +594,11 @@ syndrome_person_level_query <- function(user_id = 2769,
                        "%5E%5B;/%20%5D441590008%5E,or,%5E%5B;/%20%5D57702005%5E")
     query <- "ncovpneumo"
     condition <- "pneumonia"
-  } else if (syndrome == "none") {
+    syndrome_text <- "Pneumonia"
+  } else if (syndrome == "all") {
     category <- ""
-    condition <- ""
+    query <- "all"
+    syndrome_text <- "all"
   }
   
   # Catch all for filters
@@ -608,21 +613,21 @@ syndrome_person_level_query <- function(user_id = 2769,
   }
   
   # Catch all for percentParam types
-  if (syndrome %in% c("ili", "cli_new", "cli_old", "cli", "none")) {
+  if (syndrome %in% c("ili", "cli_new", "cli_old", "cli", "all")) {
     percent <- "&percentParam=ccddCategory"
   } else if (syndrome %in% c("pneumonia")) {
     percent <- "&percentParam=dischargeDiagnosis"
   }
   
   # Catch all for visit types
-  if (syndrome %in% c("none")) {
+  if (syndrome %in% c("all")) {
     visit_types <- "&hospFacilityType=emergency%20care&hospFacilityType=urgent%20care&hospFacilityType=primary%20care"
   } else if (syndrome %in% c("ili", "cli_new", "cli_old", "cli", "pneumonia")) {
     visit_types <- "&hospFacilityType=emergency%20care"
   }
   
   # Catch all for detector types
-  if (syndrome %in% c("cli_new", "cli_old", "cli", "none")) {
+  if (syndrome %in% c("cli_new", "cli_old", "cli", "all")) {
     detector <- "&detector=nodetectordetector"
   } else if (syndrome %in% c("ili", "pneumonia")) {
     detector <- "&detector=c2"
@@ -638,8 +643,9 @@ syndrome_person_level_query <- function(user_id = 2769,
                 # Add in percent param, types of visits, frequency, detector
                 percent, visit_types, "&timeResolution=", frequency, detector,
                 # Add in rowFields
-                "&field=C_BioSense_ID&field=age&field=ChiefComplaintParsed&field=DateTime&field=FacilityName&field=Zipcode",
-                "&field=Sex&field=Date&field=HospitalName&field=Age&field=CCDD&field=CCDDCategory_flat",
+                "&field=C_BioSense_ID&field=age&field=ChiefComplaintParsed&field=DateTime&field=FacilityName", 
+                "&field=Age&field=Race_flat&field=Ethnicity_flat&field=Sex&field=Zipcode", 
+                "&field=Date&field=HospitalName&field=CCDD&field=CCDDCategory_flat",
                 "&field=WeekYear",
                 # Add in syndrome and filter
                 category, filter)
@@ -653,7 +659,8 @@ syndrome_person_level_query <- function(user_id = 2769,
   # Add in details to the data frame
   df <- df %>%
     dplyr::mutate(condition = condition,
-           setting = setting)
+           setting = setting,
+           syndrome = syndrome_text)
   
   return(df)
 }
