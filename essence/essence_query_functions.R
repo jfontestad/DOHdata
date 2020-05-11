@@ -288,7 +288,9 @@ syndrome_alert_query <- function(user_id = 520,
                                  age = c("all", "00-04", "05-17", "18-44", "45-64", "65-1000", "unknown"),
                                  race = c("all", "aian", "asian", "black", "nhpi", "other", "white", "unknown"),
                                  ethnicity = c("all", "latino", "non-latino", "unknown"),
-                                 hospital = F, value = c("percent", "count")) {
+                                 hospital = F, 
+                                 zip = NULL,
+                                 value = c("percent", "count")) {
   
   frequency <- match.arg(frequency)
   syndrome <- match.arg(syndrome)
@@ -304,6 +306,9 @@ syndrome_alert_query <- function(user_id = 520,
   }
   if (is.na(as.Date(edate, format = "%Y-%m-%d"))) {
     stop("sdate must be %Y-%m-%d format")
+  }
+  if (sdate > edate) {
+    stop("sdate must be before edate")
   }
   
   start_date <- format(as.Date(sdate, "%Y-%m-%d"), "%d%b%Y")
@@ -441,7 +446,6 @@ syndrome_alert_query <- function(user_id = 520,
     eth_grp <- paste0(eth_grp_latino, eth_grp_nonlat, eth_grp_unk)
   }
   
- 
   
   # Set things up for hospitals
   if (hospital == T) {
@@ -457,13 +461,27 @@ syndrome_alert_query <- function(user_id = 520,
   }
   
   
+  # Set things up for ZIP codes
+  # Note that this will override any other choices like hospital
+  if (!is.null(zip)) {
+    geog_system <- "zipcode"
+    geogs <- paste(zip, collapse = ",")
+    data_source <- "&datasource=va_er"
+    zip_text <- paste(zip, collapse = ", ")
+  } else {
+    data_source <- "&datasource=va_hosp"
+    zip_text <- "all"
+  }
+  
+  
+  # Run query
   output <- dplyr::bind_rows(lapply(geogs, function(x) {
     url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?", 
                   # Add in dates and geographies
                   "startDate=", start_date, "&endDate=", end_date,
                   "&geographySystem=", geog_system, "&geography=", x,
                   # Add in a few other fields including userID
-                  "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=", user_id, 
+                  data_source, "&medicalGroupingSystem=essencesyndromes&userId=", user_id, 
                   "&aqtTarget=TimeSeries", 
                   # Add in percent param, types of visits, frequency, detector
                   percent, visit_type, "&timeResolution=", frequency, detector,
@@ -498,6 +516,7 @@ syndrome_alert_query <- function(user_id = 520,
              age = age_text,
              race = race_text,
              ethnicity = eth_text,
+             zip = zip_text,
              setting = setting,
              query = query,
              syndrome = syndrome_text) %>%
