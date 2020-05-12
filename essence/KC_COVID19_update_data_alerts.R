@@ -44,7 +44,7 @@ historical_current <- T # Set to T if you want the historical run to also overwr
 if (historical == F) {
   s_start_date <- as_date("2019-09-29", "%Y-%m-%d")
 } else {
-  s_start_date <- as_date("2017-08-01", "%Y-%m-%d")
+  s_start_date <- as_date("2017-10-01", "%Y-%m-%d")
 }
 
 s_end_date <- today() - 1
@@ -127,7 +127,7 @@ all_age_ed_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "influe
   cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, hospital = F, 
                               value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
   return(output)
 }))
 
@@ -138,7 +138,7 @@ all_age_ed_uc_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), fun
   cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, hospital = F, 
                               value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
   return(output)
 }))
 
@@ -149,7 +149,7 @@ all_age_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "infl
   cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, hospital = F, 
                               value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
   return(output)
 }))
 
@@ -164,7 +164,7 @@ all_adult_ed_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "infl
                               age = c("18-44", "45-64", "65-1000"), hospital = F, 
                               value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
   return(output)
 }))
 
@@ -177,7 +177,7 @@ all_adult_ed_uc_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), f
                               age = c("18-44", "45-64", "65-1000"), hospital = F, 
                               value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
   return(output)
 }))
 
@@ -190,7 +190,7 @@ all_adult_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "in
                               age = c("18-44", "45-64", "65-1000"), hospital = F, 
                               value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
   return(output)
 }))
 
@@ -203,38 +203,13 @@ all_age_ed_byhosp_daily <- bind_rows(lapply(c("cli"), function(x) {
   cnt <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, hospital = T, 
                               value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+  output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
   return(output)
 }))
 
 
 #### DAILY - BY ZIP/REGION ####
-# Collapsing to region for now because of small numbers each week in some ZIPs
-
-# Aggregate the person-level query and fit to the format
-all_age_byzip_daily <- bind_rows(mget(ls(pattern = "pdly_full_(cli|ili|pneumo)"))) %>%
-  mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d"),
-         query = case_when(condition == "pneumonia" ~ "pneumo", TRUE ~ condition)) %>%
-  rename(zip = ZipCode) %>%
-  left_join(., select(zips, zip, cc_region) %>% mutate(kc_zip = 1), by = c("zip")) %>%
-  filter(!is.na(cc_region)) %>%
-  arrange(query, setting, cc_region, date) %>%
-  group_by(query, setting, cc_region, date, kc_zip) %>%
-  summarise(cnt = n()) %>% ungroup() %>%
-  # Add in matching columns
-  mutate(age = "all age", race = "all", ethnicity = "all", hospital = "all")
-
-# Subtract hospitalizations from ED visits so people aren't double counted in the maps
-all_age_byzip_daily_hosp <- all_age_byzip_daily %>%
-  filter(setting == "hosp") %>%
-  select(query, cc_region, date, cnt) %>% 
-  rename(cnt_hosp = cnt)
-
-all_age_byzip_daily <- left_join(all_age_byzip_daily, all_age_byzip_daily_hosp,
-                                  by = c("query", "cc_region", "date")) %>%
-  mutate(cnt = case_when(setting == "ed" & !is.na(cnt_hosp) ~ cnt - cnt_hosp,
-                         TRUE ~ cnt)) %>%
-  select(-cnt_hosp)
+# Not running daily now, just weekly
 
 
 #### DAILY - AGE SPECIFIC ####
@@ -268,12 +243,12 @@ age_specific_ed_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), f
   cntunk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, age = "unknown", hospital = F, 
                                  value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+  output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
   return(output)
 }))
 
@@ -306,12 +281,12 @@ age_specific_ed_uc_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli")
   cntunk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed_uc = T, age = "unknown", hospital = F, 
                                  value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+  output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
   return(output)
 }))
 
@@ -343,12 +318,12 @@ age_specific_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"),
   cntunk <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, age = "unknown", hospital = F, 
                                  value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+  output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
   return(output)
 }))
 
@@ -402,16 +377,16 @@ race_specific_ed_daily <- bind_rows(lapply(c("cli"), function(x) {
   cnt_eth_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, ethnicity = "unknown", hospital = F, 
                                       value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+  output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
   return(output)
 }))
 
@@ -461,16 +436,16 @@ race_specific_hosp_daily <- bind_rows(lapply(c("cli"), function(x) {
   cnt_eth_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, ethnicity = "unknown", hospital = F, 
                                       value = "count", sdate = s_start_date, edate = s_end_date)
   # Bring together
-  output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+  output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                      left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
   return(output)
 }))
 
@@ -504,7 +479,7 @@ ndly <- bind_rows(
   # BY HOSPITAL
   all_age_ed_byhosp_daily,
   # BY ZIP/REGION
-  all_age_byzip_daily,
+  
   # AGE SPECIFIC
   age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily,
   # RACE/ETHNICITY SPECIFIC
@@ -603,7 +578,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = F, 
                                 value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
     return(output)
   }))
   
@@ -614,7 +589,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, hospital = F, 
                                 value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
     return(output)
   }))
   
@@ -625,7 +600,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, hospital = F, 
                                 value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
     return(output)
   }))
   
@@ -640,7 +615,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
                                 age = c("18-44", "45-64", "65-1000"), hospital = F, 
                                 value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
     return(output)
   }))
   
@@ -653,7 +628,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
                                 age = c("18-44", "45-64", "65-1000"), hospital = F, 
                                 value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
     return(output)
   }))
   
@@ -666,7 +641,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
                                 age = c("18-44", "45-64", "65-1000"), hospital = F, 
                                 value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
     return(output)
   }))
   
@@ -679,43 +654,59 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = T, 
                                 value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital"))
+    output <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital"))
     return(output)
   }))
   
   
   #### WEEKLY - BY ZIP/REGION ####
   # Collapsing to region for now because of small numbers each week in some ZIPs
+  regions_to_run <- zips %>% filter(!is.na(cc_region)) %>% distinct(cc_region)
   
-  # Aggregate the person-level query and fit to the format
-  all_age_byzip_weekly <- bind_rows(mget(ls(pattern = "pdly_full_(cli|ili|pneumo)"))) %>%
-    mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d"),
-           query = case_when(condition == "pneumonia" ~ "pneumo", TRUE ~ condition)) %>%
-    rename(zip = ZipCode) %>%
-    left_join(., select(zips, zip, cc_region) %>% mutate(kc_zip = 1), by = c("zip")) %>%
-    filter(!is.na(cc_region)) %>%
-    # Remove data from the most recent, incomplete week
-    filter(date <= s_end_date) %>%
-    # Need to find the start date for the week
-    group_by(WeekYear) %>%
-    mutate(date = min(date, na.rm = T)) %>% ungroup() %>%
-    arrange(query, setting, cc_region, date) %>%
-    group_by(query, setting, cc_region, date, kc_zip) %>%
-    summarise(cnt = n()) %>% ungroup() %>%
-    # Add in matching columns
-    mutate(age = "all age", race = "all", ethnicity = "all", hospital = "all")
   
-  # Subtract hospitalizations from ED visits so people aren't double counted in the maps
-  all_age_byzip_weekly_hosp <- all_age_byzip_weekly %>%
-    filter(setting == "hosp") %>%
-    select(query, cc_region, date, cnt) %>% 
-    rename(cnt_hosp = cnt)
+  all_age_ed_byzip_weekly <- bind_rows(lapply(c("cli", "pneumo"), function(x) {
+    # Loop over each ZIP for a given syndrome
+    output <- bind_rows(lapply(regions_to_run$cc_region, function(y) {
+      zips_to_run <- zips %>% filter(cc_region == y) %>% distinct(zip)
+      message("Working on ", y)
+      # Run both queries
+      pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = F, zip = zips_to_run$zip, 
+                                  value = "percent", sdate = s_start_date, edate = s_end_date)
+      cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, hospital = F, zip = zips_to_run$zip,
+                                  value = "count", sdate = s_start_date, edate = s_end_date)
+      # Bring together
+      zip_specific <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")) %>%
+        mutate(cc_region = y, kc_zip = 1)
+      zip_specific
+    }))
+    return(output)
+  }))
   
-  all_age_byzip_weekly <- left_join(all_age_byzip_weekly, all_age_byzip_weekly_hosp,
-                                    by = c("query", "cc_region", "date")) %>%
-    mutate(cnt = case_when(setting == "ed" & !is.na(cnt_hosp) ~ cnt - cnt_hosp,
-                           TRUE ~ cnt)) %>%
-    select(-cnt_hosp)
+  # Don't need to keep the long list of ZIPs so remove
+  all_age_ed_byzip_weekly <- all_age_ed_byzip_weekly %>% mutate(zip = NA)
+  
+  
+  all_age_hosp_byzip_weekly <- bind_rows(lapply(c("cli", "pneumo"), function(x) {
+    # Loop over each ZIP for a given syndrome
+    output <- bind_rows(lapply(regions_to_run$cc_region, function(y) {
+      zips_to_run <- zips %>% filter(cc_region == y) %>% distinct(zip)
+      message("Working on ", y)
+      # Run both queries
+      pct <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, hospital = F, zip = zips_to_run$zip, 
+                                  value = "percent", sdate = s_start_date, edate = s_end_date)
+      cnt <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, hospital = F, zip = zips_to_run$zip,
+                                  value = "count", sdate = s_start_date, edate = s_end_date)
+      # Bring together
+      zip_specific <- left_join(pct, cnt, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")) %>%
+        mutate(cc_region = y, kc_zip = 1)
+      zip_specific
+    }))
+    return(output)
+  }))
+  
+  # Don't need to keep the long list of ZIPs so remove
+  all_age_hosp_byzip_weekly <- all_age_hosp_byzip_weekly %>% mutate(zip = NA)
+  
   
   
   #### WEEKLY - AGE SPECIFIC ####
@@ -749,12 +740,12 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     cntunk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, age = "unknown", hospital = F, 
                                    value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+    output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
     return(output)
   }))
   
@@ -787,12 +778,12 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     cntunk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed_uc = T, age = "unknown", hospital = F, 
                                    value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+    output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
     return(output)
   }))
   
@@ -824,12 +815,12 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     cntunk <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, age = "unknown", hospital = F, 
                                    value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+    output <- bind_rows(left_join(pct04, cnt04, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct517, cnt517, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct1844, cnt1844, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct4564, cnt4564, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct65, cnt65, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pctunk, cntunk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
     return(output)
   }))
   
@@ -883,16 +874,16 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     cnt_eth_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, ethnicity = "unknown", hospital = F, 
                                         value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+    output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
     return(output)
   }))
   
@@ -942,16 +933,16 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     cnt_eth_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, ethnicity = "unknown", hospital = F, 
                                         value = "count", sdate = s_start_date, edate = s_end_date)
     # Bring together
-    output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity", "setting", "query", "syndrome", "hospital")))
+    output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
+                        left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
     return(output)
   }))
   
@@ -968,7 +959,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     # BY HOSPITAL
     all_age_ed_byhosp_weekly,
     # BY ZIP/REGION
-    all_age_byzip_weekly,
+    all_age_ed_byzip_weekly, all_age_hosp_byzip_weekly,
     # AGE SPECIFIC
     age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly,
     # RACE/ETHNICITY SPECIFIC
