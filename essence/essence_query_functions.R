@@ -662,10 +662,10 @@ syndrome_person_level_query <- function(user_id = 2769,
                 # Add in percent param, types of visits, frequency, detector
                 percent, visit_types, "&timeResolution=", frequency, detector,
                 # Add in rowFields
-                "&field=C_BioSense_ID&field=age&field=ChiefComplaintParsed&field=DateTime&field=FacilityName", 
-                "&field=Age&field=Race_flat&field=Ethnicity_flat&field=Sex&field=Zipcode", 
-                "&field=Date&field=HospitalName&field=CCDD&field=CCDDCategory_flat",
-                "&field=WeekYear",
+                "&field=C_BioSense_ID&field=PID&field=age&field=ChiefComplaintParsed&field=DateTime&field=FacilityName", 
+                "&field=Age&field=AgeGroup&field=Race_flat&field=Ethnicity_flat&field=Sex&field=Zipcode", 
+                "&field=Date&field=WeekYear&field=HospitalName&field=HasBeenE&field=HasBeenI",
+                "&field=CCDD&field=CCDDCategory_flat&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo",
                 # Add in syndrome and filter
                 category, filter)
   
