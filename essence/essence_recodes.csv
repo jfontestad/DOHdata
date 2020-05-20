@@ -1,0 +1,70 @@
+category,code,value,value_display
+race_flat,1002-5,American Indian or Alaska Native,AI/AN
+race_flat,2028-9,Asian,Asian
+race_flat,2054-5,Black or African American,Black
+race_flat,2076-8,Native Hawaiian or Other Pacific Islander,NH/PI
+race_flat,2131-1,Other Race,Other race
+race_flat,2106-3,White,White
+ethnicity_flat,2135-2,Hispanic or Latino,Latino
+ethnicity_flat,2186-5,Not Hispanic or Latino,Not Latino
+DischargeDisposition,09,Admitted as an inpatient to this hospital,Admitted as an inpatient to this hospital
+DischargeDisposition,01,Discharged to home or self care (routine discharge),Discharged to home or self care (routine discharge)
+DischargeDisposition,66,"Discharged/transferred to a Critical Access Hospital (CAH). (Effective 
+1/1/06)",Discharged/transferred to a Critical Access Hospital (CAH)
+DischargeDisposition,43,Discharged/transferred to a federal health care facility. (Effective 10/1/03),Discharged/transferred to a federal health care facility
+DischargeDisposition,63,"Discharged/transferred to a Medicare certified long term care hospital 
+(LTCH).(Effective 5/9/02.)","Discharged/transferred to a Medicare certified long term care hospital 
+(LTCH)"
+DischargeDisposition,64,"Discharged/transferred to a nursing facility certified under Medicaid 
+but not certified under Medicare. (Effective 10/1/02.)","Discharged/transferred to a nursing facility certified under Medicaid 
+but not certified under Medicare"
+DischargeDisposition,65,"Discharged/transferred to a psychiatric hospital or psychiatric distinct 
+part unit of a hospital. (Effective 4/1/04)","Discharged/transferred to a psychiatric hospital or psychiatric distinct 
+part unit of a hospital"
+DischargeDisposition,02,"Discharged/transferred to a short-term general hospital for inpatient 
+care","Discharged/transferred to a short-term general hospital for inpatient 
+care"
+DischargeDisposition,62,"Discharged/transferred to an inpatient rehabilitation facility (IRF) including 
+rehabilitation distinct part units of a hospital. (Effective 
+retroactive to 1/1/02.)","Discharged/transferred to an inpatient rehabilitation facility (IRF) including 
+rehabilitation distinct part units of a hospital"
+DischargeDisposition,05,"Discharged/transferred to another type of institution not defined elsewhere 
+in this code list","Discharged/transferred to another type of institution not defined elsewhere 
+in this code list"
+DischargeDisposition,08,Discharged/transferred to home under care of a Home IV provider,Discharged/transferred to home under care of a Home IV provider
+DischargeDisposition,06,"Discharged/transferred to home under care of organized home health service 
+organization","Discharged/transferred to home under care of organized home health service 
+organization"
+DischargeDisposition,61,Discharged/transferred to hospital-based Medicare approved swing bed,Discharged/transferred to hospital-based Medicare approved swing bed
+DischargeDisposition,03,"Discharged/transferred to skilled nursing facility (SNF) with Medicare 
+certification.","Discharged/transferred to skilled nursing facility (SNF) with Medicare 
+certification."
+DischargeDisposition,20,Expired,Expired
+DischargeDisposition,42,Expired - place unknown,Expired - place unknown
+DischargeDisposition,40,Expired at home,Expired at home
+DischargeDisposition,41,"Expired in a medical facility (e.g. hospital, SNF, ICF, or free standing 
+hospice)","Expired in a medical facility (e.g. hospital, SNF, ICF, or free standing 
+hospice)"
+DischargeDisposition,04,Discharged/transferred to an intermediate care facility (ICF),Discharged/transferred to an intermediate care facility (ICF)
+DischargeDisposition,50,Hospice - home,Hospice - home
+DischargeDisposition,51,Hospice - medical facility,Hospice - medical facility
+DischargeDisposition,07,Left against medical advice or discontinued care,Left against medical advice or discontinued care
+DischargeDisposition,44-49,Reserved for national assignment,Reserved for national assignment
+DischargeDisposition,52-60,Reserved for national assignment,Reserved for national assignment
+DischargeDisposition,67-70,Reserved for national assignment,Reserved for national assignment
+DischargeDisposition,73-99,Reserved for national assignment,Reserved for national assignment
+DischargeDisposition,2l-29,Reserved for national assignment (Discontinued effective 10/16/03),Reserved for national assignment
+DischargeDisposition,31-39,Reserved for national assignment (Discontinued effective 10/16/03),Reserved for national assignment
+DischargeDisposition,10-19,Reserved for national assignment (Discontinued effective 10/16/03),Reserved for national assignment
+DischargeDisposition,71,Reserved for national assignment (Discontinued effective 4/1/03),Reserved for national assignment
+DischargeDisposition,72,Reserved for national assignment (Discontinued effective 4/1/03),Reserved for national assignment
+DischargeDisposition,30,Still Patient,Still Patient
+Smoking_Status_Code,449868002,Current every day smoker,Current every day smoker
+Smoking_Status_Code,428041000124106,Current some day smoker,Current some day smoker
+Smoking_Status_Code,8517006,Former smoker,Former smoker
+Smoking_Status_Code,266919005,Never smoker,Never smoker
+Smoking_Status_Code,77176002,"Smoker, current status unknown","Smoker, current status unknown"
+Smoking_Status_Code,266927001,Unknown if ever smoked,Unknown if ever smoked
+Smoking_Status_Code,428071000124103,Current Heavy tobacco smoker,Current heavy tobacco smoker
+Smoking_Status_Code,428061000124105,Current Light tobacco smoker,Current light tobacco smoker
+Smoking_Status_Code,none,,
