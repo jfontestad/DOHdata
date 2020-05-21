@@ -27,7 +27,8 @@ output_path <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Reques
 
 #### CHECK FILES ####
 ### See when the daily file was last updated
-last_mod <- file.mtime(file.path(output_path, "From Natasha on March 13", "ndly.csv"))
+last_mod_ndly <- file.mtime(file.path(output_path, "From Natasha on March 13", "ndly.csv"))
+last_mod_all_ed <- file.mtime(file.path(output_path, "From Natasha on March 13", "pdly_full_all_ed.csv"))
 
 # Also check weekly file if today is Tuesday
 if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) == 2) {
@@ -45,7 +46,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   weekly_error <- F
 }
 
-if (date(last_mod) != today()) {
+if (date(last_mod_ndly) != today() | date(last_mod_all_ed) != today()) {
   daily_error <- T
 } else {
   daily_error <- F
@@ -54,23 +55,23 @@ if (date(last_mod) != today()) {
 
 #### GENERATE TEXT ####
 if (daily_error == T & tuesday == F) {
-  error_text <- "the daily syndromic data file (ndly.csv) was not updated today."
+  error_text <- "one of the daily syndromic data files (ndly.csv, pdly_full_all_ed.csv) was not updated today."
 } else if (daily_error == T & tuesday == T & weekly_error == F) {
-  error_text <- paste0("the daily syndromic data file (ndly.csv) was not updated today ", 
+  error_text <- paste0("one of the daily syndromic data files (ndly.csv, pdly_full_all_ed.csv) was not updated today ", 
                        "(and the weekly code likely failed to even start).")
 } else if (daily_error == T & weekly_error == T) {
-  error_text <- "both the daily (ndly.csv) and weekly (nwkly.csv) syndromic data files were not updated today."
+  error_text <- "both the daily (ndly.csv, pdly_full_all_ed.csv) and weekly (nwkly.csv) syndromic data files were not updated today."
 } else if (daily_error == F & weekly_error == T) {
   error_text <- "the weekly syndromic data file (nwkly.csv) was not updated today (but the daily file (ndly.csv) was)."
 } else if (daily_error == F & tuesday == F) {
-  error_text <- "the daily syndromic data file (ndly.csv) was updated today"
+  error_text <- "the daily syndromic data files (ndly.csv, pdly_full_all_ed.csv) were updated today"
 } else if (daily_error == F & tuesday == T & weekly_error == F) {
-  error_text <- "both the daily (ndly.csv) and weekly (wkly.csv) syndromic data files were updated today"
+  error_text <- "the daily (ndly.csv, pdly_full_all_ed.csv) and weekly (wkly.csv) syndromic data files were all updated today"
 }
 
 if (daily_error == T | weekly_error == T) {
   subject <- "Error in daily syndromic data refresh"
-  body_text <- paste0("This email is generated if either file's last modified date is not as expected. </p>",
+  body_text <- paste0("This email is generated if any file's last modified date is not as expected. </p>",
   "<p>Check <a href = 'file:\\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\From Natasha on March 13'>
   \\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\From Natasha on March 13</a> to see which files were changed. ",
   "<br>If the pdly-xxx.csv files were modified, the error is likely in the daily script.", 
@@ -78,7 +79,7 @@ if (daily_error == T | weekly_error == T) {
 } else {
   subject <- "Daily syndromic data refresh completed successfully"
   body_text <- paste0("<p>Go to <a href = 'https://tableau.kingcounty.gov/#/site/DPH_CDIMMS/views/Essence-SummaryofRespiratorySyndromes-internal/Pg1-CLIED?Set%20frequency=Daily'>", 
-                      "https://tableau.kingcounty.gov/#/site/DPH_CDIMMS/views/Essence-SummaryofRespiratorySyndromes-internal/Pg1-CLIED?Set%20frequency=Daily</a>", 
+                      "https://tableau.kingcounty.gov/#/site/DPH-COVID/views/Essence-SummaryofRespiratorySyndromes-internal/Pg1-CLIED?Set%20frequency=Daily</a>", 
                       " to see the dashboard and check the data extract also completed.</p>")
 }
 
@@ -92,37 +93,69 @@ if (daily_error == T | weekly_error == T) {
 if (daily_error == F | daily_error == T) {
   ### Connect to REST API
   server_name <- "tableau.kingcounty.gov"
-  api <- 3.5
+  api <- 3.5 # This is specific to Tableau 2019.3. Use API 3.8 when we upgrade to 2020.2
   
   auth_creds <- jsonlite::toJSON(list(credentials = list(
     name = key_list("tableau_server")[["username"]], 
     password = key_get("tableau_server", key_list("tableau_server")[["username"]]), 
-    site = list(contentUrl = "DPH_CDIMMS"))), auto_unbox = T)
+    site = list(contentUrl = "DPH-COVID"))), auto_unbox = T)
   
-  auth_req <- POST(paste0("https://", server_name, "/", "api/", api, "/", "auth/signin"), 
+  signin_req <- POST(paste0("https://", server_name, "/", "api/", api, "/", "auth/signin"), 
                    body = auth_creds,
                    config = add_headers(c(accept="application/json", `content-type`="application/json")),
                    encode = "json") %>% stop_for_status(auth_req)
   
-  auth_pload <- content(auth_req, "text") %>% fromJSON()
+  auth_pload <- content(signin_req, "text") %>% fromJSON()
   
   message("Sign in successful")
   
   api_cred <- list(site_id = auth_pload$credentials$site$id, token = auth_pload$credentials$token)
   
   
-  # Note: hard coding ESSENCE workbook ID for now, could use another query to dynamically get it
-  # Set up query
-  pdf_req <- GET(paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/workbooks/",
-                        "3a1dce3f-4d89-48fb-96ad-e16d5e35add5", "/pdf?type=Letter&orientation=Portrait"),
-                 add_headers("x-tableau-auth" = api_cred$token),
-                 write_disk(path = paste0(output_path, "/Reports - daily/KC_SYNDROMIC_", Sys.Date(), "_DAILY.pdf"), overwrite = T))
+  ### Note: hard coding ESSENCE workbook ID for now, could use another query to dynamically get it
+  ### Here's how to get a list of workbooks/data sources and their IDs
+  # workbook_list_response <- GET(paste0("https://", server_name, "/api/", api, "/sites/", 
+  #                                      api_cred$site_id, "/workbooks/"),
+  #                               add_headers("x-tableau-auth" = api_cred$token))
+  # workbook_list <- content(workbook_list_response)
+  # datasource_list_response <- GET(paste0("https://", server_name, "/api/", api, "/sites/",
+  #                                        api_cred$site_id, "/datasources/"),
+  #                                 add_headers("x-tableau-auth" = api_cred$token))
+  # datasource_list <- content(datasource_list_response)
+  
+  # Check that the data sources refreshed as planned
+  ds_alerts <- content(GET(paste0("https://", server_name, "/api/", api, "/sites/", 
+                                          api_cred$site_id, "/datasources/1463ec4f-cff7-4b74-bc6b-977f20eb0cde"), 
+                                   add_headers("x-tableau-auth" = api_cred$token)))[["datasource"]]
+  ds_all_ed <- content(GET(paste0("https://", server_name, "/api/", api, "/sites/", 
+                                          api_cred$site_id, "/datasources/dd5480ad-ea1f-4cf6-a7ef-7ea39e126d0d"), 
+                                   add_headers("x-tableau-auth" = api_cred$token)))[["datasource"]]
+  
+  # Extract last update time
+  ds_alerts_update <- with_tz(ymd_hms(ds_alerts$updatedAt), tzone = "America/Los_Angeles")
+  ds_all_ed_update <- with_tz(ymd_hms(ds_all_ed$updatedAt), tzone = "America/Los_Angeles")
   
   
+  # If extracts haven't refreshed, issue a warning
+  # (could trigger a refresh via the API but a human should look at why it wasn't refreshed)
   
-  body_text <- paste0(body_text, "<p>An exported pdf of the DAILY version of the Tableau workbook can be found here: <br>",
-                      "<a href = 'file:\\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\Reports - daily'>", 
-                      "\\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\Reports - daily</a></p>")
+  if (ds_alerts_update >= last_mod_ndly & ds_all_ed_update >= last_mod_all_ed) {
+    # Set up query
+    pdf_req <- GET(paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/workbooks/",
+                          "be998f6f-2604-46b3-9fd6-f9a45e74443f", "/pdf?type=Letter&orientation=Portrait"),
+                   add_headers("x-tableau-auth" = api_cred$token),
+                   write_disk(path = paste0(output_path, "/Reports - daily/KC_SYNDROMIC_", Sys.Date(), "_DAILY.pdf"), overwrite = T))
+    
+    
+    
+    body_text <- paste0(body_text, "<p>An exported pdf of the DAILY version of the Tableau workbook can be found here: <br>",
+                        "<a href = 'file:\\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\Reports - daily'>", 
+                        "\\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\Reports - daily</a></p>")
+  } else {
+    body_text <- paste0(body_text, "<p>The Tableau data extracts were not refreshed after the new data was exported ",
+                        "so a PDF was not downloaded.")
+  }
+  
 }
 
 
@@ -142,6 +175,11 @@ outlook_mail[["htmlbody"]] <- paste0(
 
 # Send email
 outlook_mail$Send()
+
+#### DISCONNECT FROM TABLEAU SERVER ####
+signout_req <- POST(paste0("https://", server_name, "/", "api/", api, "/", "auth/signout"), 
+                 config = add_headers(c(accept="application/json", `content-type`="application/json")),
+                 encode = "json")
 
 message("Daily check complete")
 
