@@ -135,7 +135,7 @@ event_query <- function(event_id = NULL, bulk = F, group_size = 5000) {
     "&field=PregnancyStatus",
     # Add in clinical fields
     "&field=Facility&field=Facility_Type_Description",
-    "&field=HasBeenE&field=HasBeenI&field=AdmissionTypeCategory&field=C_Patient_Class&field=PatientClassList",
+    "&field=HasBeenE&field=HasBeenI&field=HasBeenO&field=AdmissionTypeCategory&field=C_Patient_Class&field=PatientClassList",
     "&field=TriageNotesParsed",
     "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
     "&field=CCDDCategory_flat",
@@ -452,7 +452,7 @@ syndrome_alert_query <- function(user_id = 520,
     geog_system <- "hospital"
     geogs <- c("1255", "1297", "1298", "1247", "27090", "1252", "1269", "30509", 
                "1272", "1277", "30529", "1294", "1302", "1303", "1304", "1305", 
-               "1307", "1313", "1316")
+               "1307", "1313", "1315", "1316")
     fields <- "&multiStratVal=geography&graphOptions=multipleSmall"
   } else {
     geog_system <- "hospitalregion"
@@ -546,6 +546,7 @@ syndrome_alert_query <- function(user_id = 520,
         x == 1305 ~ "Swedish Medical Center - Issaquah",
         x == 1307 ~ "Swedish Medical Center - Redmond",
         x == 1313 ~ "University of Washington Medical Center",
+        x == 1315 ~ "Valley Medical Center",
         x == 1316 ~ "Virginia Mason Medical Center"
       ))
     }
@@ -557,15 +558,19 @@ syndrome_alert_query <- function(user_id = 520,
 }
 
 
-### Use this querty to get record-level details for each syndrome
+### Use this query to get record-level details for each syndrome or COVID testing/dx
+# kc_patients = T will restrict to patients with a KC ZIP who attended a facility in
+#   King, Snohomish, or Pierce Counties
+# kc_patients = F will restrict to all patients who attended a KC facility
 syndrome_person_level_query <- function(user_id = 2769, 
-                                        frequency = c("weekly", "daily"), 
                                         sdate = "2019-09-29", edate = today() - 1,
                                         syndrome = c("all", "ili", "cli_new", 
-                                                     "cli_old", "cli", "pneumonia"),
-                                        ed = F, inpatient = F) {
+                                                     "cli_old", "cli", "pneumonia",
+                                                     "covid_test", "covid_dx_broad",
+                                                     "covid_dx_narrow"),
+                                        ed = F, inpatient = F,
+                                        kc_patients = F) {
   
-  frequency <- match.arg(frequency)
   syndrome <- match.arg(syndrome)
   
   # Format dates properly
@@ -576,12 +581,20 @@ syndrome_person_level_query <- function(user_id = 2769,
   if (is.na(as.Date(edate, format = "%Y-%m-%d"))) {
     stop("sdate must be %Y-%m-%d format")
   }
+  if (sdate > edate) {
+    stop("sdate must be before edate")
+  }
   
   start_date <- format(as.Date(sdate, "%Y-%m-%d"), "%d%b%Y")
   end_date <- format(as.Date(edate, "%Y-%m-%d"), "%d%b%Y")
   
   
-  if (syndrome == "ili") {
+  if (syndrome == "all") {
+    category <- ""
+    query <- "all"
+    condition <- "all"
+    syndrome_text <- "all"
+  } else if (syndrome == "ili") {
     category <- "&ccddCategory=ili%20ccdd%20v1"
     query <- "ili"
     condition <- "ili"
@@ -597,27 +610,25 @@ syndrome_person_level_query <- function(user_id = 2769,
     condition <- "cli"
     syndrome_text <- "CLI"
   } else if (syndrome == "pneumonia") {
-    category <- paste0("&dischargeDiagnosisApplyTo=subsyndromeFreeText&dischargeDiagnosis=", 
-                       "%5Epneumonia%5E,or,%5E%5B;/%20%5DJ12.%5B89%5D%5E,or,%5E%5B;/%20%5DJ12%5B89%5D%5E,or,",
-                       "%5E%5B;/%20%5DJ168%5E,or,%5E%5B;/%20%5DJ16.8%5E,or,%5E%5B;/%20%5DJ1%5B78%5D%5E,or,",
-                       "%5E%5B;/%20%5DJ851%5E,or,%5E%5B;/%20%5DJ85.1%5E,or,%5E%5B;/%20%5DJ15.9%5E,or,",
-                       "%5E%5B;/%20%5DJ159%5E,or,%5E%5B;/%20%5D233604007%5E,or,%5E%5B;/%20%5D385093006%5E,or,",
-                       "%5E%5B;/%20%5D301000005%5E,or,%5E%5B;/%20%5D301001009%5E,or,%5E%5B;/%20%5D233606009%5E,or,",
-                       "%5E%5B;/%20%5D407671000%5E,or,%5E%5B;/%20%5D301003007%5E,or,%5E%5B;/%20%5D75570004%5E,or,",
-                       "%5E%5B;/%20%5D300999006%5E,or,%5E%5B;/%20%5D301002002%5E,or,%5E%5B;/%20%5D396285007%5E,or,",
-                       "%5E%5B;/%20%5D426696003%5E,or,%5E%5B;/%20%5D312342009%5E,or,%5E%5B;/%20%5D53084003%5E,or,",
-                       "%5E%5B;/%20%5D278516003%5E,or,%5E%5B;/%20%5D64667001%5E,or,%5E%5B;/%20%5D236302005%5E,or,",
-                       "%5E%5B;/%20%5D196112005%5E,or,%5E%5B;/%20%5D471272001%5E,or,%5E%5B;/%20%5D7063008%5E,or,",
-                       "%5E%5B;/%20%5D700250006%5E,or,%5E%5B;/%20%5D425996009%5E,or,%5E%5B;/%20%5D123590007%5E,or,",
-                       "%5E%5B;/%20%5D44274007%5E,or,%5E%5B;/%20%5D68409003%5E,or,%5E%5B;/%20%5D55679008%5E,or,",
-                       "%5E%5B;/%20%5D441590008%5E,or,%5E%5B;/%20%5D57702005%5E")
+    category <- "&ccddCategory=cdc%20pneumonia%20ccdd%20v1"
     query <- "ncovpneumo"
     condition <- "pneumonia"
     syndrome_text <- "Pneumonia"
-  } else if (syndrome == "all") {
-    category <- ""
-    query <- "all"
-    syndrome_text <- "all"
+  } else if (syndrome == "covid_test") {
+    category <- "&procedureCombo=%5E87635%5E,%5E86328%5E,%5E86769%5E,%5Ecovid%5E,%5Esars-cov-2%5E"
+    query <- "sars-cov-2_testing"
+    condition <- "tested_for_covid"
+    syndrome_text <- "SARS-COV-2 testing"
+  } else if (syndrome == "covid_dx_broad") {
+    category <- "&ccddCategory=cdc%20coronavirus-dd%20v1"
+    query <- "covid_dx_broad"
+    condition <- "diagnosed_with_covid_broad"
+    syndrome_text <- "Diagnosed with COVID-19 (broad definition)"
+  } else if (syndrome == "covid_dx_narrow") {
+    category <- "&dischargeDiagnosis=%5EU.07%5E,%5EU07%5E"
+    query <- "covid_dx_narrow"
+    condition <- "diagnosed_with_covid_narrow"
+    syndrome_text <- "Diagnosed with COVID-19 (narrow definition)"
   }
   
   # Catch all for filters
@@ -630,44 +641,59 @@ syndrome_person_level_query <- function(user_id = 2769,
   } else {
     stop("Select only one of 'ED' and 'inpatient'")
   }
-  
-  # Catch all for percentParam types
-  if (syndrome %in% c("ili", "cli_new", "cli_old", "cli", "all")) {
-    percent <- "&percentParam=ccddCategory"
-  } else if (syndrome %in% c("pneumonia")) {
-    percent <- "&percentParam=dischargeDiagnosis"
-  }
+
   
   # Catch all for visit types
-  if (syndrome %in% c("all")) {
+  if (syndrome %in% c("all", "covid_test", "covid_dx_broad", "covid_dx_narrow")) {
     visit_types <- "&hospFacilityType=emergency%20care&hospFacilityType=urgent%20care&hospFacilityType=primary%20care"
   } else if (syndrome %in% c("ili", "cli_new", "cli_old", "cli", "pneumonia")) {
     visit_types <- "&hospFacilityType=emergency%20care"
   }
   
-  # Catch all for detector types
-  if (syndrome %in% c("cli_new", "cli_old", "cli", "all")) {
-    detector <- "&detector=nodetectordetector"
-  } else if (syndrome %in% c("ili", "pneumonia")) {
-    detector <- "&detector=c2"
+  # Geography systems
+  if (kc_patients == F) {
+    datasource <- "&datasource=va_hosp"
+    geography <- "&geographySystem=hospitalregion"
+    facility <- ""
+  } else {
+    datasource <- "&datasource=va_er"
+    geography <- "&geographySystem=region"
+    facility <- paste0("&erFacility=1239&erFacility=1246&erFacility=1283&erFacility=1301", 
+                       "&erFacility=1306&erFacility=1237&erFacility=1250&erFacility=1308", 
+                       "&erFacility=1295&erFacility=1296&erFacility=1299&erFacility=1247", 
+                       "&erFacility=27090&erFacility=1252&erFacility=1255&erFacility=1297", 
+                       "&erFacility=1298&erFacility=1269&erFacility=30509&erFacility=1272", 
+                       "&erFacility=1277&erFacility=1294&erFacility=1302&erFacility=1303", 
+                       "&erFacility=1304&erFacility=1305&erFacility=1307&erFacility=1313", 
+                       "&erFacility=1316&erFacility=30529&erFacility=1315")
   }
+
+  
+
   
   url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?", 
                 # Add in dates and geographies
                 "startDate=", start_date, "&endDate=", end_date,
-                "&geography=wa_king&geographySystem=hospitalregion", 
+                datasource, geography, "&geography=wa_king", 
                 # Add in a few other fields including userID
-                "&datasource=va_hosp&medicalGroupingSystem=essencesyndromes&userId=", user_id, 
-                "&aqtTarget=DataDetails&refValues=true", 
+                "&medicalGroupingSystem=essencesyndromes&userId=", user_id, 
+                "&aqtTarget=DataDetails&refValues=true",
                 # Add in percent param, types of visits, frequency, detector
-                percent, visit_types, "&timeResolution=", frequency, detector,
-                # Add in rowFields
+                "&percentParam=noPercent", 
+                "&hospFacilityType=emergency%20care&hospFacilityType=urgent%20care&hospFacilityType=primary%20care", 
+                "&timeResolution=daily&detector=nodetectordetector",
+                # Add in demographics
+                "&field=Age&field=AgeGroup&field=Race_flat&field=Ethnicity_flat&field=Sex&field=Zipcode&field=C_Patient_County", 
+                "&field=Height&field=Height_Units&field=Weight&field=Weight_Units&field=Body_Mass_Index&field=Smoking_Status_Code",
+                # Add in clinical aspects
+                "&field=Date&field=HasBeenE&field=HasBeenI&field=HasBeenO",
                 "&field=C_BioSense_ID&field=PID&field=age&field=ChiefComplaintParsed&field=DateTime&field=FacilityName", 
-                "&field=Age&field=AgeGroup&field=Race_flat&field=Ethnicity_flat&field=Sex&field=Zipcode", 
-                "&field=Date&field=WeekYear&field=HospitalName&field=HasBeenE&field=HasBeenI",
-                "&field=CCDD&field=CCDDCategory_flat&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo",
-                # Add in syndrome and filter
-                category, filter)
+                "&field=CCDD&field=CCDDCategory_flat&field=Admit_Reason_Combo&field=DischargeDiagnosis&field=Diagnosis_Combo&field=Procedure_Combo",
+                "&field=TriageNotesParsed&field=hospFacilityType&field=HospitalName",
+                "&field=Admit_Date_Time&field=Discharge_Date_Time&field=DischargeDisposition&field=DispositionCategory&field=MinutesFromVisitToDischarge",
+                "&field=C_Death&field=C_Death_Source&field=Death_Date_Time",
+                # Add in syndrome and filters
+                category, filter, facility)
   
   data_load <- jsonlite::fromJSON(httr::content(
     httr::GET(url, httr::authenticate(keyring::key_list("essence")[1, 2], 
@@ -675,11 +701,108 @@ syndrome_person_level_query <- function(user_id = 2769,
   
   df <- data_load$dataDetails
   
-  # Add in details to the data frame
-  df <- df %>%
-    dplyr::mutate(condition = condition,
-           setting = setting,
-           syndrome = syndrome_text)
+  if (is.null(nrow(df))) {
+    warning("No results returned")
+  } else {
+    # Add in details to the data frame
+    df <- df %>%
+      dplyr::mutate(condition = condition,
+                    setting = setting,
+                    syndrome = syndrome_text)
+    
+    return(df)
+  }
+}
+
+
+### Use this query to recode output from syndrome_person_level_query runs
+# Need to ensure that the fields referenced here stay in sync with those produced by
+# syndrome_person_level_query
+essence_recode <- function(df) {
+  # Bring in reference data for joining
+  recodes <- read.csv("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/essence/essence_recodes.csv", 
+                      stringsAsFactors = F)
   
-  return(df)
+  zips <- read.csv("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/zip_to_region.csv",
+                   stringsAsFactors = F)
+  zips <- zips %>% mutate(zip = as.character(zip),
+                          cc_region = case_when(
+                            cc_region == 'east' ~ "East",
+                            cc_region == 'north' ~ "North",
+                            cc_region == 'seattle' ~ "Seattle",
+                            cc_region == 'south' ~ "South",
+                            TRUE ~ cc_region))
+  
+  output <- df %>%
+    left_join(., filter(recodes, category == "Smoking_Status_Code") %>% select(code, value_display),
+              by = c("Smoking_Status_Code" = "code")) %>% rename(smoking_text = value_display) %>%
+    left_join(., select(zips, zip, cc_region), by = c("ZipCode" = "zip")) %>%
+    mutate_at(vars(Age, Height, Weight, HasBeenE, HasBeenI, HasBeenO), list(~ as.numeric(.))) %>%
+    mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d"),
+           setting = ifelse(HasBeenI == 1, "hosp", "ed"),
+           age_grp = case_when(Age < 18 ~ "<18",
+                               between(Age, 18, 29) ~ "18-29",
+                               between(Age, 30, 39) ~ "30-39",
+                               between(Age, 40, 49) ~ "40-49",
+                               between(Age, 50, 59) ~ "50-59",
+                               between(Age, 60, 69) ~ "60-69",
+                               between(Age, 70, 79) ~ "70-79",
+                               Age >= 80 ~ "80+",
+                               TRUE ~ "Unknown"),
+           age_grp = factor(age_grp, levels = c("<18", "18-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+", "Unknown")),
+           sex = case_when(Sex == "F" ~ "Female", Sex == "M" ~ "Male"),
+           race = case_when(
+             str_count(Race_flat, ";") > 2 ~ "Multiple",
+             str_detect(Race_flat, "1002-5") ~ "AI/AN",
+             str_detect(Race_flat, "2028-9") ~ "Asian",
+             str_detect(Race_flat, "2054-5") ~ "Black",
+             str_detect(Race_flat, "2076-8") ~ "NH/PI",
+             str_detect(Race_flat, "2131-1") ~ "Other race",
+             str_detect(Race_flat, "2106-3") ~ "White"),
+           ethnicity = case_when(
+             str_detect(Ethnicity_flat, "2135-2") ~ "Latino",
+             str_detect(Ethnicity_flat, "2186-5") ~ "Not Latino"),
+           height_m = case_when(tolower(Height_Units) == "centimeter" ~ Height / 100,
+                                tolower(Height_Units) == "meter" ~ Height,
+                                tolower(Height_Units) %in% c("inch", "inch [length]") ~ Height * 0.0254,
+                                tolower(Height_Units) %in% c("foot", "foot [length]") ~ Height * 0.3048),
+           weight_kg = case_when(tolower(Weight_Units) %in% c("kilogram", "kilogram [si mass units]") ~ Weight,
+                                 tolower(Weight_Units) == "pound" ~ Weight / 2.2,
+                                 tolower(Weight_Units) == "ounce" ~ Weight / 0.0283495),
+           bmi = ifelse(!is.na(height_m) & !is.na(weight_kg) & Age >= 20,
+                        round(weight_kg / height_m ^ 2, 3), NA),
+           overweight = case_when(bmi >= 25 ~ "Overweight", bmi < 25 ~ "Not overweight"),
+           obese = case_when(bmi >= 30 ~ "Obese", bmi < 30 ~ "Not obese"),
+           obese_severe = case_when(bmi >= 40 ~ "Severely obese", bmi < 40 ~ "Not severely obese"),
+           smoker_current = case_when(smoking_text %in% c("Current every day smoker",
+                                                          "Current light tobacco smoker",
+                                                          "Current some day smoker",
+                                                          "Current heavy tobacco smoker") ~ "Current smoker",
+                                      smoking_text %in% c("Never smoker", "Former smoker") ~ "Not current smoker"),
+           smoker_general = case_when(smoking_text %in% c("Current every day smoker",
+                                                          "Current light tobacco smoker",
+                                                          "Current some day smoker",
+                                                          "Current heavy tobacco smoker") ~ "Current smoker",
+                                      smoking_text == "Former smoker" ~ "Former smoker",
+                                      smoking_text  == "Never smoker" ~ "Never smoker"),
+           kc_zip = ifelse(!is.na(cc_region), 1L, 0L),
+           covid_test = case_when(
+             str_detect(Procedure_Combo, "(87635|86328|86769)") ~ 1L,
+             str_detect(tolower(Procedure_Combo), "(covid|sars-cov-2)") ~ 1L,
+             TRUE ~ 0L),
+           covid_dx_broad = case_when(
+             str_detect(Diagnosis_Combo, "(U07\\.1|U071)") ~ 1L,
+             str_detect(Diagnosis_Combo, "(J12\\.89|J1289)") ~ 1L,
+             str_detect(Diagnosis_Combo, "(B97\\.29|B9729)") ~ 1L,
+             TRUE ~ 0L),
+           covid_dx_narrow = case_when(
+             str_detect(Diagnosis_Combo, "(U07\\.1|U071)") ~ 1L,
+             TRUE ~ 0L),
+           cli = ifelse(str_detect(tolower(CCDDCategory_flat), "cli cc with cli dd and coronavirus dd v1"), 1L, 0L),
+           pneumo = ifelse(str_detect(tolower(CCDDCategory_flat), "cdc pneumonia ccdd v1"), 1L, 0L),
+           cli_pneumo = ifelse(cli == 1 | pneumo == 1, 1L, 0L),
+           ili = ifelse(str_detect(tolower(CCDDCategory_flat), "ili ccdd v1"), 1L, 0L)
+    )
+  
+  return(output)
 }
