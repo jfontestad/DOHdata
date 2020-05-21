@@ -750,6 +750,12 @@ essence_recode <- function(df) {
                                TRUE ~ "Unknown"),
            age_grp = factor(age_grp, levels = c("<18", "18-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+", "Unknown")),
            sex = case_when(Sex == "F" ~ "Female", Sex == "M" ~ "Male"),
+           aian = ifelse(str_detect(Race_flat, "1002-5"), 1L, 0L),
+           asian = ifelse(str_detect(Race_flat, "2028-9"), 1L, 0L),
+           black = ifelse(str_detect(Race_flat, "2054-5"), 1L, 0L),
+           nhpi = ifelse(str_detect(Race_flat, "2076-8"), 1L, 0L),
+           other = ifelse(str_detect(Race_flat, "2131-1"), 1L, 0L),
+           white = ifelse(str_detect(Race_flat, "2106-3"), 1L, 0L),
            race = case_when(
              str_count(Race_flat, ";") > 2 ~ "Multiple",
              str_detect(Race_flat, "1002-5") ~ "AI/AN",
