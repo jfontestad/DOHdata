@@ -466,10 +466,19 @@ syndrome_alert_query <- function(user_id = 520,
     geog_system <- "zipcode"
     geogs <- paste(zip, collapse = ",")
     data_source <- "&datasource=va_er"
+    facility <- paste0("&erFacility=1239&erFacility=1246&erFacility=1283&erFacility=1301", 
+                       "&erFacility=1306&erFacility=1237&erFacility=1250&erFacility=1308", 
+                       "&erFacility=1295&erFacility=1296&erFacility=1299&erFacility=1247", 
+                       "&erFacility=27090&erFacility=1252&erFacility=1255&erFacility=1297", 
+                       "&erFacility=1298&erFacility=1269&erFacility=30509&erFacility=1272", 
+                       "&erFacility=1277&erFacility=1294&erFacility=1302&erFacility=1303", 
+                       "&erFacility=1304&erFacility=1305&erFacility=1307&erFacility=1313", 
+                       "&erFacility=1316&erFacility=30529&erFacility=1315")
     zip_text <- paste(zip, collapse = ", ")
   } else {
     data_source <- "&datasource=va_hosp"
     zip_text <- "all"
+    facility <- ""
   }
   
   
@@ -478,7 +487,7 @@ syndrome_alert_query <- function(user_id = 520,
     url <- paste0("https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?", 
                   # Add in dates and geographies
                   "startDate=", start_date, "&endDate=", end_date,
-                  "&geographySystem=", geog_system, "&geography=", x,
+                  "&geographySystem=", geog_system, "&geography=", x, facility,
                   # Add in a few other fields including userID
                   data_source, "&medicalGroupingSystem=essencesyndromes&userId=", user_id, 
                   "&aqtTarget=TimeSeries", 
@@ -808,6 +817,15 @@ essence_recode <- function(df) {
            cli_pneumo = ifelse(cli == 1 | pneumo == 1, 1L, 0L),
            ili = ifelse(str_detect(tolower(CCDDCategory_flat), "ili ccdd v1"), 1L, 0L)
     )
+  
+  ### Set up week number
+  weeks <- output %>% filter(!is.na(date)) %>% distinct(date)
+  weeks <- bind_cols(weeks, MMWRweek::MMWRweek(weeks$date))
+  weeks <- weeks %>%
+    group_by(MMWRyear, MMWRweek) %>%
+    mutate(MMWRdate = min(date)) %>% ungroup()
+  
+  output <- left_join(output, weeks, by = "date")
   
   return(output)
 }
