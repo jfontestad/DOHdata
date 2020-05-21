@@ -29,7 +29,6 @@ library(janitor)
 library(MMWRweek)
 library(lubridate)
 library(tidyverse)
-library(knitr)
 library(httr)
 httr::set_config(config(ssl_verifypeer = 0L))
 library(jsonlite)
@@ -42,7 +41,7 @@ historical <- F
 historical_current <- T # Set to T if you want the historical run to also overwrite current data
 
 if (historical == F) {
-  s_start_date <- as_date("2019-09-29", "%Y-%m-%d")
+  s_start_date <- as_date("2019-11-24", "%Y-%m-%d")
 } else {
   s_start_date <- as_date("2017-10-01", "%Y-%m-%d")
 }
@@ -69,53 +68,100 @@ zips <- zips %>% mutate(zip = as.character(zip),
 source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/essence/essence_query_functions.R")
 
 
-#### DAILY RUN ####
 #### PERSON-LEVEL DATA ####
-# Need to run this for ZIP-level aggregation below. 
+# Need to run this for ZIP-level and race aggregation below.
 # Only write out if historical = F
+# Can just filter ED visits to get inpatient
 message("Running person-level section")
-# Daily pneumonia person-level data - ED visits
-pdly_full_pneumo_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "pneumonia", ed = T,
-                                                   sdate = s_start_date, edate = s_end_date)
 
-# Daily pneumonia person-level data - hospitalizations
-pdly_full_pneumo_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "pneumonia", inpatient = T,
-                                                     sdate = s_start_date, edate = s_end_date)
-
-# Daily ILI person-level data - ED visits
-pdly_full_ili_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "ili", ed = T,
-                                                sdate = s_start_date, edate = s_end_date)
-
-# Daily ILI person-level data - hospitalalizations
-pdly_full_ili_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "ili", inpatient = T,
-                                                  sdate = s_start_date, edate = s_end_date)
-
-# Daily CLI person-level data - ED Visits 
-pdly_full_cli_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "cli", ed = T,
-                                                sdate = s_start_date, edate = s_end_date)
-
-# Daily CLI person-level data - hospitalalizations
-pdly_full_cli_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "cli", inpatient = T,
-                                                  sdate = s_start_date, edate = s_end_date)
-
-# # Daily person-level data - ALL ED visits
-# pdly_full_all_ed <- syndrome_person_level_query(frequency = "daily", syndrome = "all", ed = T,
-#                                                    sdate = s_start_date, edate = s_end_date)
-# 
-# # Daily person-level data - ALL hospitalalizations
-# pdly_full_all_hosp <- syndrome_person_level_query(frequency = "daily", syndrome = "all", inpatient = T,
-#                                                   sdate = s_start_date, edate = s_end_date)
-
+#### PERSON-LEVEL - ED VISITS ####
 if (historical == F) {
-  write_csv(pdly_full_pneumo_ed, file.path(output_path, "pdly-pneumonia.csv"))
-  write_csv(pdly_full_pneumo_hosp, file.path(output_path, "pdly-pneumonia-hosp.csv"))
-  write_csv(pdly_full_ili_ed, file.path(output_path, "pdly-ILI.csv"))
-  write_csv(pdly_full_ili_hosp, file.path(output_path, "pdly-ILI-hosp.csv"))
-  write_csv(pdly_full_cli_ed, file.path(output_path, "pdly-CLI.csv"))
-  write_csv(pdly_full_cli_hosp, file.path(output_path, "pdly-CLI-hosp.csv"))
+  # Pneumonia
+  pdly_full_pneumo_ed <- syndrome_person_level_query(syndrome = "pneumonia", ed = T,
+                                                     sdate = s_start_date, edate = s_end_date)
+  # ILI
+  pdly_full_ili_ed <- syndrome_person_level_query(syndrome = "ili", ed = T,
+                                                  sdate = s_start_date, edate = s_end_date)
+  # CLI
+  pdly_full_cli_ed <- syndrome_person_level_query(syndrome = "cli", ed = T,
+                                                  sdate = s_start_date, edate = s_end_date)
+  # All
+  system.time(pdly_full_all_ed <- syndrome_person_level_query(syndrome = "all", ed = T,
+                                                              sdate = s_start_date, edate = s_end_date)) 
+} else if (historical == T) {
+  ### Break up into smaller chunks to avoid overwhelming things
+  date_range <- seq(s_start_date, s_end_date, by = '91 days')
+  
+  # Pneumonia
+  pdly_full_pneumo_ed <- bind_rows(lapply(date_range, function(x) {
+    syndrome_person_level_query(syndrome = "pneumonia", ed = T, sdate = x, edate = min(x + 90, s_end_date))}))
+  # ILI
+  pdly_full_ili_ed <- bind_rows(lapply(date_range, function(x) {
+    syndrome_person_level_query(syndrome = "ili", ed = T, sdate = x, edate = min(x + 90, s_end_date))}))
+  # CLI
+  pdly_full_cli_ed <- bind_rows(lapply(date_range, function(x) {
+    syndrome_person_level_query(syndrome = "cli", ed = T, sdate = x, edate = min(x + 90, s_end_date))}))
+  # All
+  # Add in a try for this because it takes a long time to run and we don't want
+  # to lose the successful runs. This needs to be run manually and the output inspected
+  system.time(pdly_full_all_ed <- lapply(date_range, function(x) {
+    try(syndrome_person_level_query(syndrome = "all", ed = T, sdate = x, edate = min(x + 90, s_end_date)))
+  }))
+  names(pdly_full_all_ed) <- date_range
+  # If any list elements are null investigate and rerun those dates
+  # Otherwise, convert into a data frame
+  pdly_full_all_ed <- bind_rows(pdly_full_all_ed)
+}
+
+#### PERSON-LEVEL - RECODE ####
+pdly_full_pneumo_ed <- essence_recode(pdly_full_pneumo_ed)
+pdly_full_ili_ed <- essence_recode(pdly_full_ili_ed)
+pdly_full_cli_ed <- essence_recode(pdly_full_cli_ed)
+pdly_full_all_ed <- essence_recode(pdly_full_all_ed)
+  
+  
+#### PERSON-LEVEL - HOSPITALIZATIONS ####
+pdly_full_pneumo_hosp <- pdly_full_pneumo_ed %>% filter(HasBeenI == 1)
+pdly_full_ili_hosp <- pdly_full_ili_ed %>% filter(HasBeenI == 1)
+pdly_full_cli_hosp <- pdly_full_cli_ed %>% filter(HasBeenI == 1)
+pdly_full_all_hosp <- pdly_full_all_ed %>% filter(HasBeenI == 1)
+
+
+#### PERSON LEVEL - WRITE OUT ####  
+if (historical == F) {
+  lapply(ls(pattern = "pdly_full_(cli|ili|pneumo)"), function(x) {
+    # Pull in existing data and remove dates from before today's run
+    historical <- readRDS(file = paste0(output_path, "/", x, "_historical.RData"))
+    historical <- historical %>% filter(date < s_start_date)
+    # Bind to new data and export
+    output <- bind_rows(historical, get(x))
+    saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
+  })
+  
+  # Also write out a smaller version of overall data for use in the Tableau viz
+  write.csv(select(pdly_full_all_ed, C_BioSense_ID, date, MMWRyear, MMWRweek, MMWRday, MMWRdate, 
+                   setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip, 
+                   Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
+                   bmi, overweight, obese, obese_severe, 
+                   smoking_text, smoker_current, smoker_general,
+                   HasBeenE, HasBeenI, HasBeenO, C_Death,
+                   covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
+            file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
+  
+} else if (historical == T) {
+  lapply(ls(pattern = "pdly_full_(cli|ili|pneumo|all)"), function(x) {
+    output <- get(x)
+      if (historical_current == T) {
+        saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
+        saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
+      } else if (historical_current == F) {
+        saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
+      }
+  })
 }
 
 
+#### DAILY RUN ####
 #### DAILY - ALL AGE ####
 message("Running daily all-ages section")
 
@@ -209,7 +255,7 @@ all_age_ed_byhosp_daily <- bind_rows(lapply(c("cli"), function(x) {
 
 
 #### DAILY - BY ZIP/REGION ####
-# Not running daily now, just weekly
+# Not running daily now, just weekly due to small numbers
 
 
 #### DAILY - AGE SPECIFIC ####
@@ -331,140 +377,105 @@ age_specific_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"),
 
 #### DAILY - RACE/ETHNICITY SPECIFIC ####
 message("Running daily race/ethnicity-specific section")
-# Just running CLI for now because this is very slow and we are only graphing CLI
+# Use the person-level data because running each time series run is very slow
+
+### Query to summarise the data
+race_eth_summary <- function(condition = c("all", "pneumonia", "ili", "cli"),
+                         setting = c("ed", "hosp"), type = c("race", "ethnicity"),
+                         frequency = c("daily", "weekly")) {
+  
+  condition <- match.arg(condition)
+  setting <- match.arg(setting)
+  type <- match.arg(type)
+  frequency <- match.arg(frequency)
+  
+  if (setting == "ed") {df <- pdly_full_all_ed} 
+  else if (setting == "hosp") {df <- pdly_full_all_hosp}
+  
+  if (frequency == "weekly") {df <- mutate(date = MMWRdate)}
+  
+  # Clean up missing values
+  df <- df %>% mutate_at(vars(race, ethnicity), list(~ ifelse(is.na(.), "Unknown", .)))
+  
+  # Set up dummy variable so grouping below works
+  if (type == "race") {df <- df %>% mutate(ethnicity = "all")} 
+  else if (type == "ethnicity") {df <- df %>% mutate(race = "all")}
+  
+  # Set up recodes
+  if (condition == "all") {input <- df %>% mutate(query = "all")}
+  else if (condition == "pneumonia") {
+    input <- df %>% filter(pneumo == 1) %>% mutate(query = "pneumo")
+  } else if (condition == "ili") {
+    input <- df %>% filter(ili == 1) %>% mutate(query = "ili")
+  } else if (condition == "cli") {
+    input <- df %>% filter(cli == 1) %>% mutate(query = "cli")
+  }
+  
+  # Summarise data
+  cnt <- input %>% group_by(date, query, race, ethnicity) %>%
+    summarise(cnt = n()) %>% ungroup()
+  
+  pct <- df %>% group_by(date, race, ethnicity) %>% summarise(tot = n()) %>% ungroup()
+  
+  output <- left_join(cnt, pct, by = c("date", "race", "ethnicity")) %>%
+    mutate(pct = cnt / tot * 100) %>% select(-tot)
+  
+  output
+}
+
 
 ### ED visits
-race_specific_ed_daily <- bind_rows(lapply(c("all", "cli"), function(x) {
-  message("Working on ", x)
-  # Run queries
-  pct_aian <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "aian", hospital = F, 
-                                value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_aian <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "aian", hospital = F, 
-                                   value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_asian <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "asian", hospital = F, 
-                                value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_asian <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "asian", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_black <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "black", hospital = F, 
-                                 value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_black <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "black", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_nhpi <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "nhpi", hospital = F, 
-                                 value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_nhpi <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "nhpi", hospital = F, 
-                                   value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_other <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "other", hospital = F, 
-                                  value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_other <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "other", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_white <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "white", hospital = F, 
-                                  value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_white <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "white", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_race_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "unknown", hospital = F, 
-                                  value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_race_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, race = "unknown", hospital = F, 
-                                       value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_lat <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, ethnicity = "latino", hospital = F, 
-                                  value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_lat <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, ethnicity = "latino", hospital = F, 
-                                  value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_nonlat <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, ethnicity = "non-latino", hospital = F, 
-                                value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_nonlat <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, ethnicity = "non-latino", hospital = F, 
-                                     value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_eth_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, ethnicity = "unknown", hospital = F, 
-                                value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_eth_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, ed = T, ethnicity = "unknown", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-  # Bring together
-  output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
-  return(output)
-}))
+race_specific_ed_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), 
+                                           race_eth_summary, setting = "ed", 
+                                           type = "race", frequency = "daily"))
+eth_specific_ed_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), 
+                                          race_eth_summary, setting = "ed", 
+                                          type = "ethnicity", frequency = "daily"))
+                                    
+
+### Hospitalizations
+race_specific_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), 
+                                           race_eth_summary, setting = "hosp", 
+                                           type = "race", frequency = "daily"))
+eth_specific_hosp_daily <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), 
+                                          race_eth_summary, setting = "hosp", 
+                                          type = "ethnicity", frequency = "daily"))
 
 
-### Hospitalization
-race_specific_hosp_daily <- bind_rows(lapply(c("all", "cli"), function(x) {
-  message("Working on ", x)
-  # Run queries
-  pct_aian <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "aian", hospital = F, 
-                                   value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_aian <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "aian", hospital = F, 
-                                   value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_asian <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "asian", hospital = F, 
-                                    value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_asian <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "asian", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_black <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "black", hospital = F, 
-                                    value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_black <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "black", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_nhpi <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "nhpi", hospital = F, 
-                                   value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_nhpi <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "nhpi", hospital = F, 
-                                   value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_other <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "other", hospital = F, 
-                                    value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_other <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "other", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_white <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "white", hospital = F, 
-                                    value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_white <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "white", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_race_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "unknown", hospital = F, 
-                                       value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_race_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, race = "unknown", hospital = F, 
-                                       value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_lat <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, ethnicity = "latino", hospital = F, 
-                                  value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_lat <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, ethnicity = "latino", hospital = F, 
-                                  value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_nonlat <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, ethnicity = "non-latino", hospital = F, 
-                                     value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_nonlat <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, ethnicity = "non-latino", hospital = F, 
-                                     value = "count", sdate = s_start_date, edate = s_end_date)
-  pct_eth_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, ethnicity = "unknown", hospital = F, 
-                                      value = "percent", sdate = s_start_date, edate = s_end_date)
-  cnt_eth_unk <- syndrome_alert_query(frequency = "daily", syndrome = x, inpatient = T, ethnicity = "unknown", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-  # Bring together
-  output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                      left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
-  return(output)
-}))
+### Set up matrix of all date/race permutations so zero values show up
+# Relies on running the summary code first
+race_specific_grid_daily <- expand.grid(date = unique(race_specific_ed_daily$date), 
+                                        race = unique(race_specific_ed_daily$race),
+                                        query = unique(race_specific_ed_daily$query),
+                                        stringsAsFactors = F)
+eth_specific_grid_daily <- expand.grid(date = unique(eth_specific_ed_daily$date), 
+                                       ethnicity = unique(eth_specific_ed_daily$ethnicity),
+                                       query = unique(eth_specific_ed_daily$query),
+                                       stringsAsFactors = F)
+
+### Bring together grid and results
+race_specific_ed_daily <- left_join(race_specific_grid_daily, race_specific_ed_daily, by = c("date", "race", "query")) %>%
+  mutate(setting = "ed")
+eth_specific_ed_daily <- left_join(eth_specific_grid_daily, eth_specific_ed_daily, by = c("date", "ethnicity", "query")) %>%
+  mutate(setting = "ed")
+race_specific_hosp_daily <- left_join(race_specific_grid_daily, race_specific_hosp_daily, by = c("date", "race", "query")) %>%
+  mutate(setting = "hosp")
+eth_specific_hosp_daily <- left_join(eth_specific_grid_daily, eth_specific_hosp_daily, by = c("date", "ethnicity", "query")) %>%
+  mutate(setting = "hosp")
 
 
-### Add in multiple race
-# Aggregate the person-level query and fit to the format
-race_specific_multi_daily <- bind_rows(mget(ls(pattern = "pdly_full_(cli|ili|pneumo)"))) %>%
-  # Keep only those with multiple entries for race
-  filter(str_count(Race_flat, ";") > 2) %>%
-  mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d"),
-         race = "multiple") %>%
-  arrange(condition, setting, race, date) %>%
-  group_by(condition, setting, race, date) %>%
-  summarise(cnt = n()) %>% ungroup() %>%
-  # Add in matching columns
-  mutate(query = case_when(condition == "pneumonia" ~ "pneumo", TRUE ~ condition),
-         age = "all age", ethnicity = "all", hospital = "all")
-
+### Combine in a single df and add missing variables
+race_eth_specific_daily <- bind_rows(race_specific_ed_daily, eth_specific_ed_daily, 
+                                     race_specific_hosp_daily, eth_specific_hosp_daily) %>%
+  mutate(syndrome = case_when(query == "all" ~ "all",
+                              query == "pneumo" ~ "Pneumonia",
+                              query == "ili" ~ "ILI",
+                              query == "cli" ~ "CLI"),
+         cnt = replace_na(cnt, 0L),
+         pct = replace_na(pct, 0),
+         age = "all age", zip = "all", hospital = "all") %>%
+  mutate_at(vars(race, ethnicity), list(~ replace_na(., "all"))) %>%
+  select(date, pct, age, race, ethnicity, zip, setting, query, syndrome, hospital, cnt)
 
 
 #### DAILY - MAKE AND SAVE COMBINED DATASET ####
@@ -484,7 +495,7 @@ ndly <- bind_rows(
   # AGE SPECIFIC
   age_specific_ed_daily, age_specific_hosp_daily, #age_specific_ed_uc_daily,
   # RACE/ETHNICITY SPECIFIC
-  race_specific_ed_daily, race_specific_hosp_daily
+  race_eth_specific_daily
   )
 
 ### Pull out dates and convert to get weeks
@@ -549,8 +560,8 @@ rm(dly,
    all_age_ed_daily, all_age_hosp_daily, all_age_ed_uc_daily, 
    all_adult_ed_daily, all_adult_ed_uc_daily, all_adult_hosp_daily,
    all_age_ed_byhosp_daily, all_age_byzip_daily,
-      age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily,
-   race_specific_ed_daily, race_specific_hosp_daily)
+   age_specific_ed_daily, age_specific_ed_uc_daily, age_specific_hosp_daily,
+   race_eth_specific_daily)
 
 
 #### WEEKLY RUN ####
@@ -830,142 +841,60 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
   message("Running weekly race/ethnicity-specific section")
   # Just running CLI for now because this is very slow and we are only graphing CLI
   
+  
   ### ED visits
-  race_specific_ed_weekly <- bind_rows(lapply(c("cli"), function(x) {
-    message("Working on ", x)
-    # Run queries
-    message("aian")
-    pct_aian <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "aian", hospital = F, 
-                                     value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_aian <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "aian", hospital = F, 
-                                     value = "count", sdate = s_start_date, edate = s_end_date)
-    message("asian")
-    pct_asian <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "asian", hospital = F, 
-                                      value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_asian <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "asian", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-    message("black")
-    pct_black <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "black", hospital = F, 
-                                      value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_black <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "black", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-    message("nhpi")
-    pct_nhpi <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "nhpi", hospital = F, 
-                                     value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_nhpi <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "nhpi", hospital = F, 
-                                     value = "count", sdate = s_start_date, edate = s_end_date)
-    message("other race")
-    pct_other <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "other", hospital = F, 
-                                      value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_other <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "other", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-    message("white")
-    pct_white <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "white", hospital = F, 
-                                      value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_white <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "white", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-    message("unknown race")
-    pct_race_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "unknown", hospital = F, 
-                                         value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_race_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, race = "unknown", hospital = F, 
-                                         value = "count", sdate = s_start_date, edate = s_end_date)
-    message("latino")
-    pct_lat <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, ethnicity = "latino", hospital = F, 
-                                    value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_lat <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, ethnicity = "latino", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-    message("non-latino")
-    pct_nonlat <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, ethnicity = "non-latino", hospital = F, 
-                                       value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_nonlat <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, ethnicity = "non-latino", hospital = F, 
-                                       value = "count", sdate = s_start_date, edate = s_end_date)
-    message("unknown ethnicity")
-    pct_eth_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, ethnicity = "unknown", hospital = F, 
-                                        value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_eth_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, ed = T, ethnicity = "unknown", hospital = F, 
-                                        value = "count", sdate = s_start_date, edate = s_end_date)
-    # Bring together
-    output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
-    return(output)
-  }))
+  race_specific_ed_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), 
+                                             race_eth_summary, setting = "ed", 
+                                             type = "race", frequency = "weekly"))
+  eth_specific_ed_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), 
+                                            race_eth_summary, setting = "ed", 
+                                            type = "ethnicity", frequency = "weekly"))
   
   
-  ### Hospitalization
-  race_specific_hosp_weekly <- bind_rows(lapply(c("cli"), function(x) {
-    message("Working on ", x)
-    # Run queries
-    message("aian")
-    pct_aian <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "aian", hospital = F, 
-                                     value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_aian <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "aian", hospital = F, 
-                                     value = "count", sdate = s_start_date, edate = s_end_date)
-    message("asian")
-    pct_asian <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "asian", hospital = F, 
-                                      value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_asian <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "asian", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-    message("black")
-    pct_black <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "black", hospital = F, 
-                                      value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_black <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "black", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-    message("nhpi")
-    pct_nhpi <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "nhpi", hospital = F, 
-                                     value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_nhpi <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "nhpi", hospital = F, 
-                                     value = "count", sdate = s_start_date, edate = s_end_date)
-    message("other race")
-    pct_other <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "other", hospital = F, 
-                                      value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_other <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "other", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-    message("white")
-    pct_white <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "white", hospital = F, 
-                                      value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_white <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "white", hospital = F, 
-                                      value = "count", sdate = s_start_date, edate = s_end_date)
-    message("unknown race")
-    pct_race_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "unknown", hospital = F, 
-                                         value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_race_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, race = "unknown", hospital = F, 
-                                         value = "count", sdate = s_start_date, edate = s_end_date)
-    message("latino")
-    pct_lat <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, ethnicity = "latino", hospital = F, 
-                                    value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_lat <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, ethnicity = "latino", hospital = F, 
-                                    value = "count", sdate = s_start_date, edate = s_end_date)
-    message("non-latino")
-    pct_nonlat <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, ethnicity = "non-latino", hospital = F, 
-                                       value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_nonlat <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, ethnicity = "non-latino", hospital = F, 
-                                       value = "count", sdate = s_start_date, edate = s_end_date)
-    message("unknown ethnicity")
-    pct_eth_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, ethnicity = "unknown", hospital = F, 
-                                        value = "percent", sdate = s_start_date, edate = s_end_date)
-    cnt_eth_unk <- syndrome_alert_query(frequency = "weekly", syndrome = x, inpatient = T, ethnicity = "unknown", hospital = F, 
-                                        value = "count", sdate = s_start_date, edate = s_end_date)
-    # Bring together
-    output <- bind_rows(left_join(pct_aian, cnt_aian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_asian, cnt_asian, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_black, cnt_black, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_nhpi, cnt_nhpi, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_other, cnt_other, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_white, cnt_white, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_race_unk, cnt_race_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_lat, cnt_lat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_nonlat, cnt_nonlat, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")),
-                        left_join(pct_eth_unk, cnt_eth_unk, by = c("date", "age", "race", "ethnicity",  "zip", "setting", "query", "syndrome", "hospital")))
-    return(output)
-  }))
+  ### Hospitalizations
+  race_specific_hosp_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), 
+                                               race_eth_summary, setting = "hosp", 
+                                               type = "race", frequency = "weekly"))
+  eth_specific_hosp_weekly <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), 
+                                              race_eth_summary, setting = "hosp", 
+                                              type = "ethnicity", frequency = "weekly"))
+  
+  
+  ### Set up matrix of all date/race permutations so zero values show up
+  # Relies on running the summary code first
+  race_specific_grid_weekly <- expand.grid(date = unique(race_specific_ed_weekly$date), 
+                                          race = unique(race_specific_ed_weekly$race),
+                                          query = unique(race_specific_ed_weekly$query),
+                                          stringsAsFactors = F)
+  eth_specific_grid_weekly <- expand.grid(date = unique(eth_specific_ed_weekly$date), 
+                                         ethnicity = unique(eth_specific_ed_weekly$ethnicity),
+                                         query = unique(eth_specific_ed_weekly$query),
+                                         stringsAsFactors = F)
+  
+  ### Bring together grid and results
+  race_specific_ed_weekly <- left_join(race_specific_grid_weekly, race_specific_ed_weekly, by = c("date", "race", "query")) %>%
+    mutate(setting = "ed")
+  eth_specific_ed_weekly <- left_join(eth_specific_grid_weekly, eth_specific_ed_weekly, by = c("date", "ethnicity", "query")) %>%
+    mutate(setting = "ed")
+  race_specific_hosp_weekly <- left_join(race_specific_grid_weekly, race_specific_hosp_weekly, by = c("date", "race", "query")) %>%
+    mutate(setting = "hosp")
+  eth_specific_hosp_weekly <- left_join(eth_specific_grid_weekly, eth_specific_hosp_weekly, by = c("date", "ethnicity", "query")) %>%
+    mutate(setting = "hosp")
+  
+  
+  ### Combine in a single df and add missing variables
+  race_eth_specific_weekly <- bind_rows(race_specific_ed_weekly, eth_specific_ed_weekly, 
+                                       race_specific_hosp_weekly, eth_specific_hosp_weekly) %>%
+    mutate(syndrome = case_when(query == "all" ~ "all",
+                                query == "pneumo" ~ "Pneumonia",
+                                query == "ili" ~ "ILI",
+                                query == "cli" ~ "CLI"),
+           cnt = replace_na(cnt, 0L),
+           pct = replace_na(pct, 0),
+           age = "all age", zip = "all", hospital = "all") %>%
+    mutate_at(vars(race, ethnicity), list(~ replace_na(., "all"))) %>%
+    select(date, pct, age, race, ethnicity, zip, setting, query, syndrome, hospital, cnt) %>%
+    filter(date <= s_end_date)
   
   
   #### WEEKLY - MAKE AND SAVE COMBINED DATASET ####
@@ -984,7 +913,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
     # AGE SPECIFIC
     age_specific_ed_weekly, age_specific_hosp_weekly, #age_specific_ed_uc_weekly,
     # RACE/ETHNICITY SPECIFIC
-    race_specific_ed_weekly, race_specific_hosp_weekly
+    race_eth_specific_weekly
     )
   
   ### Pull out dates and convert to get weeks
@@ -1047,7 +976,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
      all_adult_ed_weekly, all_adult_ed_uc_weekly, all_adult_hosp_weekly,
      all_age_ed_byhosp_weekly, all_age_byzip_weekly, 
      age_specific_ed_weekly, age_specific_ed_uc_weekly, age_specific_hosp_weekly,
-     race_specific_ed_weekly, race_specific_hosp_weekly)
+     race_eth_specific_weekly)
   
 }
 
