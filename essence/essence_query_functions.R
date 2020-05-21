@@ -347,19 +347,18 @@ syndrome_alert_query <- function(user_id = 520,
     syndrome_text <- "Influenza diagnosis"
   }
   
+  # Percent or not
+  if (value == "percent") {
+    percent <- "&percentParam=ccddCategory"
+  } else if (value == "count") {
+    percent <- "&percentParam=noPercent"
+  }
+  
   # Catch all for detector types
-  if (syndrome %in% c("influenza") & value == "percent") {
+  if (syndrome %in% c("influenza")) {
     detector <- "&detector=probrepswitch"
-    percent <- "&percentParam=ccddCategory"
-  } else if (syndrome %in% c("influenza") & value == "count") {
-    detector <- "&detector=probrepswitch"
-    percent <- "&percentParam=noPercent"
-  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new", "cli") & value == "percent") {
+  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new", "cli")) {
     detector <- "&detector=c2"
-    percent <- "&percentParam=ccddCategory"
-  } else if (syndrome %in% c("all", "ili", "pneumonia", "cli_old", "cli_new", "cli") & value == "count") {
-    detector <- "&detector=probregv2"
-    percent <- "&percentParam=noPercent"
   }
   
   # Catch all for visit types and other config setup
