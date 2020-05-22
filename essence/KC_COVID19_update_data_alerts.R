@@ -118,8 +118,9 @@ pdly_full_pneumo_ed <- essence_recode(pdly_full_pneumo_ed)
 pdly_full_ili_ed <- essence_recode(pdly_full_ili_ed)
 pdly_full_cli_ed <- essence_recode(pdly_full_cli_ed)
 pdly_full_all_ed <- essence_recode(pdly_full_all_ed)
-  
-  
+
+
+
 #### PERSON-LEVEL - HOSPITALIZATIONS ####
 pdly_full_pneumo_hosp <- pdly_full_pneumo_ed %>% filter(HasBeenI == 1)
 pdly_full_ili_hosp <- pdly_full_ili_ed %>% filter(HasBeenI == 1)
@@ -129,28 +130,41 @@ pdly_full_all_hosp <- pdly_full_all_ed %>% filter(HasBeenI == 1)
 
 #### PERSON LEVEL - WRITE OUT ####  
 if (historical == F) {
-  lapply(ls(pattern = "pdly_full_(cli|ili|pneumo)"), function(x) {
+  lapply(ls(pattern = "pdly_full_(pneumo|ili|cli|all)"), function(x) {
     # Pull in existing data and remove dates from before today's run
     historical <- readRDS(file = paste0(output_path, "/", x, "_historical.RData"))
     historical <- historical %>% filter(date < s_start_date)
-    # Bind to new data and export
+    
+    # Bind to new data
     output <- bind_rows(historical, get(x))
+    
+    # Set up sort order
+    sort_order <- output %>% 
+      distinct(date, season) %>%
+      arrange(date, season) %>%
+      group_by(season) %>%
+      mutate(date_sort = row_number()) %>%
+      ungroup()
+    
+    output <- left_join(output, sort_order, by = c("date", "season"))
+    
+    # Export
     saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
   })
-  
-  # Also write out a smaller version of overall data for use in the Tableau viz
-  write.csv(select(pdly_full_all_ed, C_BioSense_ID, date, MMWRyear, MMWRweek, MMWRday, MMWRdate, 
-                   setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip, 
-                   Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
-                   bmi, overweight, obese, obese_severe, 
-                   smoking_text, smoker_current, smoker_general,
-                   HasBeenE, HasBeenI, HasBeenO, C_Death,
-                   covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
-            file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
-  
 } else if (historical == T) {
-  lapply(ls(pattern = "pdly_full_(cli|ili|pneumo|all)"), function(x) {
+  lapply(ls(pattern = "pdly_full_(pneumo|ili|cli|all)"), function(x) {
     output <- get(x)
+    
+    # Set up sort order
+    sort_order <- output %>% 
+      distinct(date, season) %>%
+      arrange(date, season) %>%
+      group_by(season) %>%
+      mutate(date_sort = row_number()) %>%
+      ungroup()
+    
+    output <- left_join(output, sort_order, by = c("date", "season"))
+    
       if (historical_current == T) {
         saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
         saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
@@ -160,6 +174,16 @@ if (historical == F) {
   })
 }
 
+# Also write out a smaller version of overall data for use in the Tableau viz
+write.csv(select(pdly_full_all_ed, C_BioSense_ID, 
+                 date, year, week, day, MMWRdate, season, date_sort, 
+                 setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip, 
+                 Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
+                 bmi, overweight, obese, obese_severe, 
+                 smoking_text, smoker_current, smoker_general,
+                 HasBeenE, HasBeenI, HasBeenO, C_Death,
+                 covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
+          file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
 
 #### DAILY RUN ####
 #### DAILY - ALL AGE ####
@@ -512,7 +536,8 @@ ndly <- left_join(ndly, ndly_date, by = c("date" = "ndly_date")) %>%
            year == 2018 & week >= 40 ~ "2018-2019",
            year == 2019 & week < 40 ~ "2018-2019",
            year == 2019 & week >= 40 ~ "2019-2020",
-           year == 2020 & week < 40 ~ "2019-2020"),
+           year == 2020 & week < 40 ~ "2019-2020",
+           year == 2020 & week >= 40 ~ "2020-2021"),
          week = as.factor(week),
          week = factor(week, levels(week)[c(40:52, 1:39)], ordered = TRUE),
          essence_refresh_date = today()) %>%
