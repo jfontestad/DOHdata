@@ -823,7 +823,16 @@ essence_recode <- function(df) {
   weeks <- bind_cols(weeks, MMWRweek::MMWRweek(weeks$date))
   weeks <- weeks %>%
     group_by(MMWRyear, MMWRweek) %>%
-    mutate(MMWRdate = min(date)) %>% ungroup()
+    mutate(MMWRdate = min(date)) %>% ungroup() %>%
+    rename(year = MMWRyear, week = MMWRweek, day = MMWRday) %>%
+    mutate(season = case_when(
+      year == 2017 & week >= 40 ~ "2017-2018",
+      year == 2018 & week < 40 ~ "2017-2018",
+      year == 2018 & week >= 40 ~ "2018-2019",
+      year == 2019 & week < 40 ~ "2018-2019",
+      year == 2019 & week >= 40 ~ "2019-2020",
+      year == 2020 & week < 40 ~ "2019-2020",
+      year == 2020 & week >= 40 ~ "2020-2021"))
   
   output <- left_join(output, weeks, by = "date")
   
