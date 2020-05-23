@@ -114,11 +114,11 @@ if (historical == F) {
 }
 
 #### PERSON-LEVEL - RECODE ####
+message("Recoding line-level data")
 pdly_full_pneumo_ed <- essence_recode(pdly_full_pneumo_ed)
 pdly_full_ili_ed <- essence_recode(pdly_full_ili_ed)
 pdly_full_cli_ed <- essence_recode(pdly_full_cli_ed)
 pdly_full_all_ed <- essence_recode(pdly_full_all_ed)
-
 
 
 #### PERSON-LEVEL - HOSPITALIZATIONS ####
@@ -128,62 +128,53 @@ pdly_full_cli_hosp <- pdly_full_cli_ed %>% filter(HasBeenI == 1)
 pdly_full_all_hosp <- pdly_full_all_ed %>% filter(HasBeenI == 1)
 
 
-#### PERSON LEVEL - WRITE OUT ####  
-if (historical == F) {
-  lapply(ls(pattern = "pdly_full_(pneumo|ili|cli|all)"), function(x) {
+#### PERSON LEVEL - WRITE OUT ####
+lapply(ls(pattern = "pdly_full_(pneumo|ili|cli|all)"), function(x) {
+  if (historical == F) {
     # Pull in existing data and remove dates from before today's run
-    historical <- readRDS(file = paste0(output_path, "/", x, "_historical.RData"))
-    historical <- historical %>% filter(date < s_start_date)
+    old_data <- readRDS(file = paste0(output_path, "/", x, "_historical.RData"))
+    old_data <- old_data %>% filter(date < s_start_date) %>% select(-date_sort)
     
     # Bind to new data
-    output <- bind_rows(historical, get(x))
-    
-    # Set up sort order
-    sort_order <- output %>% 
-      distinct(date, season) %>%
-      arrange(date, season) %>%
-      group_by(season) %>%
-      mutate(date_sort = row_number()) %>%
-      ungroup()
-    
-    output <- left_join(output, sort_order, by = c("date", "season"))
-    
-    # Export
-    saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
-  })
-} else if (historical == T) {
-  lapply(ls(pattern = "pdly_full_(pneumo|ili|cli|all)"), function(x) {
+    output <- bind_rows(old_data, get(x))
+  } else if (historical == T) {
     output <- get(x)
-    
-    # Set up sort order
-    sort_order <- output %>% 
-      distinct(date, season) %>%
-      arrange(date, season) %>%
-      group_by(season) %>%
-      mutate(date_sort = row_number()) %>%
-      ungroup()
-    
-    output <- left_join(output, sort_order, by = c("date", "season"))
-    
-      if (historical_current == T) {
-        saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
-        saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
-      } else if (historical_current == F) {
-        saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
-      }
-  })
-}
+  }
 
-# Also write out a smaller version of overall data for use in the Tableau viz
-write.csv(select(pdly_full_all_ed, C_BioSense_ID, 
-                 date, year, week, day, MMWRdate, season, date_sort, 
-                 setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip, 
-                 Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
-                 bmi, overweight, obese, obese_severe, 
-                 smoking_text, smoker_current, smoker_general,
-                 HasBeenE, HasBeenI, HasBeenO, C_Death,
-                 covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
-          file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
+  # Set up sort order
+  sort_order <- output %>% 
+    distinct(date, season) %>%
+    arrange(date, season) %>%
+    group_by(season) %>%
+    mutate(date_sort = row_number()) %>%
+    ungroup()
+  
+  output <- left_join(output, sort_order, by = c("date", "season"))
+  
+  # Export
+  if (historical == F) {
+    saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
+  } else if (historical == T & historical_current == T) {
+    saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
+    saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
+  } else if (historical == T & historical_current == F) {
+    saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
+  }
+  
+  # if (x == "pdly_full_all_ed") {
+  #   # Also write out a smaller version of overall data for use in the Tableau viz
+  #   write.csv(select(output, C_BioSense_ID, 
+  #                    date, year, week, day, MMWRdate, season, date_sort, 
+  #                    setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip, 
+  #                    Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
+  #                    bmi, overweight, obese, obese_severe, 
+  #                    smoking_text, smoker_current, smoker_general,
+  #                    HasBeenE, HasBeenI, HasBeenO, C_Death,
+  #                    covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
+  #             file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
+  # }
+})
+
 
 #### DAILY RUN ####
 #### DAILY - ALL AGE ####
