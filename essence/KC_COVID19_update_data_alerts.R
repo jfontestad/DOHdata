@@ -161,19 +161,20 @@ lapply(ls(pattern = "pdly_full_(pneumo|ili|cli|all)"), function(x) {
     saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
   }
   
-  # if (x == "pdly_full_all_ed") {
-  #   # Also write out a smaller version of overall data for use in the Tableau viz
-  #   write.csv(select(output, C_BioSense_ID, 
-  #                    date, year, week, day, MMWRdate, season, date_sort, 
-  #                    setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip, 
-  #                    Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
-  #                    bmi, overweight, obese, obese_severe, 
-  #                    smoking_text, smoker_current, smoker_general,
-  #                    HasBeenE, HasBeenI, HasBeenO, C_Death,
-  #                    covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
-  #             file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
-  # }
+  if (x == "pdly_full_all_ed") {
+    # Also write out a smaller version of overall data for use in the Tableau viz
+    write.csv(select(output, C_BioSense_ID,
+                     date, year, week, day, MMWRdate, season, date_sort,
+                     setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip,
+                     Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
+                     bmi, overweight, obese, obese_severe,
+                     smoking_text, smoker_current, smoker_general,
+                     HasBeenE, HasBeenI, HasBeenO, C_Death,
+                     covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
+              file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
+  }
 })
+
 
 
 #### DAILY RUN ####
