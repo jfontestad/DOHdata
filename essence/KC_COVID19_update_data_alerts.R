@@ -408,7 +408,7 @@ race_eth_summary <- function(condition = c("all", "pneumonia", "ili", "cli"),
   if (setting == "ed") {df <- pdly_full_all_ed} 
   else if (setting == "hosp") {df <- pdly_full_all_hosp}
   
-  if (frequency == "weekly") {df <- mutate(date = MMWRdate)}
+  if (frequency == "weekly") {df <- df %>% mutate(date = MMWRdate)}
   
   # Clean up missing values
   df <- df %>% mutate_at(vars(race, ethnicity), list(~ ifelse(is.na(.), "Unknown", .)))
