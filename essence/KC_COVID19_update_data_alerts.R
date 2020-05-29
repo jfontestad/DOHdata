@@ -41,7 +41,7 @@ historical <- F
 historical_current <- T # Set to T if you want the historical run to also overwrite current data
 
 if (historical == F) {
-  s_start_date <- as_date("2019-11-24", "%Y-%m-%d")
+  s_start_date <- as_date("2020-01-01", "%Y-%m-%d")
 } else {
   s_start_date <- as_date("2017-10-01", "%Y-%m-%d")
 }
@@ -72,35 +72,17 @@ source("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/essence/esse
 # Need to run this for ZIP-level and race aggregation below.
 # Only write out if historical = F
 # Can just filter ED visits to get inpatient
+# Only need to run for all ED, can use recoding and filters to find CLI, ILI, etc.
 message("Running person-level section")
 
 #### PERSON-LEVEL - ED VISITS ####
 if (historical == F) {
-  # Pneumonia
-  pdly_full_pneumo_ed <- syndrome_person_level_query(syndrome = "pneumonia", ed = T,
-                                                     sdate = s_start_date, edate = s_end_date)
-  # ILI
-  pdly_full_ili_ed <- syndrome_person_level_query(syndrome = "ili", ed = T,
-                                                  sdate = s_start_date, edate = s_end_date)
-  # CLI
-  pdly_full_cli_ed <- syndrome_person_level_query(syndrome = "cli", ed = T,
-                                                  sdate = s_start_date, edate = s_end_date)
   # All
   system.time(pdly_full_all_ed <- syndrome_person_level_query(syndrome = "all", ed = T,
                                                               sdate = s_start_date, edate = s_end_date)) 
 } else if (historical == T) {
   ### Break up into smaller chunks to avoid overwhelming things
   date_range <- seq(s_start_date, s_end_date, by = '91 days')
-  
-  # Pneumonia
-  pdly_full_pneumo_ed <- bind_rows(lapply(date_range, function(x) {
-    syndrome_person_level_query(syndrome = "pneumonia", ed = T, sdate = x, edate = min(x + 90, s_end_date))}))
-  # ILI
-  pdly_full_ili_ed <- bind_rows(lapply(date_range, function(x) {
-    syndrome_person_level_query(syndrome = "ili", ed = T, sdate = x, edate = min(x + 90, s_end_date))}))
-  # CLI
-  pdly_full_cli_ed <- bind_rows(lapply(date_range, function(x) {
-    syndrome_person_level_query(syndrome = "cli", ed = T, sdate = x, edate = min(x + 90, s_end_date))}))
   # All
   # Add in a try for this because it takes a long time to run and we don't want
   # to lose the successful runs. This needs to be run manually and the output inspected
@@ -115,65 +97,178 @@ if (historical == F) {
 
 #### PERSON-LEVEL - RECODE ####
 message("Recoding line-level data")
-pdly_full_pneumo_ed <- essence_recode(pdly_full_pneumo_ed)
-pdly_full_ili_ed <- essence_recode(pdly_full_ili_ed)
-pdly_full_cli_ed <- essence_recode(pdly_full_cli_ed)
 pdly_full_all_ed <- essence_recode(pdly_full_all_ed)
 
 
-#### PERSON-LEVEL - HOSPITALIZATIONS ####
-pdly_full_pneumo_hosp <- pdly_full_pneumo_ed %>% filter(HasBeenI == 1)
-pdly_full_ili_hosp <- pdly_full_ili_ed %>% filter(HasBeenI == 1)
-pdly_full_cli_hosp <- pdly_full_cli_ed %>% filter(HasBeenI == 1)
-pdly_full_all_hosp <- pdly_full_all_ed %>% filter(HasBeenI == 1)
+#### PERSON-LEVEL - JOIN TO HISTORICAL DATA ####
+if (historical == F) {
+  # Pull in existing data and remove dates from before today's run
+  pdly_full_all_ed_historical <- readRDS(file = paste0(output_path, "/pdly_full_all_ed_historical.RData"))
+  pdly_full_all_ed_historical <- pdly_full_all_ed_historical %>% filter(date < s_start_date) %>% select(-date_sort)
+  
+  # Bind to new data
+  pdly_full_all_ed_output <- bind_rows(pdly_full_all_ed_historical, pdly_full_all_ed)
+} else if (historical == T) {
+  pdly_full_all_ed_output <- pdly_full_all_ed
+}
+
+# Set up sort order
+sort_order <- pdly_full_all_ed_output %>% 
+  distinct(date, season) %>%
+  arrange(date, season) %>%
+  group_by(season) %>%
+  mutate(date_sort = row_number()) %>%
+  ungroup()
+
+pdly_full_all_ed_output <- left_join(pdly_full_all_ed_output, sort_order, 
+                                     by = c("date", "season"))
+
+
+#### PERSON-LEVEL - AGGREGATION ####
+### Query to summarise the data
+essence_summary_time <- function(df = pdly_full_all_ed_output,
+                                 condition = c("all", "pneumonia", "ili", "cli", "cli_pneumo"),
+                                 setting = c("ed", "hosp"), 
+                                 cat = c("all", "age_grp", "race", "ethnicity", "race_eth",
+                                         "smoker", "obese", "setting", "facility", 
+                                         "region", "zipcode"),
+                                 frequency = c("daily", "weekly")) {
+  
+  condition <- match.arg(condition)
+  setting_text <- match.arg(setting)
+  cat_text <- match.arg(cat)
+  freq_text <- match.arg(frequency)
+  
+  if (setting_text == "hosp") {df <- pdly_full_all_ed %>% filter(HasBeenI == 1)}
+  
+  # Special treatment for ZIPs so that only KC ones are kept
+  if (cat_text == "zipcode") {
+    df <- df %>% filter(kc_zip == 1) %>% 
+      mutate(zipcode = ZipCode)
+  }
+  
+  # Rename certain fields
+  if (cat_text == "smoker") {df <- df %>% mutate(smoker = smoker_general)}
+  if (cat_text == "facility") {df <- df %>% mutate(facility = HospitalName)}
+  if (cat_text == "region") {df <- df %>% mutate(region = cc_region)}
+  
+  # Set up time frame
+  if (freq_text == "weekly") {df <- df %>% mutate(date = MMWRdate)}
+  
+  # Set up recodes
+  if (condition == "all") {input <- df %>% mutate(query = "all")}
+  else if (condition == "pneumonia") {
+    input <- df %>% filter(pneumo == 1) %>% mutate(query = "pneumo")
+  } else if (condition == "ili") {
+    input <- df %>% filter(ili == 1) %>% mutate(query = "ili")
+  } else if (condition == "cli") {
+    input <- df %>% filter(cli == 1) %>% mutate(query = "cli")
+  } else if (condition == "cli_pneumo") {
+    input <- df %>% filter(cli_pneumo == 1) %>% mutate(query = "cli_pneumo")
+  }
+  
+  
+  # Summarise data
+  if (cat_text != "all") {
+    cat_quo <- rlang::sym(cat_text)
+    input <- input %>% mutate(group = !!cat_quo) 
+    df <- df %>% mutate(group = !!cat_quo)
+  } else {
+    input <- input %>% mutate(group = "all")
+    df <- df %>% mutate(group = "all")
+  }
+  
+  # Set up a frame of all date and group combos
+  # (avoids issues in Tableau)
+  if (freq_text == "weekly") {
+    date_grid <- expand.grid(date = seq(min(df$date), max(df$date), by = "1 week"),
+                             query = unique(input$query),
+                             group = unique(df$group),
+                             stringsAsFactors = F)
+  } else {
+    date_grid <- expand.grid(date = seq(min(df$date), max(df$date), by = "1 day"),
+                             query = unique(input$query),
+                             group = unique(df$group),
+                             stringsAsFactors = F)
+  }
+  
+  # Summarise data
+  cnt <- input %>% group_by(date, query, group) %>% summarise(cnt = n()) %>% ungroup()
+  pct <- df %>% group_by(date, group) %>% summarise(tot = n()) %>% ungroup()
+  
+  # Produce output
+  output <- left_join(date_grid, cnt, by = c("date", "query", "group")) %>%
+    left_join(., pct, by = c("date", "group")) %>%
+    mutate(pct = cnt / tot * 100,
+           setting = setting_text,
+           category = cat_text,
+           frequency = freq_text,
+           analysis = "time_series") %>% 
+    mutate_at(vars(cnt, tot, pct), list(~ replace_na(., 0))) %>%
+    select(-tot)
+  
+  output
+}
+
+
+
+### ED visits
+ed_summary_time <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
+  daily <- bind_rows(
+    lapply(c("all", "age_grp", "race", "ethnicity", "race_eth", "smoker", "obese", 
+             "setting", "facility", "region"), 
+           essence_summary_time, df = pdly_full_all_ed_output,
+           condition = x, setting = "ed", frequency = "daily"))
+  
+  weekly <- bind_rows(
+    lapply(c("all", "age_grp", "race", "ethnicity", "race_eth", "smoker", "obese", 
+             "setting", "facility", "region", "zipcode"), 
+           essence_summary_time, df = pdly_full_all_ed_output, 
+           condition = x, setting = "ed", frequency = "weekly"))
+  
+  total <- bind_rows(daily, weekly)
+  return(total)
+}))
+
+### Hospitalizations
+hosp_summary_time <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
+  daily <- bind_rows(
+    lapply(c("all", "age_grp", "race", "ethnicity", "race_eth", "smoker", "obese", 
+             "setting", "facility", "region"), 
+           essence_summary_time, df = pdly_full_all_ed_output, 
+           condition = x, setting = "hosp", frequency = "daily"))
+  
+  weekly <- bind_rows(
+    lapply(c("all", "age_grp", "race", "ethnicity", "race_eth", "smoker", "obese", 
+             "setting", "facility", "region", "zipcode"), 
+           essence_summary_time, df = pdly_full_all_ed_output, 
+           condition = x, setting = "hosp", frequency = "weekly"))
+  
+  total <- bind_rows(daily, weekly)
+  return(total)
+}))
+
+
+summary_time <- bind_rows(ed_summary_time, hosp_summary_time)
+
 
 
 #### PERSON LEVEL - WRITE OUT ####
-lapply(ls(pattern = "pdly_full_(pneumo|ili|cli|all)"), function(x) {
-  if (historical == F) {
-    # Pull in existing data and remove dates from before today's run
-    old_data <- readRDS(file = paste0(output_path, "/", x, "_historical.RData"))
-    old_data <- old_data %>% filter(date < s_start_date) %>% select(-date_sort)
-    
-    # Bind to new data
-    output <- bind_rows(old_data, get(x))
-  } else if (historical == T) {
-    output <- get(x)
-  }
+# Write out summarized data for use in the Tableau viz
+write.csv(summary_time,
+          file = file.path(output_path, "pdly_full_all_ed_summary.csv"), row.names = F)
 
-  # Set up sort order
-  sort_order <- output %>% 
-    distinct(date, season) %>%
-    arrange(date, season) %>%
-    group_by(season) %>%
-    mutate(date_sort = row_number()) %>%
-    ungroup()
-  
-  output <- left_join(output, sort_order, by = c("date", "season"))
-  
-  # Export
-  if (historical == F) {
-    saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
-  } else if (historical == T & historical_current == T) {
-    saveRDS(output, file = paste0(output_path, "/", x, ".RData"))
-    saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
-  } else if (historical == T & historical_current == F) {
-    saveRDS(output, file = paste0(output_path, "/", x, "_historical.RData"))
-  }
-  
-  if (x == "pdly_full_all_ed") {
-    # Also write out a smaller version of overall data for use in the Tableau viz
-    write.csv(select(output, C_BioSense_ID,
-                     date, year, week, day, MMWRdate, season, date_sort,
-                     setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip,
-                     Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
-                     bmi, overweight, obese, obese_severe,
-                     smoking_text, smoker_current, smoker_general,
-                     HasBeenE, HasBeenI, HasBeenO, C_Death,
-                     covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
-              file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
-  }
-})
+
+
+# Export
+if (historical == F) {
+  saveRDS(pdly_full_all_ed_output, file = paste0(output_path, "/pdly_full_all_ed.RData"))
+} else if (historical == T & historical_current == T) {
+  saveRDS(pdly_full_all_ed_output, file = paste0(output_path, "/pdly_full_all_ed.RData"))
+  saveRDS(pdly_full_all_ed_output, file = paste0(output_path, "/pdly_full_all_ed_historical.RData"))
+} else if (historical == T & historical_current == F) {
+  saveRDS(pdly_full_all_ed_output, file = paste0(output_path, "/pdly_full_all_ed_historical.RData"))
+}
 
 
 
