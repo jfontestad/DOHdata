@@ -739,12 +739,13 @@ essence_recode <- function(df) {
                             cc_region == 'north' ~ "North",
                             cc_region == 'seattle' ~ "Seattle",
                             cc_region == 'south' ~ "South",
-                            TRUE ~ 'Non-King County'))
+                            TRUE ~ "Non-King County"))
   
   output <- df %>%
     left_join(., filter(recodes, category == "Smoking_Status_Code") %>% select(code, value_display),
               by = c("Smoking_Status_Code" = "code")) %>% rename(smoking_text = value_display) %>%
     left_join(., select(zips, zip, cc_region), by = c("ZipCode" = "zip")) %>%
+    mutate(cc_region = replace_na(cc_region, "Non-King County")) %>%
     mutate_at(vars(Age, Height, Weight, HasBeenE, HasBeenI, HasBeenO), list(~ as.numeric(.))) %>%
     mutate(date = as.Date(str_sub(C_BioSense_ID, 1, 10), format = "%Y.%m.%d"),
            setting = ifelse(HasBeenI == 1, "hosp", "ed"),
