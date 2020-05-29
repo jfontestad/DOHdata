@@ -777,7 +777,7 @@ essence_recode <- function(df) {
              str_detect(Ethnicity_flat, "2135-2") ~ "Latino",
              str_detect(Ethnicity_flat, "2186-5") ~ "Not Latino"),
            race_eth = case_when(
-             ethnicity == "Latino" ~ "Latino"
+             ethnicity == "Latino" ~ "Latino",
              TRUE ~ race),
            height_m = case_when(tolower(Height_Units) == "centimeter" ~ Height / 100,
                                 tolower(Height_Units) == "meter" ~ Height,
