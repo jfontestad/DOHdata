@@ -739,7 +739,7 @@ essence_recode <- function(df) {
                             cc_region == 'north' ~ "North",
                             cc_region == 'seattle' ~ "Seattle",
                             cc_region == 'south' ~ "South",
-                            TRUE ~ cc_region))
+                            TRUE ~ 'Non-King County'))
   
   output <- df %>%
     left_join(., filter(recodes, category == "Smoking_Status_Code") %>% select(code, value_display),
@@ -776,6 +776,9 @@ essence_recode <- function(df) {
            ethnicity = case_when(
              str_detect(Ethnicity_flat, "2135-2") ~ "Latino",
              str_detect(Ethnicity_flat, "2186-5") ~ "Not Latino"),
+           race_eth = case_when(
+             ethnicity == "Latino" ~ "Latino"
+             TRUE ~ race),
            height_m = case_when(tolower(Height_Units) == "centimeter" ~ Height / 100,
                                 tolower(Height_Units) == "meter" ~ Height,
                                 tolower(Height_Units) %in% c("inch", "inch [length]") ~ Height * 0.0254,
