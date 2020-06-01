@@ -124,7 +124,7 @@ pdly_full_all_ed_output <- left_join(pdly_full_all_ed_output, sort_order,
                                      by = c("date", "season"))
 
 
-#### PERSON-LEVEL - AGGREGATION ####
+#### PERSON-LEVEL - TIME AGGREGATION ####
 ### Query to summarise the data
 essence_summary_time <- function(df = pdly_full_all_ed_output,
                                  condition = c("all", "pneumonia", "ili", "cli", "cli_pneumo"),
@@ -139,7 +139,7 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
   cat_text <- match.arg(cat)
   freq_text <- match.arg(frequency)
   
-  if (setting_text == "hosp") {df <- pdly_full_all_ed %>% filter(HasBeenI == 1)}
+  if (setting_text == "hosp") {df <- df %>% filter(HasBeenI == 1)}
   
   # Special treatment for ZIPs so that only KC ones are kept
   if (cat_text == "zipcode") {
@@ -191,21 +191,29 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
                              group = unique(df$group),
                              stringsAsFactors = F)
   }
+  # Add in seasons and dates so they are not missing
+  seasons <- df %>% distinct(date, season, year, week)
+  date_grid <- date_grid %>% left_join(., seasons, by = "date")
+
   
   # Summarise data
-  cnt <- input %>% group_by(date, query, group) %>% summarise(cnt = n()) %>% ungroup()
-  pct <- df %>% group_by(date, group) %>% summarise(tot = n()) %>% ungroup()
+  cnt <- input %>% group_by(season, year, week, date, query, group) %>% summarise(cnt = n()) %>% ungroup()
+  pct <- df %>% group_by(season, year, week, date, group) %>% summarise(tot = n()) %>% ungroup()
   
   # Produce output
-  output <- left_join(date_grid, cnt, by = c("date", "query", "group")) %>%
-    left_join(., pct, by = c("date", "group")) %>%
-    mutate(pct = cnt / tot * 100,
+  output <- left_join(date_grid, cnt, by = c("season", "year", "week", "date", "query", "group")) %>%
+    left_join(., pct, by = c("season", "year", "week", "date", "group")) %>%
+    mutate(pct = round(cnt / tot, 6),
            setting = setting_text,
-           category = cat_text,
-           frequency = freq_text,
-           analysis = "time_series") %>% 
+           category = cat_text) %>% 
     mutate_at(vars(cnt, tot, pct), list(~ replace_na(., 0))) %>%
     select(-tot)
+  
+  if (freq_text == "daily") {
+    output <- output %>% rename(cnt_daily = cnt, pct_daily = pct)
+  } else {
+    output <- output %>% rename(cnt_weekly = cnt, pct_weekly = pct)
+  }
   
   output
 }
@@ -213,7 +221,7 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
 
 
 ### ED visits
-ed_summary_time <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
+summary_time_ed <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "cli_pneumo"), function(x) {
   daily <- bind_rows(
     lapply(c("all", "age_grp", "race", "ethnicity", "race_eth", "smoker", "obese", 
              "setting", "facility", "region"), 
@@ -226,12 +234,15 @@ ed_summary_time <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), functio
            essence_summary_time, df = pdly_full_all_ed_output, 
            condition = x, setting = "ed", frequency = "weekly"))
   
-  total <- bind_rows(daily, weekly)
+  total <- full_join(daily, weekly, 
+                     by = c("season", "year", "week", "date", "query", 
+                            "category", "group", "setting"))
   return(total)
 }))
 
+
 ### Hospitalizations
-hosp_summary_time <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), function(x) {
+summary_time_hosp <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "cli_pneumo"), function(x) {
   daily <- bind_rows(
     lapply(c("all", "age_grp", "race", "ethnicity", "race_eth", "smoker", "obese", 
              "setting", "facility", "region"), 
@@ -244,19 +255,162 @@ hosp_summary_time <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli"), funct
            essence_summary_time, df = pdly_full_all_ed_output, 
            condition = x, setting = "hosp", frequency = "weekly"))
   
-  total <- bind_rows(daily, weekly)
+  total <- full_join(daily, weekly, 
+                     by = c("season", "year", "week", "date", "query", 
+                            "category", "group", "setting"))
   return(total)
 }))
 
 
-summary_time <- bind_rows(ed_summary_time, hosp_summary_time)
+#### PERSON-LEVEL - DEMOG AGGREGATION ####
+# Query to sum up breakdowns of dx, testing, etc.
+essence_summary_demog <- function(df = pdly_full_all_ed_output,
+                                 condition = c("all", "pneumonia", "ili", "cli", "cli_pneumo"),
+                                 setting = c("ed", "hosp"), 
+                                 cat = c("all", "age_grp", "race", "ethnicity", "race_eth",
+                                         "smoker", "obese", "setting", "facility", 
+                                         "region", "zipcode"),
+                                 frequency = c("weekly", "daily")) {
+  
+  condition <- match.arg(condition)
+  setting_text <- match.arg(setting)
+  cat_text <- match.arg(cat)
+  freq_text <- match.arg(frequency)
+  
+  if (setting_text == "hosp") {df <- df %>% filter(HasBeenI == 1)}
+  
+  # Special treatment for ZIPs so that only KC ones are kept
+  if (cat_text == "zipcode") {
+    df <- df %>% filter(kc_zip == 1) %>% 
+      mutate(zipcode = ZipCode)
+  }
+  
+  # Rename certain fields
+  if (cat_text == "smoker") {df <- df %>% mutate(smoker = smoker_general)}
+  if (cat_text == "facility") {df <- df %>% mutate(facility = HospitalName)}
+  if (cat_text == "region") {df <- df %>% mutate(region = cc_region)}
+  
+  # Set up time frame
+  if (freq_text == "weekly") {df <- df %>% mutate(date = MMWRdate)}
+  
+  # Set up recodes
+  if (condition == "all") {input <- df %>% mutate(query = "all")}
+  else if (condition == "pneumonia") {
+    input <- df %>% filter(pneumo == 1) %>% mutate(query = "pneumo")
+  } else if (condition == "ili") {
+    input <- df %>% filter(ili == 1) %>% mutate(query = "ili")
+  } else if (condition == "cli") {
+    input <- df %>% filter(cli == 1) %>% mutate(query = "cli")
+  } else if (condition == "cli_pneumo") {
+    input <- df %>% filter(cli_pneumo == 1) %>% mutate(query = "cli_pneumo")
+  }
+  
+
+  # Summarise data
+  if (cat_text != "all") {
+    cat_quo <- rlang::sym(cat_text)
+    input <- input %>% mutate(group = !!cat_quo) 
+    df <- df %>% mutate(group = !!cat_quo)
+  } else {
+    input <- input %>% mutate(group = "all")
+    df <- df %>% mutate(group = "all")
+  }
+  
+  # Set up a frame of all date and group combos
+  # (avoids issues in Tableau)
+  if (freq_text == "weekly") {
+    date_grid <- expand.grid(date = seq(min(df$date), max(df$date), by = "1 week"),
+                             query = unique(input$query),
+                             group = unique(df$group),
+                             stringsAsFactors = F)
+  } else {
+    date_grid <- expand.grid(date = seq(min(df$date), max(df$date), by = "1 day"),
+                             query = unique(input$query),
+                             group = unique(df$group),
+                             stringsAsFactors = F)
+  }
+  # Add in seasons and dates so they are not missing
+  seasons <- df %>% distinct(date, season, year, week)
+  date_grid <- date_grid %>% left_join(., seasons, by = "date")
+  
+  
+  # Summarise data
+  cnt_dx_narrow <- input %>% filter(covid_dx_narrow == 1) %>%
+    group_by(season, year, week, date, query, group) %>% 
+    summarise(cnt_dx_narrow = n()) %>% ungroup()
+  covid_dx_broad <- input %>% filter(covid_dx_broad == 1) %>%
+    group_by(season, year, week, date, query, group) %>% 
+    summarise(cnt_dx_broad = n()) %>% ungroup()
+  covid_test <- input %>% filter(covid_test == 1) %>%
+    group_by(season, year, week, date, query, group) %>% 
+    summarise(cnt_test = n()) %>% ungroup()
+  
+  # Produce output
+  output <- left_join(date_grid, cnt_dx_narrow, by = c("season", "year", "week", "date", "query", "group")) %>%
+    left_join(., covid_dx_broad, by = c("season", "year", "week", "date", "query", "group")) %>%
+    left_join(., covid_test, by = c("season", "year", "week", "date", "query", "group")) %>%
+    mutate(setting = setting_text,
+           category = cat_text) %>% 
+    mutate_at(vars(cnt_dx_narrow, cnt_dx_broad, cnt_test), list(~ replace_na(., 0)))
+  
+  output
+}
+
+
+### ED visits
+summary_demog_ed <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "cli_pneumo"), function(x) {
+  
+  weekly_ed <- bind_rows(
+    lapply(c("all", "age_grp", "race", "ethnicity", "race_eth", "smoker", "obese", 
+             "setting", "facility", "region", "zipcode"), 
+           essence_summary_demog, df = pdly_full_all_ed_output, 
+           condition = x, setting = "ed", frequency = "weekly"))
+  
+  return(weekly_ed)
+}))
+
+
+### Hospitalizations
+summary_demog_hosp <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "cli_pneumo"), function(x) {
+  weekly_hosp <- bind_rows(
+    lapply(c("all", "age_grp", "race", "ethnicity", "race_eth", "smoker", "obese", 
+             "setting", "facility", "region", "zipcode"), 
+           essence_summary_demog, df = pdly_full_all_ed_output, 
+           condition = x, setting = "hosp", frequency = "weekly"))
+  return(weekly_hosp)
+}))
 
 
 
 #### PERSON LEVEL - WRITE OUT ####
 # Write out summarized data for use in the Tableau viz
-write.csv(summary_time,
+summary_all <- bind_rows(left_join(summary_time_ed, summary_demog_ed, 
+                                   by = c("setting", "season", "year", "week", "date", "query", "category", "group")),
+                         left_join(summary_time_hosp, summary_demog_hosp, 
+                                   by = c("setting", "season", "year", "week", "date", "query", "category", "group")))
+
+# Set up sort order
+summary_all <- summary_all %>%
+  arrange(season, date) %>%
+  group_by(setting, season, query, category, group) %>%
+  mutate(date_sort = row_number()) %>%
+  ungroup()
+
+
+write.csv(summary_all,
           file = file.path(output_path, "pdly_full_all_ed_summary.csv"), row.names = F)
+
+
+# Also write out a smaller version of overall data for use in the Tableau viz
+write.csv(select(pdly_full_all_ed_output, C_BioSense_ID,
+                 date, year, week, day, MMWRdate, season, date_sort,
+                 setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip,
+                 Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
+                 bmi, overweight, obese, obese_severe,
+                 smoking_text, smoker_current, smoker_general,
+                 HasBeenE, HasBeenI, HasBeenO, C_Death,
+                 covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
+          file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
 
 
 
@@ -501,7 +655,7 @@ race_eth_summary <- function(condition = c("all", "pneumonia", "ili", "cli"),
   frequency <- match.arg(frequency)
   
   if (setting == "ed") {df <- pdly_full_all_ed} 
-  else if (setting == "hosp") {df <- pdly_full_all_hosp}
+  if (setting == "hosp") {df <- pdly_full_all_ed %>% filter(HasBeenI == 1)}
   
   if (frequency == "weekly") {df <- df %>% mutate(date = MMWRdate)}
   
