@@ -803,7 +803,7 @@ essence_recode <- function(df) {
                                                           "Current heavy tobacco smoker") ~ "Current smoker",
                                       smoking_text == "Former smoker" ~ "Former smoker",
                                       smoking_text  == "Never smoker" ~ "Never smoker"),
-           kc_zip = ifelse(!is.na(cc_region), 1L, 0L),
+           kc_zip = ifelse(!is.na(cc_region) & cc_region != "Non-King County", 1L, 0L),
            covid_test = case_when(
              str_detect(Procedure_Combo, "(87635|86328|86769)") ~ 1L,
              str_detect(tolower(Procedure_Combo), "(covid|sars-cov-2)") ~ 1L,
