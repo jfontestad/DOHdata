@@ -205,7 +205,8 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
     left_join(., pct, by = c("season", "year", "week", "date", "group")) %>%
     mutate(pct = round(cnt / tot, 6),
            setting = setting_text,
-           category = cat_text) %>% 
+           category = cat_text,
+           zipcode = ifelse(category == "zipcode", group, NA_character_)) %>% 
     mutate_at(vars(cnt, tot, pct), list(~ replace_na(., 0))) %>%
     select(-tot)
   
@@ -236,7 +237,7 @@ summary_time_ed <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "cli_pne
   
   total <- full_join(daily, weekly, 
                      by = c("season", "year", "week", "date", "query", 
-                            "category", "group", "setting"))
+                            "category", "group", "setting", "zipcode"))
   return(total)
 }))
 
@@ -257,7 +258,7 @@ summary_time_hosp <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "cli_p
   
   total <- full_join(daily, weekly, 
                      by = c("season", "year", "week", "date", "query", 
-                            "category", "group", "setting"))
+                            "category", "group", "setting", "zipcode"))
   return(total)
 }))
 
@@ -350,7 +351,8 @@ essence_summary_demog <- function(df = pdly_full_all_ed_output,
     left_join(., covid_dx_broad, by = c("season", "year", "week", "date", "query", "group")) %>%
     left_join(., covid_test, by = c("season", "year", "week", "date", "query", "group")) %>%
     mutate(setting = setting_text,
-           category = cat_text) %>% 
+           category = cat_text,
+           zipcode = ifelse(category == "zipcode", group, NA_character_)) %>% 
     mutate_at(vars(cnt_dx_narrow, cnt_dx_broad, cnt_test), list(~ replace_na(., 0)))
   
   output
@@ -385,9 +387,11 @@ summary_demog_hosp <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "cli_
 #### PERSON LEVEL - WRITE OUT ####
 # Write out summarized data for use in the Tableau viz
 summary_all <- bind_rows(left_join(summary_time_ed, summary_demog_ed, 
-                                   by = c("setting", "season", "year", "week", "date", "query", "category", "group")),
+                                   by = c("setting", "season", "year", "week", "date", "query", 
+                                          "category", "group", "zipcode")),
                          left_join(summary_time_hosp, summary_demog_hosp, 
-                                   by = c("setting", "season", "year", "week", "date", "query", "category", "group")))
+                                   by = c("setting", "season", "year", "week", "date", "query", 
+                                          "category", "group", "zipcode")))
 
 # Set up sort order
 summary_all <- summary_all %>%
@@ -402,15 +406,15 @@ write.csv(summary_all,
 
 
 # Also write out a smaller version of overall data for use in the Tableau viz
-write.csv(select(pdly_full_all_ed_output, C_BioSense_ID,
-                 date, year, week, day, MMWRdate, season, date_sort,
-                 setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip,
-                 Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
-                 bmi, overweight, obese, obese_severe,
-                 smoking_text, smoker_current, smoker_general,
-                 HasBeenE, HasBeenI, HasBeenO, C_Death,
-                 covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
-          file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
+# write.csv(select(pdly_full_all_ed_output, C_BioSense_ID,
+#                  date, year, week, day, MMWRdate, season, date_sort,
+#                  setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip,
+#                  Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
+#                  bmi, overweight, obese, obese_severe,
+#                  smoking_text, smoker_current, smoker_general,
+#                  HasBeenE, HasBeenI, HasBeenO, C_Death,
+#                  covid_dx_broad, covid_dx_narrow, covid_test, cli, pneumo, cli_pneumo, ili),
+#           file = file.path(output_path, "pdly_full_all_ed.csv"), row.names = F)
 
 
 
