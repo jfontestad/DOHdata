@@ -281,7 +281,8 @@ if (daily_error == F) {
       
       # Make list of files produced and return this
       files_made <- list.files(path = paste0(output_path_pdf, "/Reports - ", freq),
-                               pattern = paste0("KC_SYNDROMIC_", Sys.Date(), "_", freq_file),
+                               pattern = paste0("KC_SYNDROMIC_", Sys.Date(), "_", 
+                                                freq_file, "_p"),
                                full.names = T)
       
       files_made
