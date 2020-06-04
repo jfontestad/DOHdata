@@ -19,7 +19,7 @@
 options(scipen = 6, digits = 4, warning.length = 8170)
 
 if (!require("pacman")) {install.packages("pacman")}
-pacman::p_load(tidyverse, glue, RDCOMClient, lubridate, keyring, jsonlite, httr)
+pacman::p_load(tidyverse, glue, RDCOMClient, lubridate, keyring, jsonlite, httr, pdftools)
 
 ### Set up folder to check
 output_path_pdf <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Requests/2020/372_nCoV Essence Extract"
@@ -150,144 +150,162 @@ if (daily_error == F) {
                                             Sys.Date(), "_DAILY.pdf"), overwrite = T))
     
     
-    #### TEST
-    # pdf_maker <- function(freq = c("daily", "weekly")) {
-    #   # Set up daily/weekly names
-    #   freq <- match.arg(freq)
-    #   if (freq == "daily") {freq_file <- "DAILY"} else {freq_file <- "WEEKLY"}
-    #   
-    #   # Set up part of URI
-    #   uri_time <- paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/views/",
-    #                        "b6c46369-ebcb-4b3e-81c4-ec0ad0f59249", "/pdf", 
-    #                        "?type=Letter&orientation=Portrait&maxAge=1")
-    #   uri_demog <- paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/views/",
-    #                      "2c9085bd-0259-486e-b73c-1db305e00f5d", "/pdf", 
-    #                      "?type=Letter&orientation=Portrait&maxAge=1")
-    #   uri_map <- paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/views/",
-    #                      "dfd45fb5-f54a-41a3-8d8d-394a7da005c1", "/pdf", 
-    #                      "?type=Letter&orientation=Portrait&maxAge=1")
-    #   uri_note <- paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/views/",
-    #                     "e3d176c1-eff8-4ed6-b2ee-350f2b109350", "/pdf", 
-    #                     "?type=Letter&orientation=Portrait&maxAge=1")
-    #   
-    #   # Set up file output
-    #   file_path <- function(pg = 1) {
-    #     path <- paste0(output_path_pdf, "/Reports - ", freq, "/KC_SYNDROMIC_", Sys.Date(), 
-    #                    "_", freq_file, "_p", pg, ".pdf")
-    #   }
-    #   
-    #   
-    #   ### CLI TIME SERIES
-    #   # Produce all and age pages for ED CLI
-    #   GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=", freq, "&vf_Category=all",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(1), overwrite = T))
-    #   
-    #   GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(2), overwrite = T))
-    #   
-    #   # Race/eth page for ED CLI (always weekly even in daily runs)
-    #   GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=weekly&vf_Category=race_eth",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(3), overwrite = T))
-    #   
-    #   # Produce all and age for CLI hospitalizations
-    #   GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=weekly&vf_Category=all",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(4), overwrite = T))
-    #   
-    #   GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(5), overwrite = T))
-    #   
-    #   # Race/eth page for CLI hosp (always weekly even in daily runs)
-    #   GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=weekly&vf_Category=race_eth",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(6), overwrite = T))
-    #   
-    #   
-    #   ### PNEUMO TIME SERIES
-    #   # Produce all and age pages for ED CLI
-    #   GET(paste0(uri_time, "&vf_query=Pneumonia%20only&vf_Set%20frequency=", freq, "&vf_Category=all",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(7), overwrite = T))
-    #   
-    #   GET(paste0(uri_time, "&vf_query=Pneumonia%20only&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(8), overwrite = T))
-    #   
-    #   # Produce all and age for CLI hospitalizations
-    #   GET(paste0(uri_time, "&vf_query=pneumo&vf_Set%20frequency=", freq, "&vf_Category=all",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(9), overwrite = T))
-    #   
-    #   GET(paste0(uri_time, "&vf_query=pneumo&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(10), overwrite = T))
-    #   
-    #   
-    #   ### ALL VISITS
-    #   # ED
-    #   GET(paste0(uri_time, "&vf_query=all&vf_Set%20frequency=", freq, "&vf_Category=all",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(11), overwrite = T))
-    #   
-    #   GET(paste0(uri_time, "&vf_query=all&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(12), overwrite = T))
-    #   
-    #   # Hosp
-    #   GET(paste0(uri_time, "&vf_query=all&vf_Set%20frequency=", freq, "&vf_Category=all",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(13), overwrite = T))
-    #   
-    #   GET(paste0(uri_time, "&vf_query=all&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
-    #              "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(14), overwrite = T))
-    #   
-    #   
-    #   ### CLI DEMOG BREAKDOWN (always weekly)
-    #   # Produce race breakdown for testing
-    #   GET(paste0(uri_demog, "&vf_query=cli&vf_Set%20frequency=weekly&vf_Category=race_eth"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(15), overwrite = T))
-    #   
-    #   ### CLI MAP (always weekly)
-    #   # Testing among all visits
-    #   GET(paste0(uri_map, "&vf_query=all&vf_Set%20frequency=weekly",
-    #              "vf_Choose%20what%20to%20display%20on%20map=tests"),
-    #       add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(16), overwrite = T))
-    #   
-    #   ### NOTES
-    #   GET(uri_note, add_headers("x-tableau-auth" = api_cred$token),
-    #       write_disk(path = file_path(17), overwrite = T))
-    #   
-    # }
-    # 
-    # 
-    # pdf_maker(freq = "daily")
+    # Create condensed version
+    pdf_maker <- function(freq = c("daily", "weekly")) {
+      # Set up daily/weekly names
+      freq <- match.arg(freq)
+      if (freq == "daily") {freq_file <- "DAILY"} else {freq_file <- "WEEKLY"}
+
+      # Set up part of URI
+      uri_time <- paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/views/",
+                           "b6c46369-ebcb-4b3e-81c4-ec0ad0f59249", "/pdf",
+                           "?type=Letter&orientation=Portrait&maxAge=1")
+      uri_demog <- paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/views/",
+                         "2c9085bd-0259-486e-b73c-1db305e00f5d", "/pdf",
+                         "?type=Letter&orientation=Portrait&maxAge=1")
+      uri_map <- paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/views/",
+                         "dfd45fb5-f54a-41a3-8d8d-394a7da005c1", "/pdf",
+                         "?type=Letter&orientation=Portrait&maxAge=1")
+      uri_note <- paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/views/",
+                        "e3d176c1-eff8-4ed6-b2ee-350f2b109350", "/pdf",
+                        "?type=Letter&orientation=Portrait&maxAge=1")
+
+      # Set up file output
+      file_path <- function(pg = "1") {
+        path <- paste0(output_path_pdf, "/Reports - ", freq, "/KC_SYNDROMIC_", Sys.Date(),
+                       "_", freq_file, "_p", pg, ".pdf")
+      }
+
+
+      ### CLI TIME SERIES
+      # Produce all and age pages for ED CLI
+      GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=", freq, "&vf_Category=all",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("01"), overwrite = T))
+
+      GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("02"), overwrite = T))
+
+      # Race/eth page for ED CLI (always weekly even in daily runs)
+      GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=weekly&vf_Category=race_eth",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("03"), overwrite = T))
+
+      # Produce all and age for CLI hospitalizations
+      GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=weekly&vf_Category=all",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("04"), overwrite = T))
+
+      GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("05"), overwrite = T))
+
+      # Race/eth page for CLI hosp (always weekly even in daily runs)
+      GET(paste0(uri_time, "&vf_query=cli&vf_Set%20frequency=weekly&vf_Category=race_eth",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("06"), overwrite = T))
+
+
+      ### PNEUMO TIME SERIES
+      # Produce all and age pages for ED CLI
+      GET(paste0(uri_time, "&vf_query=Pneumonia%20only&vf_Set%20frequency=", freq, "&vf_Category=all",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("07"), overwrite = T))
+
+      GET(paste0(uri_time, "&vf_query=Pneumonia%20only&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("08"), overwrite = T))
+
+      # Produce all and age for CLI hospitalizations
+      GET(paste0(uri_time, "&vf_query=pneumo&vf_Set%20frequency=", freq, "&vf_Category=all",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("09"), overwrite = T))
+
+      GET(paste0(uri_time, "&vf_query=pneumo&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("10"), overwrite = T))
+
+
+      ### ALL VISITS
+      # ED
+      GET(paste0(uri_time, "&vf_query=all&vf_Set%20frequency=", freq, "&vf_Category=all",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("11"), overwrite = T))
+
+      GET(paste0(uri_time, "&vf_query=all&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=ed"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("12"), overwrite = T))
+
+      # Hosp
+      GET(paste0(uri_time, "&vf_query=all&vf_Set%20frequency=", freq, "&vf_Category=all",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("13"), overwrite = T))
+
+      GET(paste0(uri_time, "&vf_query=all&vf_Set%20frequency=", freq, "&vf_Category=age_grp",
+                 "&vf_All%20ED%20visits%20or%20hospitalizations=hosp"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("14"), overwrite = T))
+
+
+      ### CLI DEMOG BREAKDOWN (always weekly)
+      # Produce race breakdown for testing
+      GET(paste0(uri_demog, "&vf_query=cli&vf_Set%20frequency=weekly&vf_Category=race_eth"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("15"), overwrite = T))
+
+      ### CLI MAP (always weekly)
+      # Testing among all visits
+      GET(paste0(uri_map, "&vf_query=all&vf_Set%20frequency=weekly",
+                 "&vf_Show%20ZIP%20codes%20or%20regions=ZIP%20codes",
+                 "&vf_Choose%20what%20to%20display%20on%20map=tests"),
+          add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("16"), overwrite = T))
+
+      ### NOTES
+      GET(uri_note, add_headers("x-tableau-auth" = api_cred$token),
+          write_disk(path = file_path("17"), overwrite = T))
+      
+      # Make list of files produced and return this
+      files_made <- list.files(path = paste0(output_path_pdf, "/Reports - ", freq),
+                               pattern = paste0("KC_SYNDROMIC_", Sys.Date(), "_", freq_file),
+                               full.names = T)
+      
+      files_made
+
+    }
     
+    # Make PDFs
+    daily_condensed <- pdf_maker(freq = "daily")
+    # Combine the PDFs and clean up
+    pdf_combine(daily_condensed, 
+                output = paste0(output_path_pdf, "/Reports - daily/KC_SYNDROMIC_", 
+                                Sys.Date(), "_DAILY2.pdf"))
+    unlink(daily_condensed)
     
-    #### END TEST ####
+    # Run weekly version if needed
+    if (tuesday == T) {
+      weekly_condensed <- pdf_maker(freq = "weekly")
+      pdf_combine(weekly_condensed, 
+                  output = paste0(output_path_pdf, "/Reports - weekly/KC_SYNDROMIC_", 
+                                  Sys.Date(), "_WEEKLY2.pdf"))
+      unlink(weekly_condensed)
+    }
     
-    
-    
+
     body_text <- paste0(body_text, "<p>An exported pdf of the DAILY version of the Tableau workbook can be found here: <br>",
                         "<a href = 'file:\\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\Reports - daily'>", 
                         "\\\\Phshare01\\cdi_share\\Analytics and Informatics Team\\Data Requests\\2020\\372_nCoV Essence Extract\\Reports - daily</a></p>")
@@ -305,7 +323,7 @@ outlook_app <- COMCreate("Outlook.Application")
 # Create an email
 outlook_mail <- outlook_app$CreateItem(0)
 # Configure email
-outlook_mail[["To"]] <- "alastair.matheson@kingcounty.gov" #; jlenahan@kingcounty.gov"
+outlook_mail[["To"]] <- "alastair.matheson@kingcounty.gov; jlenahan@kingcounty.gov"
 outlook_mail[["subject"]] <- subject
 additional_msg <- ""
 outlook_mail[["htmlbody"]] <- paste0(
