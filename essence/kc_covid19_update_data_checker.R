@@ -19,7 +19,7 @@
 options(scipen = 6, digits = 4, warning.length = 8170)
 
 if (!require("pacman")) {install.packages("pacman")}
-pacman::p_load(tidyverse, glue, RDCOMClient, lubridate, keyring, jsonlite, httr, pdftools)
+pacman::p_load(tidyverse, glue, blastula, lubridate, keyring, jsonlite, httr, pdftools)
 
 ### Set up folder to check
 output_path_pdf <- "//phshare01/cdi_share/Analytics and Informatics Team/Data Requests/2020/372_nCoV Essence Extract"
@@ -319,21 +319,25 @@ if (daily_error == F) {
 
 
 #### SEND EMAIL ####
-# Set up COM API
-outlook_app <- COMCreate("Outlook.Application")
-# Create an email
-outlook_mail <- outlook_app$CreateItem(0)
-# Configure email
-outlook_mail[["To"]] <- "alastair.matheson@kingcounty.gov; jlenahan@kingcounty.gov"
-outlook_mail[["subject"]] <- subject
-additional_msg <- ""
-outlook_mail[["htmlbody"]] <- paste0(
+# Note that email credentials must be set up first
+# e.g., create_smtp_creds_key(id = "outlook", user = "alastair.matheson@kingcounty.gov", provider = "outlook")
+# This stores credentials securely using the keyring package
+
+# Make email content
+email <- compose_email(body = md(paste0(
   "<p>This is an automatically generated email to let you know that ", error_text,  "</p>",
   "<p>As a reminder, the daily file should be updated shortly after 4 PM each day and the weekly file each Tuesday at 4 PM. ", 
-  body_text)
+  body_text)))
 
 # Send email
-outlook_mail$Send()
+smtp_send(email = email,
+          to = "alastair.matheson@kingcounty.gov; jlenahan@kingcounty.gov",
+          from = "alastair.matheson@kingcounty.gov",
+          subject = subject,
+          credentials = creds_key("outlook")
+)
+
+
 
 #### DISCONNECT FROM TABLEAU SERVER ####
 signout_req <- POST(paste0("https://", server_name, "/", "api/", api, "/", "auth/signout"), 
