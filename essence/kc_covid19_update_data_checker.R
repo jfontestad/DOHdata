@@ -331,7 +331,7 @@ email <- compose_email(body = md(paste0(
 
 # Send email
 smtp_send(email = email,
-          to = "alastair.matheson@kingcounty.gov; jlenahan@kingcounty.gov",
+          to = c("alastair.matheson@kingcounty.gov", "jlenahan@kingcounty.gov"),
           from = "alastair.matheson@kingcounty.gov",
           subject = subject,
           credentials = creds_key("outlook")
