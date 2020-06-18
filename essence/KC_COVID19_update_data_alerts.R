@@ -33,6 +33,8 @@ library(httr)
 httr::set_config(config(ssl_verifypeer = 0L))
 library(jsonlite)
 library(keyring)
+library(splines)
+library(multcomp)
 
 
 # date objects for ESSENCE queries and NRVESS data pull
@@ -153,7 +155,12 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
   if (cat_text == "region") {df <- df %>% mutate(region = cc_region)}
   
   # Set up time frame
-  if (freq_text == "weekly") {df <- df %>% mutate(date = MMWRdate)}
+  if (freq_text == "weekly") {
+    df <- df %>% mutate(date = MMWRdate)
+    knots <- 2
+  } else {
+      knots <- 14
+    }
   
   # Set up recodes
   if (condition == "all") {input <- df %>% mutate(query = "all")}
@@ -199,6 +206,52 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
   # Summarise data
   cnt <- input %>% group_by(season, year, week, date, query, group) %>% summarise(cnt = n()) %>% ungroup()
   pct <- df %>% group_by(season, year, week, date, group) %>% summarise(tot = n()) %>% ungroup()
+  
+  
+  # Run splines
+  # Define knots at 14 day increments starting at the last interval and working backwards
+  # (ensures that last interval is always 14 days)
+  knots_seq <- rev(c(seq(max(cnt$date) - knots, min(cnt$date) + 1, -knots)))
+  
+  # Fit Poisson model with natural cubic spline for time
+  fit <- glm(cnt ~ group * ns(date, knots = knots_seq), 
+             data = cnt,
+             family = "poisson")
+  
+  # Slope in last 14 day period = sum of coefficients for all spline terms up to the last 14 day period
+  # Linear combination can be estimated (with 95% confidence interval) using glht() from the multcomp package
+  
+  ## First make the lincom function
+  paste0("`ns(date, knots = knots_seq)",1:(length(knots_seq)+1),"`", collapse = " + ") %>%
+    paste0(.," = 0") -> lincom_string
+  
+  ## Use glht() to estimate sum of spline coefficients
+  knot_ci <- as.data.frame(confint(glht(linfct = lincom_string, model = fit))$confint)
+  
+  
+  
+  test_18_29 <- test %>% filter(age_grp == "18-29")
+  
+  summary(fit)
+  
+  fit_predict <- exp(predict(fit))
+  
+  test_18_29 <- cbind(test_18_29, predict = fit_predict)
+  
+  
+  ggplot(data = test_18_29, aes(x = date, y = cnt)) +
+    geom_line() +
+    geom_line(aes(y = predict), color = "red")
+  
+  
+  ggplot(data = test_18_29[test_18_29$date >= "2020-01-01", ], aes(x = date, y = cnt)) +
+    geom_line() +
+    geom_line(aes(y = predict), color = "red")
+  
+  
+  
+  
+  
   
   # Produce output
   output <- left_join(date_grid, cnt, by = c("season", "year", "week", "date", "query", "group")) %>%
