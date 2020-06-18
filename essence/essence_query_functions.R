@@ -819,8 +819,12 @@ essence_recode <- function(df) {
            cli = ifelse(str_detect(tolower(CCDDCategory_flat), "cli cc with cli dd and coronavirus dd v1"), 1L, 0L),
            pneumo = ifelse(str_detect(tolower(CCDDCategory_flat), "cdc pneumonia ccdd v1"), 1L, 0L),
            cli_pneumo = ifelse(cli == 1 | pneumo == 1, 1L, 0L),
-           ili = ifelse(str_detect(tolower(CCDDCategory_flat), "ili ccdd v1"), 1L, 0L)
+           ili = ifelse(str_detect(tolower(CCDDCategory_flat), "ili ccdd v1"), 1L, 0L),
+           telehealth = ifelse(str_detect(tolower(Procedure_Combo), 
+                                   ("99421|99422|99423|g2061|g2062|g2063|g2010|g2012
+                                    |phone|telephone|telehealth|telemed|e consult|econsult")), 1L, 0L)
     )
+    
   
   ### Set up week number
   weeks <- output %>% filter(!is.na(date)) %>% distinct(date)
