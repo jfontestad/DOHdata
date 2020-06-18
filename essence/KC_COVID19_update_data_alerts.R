@@ -28,14 +28,14 @@
 library(janitor)
 library(MMWRweek)
 library(lubridate)
-library(tidyverse)
+
 library(httr)
 httr::set_config(config(ssl_verifypeer = 0L))
 library(jsonlite)
 library(keyring)
 library(splines)
 library(multcomp)
-
+library(tidyverse)
 
 # date objects for ESSENCE queries and NRVESS data pull
 ### SET WHETHER THIS IS A HISTORICAL RUN OR NOT
@@ -106,7 +106,7 @@ pdly_full_all_ed <- essence_recode(pdly_full_all_ed)
 if (historical == F) {
   # Pull in existing data and remove dates from before today's run
   pdly_full_all_ed_historical <- readRDS(file = paste0(output_path, "/pdly_full_all_ed_historical.RData"))
-  pdly_full_all_ed_historical <- pdly_full_all_ed_historical %>% filter(date < s_start_date) %>% select(-date_sort)
+  pdly_full_all_ed_historical <- pdly_full_all_ed_historical %>% filter(date < s_start_date) %>% dplyr::select(-date_sort)
   
   # Bind to new data
   pdly_full_all_ed_output <- bind_rows(pdly_full_all_ed_historical, pdly_full_all_ed)
@@ -129,7 +129,7 @@ pdly_full_all_ed_output <- left_join(pdly_full_all_ed_output, sort_order,
 #### PERSON-LEVEL - TIME AGGREGATION ####
 ### Query to summarise the data
 essence_summary_time <- function(df = pdly_full_all_ed_output,
-                                 condition = c("all", "pneumonia", "ili", "cli", "cli_pneumo"),
+                                 condition = c("all", "pneumonia", "ili", "cli", "cli_pneumo", "telehealth"),
                                  setting = c("ed", "hosp"), 
                                  cat = c("all", "age_grp", "race", "ethnicity", "race_eth",
                                          "smoker", "obese", "setting", "facility", 
@@ -172,6 +172,8 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
     input <- df %>% filter(cli == 1) %>% mutate(query = "cli")
   } else if (condition == "cli_pneumo") {
     input <- df %>% filter(cli_pneumo == 1) %>% mutate(query = "cli_pneumo")
+  } else if (condition == "telehealth") {
+    input <- df %>% filter(telehealth == 1) %>% mutate(query = "telehealth")
   }
   
   
@@ -208,46 +210,46 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
   pct <- df %>% group_by(season, year, week, date, group) %>% summarise(tot = n()) %>% ungroup()
   
   
-  # Run splines
-  # Define knots at 14 day increments starting at the last interval and working backwards
-  # (ensures that last interval is always 14 days)
-  knots_seq <- rev(c(seq(max(cnt$date) - knots, min(cnt$date) + 1, -knots)))
-  
-  # Fit Poisson model with natural cubic spline for time
-  fit <- glm(cnt ~ group * ns(date, knots = knots_seq), 
-             data = cnt,
-             family = "poisson")
-  
-  # Slope in last 14 day period = sum of coefficients for all spline terms up to the last 14 day period
-  # Linear combination can be estimated (with 95% confidence interval) using glht() from the multcomp package
-  
-  ## First make the lincom function
-  paste0("`ns(date, knots = knots_seq)",1:(length(knots_seq)+1),"`", collapse = " + ") %>%
-    paste0(.," = 0") -> lincom_string
-  
-  ## Use glht() to estimate sum of spline coefficients
-  knot_ci <- as.data.frame(confint(glht(linfct = lincom_string, model = fit))$confint)
-  
-  
-  
-  test_18_29 <- test %>% filter(age_grp == "18-29")
-  
-  summary(fit)
-  
-  fit_predict <- exp(predict(fit))
-  
-  test_18_29 <- cbind(test_18_29, predict = fit_predict)
-  
-  
-  ggplot(data = test_18_29, aes(x = date, y = cnt)) +
-    geom_line() +
-    geom_line(aes(y = predict), color = "red")
-  
-  
-  ggplot(data = test_18_29[test_18_29$date >= "2020-01-01", ], aes(x = date, y = cnt)) +
-    geom_line() +
-    geom_line(aes(y = predict), color = "red")
-  
+  # # Run splines
+  # # Define knots at 14 day increments starting at the last interval and working backwards
+  # # (ensures that last interval is always 14 days)
+  # knots_seq <- rev(c(seq(max(cnt$date) - knots, min(cnt$date) + 1, -knots)))
+  # 
+  # # Fit Poisson model with natural cubic spline for time
+  # fit <- glm(cnt ~ group * ns(date, knots = knots_seq), 
+  #            data = cnt,
+  #            family = "poisson")
+  # 
+  # # Slope in last 14 day period = sum of coefficients for all spline terms up to the last 14 day period
+  # # Linear combination can be estimated (with 95% confidence interval) using glht() from the multcomp package
+  # 
+  # ## First make the lincom function
+  # paste0("`ns(date, knots = knots_seq)",1:(length(knots_seq)+1),"`", collapse = " + ") %>%
+  #   paste0(.," = 0") -> lincom_string
+  # 
+  # ## Use glht() to estimate sum of spline coefficients
+  # knot_ci <- as.data.frame(confint(glht(linfct = lincom_string, model = fit))$confint)
+  # 
+  # 
+  # 
+  # test_18_29 <- test %>% filter(age_grp == "18-29")
+  # 
+  # summary(fit)
+  # 
+  # fit_predict <- exp(predict(fit))
+  # 
+  # test_18_29 <- cbind(test_18_29, predict = fit_predict)
+  # 
+  # 
+  # ggplot(data = test_18_29, aes(x = date, y = cnt)) +
+  #   geom_line() +
+  #   geom_line(aes(y = predict), color = "red")
+  # 
+  # 
+  # ggplot(data = test_18_29[test_18_29$date >= "2020-01-01", ], aes(x = date, y = cnt)) +
+  #   geom_line() +
+  #   geom_line(aes(y = predict), color = "red")
+  # 
   
   
   
@@ -261,7 +263,7 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
            category = cat_text,
            zipcode = ifelse(category == "zipcode", group, NA_character_)) %>% 
     mutate_at(vars(cnt, tot, pct), list(~ replace_na(., 0))) %>%
-    select(-tot)
+    dplyr::select(-tot)
   
   if (freq_text == "daily") {
     output <- output %>% rename(cnt_daily = cnt, pct_daily = pct)
@@ -319,7 +321,7 @@ summary_time_hosp <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "cli_p
 #### PERSON-LEVEL - DEMOG AGGREGATION ####
 # Query to sum up breakdowns of dx, testing, etc.
 essence_summary_demog <- function(df = pdly_full_all_ed_output,
-                                 condition = c("all", "pneumonia", "ili", "cli", "cli_pneumo"),
+                                 condition = c("all", "pneumonia", "ili", "cli", "cli_pneumo", "telehealth"),
                                  setting = c("ed", "hosp"), 
                                  cat = c("all", "age_grp", "race", "ethnicity", "race_eth",
                                          "smoker", "obese", "setting", "facility", 
@@ -357,6 +359,8 @@ essence_summary_demog <- function(df = pdly_full_all_ed_output,
     input <- df %>% filter(cli == 1) %>% mutate(query = "cli")
   } else if (condition == "cli_pneumo") {
     input <- df %>% filter(cli_pneumo == 1) %>% mutate(query = "cli_pneumo")
+  } else if (condition == "telehealth") {
+    input <- df %>% filter("telehealth" == 1) %>% mutate(query = "telehealth")
   }
   
 
@@ -459,7 +463,7 @@ write.csv(summary_all,
 
 
 # Also write out a smaller version of overall data for use in the Tableau viz
-# write.csv(select(pdly_full_all_ed_output, C_BioSense_ID,
+# write.csv(dplyr::select(pdly_full_all_ed_output, C_BioSense_ID,
 #                  date, year, week, day, MMWRdate, season, date_sort,
 #                  setting, HospitalName, ZipCode, C_Patient_County, cc_region, kc_zip,
 #                  Age, age_grp, sex, aian, asian, black, nhpi, other, white, race, ethnicity,
@@ -740,7 +744,7 @@ race_eth_summary <- function(condition = c("all", "pneumonia", "ili", "cli"),
   pct <- df %>% group_by(date, race, ethnicity) %>% summarise(tot = n()) %>% ungroup()
   
   output <- left_join(cnt, pct, by = c("date", "race", "ethnicity")) %>%
-    mutate(pct = cnt / tot * 100) %>% select(-tot)
+    mutate(pct = cnt / tot * 100) %>% dplyr::select(-tot)
   
   output
 }
@@ -797,7 +801,7 @@ race_eth_specific_daily <- bind_rows(race_specific_ed_daily, eth_specific_ed_dai
          pct = replace_na(pct, 0),
          age = "all age", zip = "all", hospital = "all") %>%
   mutate_at(vars(race, ethnicity), list(~ replace_na(., "all"))) %>%
-  select(date, pct, age, race, ethnicity, zip, setting, query, syndrome, hospital, cnt)
+  dplyr::select(date, pct, age, race, ethnicity, zip, setting, query, syndrome, hospital, cnt)
 
 
 #### DAILY - MAKE AND SAVE COMBINED DATASET ####
@@ -1216,7 +1220,7 @@ if (wday(today(), label = F, week_start = getOption("lubridate.week.start", 1)) 
            pct = replace_na(pct, 0),
            age = "all age", zip = "all", hospital = "all") %>%
     mutate_at(vars(race, ethnicity), list(~ replace_na(., "all"))) %>%
-    select(date, pct, age, race, ethnicity, zip, setting, query, syndrome, hospital, cnt) %>%
+    dplyr::select(date, pct, age, race, ethnicity, zip, setting, query, syndrome, hospital, cnt) %>%
     filter(date <= s_end_date)
   
   
