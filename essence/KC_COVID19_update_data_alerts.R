@@ -125,6 +125,64 @@ sort_order <- pdly_full_all_ed_output %>%
 pdly_full_all_ed_output <- left_join(pdly_full_all_ed_output, sort_order, 
                                      by = c("date", "season"))
 
+# Splines function
+# CDC Criteria - Decreases in ED and/or outpatient visits for ILI/CLI
+# Downward trajectory of ILI/CLI (or minimal ILI activity or near prepandemic level of CLI ED visits) reported over a 14-day period
+#   * Uses a 3-day average in a cubic  smoothing spline 
+#   * 14 consecutive days of decline required but can use a 2 – 3 day grace period if data are inconsistent 
+#   * Look at both total visits for ILI/CLI and percentage of visits for ILI/CLI 
+#   * 14th day must be lower than 1st day 
+#   * If near prepandemic level of CLI ED visits has been reached, can meet if prepandemic level is maintained over 14 consecutive days 
+#     (2-3 day grace period) 
+fnFit <- function(df, group_cat, outcome = c("cnt3day","pct3day")) {
+  tmp <- df %>%
+    filter(group == group_cat)
+  
+  out_type <- case_when(outcome == "cnt3day" ~ "cnt",
+                        outcome == "pct3day" ~ "pct")
+  
+  fit <- smooth.spline(x = tmp$date, y = tmp[[outcome]], spar = 0.5)
+  
+  # Get jack-knife residuals to compute 95% confidence interval
+  res <- (fit$yin - fit$y)/(1-fit$lev)      # jackknife residuals
+  sigma <- sqrt(var(res))                   # estimate sd
+  
+  tmp2 <- tmp %>%
+    mutate(pred = predict(fit)$y,
+           lower = fit$y - 2.0*sigma*sqrt(fit$lev), #lower CI
+           upper = fit$y + 2.0*sigma*sqrt(fit$lev)  #upper CI
+    ) %>%
+    mutate(diff3day = pred - lag(pred))
+  
+  # Determine if slope is increasing or decreasing today
+  inc_or_dec <- case_when(tmp2$diff3day[tmp2$date == max(tmp2$date)] < 0 ~ "Decreasing",
+                          TRUE ~ "Increasing")
+  
+  # Determine how many consecutive days the slope has been declining
+  tmp3 <- tmp2 %>%
+    mutate(slope_indicator = case_when(inc_or_dec == "Decreasing" ~ diff3day < 0,
+                                       TRUE ~ diff3day >= 0))
+  
+  last_inc_dec <- max(tmp3$date[tmp3$slope_indicator == FALSE], na.rm = T)
+  
+  tmp3 <- tmp3 %>%
+    mutate(consecutive_day_count = cumsum(case_when(date > last_inc_dec ~ 1, TRUE ~ 0)))
+  
+  streak <- max(tmp3$consecutive_day_count)
+  
+  # Is 14th day lower than the 1st day?
+  compare_first_last14 <- diff(tail(tmp3$pred,14)[c(1,14)])
+  
+  tmp4 <- tmp3 %>%
+    mutate(inc_or_dec = inc_or_dec,
+           streak = streak,
+           compare_first_last14 = compare_first_last14,
+           label = paste0(inc_or_dec, " ", streak, "-day streak")) %>%
+    mutate(-slope_indicator,)
+    rename_at(vars(pred:label), function(x) paste0(out_type, "_", x))
+  
+  return(tmp4)
+}
 
 #### PERSON-LEVEL - TIME AGGREGATION ####
 ### Query to summarise the data
@@ -157,14 +215,11 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
   # Set up time frame
   if (freq_text == "weekly") {
     df <- df %>% mutate(date = MMWRdate)
-    knots <- 2
-  } else {
-      knots <- 14
-    }
+  }
   
   # Set up recodes
-  if (condition == "all") {input <- df %>% mutate(query = "all")}
-  else if (condition == "pneumonia") {
+  if (condition == "all") {input <- df %>% mutate(query = "all")
+  } else if (condition == "pneumonia") {
     input <- df %>% filter(pneumo == 1) %>% mutate(query = "pneumo")
   } else if (condition == "ili") {
     input <- df %>% filter(ili == 1) %>% mutate(query = "ili")
@@ -209,72 +264,66 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
   cnt <- input %>% group_by(season, year, week, date, query, group) %>% summarise(cnt = n()) %>% ungroup()
   pct <- df %>% group_by(season, year, week, date, group) %>% summarise(tot = n()) %>% ungroup()
   
-  
-  # # Run splines
-  # # Define knots at 14 day increments starting at the last interval and working backwards
-  # # (ensures that last interval is always 14 days)
-  # knots_seq <- rev(c(seq(max(cnt$date) - knots, min(cnt$date) + 1, -knots)))
-  # 
-  # # Fit Poisson model with natural cubic spline for time
-  # fit <- glm(cnt ~ group * ns(date, knots = knots_seq), 
-  #            data = cnt,
-  #            family = "poisson")
-  # 
-  # # Slope in last 14 day period = sum of coefficients for all spline terms up to the last 14 day period
-  # # Linear combination can be estimated (with 95% confidence interval) using glht() from the multcomp package
-  # 
-  # ## First make the lincom function
-  # paste0("`ns(date, knots = knots_seq)",1:(length(knots_seq)+1),"`", collapse = " + ") %>%
-  #   paste0(.," = 0") -> lincom_string
-  # 
-  # ## Use glht() to estimate sum of spline coefficients
-  # knot_ci <- as.data.frame(confint(glht(linfct = lincom_string, model = fit))$confint)
-  # 
-  # 
-  # 
-  # test_18_29 <- test %>% filter(age_grp == "18-29")
-  # 
-  # summary(fit)
-  # 
-  # fit_predict <- exp(predict(fit))
-  # 
-  # test_18_29 <- cbind(test_18_29, predict = fit_predict)
-  # 
-  # 
-  # ggplot(data = test_18_29, aes(x = date, y = cnt)) +
-  #   geom_line() +
-  #   geom_line(aes(y = predict), color = "red")
-  # 
-  # 
-  # ggplot(data = test_18_29[test_18_29$date >= "2020-01-01", ], aes(x = date, y = cnt)) +
-  #   geom_line() +
-  #   geom_line(aes(y = predict), color = "red")
-  # 
-  
-  
-  
-  
-  
   # Produce output
-  output <- left_join(date_grid, cnt, by = c("season", "year", "week", "date", "query", "group")) %>%
+  ## Combine count and percent datasets
+  combined <- left_join(date_grid, cnt, by = c("season", "year", "week", "date", "query", "group")) %>%
     left_join(., pct, by = c("season", "year", "week", "date", "group")) %>%
     mutate(pct = round(cnt / tot, 6),
            setting = setting_text,
            category = cat_text,
            zipcode = ifelse(category == "zipcode", group, NA_character_)) %>% 
-    mutate_at(vars(cnt, tot, pct), list(~ replace_na(., 0))) %>%
-    dplyr::select(-tot)
-  
+    mutate_at(vars(cnt, tot, pct), list(~ replace_na(., 0))) 
+  # %>%
+  #   dplyr::select(-tot)
+
   if (freq_text == "daily") {
-    output <- output %>% rename(cnt_daily = cnt, pct_daily = pct)
+    ## Run splines on daily dataset only
+    ## Set up 3-day rolling average for count
+    
+    if (condition %in% c("cli","ili") &
+        cat_text = "all") {
+      
+      comb2 <- combined %>%
+        group_by(group) %>%
+        filter(date != max(date)) %>%
+        arrange(group,date) %>% 
+        mutate(cnt3day = zoo::rollmean(cnt, 3, na.pad = T, align = "right"),
+               tot3day = zoo::rollmean(tot, 3, na.pad = T, align = "right")
+        ) %>%
+        mutate(pct3day = cnt3day/tot3day) %>%
+        select(-tot3day) %>%
+        filter(!is.na(cnt3day))
+      
+      args <- list(group_cat = unique(comb2$group),
+                   outcome = c("cnt3day","pct3day")) %>%
+        cross_df()
+      
+      comb3 <- map_dfr(.x = unique(comb2$group),
+                       fnFit,
+                       df = comb2,
+                       outcome = "cnt3day") %>%
+        left_join(map_dfr(.x = unique(comb2$group),
+                          fnFit,
+                          df = comb2,
+                          outcome = "pct3day"))
+      
+      output <- comb3 %>% 
+        dplyr::select(-tot) %>%
+        rename(cnt_daily = cnt, pct_daily = pct)
+    } else {
+      output <- combined %>%
+        dplyr::select(-tot) %>%
+        rename(cnt_daily = cnt, pct_daily = pct)
+    }
+    
   } else {
-    output <- output %>% rename(cnt_weekly = cnt, pct_weekly = pct)
+    output <- combined %>% 
+      dplyr::select(-tot) %>%
+      rename(cnt_weekly = cnt, pct_weekly = pct)
   }
   
   output
 }
-
-
 
 ### ED visits
 summary_time_ed <- bind_rows(lapply(c("all", "pneumonia", "ili", "cli", "cli_pneumo"), function(x) {
