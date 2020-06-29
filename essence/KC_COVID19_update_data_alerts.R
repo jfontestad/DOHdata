@@ -178,7 +178,7 @@ fnFit <- function(df, group_cat, outcome = c("cnt3day","pct3day")) {
            streak = streak,
            compare_first_last14 = compare_first_last14,
            label = paste0(inc_or_dec, " ", streak, "-day streak")) %>%
-    mutate(-slope_indicator,)
+    select(-slope_indicator,-consecutive_day_count) %>%
     rename_at(vars(pred:label), function(x) paste0(out_type, "_", x))
   
   return(tmp4)
