@@ -281,7 +281,7 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
     ## Set up 3-day rolling average for count
     
     if (condition %in% c("cli","ili") &
-        cat_text = "all") {
+        cat_text == "all") {
       
       comb2 <- combined %>%
         group_by(group) %>%
