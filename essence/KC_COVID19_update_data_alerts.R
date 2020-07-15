@@ -285,7 +285,7 @@ essence_summary_time <- function(df = pdly_full_all_ed_output,
       
       comb2 <- combined %>%
         group_by(group) %>%
-        filter(date != max(date)) %>%
+      #  filter(date != max(date)) %>% #
         arrange(group,date) %>% 
         mutate(cnt3day = zoo::rollmean(cnt, 3, na.pad = T, align = "right"),
                tot3day = zoo::rollmean(tot, 3, na.pad = T, align = "right")
