@@ -143,12 +143,18 @@ if (daily_error == F) {
   
   if (ds_alerts_update >= last_mod_ndly & ds_all_ed_update >= last_mod_all_ed) {
     # Set up query
+    #daily report#
     pdf_req <- GET(paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/workbooks/",
                           "be998f6f-2604-46b3-9fd6-f9a45e74443f", "/pdf?type=Letter&orientation=Portrait"),
                    add_headers("x-tableau-auth" = api_cred$token),
                    write_disk(path = paste0(output_path_pdf, "/Reports - daily/KC_SYNDROMIC_", 
                                             Sys.Date(), "_DAILY.pdf"), overwrite = T))
-    
+     #slopes#  
+    pdf_req <- GET(paste0("https://", server_name, "/api/", api, "/sites/", api_cred$site_id, "/workbooks/",
+                          "e916ee50-7443-48d5-bfd1-f0c7540ca343", "/pdf?type=Letter&orientation=Portrait"),
+                   add_headers("x-tableau-auth" = api_cred$token),
+                   write_disk(path = paste0(output_path_pdf, "/Reports - daily/KC_SYNDROMIC_", 
+                                            Sys.Date(), "_SLOPES.pdf"), overwrite = T))
     
     # Create condensed version
     pdf_maker <- function(freq = c("daily", "weekly")) {
