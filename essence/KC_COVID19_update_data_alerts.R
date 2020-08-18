@@ -43,7 +43,7 @@ historical <- F
 historical_current <- T # Set to T if you want the historical run to also overwrite current data
 
 if (historical == F) {
-  s_start_date <- as_date("2020-01-01", "%Y-%m-%d")
+  s_start_date <- as_date("2020-06-01", "%Y-%m-%d")
 } else {
   s_start_date <- as_date("2017-10-01", "%Y-%m-%d")
 }
