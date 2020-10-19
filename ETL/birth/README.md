@@ -32,7 +32,7 @@ These data can be used for production of standardized estimates for larger scale
 <td>Small number suppression</td>
 <td><p>Follow whichever guideline is most strict at the time of your analysis</p>
 <p><a href="https://www.doh.wa.gov/Portals/1/Documents/1500/SmallNumbers.pdf">WA DOH small number suppression guidelines</a></p>
-<p><a href="https://kc1.sharepoint.com/:w:/r/teams/PHc/datareq/_layouts/15/WopiFrame.aspx?sourcedoc=%7b03674a42-971d-442b-a332-2bbd7b355e2c%7d&amp;action=edit&amp;cid=4850db36-385c-4c99-962f-6a9a6242758d">APDE Analysis Guide suppression guidelines</a></p>
+
 <p><a href="https://kc1.sharepoint.com/teams/PHc/datareq/_layouts/15/Doc.aspx?sourcedoc=%7B87129496-FD07-4DED-8B2E-8351FF20ECDA%7D&amp;file=APDE_SmallNumberUpdate.xlsx&amp;action=default&amp;mobileredirect=true&amp;cid=1af3200d-e226-44c3-9905-cb62c2b26285&amp;CT=1602868544706&amp;OR=Outlook-Body&amp;CID=187CB2DA-3CC8-44E7-A241-99EF084F4985&amp;wdLOR=c80047442-F8B0-49EC-A597-0B69910E2C40">APDE SharePoint suppression guidelines</a></p></td>
 </tr>
 <tr class="even">
