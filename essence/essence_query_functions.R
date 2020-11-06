@@ -49,7 +49,7 @@ person_query <- function(pid = NULL, sdate = "2019-01-01", edate = today() - 1,
   
   
   if (dx == T) {
-    dx_fields <- paste0("&field=dischargeDiagnosis&field=Diagnosis_Combo&field=CCDDCategory_flat", 
+    dx_fields <- paste0("&field=dischargeDiagnosis&field=Diagnosis_Combo&field=CCDDCategory_flat&field=CCDD", 
                         "&field=HasBeenE&field=HasBeenI")
   } else {
     dx_fields <- ""
@@ -138,7 +138,7 @@ event_query <- function(event_id = NULL, bulk = F, group_size = 5000) {
     "&field=HasBeenE&field=HasBeenI&field=HasBeenO&field=AdmissionTypeCategory&field=C_Patient_Class&field=PatientClassList",
     "&field=TriageNotesParsed",
     "&field=Admit_Reason_Combo&field=Diagnosis_Combo&field=Procedure_Combo&field=Medication_Combo",
-    "&field=CCDDCategory_flat",
+    "&field=CCDDCategory_flat&field=CCDD",
     "&field=Onset_Date&field=Initial_Temp_Calc&field=HighestTemp_Calc&field=Initial_Pulse_Oximetry_Calc",
     "&field=Systolic_Blood_Pressure&field=Diastolic_Blood_Pressure&field=Systolic_Diastolic_Blood_Pressure",
     "&field=Admit_Date_Time&field=Discharge_Date_Time&field=DischargeDisposition&field=DispositionCategory&field=MinutesFromVisitToDischarge",
@@ -326,7 +326,7 @@ syndrome_alert_query <- function(user_id = 520,
     query <- "all"
     syndrome_text <- "all"
   } else if (syndrome == "ili") {
-    category <- "ccddCategoryFreeText=%5EILI%20CCDD%20v1;%5E,andnot,%5E;CDC%20Coronavirus-DD%20v1;%5E"
+    category <- "&CCDD=%5EILI%20CCDD%20v1;%5E,andnot,%5E;CDC%20Coronavirus-DD%20v1;%5E"
     query <- "ili"
     syndrome_text <- "ILI"
     ccddCategoryFreeText
@@ -604,7 +604,7 @@ syndrome_person_level_query <- function(user_id = 2769,
     condition <- "all"
     syndrome_text <- "all"
   } else if (syndrome == "ili") {
-    category <- "ccddCategoryFreeText=%5EILI%20CCDD%20v1;%5E,andnot,%5E;CDC%20Coronavirus-DD%20v1;%5E"
+    category <- "&CCDD=%5EILI%20CCDD%20v1;%5E,andnot,%5E;CDC%20Coronavirus-DD%20v1;%5E"
     query <- "ili"
     condition <- "ili"
     syndrome_text <- "ILI"
