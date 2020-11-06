@@ -326,7 +326,7 @@ syndrome_alert_query <- function(user_id = 520,
     query <- "all"
     syndrome_text <- "all"
   } else if (syndrome == "ili") {
-    category <- "&CCDD=%5EILI%20CCDD%20v1;%5E,andnot,%5E;CDC%20Coronavirus-DD%20v1;%5E"
+    category <- "&ccddCategory=ili%20ccdd%20v1"
     query <- "ili"
     syndrome_text <- "ILI"
   } else if (syndrome == "cli_old") {
@@ -603,7 +603,7 @@ syndrome_person_level_query <- function(user_id = 2769,
     condition <- "all"
     syndrome_text <- "all"
   } else if (syndrome == "ili") {
-    category <- "&CCDD=%5EILI%20CCDD%20v1;%5E,andnot,%5E;CDC%20Coronavirus-DD%20v1;%5E"
+    category <- "&ccddCategory=ili%20ccdd%20v1"
     query <- "ili"
     condition <- "ili"
     syndrome_text <- "ILI"
