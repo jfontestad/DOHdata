@@ -329,7 +329,6 @@ syndrome_alert_query <- function(user_id = 520,
     category <- "&CCDD=%5EILI%20CCDD%20v1;%5E,andnot,%5E;CDC%20Coronavirus-DD%20v1;%5E"
     query <- "ili"
     syndrome_text <- "ILI"
-    ccddCategoryFreeText
   } else if (syndrome == "cli_old") {
     category <- "&ccddCategory=fever%20and%20cough-sob-diffbr%20v1"
     query <- "cli_old"
