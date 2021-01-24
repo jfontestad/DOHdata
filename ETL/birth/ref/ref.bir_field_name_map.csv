@@ -84,6 +84,7 @@ Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes fo
 77,mother_hispanic_cuban,Mother Hispanic Cuban,momh_cub,"Mother's Hispanic Origin, Cuban",CHAR(1)
 78,mother_hispanic_other,Mother Hispanic Other,momh_oth,"Mother's Hispanic Origin, Other Hispanic",CHAR(1)
 79,mother_hispanic_other_specify,Mother Hispanic Other - Specify,,"Mother's Hispanic Origin, Other Hispanic Literal",VARCHAR(21)
+79,mother_hispanic_other_specify,Mother Hispanic Other Specify,,"Mother's Hispanic Origin, Other Hispanic Literal",VARCHAR(21)
 80,mother_hispanic_nchs_ecodes,Mother Hispanic NCHS Ecodes,,Mother's Hispanic Tabulation from Checkboxes,INTEGER
 81,mother_hispanic_nchs_ccodes,Mother Hispanic NCHS Ccodes,,Mother's Hispanic Tabulation from Literal,INTEGER
 82,mother_hispanic,Mother Hispanic,hisp_mom,"Mother's Hispanic Origin
@@ -149,6 +150,7 @@ Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes fo
 137,father_hispanic_cuban,Father Hispanic Cuban,dadh_cub,"Father's Hispanic Origin, Cuban",CHAR(1)
 138,father_hispanic_other,Father Hispanic Other,dadh_oth,"Father's Hispanic Origin, Other Hispanic",CHAR(1)
 139,father_hispanic_other_specify,Father Hispanic Other - Specify,,"Father's Hispanic Origin, Other Hispanic Literal",VARCHAR(20)
+139,father_hispanic_other_specify,Father Hispanic Other Specify,,"Father's Hispanic Origin, Other Hispanic Literal",VARCHAR(20)
 140,father_hispanic_nchs_ecodes,Father Hispanic NCHS Ecodes,,Father's Hispanic Tabulation from Checkboxes,INTEGER
 141,father_hispanic_nchs_ccodes,Father Hispanic NCHS Ccodes,,Father's Hispanic Tabulation from Literal,INTEGER
 142,father_hispanic,Father Hispanic,hisp_dad,"Father's Hispanic Origin
@@ -270,6 +272,7 @@ Indicates whether the calculated Gestation (gestcalc) field was calculated based
 233,fetal_intolerance,Fetal Intolerance,labchar1 - labchar7,"Characteristics of Labor and Delivery, Fetal Intolerance of Labor",CHAR(1)
 234,mat_labor_characteristics_none,Mat Labor Characteristics None,labchar1 - labchar7,"Characteristics of Labor and Delivery, None of the Above",CHAR(1)
 235,mat_labor_characteristics_unknow,Mat Labor Characteristics Unknow,labchar1 - labchar7,"Characteristics of Labor and Delivery, Unknown",CHAR(1)
+235,mat_labor_characteristics_unknow,Mat Labor Characteristics Unk,labchar1 - labchar7,"Characteristics of Labor and Delivery, Unknown",CHAR(1)
 236,maternal_transfusion,Maternal Transfusion,mmorbid1 - mmorbid5,"Maternal Morbidity, Maternal Transfusion",CHAR(1)
 237,perineal_laceration,Perineal Laceration,mmorbid1 - mmorbid5,"Maternal Morbidity, Perineal Laceration",CHAR(1)
 238,ruptured_uterus,Ruptured Uterus,mmorbid1 - mmorbid5,"Maternal Morbidity, Ruptured Uterus",CHAR(1)
