@@ -307,3 +307,10 @@ table_2018:
     date_issue: 2019-10-21
     date_delivery: 2019-11-12
     note: Initial file received from DOH
+table_2019:
+    vars_2019: null
+    date_min: 2019-01-01
+    date_max: 2019-12-31
+    date_issue: 2020-10-22
+    date_delivery: 2020-12-03
+    note: Initial file received from DOH

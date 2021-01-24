@@ -39,9 +39,9 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/qa_load_raw.bir_wa_2003_2016.R")
 
 ### Pull in config files to define variable types and metadata
-table_config_create_bir_wa_2003_2016 <- yaml::yaml.load(getURL(
+table_config_create_bir_wa_2003_2016 <- yaml::yaml.load(httr::GET(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/create_load_raw.bir_wa_2003_2016.yaml"))
-table_config_load_bir_wa_2003_2016 <- yaml::yaml.load(getURL(
+table_config_load_bir_wa_2003_2016 <- yaml::yaml.load(httr::GET(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_2003_2016.yaml"))
 
 
@@ -73,9 +73,9 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/qa_load_raw.bir_wa_geo_2003_2016.R")
 
 ### Pull in config files to define variable types and metadata
-table_config_create_bir_wa_geo_2003_2016 <- yaml::yaml.load(getURL(
+table_config_create_bir_wa_geo_2003_2016 <- yaml::yaml.load(httr::GET(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/create_load_raw.bir_wa_geo_2003_2016.yaml"))
-table_config_load_bir_wa_geo_2003_2016 <- yaml::yaml.load(getURL(
+table_config_load_bir_wa_geo_2003_2016 <- yaml::yaml.load(httr::GET(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_geo_2003_2016.yaml"))
 
 ### Create table
@@ -107,7 +107,7 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 
 
 ### Pull in config files to define variable types and metadata
-table_config_load_bir_wa_2017_20xx <- yaml::yaml.load(getURL(
+table_config_load_bir_wa_2017_20xx <- yaml::yaml.load(httr::GET(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_2017_20xx.yaml"))
 
 ### Run function to import and load data
@@ -133,7 +133,7 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/qa_load_raw.bir_wa_geo_2017_20xx.R")
 
 ### Pull in config files to define variable types and metadata
-table_config_load_bir_wa_geo_2017_20xx <- yaml::yaml.load(getURL(
+table_config_load_bir_wa_geo_2017_20xx <- yaml::yaml.load(httr::GET(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_geo_2017_20xx.yaml"))
 
 
