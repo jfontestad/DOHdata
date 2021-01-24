@@ -8,6 +8,7 @@
 
 
 qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
+                                           bir_path = NULL,
                                            load_only = F) {
   
   # If this is the first time ever loading data, only load values.
@@ -15,8 +16,16 @@ qa_load_raw_bir_wa_2017_20xx_f <- function(conn = db_apde,
   
   
   #### PULL OUT VALUES NEEDED MULTIPLE TIMES ####
-  # List of years
-  years <- as.list(seq(2017, 2018))
+  # Find list of files with years 2017-20xx inclusive
+  bir_file_names_2017_20xx <- list.files(path = file.path(bir_path, "DATA/raw"), 
+                                         pattern = "birth_20(1[7-9]{1}|2[0-9]{1}).(asc|csv|xls|xlsx)$",
+                                         full.names = T)
+  # extract years of data as a list
+  years <- lapply(bir_file_names_2017_20xx, function(x)
+    as.numeric(str_sub(x,
+            start = str_locate(x, "birth_")[2] + 1, 
+            end = str_locate(x, "birth_20[0-9]{2}")[2]))
+  )
   
   # Rows in current table
   row_count_tot <- as.numeric(dbGetQuery(conn, 
