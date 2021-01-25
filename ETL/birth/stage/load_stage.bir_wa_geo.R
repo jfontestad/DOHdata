@@ -9,7 +9,7 @@ rm(list=setdiff(ls(), "db_apde")) # only keep SQL connection
 gc()
 
 #### PULL IN TABLE CONFIG FILE FOR VAR TYPE INFO ####
-table_config_stage_bir_wa_geo <- yaml::yaml.load(getURL(
+table_config_stage_bir_wa_geo <- yaml::yaml.load(httr::GET(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa_geo.yaml"))
 
 

@@ -144,7 +144,7 @@ load_bir_wa_geo_2017_20xx_output <- load_load_raw.bir_wa_geo_2017_20xx_f(
   conn = db_apde)
 
 ### Run function to QA loaded data
-qa_load_raw_bir_wa_geo_2017_20xx_f(conn = db_apde,  bir_path = bir_path, load_only = T)
+qa_load_raw_bir_wa_geo_2017_20xx_f(conn = db_apde,  bir_path = bir_path_geo, load_only = T)
 
 ### Clean up
 rm(table_config_load_bir_wa_geo_2017_20xx, load_load_raw.bir_wa_geo_2017_20xx_f,

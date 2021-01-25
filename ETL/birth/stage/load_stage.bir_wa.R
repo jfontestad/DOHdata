@@ -19,7 +19,7 @@
 #### Load additional functions ####
 
 #### LOAD REFERENCE DATA ####
-yaml_config <- yaml::yaml.load(getURL(
+yaml_config <- yaml::yaml.load(httr::GET(
   "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
 recodes <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/ref/ref.bir_recodes_simple.csv")
