@@ -54,7 +54,7 @@ iso_3166.us <- iso_3166.us[!iso3166_2_name %in% c("American Samoa",	"Guam",	"Nor
       char.vars <- setdiff(char.vars, c("birthplace_county_city_wa_code", "mother_residence_city_wa_code"))
 
     # Use lossless_convert to change to numeric when possible
-      my.dt[, (char.vars) := lapply(.SD, lossless_convert, class = 'numeric'), .SDcols = char.vars]
+      my.dt[, (char.vars) := lapply(.SD, rads::lossless_convert, class = 'numeric'), .SDcols = char.vars]
   }
 
 
