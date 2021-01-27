@@ -28,12 +28,12 @@ db_apde <- dbConnect(odbc(), "PH_APDEStore50")
 #### SET UP FUNCTIONS ####
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/claims_data/master/claims_db/db_loader/scripts_general/create_table.R")
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/general/scripts_general/etl_log.R")
+# Call in alter schema script from claims repo (should eventually be part of an APDE-wide one)
+devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/claims_data/master/claims_db/db_loader/scripts_general/alter_schema.R")
 
 
-#############################
-#### LOAD_RAW: 2003-2016 ####
-#############################
 
+#### LOAD_RAW: 2003-2016 -------------------------------------------------------
 ### Pull in functions
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_2003_2016.R")
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/qa_load_raw.bir_wa_2003_2016.R")
@@ -64,10 +64,8 @@ load_bir_wa_2003_2016_output <- load_load_raw.bir_wa_2003_2016_f(
 qa_load_raw_bir_wa_2003_2016_f(conn = db_apde, load_only = T)
 
 
-#################################
-#### LOAD_RAW: 2003-2016 GEO ####
-#################################
 
+#### LOAD_RAW: 2003-2016 GEO ---------------------------------------------------
 ### Pull in functions
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_geo_2003_2016.R")
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/qa_load_raw.bir_wa_geo_2003_2016.R")
@@ -97,10 +95,8 @@ load_bir_wa_geo_2003_2016_output <- load_load_raw.bir_wa_geo_2003_2016_f(
 qa_load_raw_bir_wa_geo_2003_2016_f(conn = db_apde, load_only = T)
 
 
-#############################
-#### LOAD_RAW: 2017-20xx ####
-#############################
 
+#### LOAD_RAW: 2017-20xx -------------------------------------------------------
 ### Pull in functions
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_2017_20xx.R")
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/qa_load_raw.bir_wa_2017_20xx.R")
@@ -125,9 +121,8 @@ rm(table_config_load_bir_wa_2017_20xx, load_load_raw.bir_wa_2017_20xx_f,
    qa_load_raw_bir_wa_2017_20xx_f)
 
 
-#################################
-#### LOAD_RAW: 2017-20xx GEO ####
-#################################
+
+#### LOAD_RAW: 2017-20xx GEO ---------------------------------------------------
 ### Pull in functions
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_geo_2017_20xx.R")
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/qa_load_raw.bir_wa_geo_2017_20xx.R")
@@ -151,16 +146,37 @@ rm(table_config_load_bir_wa_geo_2017_20xx, load_load_raw.bir_wa_geo_2017_20xx_f,
    qa_load_raw_bir_wa_geo_2017_20xx_f)
 
 
-###############
-#### STAGE ####
-###############
-#### BIR_WA_GEO ####
+
+#### STAGE: BIR_WA_GEO ---------------------------------------------------------
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa_geo.R")
 
-#### BIR_WA ####
+#### STAGE: BIR_WA -------------------------------------------------------------
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/load_stage.bir_wa.R")
 
 ### QA for birth data overall (consider running manually so can assess quality before loading to SQL ####
 devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/qa_stage.bir_wa.R")
 
+
+#### FINAL: BIR_WA_GEO ---------------------------------------------------------
+alter_schema_f(conn = db_apde,
+               from_schema = "stage", to_schema = "final",
+               table_name = "bir_wa_geo")
+# Add index (use existing functions for this eventually once they're tweaked)
+DBI::dbExecute(db_apde,
+               "CREATE CLUSTERED COLUMNSTORE INDEX idx_final_bir_wa_geo
+	ON [PH_APDEStore].[final].[bir_wa_geo]
+	WITH (DROP_EXISTING = OFF)")
+
+
+#### FINAL: BIR_WA -------------------------------------------------------------
+alter_schema_f(conn = db_apde,
+               from_schema = "stage", to_schema = "final",
+               table_name = "bir_wa")
+# Add index (use existing functions for this eventually once they're tweaked)
+DBI::dbExecute(db_apde,
+               "CREATE CLUSTERED COLUMNSTORE INDEX idx_final_bir_wa
+	ON [PH_APDEStore].[final].[bir_wa]
+	WITH (DROP_EXISTING = OFF)")
+
+### Need to add a QA step here at some point
 
