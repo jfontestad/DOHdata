@@ -14,7 +14,7 @@ load_load_raw.bir_wa_2003_2016_f <- function(table_config_create = NULL,
   if (is.null(table_config_create)) {
     print("No table creation config file specified, attempting default URL")
     
-    table_config_create <- yaml::yaml.load(getURL(
+    table_config_create <- yaml::yaml.load(httr::GET(
       "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/create_load_raw.bir_wa_2003_2016.yaml"))
   }
   
@@ -22,7 +22,7 @@ load_load_raw.bir_wa_2003_2016_f <- function(table_config_create = NULL,
   if (is.null(table_config_load)) {
     print("No table load config file specified, attempting default URL")
     
-    table_config_load <- yaml::yaml.load(getURL(
+    table_config_load <- yaml::yaml.load(httr::GET(
       "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_2003_2016.yaml"))
   }
   

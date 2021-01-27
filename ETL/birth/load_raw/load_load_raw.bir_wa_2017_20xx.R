@@ -13,7 +13,7 @@ load_load_raw.bir_wa_2017_20xx_f <- function(table_config_load = NULL,
   if (is.null(table_config_load)) {
     print("No table load config file specified, attempting default URL")
     
-    table_config_load <- yaml::yaml.load(getURL(
+    table_config_load <- yaml::yaml.load(httr::GET(
       "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/load_raw/load_load_raw.bir_wa_2017_20xx.yaml"))
   }
   

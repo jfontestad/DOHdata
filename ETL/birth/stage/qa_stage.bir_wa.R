@@ -13,7 +13,7 @@
     #  db_apde <- dbConnect(odbc(), "PH_APDEStore50")
 
 ## Load staged from SQL ----
-    yaml_config <- yaml::yaml.load(getURL(
+    yaml_config <- yaml::yaml.load(httr::GET(
       "https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/ETL/birth/stage/create_stage.bir_wa.yaml"))
 
     if(!exists("bir_combined")){ # only load data if needed
