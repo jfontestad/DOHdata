@@ -994,12 +994,29 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
 
   ## Push to SQL if the data are fine
       if(nrow(compare.classes[r.class != yaml.class ]) == 0){
-        dbWriteTable(db_apde,
-                     tbl_id_2003_20xx,
-                     value = as.data.frame(bir_combined[]),
-                     overwrite = T,
-                     append = F,
-                     field.types = c(unlist(yaml_config$vars), unlist(yaml_config$recodes)) )
+        ### Split into smaller tables to avoid SQL connection issues
+        start <- 1L
+        max_rows <- 100000L
+        cycles <- ceiling(nrow(bir_combined)/max_rows)
+        
+        lapply(seq(start, cycles), function(i) {
+          start_row <- ifelse(i == 1, 1L, max_rows * (i-1) + 1)
+          end_row <- min(nrow(bir_combined), max_rows * i)
+          
+          message("Loading cycle ", i, " of ", cycles)
+          if (i == 1) {
+            dbWriteTable(db_apde,
+                         tbl_id_2003_20xx,
+                         value = as.data.frame(bir_combined[start_row:end_row]),
+                         overwrite = T, append = F,
+                         field.types = c(unlist(yaml_config$vars), unlist(yaml_config$recodes)))
+          } else {
+            dbWriteTable(db_apde,
+                         tbl_id_2003_20xx,
+                         value = as.data.frame(bir_combined[start_row:end_row]),
+                         overwrite = F, append = T)
+          }
+        })
       }
 
 #### THE END! ----
