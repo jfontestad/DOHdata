@@ -46,6 +46,7 @@
         births <- merge(births, births.doh, by.x = "chi_year", by.y = "chi_year"); rm(births.doh)
         births[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
         births[, indicator := "births"]
+        print("Births compared to CHAT: ")
         print(births)
 
     # Race compared to CHAT ----
@@ -64,6 +65,7 @@
         race <- merge(race, race.doh, by.x = c("chi_year", "chi_race_7"), by.y = c("chi_year", "chi_race_7"), all.x = TRUE)
         rm(race.doh)
         race[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Race compared to CHAT: ")
         print(race[!is.na(count.doh)])
 
     # Hispanic compared to CHAT ----
@@ -75,6 +77,7 @@
 
         hispanic <- merge(hispanic, hispanic.doh, by = "chi_year"); rm(hispanic.doh)
         hispanic[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Hispanic compared to CHAT: ")
         print(hispanic[!is.na(count.doh)])
 
     # Birthweight compared to CHAT ----
@@ -96,6 +99,7 @@
 
         bw <- merge(bw, bw.doh, by = c("chi_year", "bw"), all.x = TRUE); rm(bw.doh)
         bw[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Birthweight compared to CHAT: ")
         print(bw)
 
     # Premature compared to CHAT ----
@@ -107,6 +111,7 @@
         preterm <- merge(preterm, preterm.doh, by = "chi_year"); rm(preterm.doh)
         preterm[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
         print(preterm)
+        print("Premature compared to CHAT: ")
 
     # Mom born in USA compared to CHAT ----
         mother_birthplace_usa <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, mother_birthplace_usa)], row.names = TRUE), chi_year)[mother_birthplace_usa==1, -c("mother_birthplace_usa")]
@@ -117,6 +122,7 @@
         mother_birthplace_usa <- merge(mother_birthplace_usa, mother_birthplace_usa.doh, by = "chi_year"); rm(mother_birthplace_usa.doh)
         mother_birthplace_usa[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
         print(mother_birthplace_usa)
+        print("Mom born in USA compared to CHAT: ")
 
     # Prior pregnancy compared to CHAT ----
         ch_priorpreg <- setorder(as.data.table(bir_combined[chi_geo_wastate==1, table(chi_year, ch_priorpreg)], row.names = TRUE), chi_year)[ch_priorpreg==1, -c("ch_priorpreg")]
@@ -126,6 +132,7 @@
 
         ch_priorpreg <- merge(ch_priorpreg, ch_priorpreg.doh, by = "chi_year"); rm(ch_priorpreg.doh)
         ch_priorpreg[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Prior pregnancy compared to CHAT: ")
         print(ch_priorpreg)
 
     # NCHS Prenatal Care compared to CHAT (only availble >=2011) ----
@@ -143,6 +150,7 @@
         pnc.nchs <- merge(pnc, pnc.doh, by = c("chi_year", "pnc_tri_nchs"), all.x = TRUE); rm(pnc.doh)
         pnc.nchs[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
         pnc.nchs <- pnc.nchs[pnc_tri_nchs != "NCHS No PNC" & chi_year >= 2011]
+        print("NCHS Prenatal Care compared to CHAT (only availble >=2011): ")
         print(pnc.nchs)
 
     # Prenatal Care compared to CHAT ----
@@ -158,6 +166,7 @@
 
         pnc <- merge(pnc, pnc.doh, by = c("chi_year", "pnc_tri"), all.x = TRUE); rm(pnc.doh)
         pnc[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Prenatal Care compared to CHAT: ")
         print(pnc[!is.na(count.doh)])
 
     # Hypertension - gestational compared to CHAT ----
@@ -168,6 +177,7 @@
 
         htn_gest <- merge(htn_gest, htn_gest.doh, by = "chi_year"); rm(htn_gest.doh)
         htn_gest[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Hypertension - gestational compared to CHAT: ")
         print(htn_gest)
 
     # Hypertension - Prepregnancy compared to CHAT ----
@@ -178,6 +188,7 @@
 
         htn_prepreg <- merge(htn_prepreg, htn_prepreg.doh, by = "chi_year"); rm(htn_prepreg.doh)
         htn_prepreg[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Hypertension - Prepregnancy compared to CHAT: ")
         print(htn_prepreg)
 
     # Kotelchuck Index (adequate PNC) compared to CHAT ----
@@ -188,6 +199,7 @@
 
         kotelchuck <- merge(kotelchuck, kotelchuck.doh, by = "chi_year"); rm(kotelchuck.doh)
         kotelchuck[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Kotelchuck Index (adequate PNC) compared to CHAT: ")
         print(kotelchuck)
 
     # Kotelchuck Index (inadequate PNC) compared to CHAT ----
@@ -198,6 +210,7 @@
 
         kotelchuck.inadequate <- merge(kotelchuck.inadequate, kotelchuck.inadequate.doh, by = "chi_year"); rm(kotelchuck.inadequate.doh)
         kotelchuck.inadequate[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Kotelchuck Index (inadequate PNC) compared to CHAT: ")
         print(kotelchuck.inadequate)
 
     # Births in KC compared to CHAT ----
@@ -206,31 +219,32 @@
         kc.births <- setorder(bir_combined[chi_geo_kc==1, .N, by = chi_year], chi_year)
         kc.births <- merge(kc.births, kc.births.doh, by = "chi_year"); rm(kc.births.doh)
         kc.births[, diff := paste0(round(100* (N - count.doh) / count.doh, 2), "%")]
+        print("Births in KC compared to CHAT: ")
         print(kc.births)
 
 ## Check some cross-tabulations ----
             print("*****************************")
             print("**** Simple cross-tabs  *****")
             print("*****************************")
-            bir_combined[, table(plurality, singleton, exclude = NULL)]
+            print(bir_combined[, table(plurality, singleton, exclude = NULL)])
             print("*****************************")
-            bir_combined[, table(plurality, multiple, exclude = NULL)]
+            print(bir_combined[, table(plurality, multiple, exclude = NULL)])
             print("*****************************")
-            bir_combined[, table(breastfed, bf, exclude = NULL)]
+            print(bir_combined[, table(breastfed, bf, exclude = NULL)])
             print("*****************************")
-            bir_combined[, table(infant_death_flag, inf_death, exclude = NULL)]
+            print(bir_combined[, table(infant_death_flag, inf_death, exclude = NULL)])
             print("*****************************")
-            bir_combined[, table(mother_residence_county_wa_code, chi_geo_kc, exclude = NULL)]
+            print(bir_combined[, table(mother_residence_county_wa_code, chi_geo_kc, exclude = NULL)])
             print("*****************************")
-            bir_combined[, table(mother_residence_state_nchs_code, chi_geo_wastate, exclude = NULL)]
+            print(bir_combined[, table(mother_residence_state_nchs_code, chi_geo_wastate, exclude = NULL)])
             print("*****************************")
-            bir_combined[, table(source_of_payment, dlp_medicaid, exclude = NULL)]
+            print(bir_combined[, table(source_of_payment, dlp_medicaid, exclude = NULL)])
             print("*****************************")
-            bir_combined[, table(nchs_month_prenatal_care_began, pnc_tri_nchs, exclude = NULL)]
+            print(bir_combined[, table(nchs_month_prenatal_care_began, pnc_tri_nchs, exclude = NULL)])
             print("*****************************")
-            bir_combined[, table(month_prenatal_care_began, pnc_tri, exclude = NULL)]
-            print("*****************************")
-            bir_combined[, table(priorprg, ch_priorpreg, exclude = NULL)]
+            print(bir_combined[, table(month_prenatal_care_began, pnc_tri, exclude = NULL)])
+            print(print("*****************************"))
+            print(bir_combined[, table(priorprg, ch_priorpreg, exclude = NULL)])
 
 ## Compare row counts by year with raw data ----
   rows.raw <- setDT(DBI::dbGetQuery(db_apde, "SELECT *  FROM metadata.qa_bir_values"))
@@ -245,6 +259,7 @@
   row.count <- merge(row.count, rows.raw, by = "chi_year"); rm(rows.raw)
   row.count[, diff := paste0(round(100* (N - raw) / raw, 2), "%")]
   row.count[, indicator := "number of rows in stage vs load_raw"]
+  print("Compare row counts by year with raw data: ")
   print(row.count)
 
 ## Write QA row count results to SQL ----

@@ -249,12 +249,22 @@ load_load_raw.bir_wa_2003_2016_f <- function(table_config_create = NULL,
                             .con = conn))
   
   tbl_id_2013_2016 <- DBI::Id(schema = table_config_load$schema, table = table_config_load$table)
-  dbWriteTable(conn, tbl_id_2013_2016, value = as.data.frame(bir_2003_2016),
-               overwrite = F,
-               append = T,
-               field.types = paste(names(table_config_create$vars), 
-                                   table_config_create$vars, 
-                                   collapse = ", ", sep = " = "))
+  
+  #### Temp fix for network errors ####
+  # Split data into chunks to load
+  temp_load <- bir_2003_2016 %>% group_split(dob_yr)
+  
+  lapply(seq_along(temp_load), function(x) {
+    message("loading ", x)
+    dbWriteTable(conn, tbl_id_2013_2016, value = as.data.frame(temp_load[[x]]),
+                 overwrite = F,
+                 append = T)
+  })
+  
+  ### Original version for posterity
+  # dbWriteTable(conn, tbl_id_2013_2016, value = as.data.frame(bir_2003_2016),
+  #              overwrite = F,
+  #              append = T)
   
 
   #### COLLATE OUTPUT TO RETURN ####
