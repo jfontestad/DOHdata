@@ -161,22 +161,14 @@ devtools::source_url("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/maste
 alter_schema_f(conn = db_apde,
                from_schema = "stage", to_schema = "final",
                table_name = "bir_wa_geo")
-# Add index (use existing functions for this eventually once they're tweaked)
-DBI::dbExecute(db_apde,
-               "CREATE CLUSTERED COLUMNSTORE INDEX idx_final_bir_wa_geo
-	ON [PH_APDEStore].[final].[bir_wa_geo]
-	WITH (DROP_EXISTING = OFF)")
+
 
 
 #### FINAL: BIR_WA -------------------------------------------------------------
 alter_schema_f(conn = db_apde,
                from_schema = "stage", to_schema = "final",
                table_name = "bir_wa")
-# Add index (use existing functions for this eventually once they're tweaked)
-DBI::dbExecute(db_apde,
-               "CREATE CLUSTERED COLUMNSTORE INDEX idx_final_bir_wa
-	ON [PH_APDEStore].[final].[bir_wa]
-	WITH (DROP_EXISTING = OFF)")
+
 
 ### Need to add a QA step here at some point
 
