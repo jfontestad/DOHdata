@@ -323,11 +323,17 @@ recodes:
     chi_race_aic_black: INTEGER
     chi_race_aic_chinese: INTEGER
     chi_race_aic_filipino: INTEGER
+    chi_race_aic_guam_or_chamorro: INTEGER
+    chi_race_aic_hawaiian: INTEGER
     chi_race_aic_his: INTEGER
+    chi_race_aic_his_cuban: INTEGER
+    chi_race_aic_his_mexican: INTEGER
+    chi_race_aic_his_puerto_rican: INTEGER
     chi_race_aic_indian: INTEGER
     chi_race_aic_japanese: INTEGER
     chi_race_aic_korean: INTEGER
     chi_race_aic_nhpi: INTEGER
+    chi_race_aic_samoan: INTEGER
     chi_race_aic_vietnamese: INTEGER
     chi_race_aic_wht: INTEGER
     chi_race_hisp: TINYINT
