@@ -1,417 +1,423 @@
 "varname","years","vartype","description","value","sourcevar","field_name_whales","field_name_bedrock","notes"
-"abnormal_conditions_none","2003-2018","binary (factor)","Abnormal Conditions of Newborn, None of the Above","N, Y","Abnormal Conditions None, abcond1 - abcond6","Abnormal Conditions None","abcond1 - abcond6",NA
-"abnormal_conditions_unknown","2003-2018","binary (factor)","Abnormal Conditions of Newborn, Unknown","N, Y","Abnormal Conditions Unknown, abcond1 - abcond6","Abnormal Conditions Unknown","abcond1 - abcond6",NA
-"anencephaly","2003-2018","binary (factor)","Congenital Malformations, Anencephaly","N, Y","Anencephaly, malf1 - malf7","Anencephaly","malf1 - malf7",NA
-"anesthesia","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Anesthesia During Labor","N, Y","Anesthesia, labchar1 - labchar7","Anesthesia","labchar1 - labchar7",NA
-"antibiotics","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Antibiotics Received by Mother","N, Y","Antibiotics, labchar1 - labchar7","Antibiotics","labchar1 - labchar7",NA
-"apgar_10","2003-2018","integer","APGAR Score - 10 Minute
+"abnormal_conditions_none","2003-2019","binary (factor)","Abnormal Conditions of Newborn, None of the Above","N, Y","Abnormal Conditions None, abcond1 - abcond6","Abnormal Conditions None","abcond1 - abcond6",NA
+"abnormal_conditions_unknown","2003-2019","binary (factor)","Abnormal Conditions of Newborn, Unknown","N, Y","Abnormal Conditions Unknown, abcond1 - abcond6","Abnormal Conditions Unknown","abcond1 - abcond6",NA
+"anencephaly","2003-2019","binary (factor)","Congenital Malformations, Anencephaly","N, Y","Anencephaly, malf1 - malf7","Anencephaly","malf1 - malf7",NA
+"anesthesia","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Anesthesia During Labor","N, Y","Anesthesia, labchar1 - labchar7","Anesthesia","labchar1 - labchar7",NA
+"antibiotics","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Antibiotics Received by Mother","N, Y","Antibiotics, labchar1 - labchar7","Antibiotics","labchar1 - labchar7",NA
+"apgar_10","2003-2019","integer","APGAR Score - 10 Minute
 The numerical sum of points given for heart rate, respirator effort, muscle tone, reflexes and color. Score taken at 10 minutes. Only reported if 5 minute score is <6.","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 998","APGAR 10, apgar10","APGAR 10","apgar10",NA
-"apgar_5","2003-2018","integer","APGAR Score - 5 Minute
+"apgar_5","2003-2019","integer","APGAR Score - 5 Minute
 The numerical sum of points given for heart rate, respirator effort, muscle tone, reflexes and color. Score taken at 5 minutes. Before using this field, see """"Data Quality Technical Notes – Apgar Score (5 minutes).""""","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10","APGAR 5, apgar5","APGAR 5","apgar5",NA
-"assist_vent","2003-2018","binary (factor)","Abnormal Conditions of Newborn, Assisted Ventilation, Immediate","N, Y","Assist Vent, abcond1 - abcond6","Assist Vent","abcond1 - abcond6",NA
-"assist_vent_6","2003-2018","binary (factor)","Abnormal Conditions of Newborn, Assisted Ventilation, Over 6 Hours","N, Y","Assist Vent 6, abcond1 - abcond6","Assist Vent 6","abcond1 - abcond6",NA
-"assisted_reproduction","2003-2018","binary (factor)","Medical Risk Factor, Infertility Treatments, ART","N, Y","Assisted Reproduction, mrf1 - mrf6","Assisted Reproduction","mrf1 - mrf6",NA
-"attempt_forceps","2003-2018","binary (factor)","Method of Delivery, Forceps Failed
+"assist_vent","2003-2019","binary (factor)","Abnormal Conditions of Newborn, Assisted Ventilation, Immediate","N, Y","Assist Vent, abcond1 - abcond6","Assist Vent","abcond1 - abcond6",NA
+"assist_vent_6","2003-2019","binary (factor)","Abnormal Conditions of Newborn, Assisted Ventilation, Over 6 Hours","N, Y","Assist Vent 6, abcond1 - abcond6","Assist Vent 6","abcond1 - abcond6",NA
+"assisted_reproduction","2003-2019","binary (factor)","Medical Risk Factor, Infertility Treatments, ART","N, Y","Assisted Reproduction, mrf1 - mrf6","Assisted Reproduction","mrf1 - mrf6",NA
+"attempt_forceps","2003-2019","binary (factor)","Method of Delivery, Forceps Failed
 Indicates whether forceps delivery was attempted but unsuccessful.","N, Y","Attempt Forceps, forcfail","Attempt Forceps","forcfail",NA
-"attempt_vacuum","2003-2018","binary (factor)","Method of Delivery, Vacuum Extraction Failed
+"attempt_vacuum","2003-2019","binary (factor)","Method of Delivery, Vacuum Extraction Failed
 Indicates whether vacuum extraction delivery was attempted but unsuccessful.","N, Y","Attempt Vacuum, vacfail","Attempt Vacuum","vacfail",NA
-"attendant_class","2003-2018","integer","Classification of Attendant","0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12","Attendant Class, attclass","Attendant Class","attclass",NA
-"augmentation","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Augmentation of Labor","N, Y","Augmentation, labchar1 - labchar7","Augmentation","labchar1 - labchar7",NA
-"bf","2003-2018","binary (integer)","Infant being breastfed","0, 1","breastfed, NA",NA,NA,NA
-"birth_cert_encrypt","2003-2018","integer","Certificate Number","E.g., 2003700010, 2003700012, 2003700014, 2003700015, 2003700020","Birth Cert Encrypt, certno_e","Birth Cert Encrypt","certno_e",NA
-"birth_cert_type","2003-2018","binary (factor)","Certificate Type","O, R","Birth Cert Type, certype","Birth Cert Type","certype",NA
-"birth_order","2003-2018","integer","Order at Birth","0, 1, 2, 3, 4","Birth Order, order","Birth Order","order",NA
-"birth_weight_grams","2003-2018","integer","Birth Weight of Baby - Grams
+"attendant_class","2003-2019","numeric","Classification of Attendant","0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12","Attendant Class, attclass","Attendant Class","attclass",NA
+"augmentation","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Augmentation of Labor","N, Y","Augmentation, labchar1 - labchar7","Augmentation","labchar1 - labchar7",NA
+"bf","2003-2019","binary (integer)","Infant being breastfed","0, 1","breastfed, NA",NA,NA,NA
+"birth_cert_encrypt","2003-2019","integer","Certificate Number","E.g., 2003700010, 2003700012, 2003700014, 2003700015, 2003700020","Birth Cert Encrypt, certno_e","Birth Cert Encrypt","certno_e",NA
+"birth_cert_type","2003-2019","binary (factor)","Certificate Type","O, R","Birth Cert Type, certype","Birth Cert Type","certype",NA
+"birth_order","2003-2019","integer","Order at Birth","0, 1, 2, 3, 4","Birth Order, order","Birth Order","order",NA
+"birth_weight_grams","2003-2019","integer","Birth Weight of Baby - Grams
 Indicates gram weight of infant. Pounds and ounces are converted as follows: grams = [(lbs*16)+oz]*28.3495267 (Rounded to the nearest gram)
 
 In 1980-1991 data was stored in units of pounds and ounces. This data has been converted to grams. Since one ounce is equivalent to 28 grams, the converted data will cluster in multiples of 28 grams. For more detail see """"Data Quality Technical Notes - Birth Weight.""""","E.g., 227, 230, 235, 236, 240","birth_weight_grams, Birth Weight - Grams, wt_grams","Birth Weight - Grams","wt_grams",NA
-"birthplace_city","2017-2018","factor","Birthplace City","E.g., ABERDEEN, ALGONA, ANACORTES, AUBURN, BELLEVUE","Birthplace City","Birthplace City",NA,NA
-"birthplace_county","2017-2018","factor","Birthplace County","BENTON, CHELAN, CLALLAM, CLARK, COWLITZ, GRAYS HARBOR, ISLAND, JEFFERSON, KING, KITSAP, KITTITAS, LEWIS, PIERCE, SKAGIT, SNOHOMISH, SPOKANE, THURSTON, WHATCOM, YAKIMA","Birthplace County","Birthplace County",NA,NA
-"birthplace_county_city_wa_code","2003-2018","factor","Birthplace WA City Code","E.g., 0000, 0103, 0301, 0302, 0303","Birthplace County City WA Code, city_occ","Birthplace County City WA Code","city_occ",NA
-"birthplace_county_wa_code","2003-2018","factor","Birthplace WA County Code","00, 01, 03, 04, 05, 06, 08, 11, 13, 14, 15, 16, 17, 18, 19, 21, 23, 24, 25, 27, 28, 29, 31, 32, 33, 34, 36, 37, 38, 39, NA","Birthplace County WA Code, cnty_occ","Birthplace County WA Code","cnty_occ",NA
-"birthplace_state_nchs_code","2003-2018","integer","Birthplace State NCHS Code","E.g., 0, 1, 2, 3, 4","Birthplace State NCHS Code, st_occ","Birthplace State NCHS Code","st_occ",NA
-"breastfed","2003-2018","binary (factor)","Infant Being Breastfed","N, Y","Breastfed, breastfd","Breastfed","breastfd",NA
-"bw_high","2003-2018","binary (integer)","Birth WT-High (4000-4499 grams)","0, 1","birth_weight_grams, NA",NA,NA,NA
-"bw_low","2003-2018","binary (integer)","Low Birth Weight (< 2500) (all births)","0, 1","birth_weight_grams, NA",NA,NA,NA
-"bw_low_sing","2003-2018","binary (integer)","Low Birth Weight (< 2500) (singleton births)","0, 1","NA",NA,NA,"complex recoding"
-"bw_modlow","2003-2018","binary (integer)","Mod. Low Birth Weight (1500-2499)","0, 1","birth_weight_grams, NA",NA,NA,NA
-"bw_norm","2003-2018","binary (integer)","Birth WT-Normal (2500-3999 grams)","0, 1","birth_weight_grams, NA",NA,NA,NA
-"bw_norm_sing","2003-2018","binary (integer)","Birth WT-Normal (2500-3999 grams)","0, 1","NA",NA,NA,"complex recoding"
-"bw_vhigh","2003-2018","binary (integer)","Birth WT-Very High (4500-8164 grams)","0, 1","birth_weight_grams, NA",NA,NA,NA
-"bw_vlow","2003-2018","binary (integer)","Very Low Birth Weight (< 1500) (all births)","0, 1","birth_weight_grams, NA",NA,NA,NA
-"bw_vlow_sing","2003-2018","binary (integer)","Very Low Birth Weight (< 1500) (singleton births)","0, 1","NA",NA,NA,"complex recoding"
-"calculated_gestation","2003-2018","integer","Calculated Gestation in Weeks
+"birthplace_city","2017-2019","factor","Birthplace City","E.g., ABERDEEN, ALGONA, ANACORTES, AUBURN, BELLEVUE","Birthplace City","Birthplace City",NA,NA
+"birthplace_county","2017-2019","factor","Birthplace County","BENTON, CHELAN, CLALLAM, CLARK, COWLITZ, GRANT, GRAYS HARBOR, ISLAND, JEFFERSON, KING, KITSAP, KITTITAS, LEWIS, PEND OREILLE, PIERCE, SKAGIT, SNOHOMISH, SPOKANE, THURSTON, UNKNOWN, WALLA WALLA, WHATCOM, YAKIMA","Birthplace County","Birthplace County",NA,NA
+"birthplace_county_city_wa_code","2003-2019","factor","Birthplace WA City Code","E.g., 0000, 0103, 0301, 0302, 0303","Birthplace County City WA Code, city_occ","Birthplace County City WA Code","city_occ",NA
+"birthplace_county_wa_code","2003-2019","factor","Birthplace WA County Code","E.g., 00, 01, 03, 04, 05","Birthplace County WA Code, cnty_occ","Birthplace County WA Code","cnty_occ",NA
+"birthplace_state_nchs_code","2003-2019","numeric","Birthplace State NCHS Code","E.g., 0, 1, 2, 3, 4","Birthplace State NCHS Code, st_occ","Birthplace State NCHS Code","st_occ",NA
+"breastfed","2003-2019","binary (factor)","Infant Being Breastfed","N, Y","Breastfed, breastfd","Breastfed","breastfd",NA
+"bw_high","2003-2019","binary (integer)","Birth WT-High (4000-4499 grams)","0, 1","birth_weight_grams, NA",NA,NA,NA
+"bw_low","2003-2019","binary (integer)","Low Birth Weight (< 2500) (all births)","0, 1","birth_weight_grams, NA",NA,NA,NA
+"bw_low_sing","2003-2019","binary (numeric)","Low Birth Weight (< 2500) (singleton births)","0, 1","NA",NA,NA,"complex recoding"
+"bw_modlow","2003-2019","binary (integer)","Mod. Low Birth Weight (1500-2499)","0, 1","birth_weight_grams, NA",NA,NA,NA
+"bw_norm","2003-2019","binary (integer)","Birth WT-Normal (2500-3999 grams)","0, 1","birth_weight_grams, NA",NA,NA,NA
+"bw_norm_sing","2003-2019","binary (numeric)","Birth WT-Normal (2500-3999 grams)","0, 1","NA",NA,NA,"complex recoding"
+"bw_vhigh","2003-2019","binary (integer)","Birth WT-Very High (4500-8164 grams)","0, 1","birth_weight_grams, NA",NA,NA,NA
+"bw_vlow","2003-2019","binary (integer)","Very Low Birth Weight (< 1500) (all births)","0, 1","birth_weight_grams, NA",NA,NA,NA
+"bw_vlow_sing","2003-2019","binary (numeric)","Very Low Birth Weight (< 1500) (singleton births)","0, 1","NA",NA,NA,"complex recoding"
+"calculated_gestation","2003-2019","integer","Calculated Gestation in Weeks
 Calculated from the date of birth and last menses date (mensdate) or from gestational estimate. Before using this field, see """"Data Quality Technical Notes – Gestational Age – 
 Calculated and Clinical Estimate.""""","E.g., 15, 16, 17, 18, 19","calculated_gestation, Calculated Gestation, gestcalc","Calculated Gestation","gestcalc","method changed in 2005"
-"certifier_class","2003-2018","integer","Classification of Certifier
+"certifier_class","2003-2019","numeric","Classification of Certifier
 Before using this field, see """"Data Quality Technical Notes - Attendant/Certifier Classification.""""","0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 42","Certifier Class, crt_clas","Certifier Class","crt_clas",NA
-"cervical_cerclage","2003-2018","binary (factor)","Obstetric Procedure, Cervical Cerclage","N, Y","Cervical Cerclage, obproc1 - obproc4","Cervical Cerclage","obproc1 - obproc4",NA
-"ch_priorpreg","2003-2018","binary (integer)","Prior Pregnancy","0, 1","priorprg, NA",NA,NA,"not available 2017+"
-"chi_age","2003-2018","integer","Mother's age","E.g., 0, 12, 13, 14, 15","mother_calculated_age, NA",NA,NA,"old_val & new_val blank to copy variable wholesale"
-"chi_edu_mom_8","2003-2018","factor","Mother's education","<= 8th grade, 9th-12th grade, no diploma, Associate degree, Bachelor's degree, Doctorate or Professional degree, High school graduate or GED, Master's degree, Some college, no degree","mother_education, NA",NA,NA,NA
-"chi_geo_big_cities","2003-2018","factor","CHI geography: Big Cities","Auburn city, Bellevue city, Federal Way city, Kent city, Kirkland city, Renton city, Seattle city","NA",NA,NA,NA
-"chi_geo_coo_places","2003-2018","factor","CHI geography: COO Places","Balance of King County, Rainier Valley, SeaTac/Tukwila, White Center","NA",NA,NA,NA
-"chi_geo_hra_long","2003-2018","factor","CHI geograpny: HRA long names","E.g., Auburn-North, Auburn-South, Ballard, Beacon Hill/Georgetown/South Park, Bear Creek/Carnation/Duvall","NA",NA,NA,NA
-"chi_geo_hra_short","2003-2018","factor","CHI geograpny: HRA short names","E.g., Auburn-North, Auburn-South, Ballard, Beacon/Gtown/S.Park, Bear Creek/Carnation/Duvall","NA",NA,NA,NA
-"chi_geo_kc","2003-2018","integer","King County resident (mother)","1","mother_residence_county_wa_code, NA",NA,NA,NA
-"chi_geo_regions_4","2003-2018","factor","CHI geography: Regions","East, North, Seattle, South","NA",NA,NA,NA
-"chi_geo_seattle","2003-2018","binary (factor)","CHI geography: Seattle flag","Not Seattle, Seattle","NA",NA,NA,NA
-"chi_geo_wastate","2003-2018","integer","WA State resident (mother)","1","mother_residence_state_nchs_code, NA",NA,NA,NA
-"chi_geo_zip5","2003-2018","factor","Zip code (5 digit) of residence","E.g., 90759, 97002, 97188, 98001, 98002","NA",NA,NA,"complex recoding"
-"chi_nativity","2003-2018","binary (factor)","Nativity","Born in US, Foreign born","NA",NA,NA,"complex recoding"
-"chi_race_6","2003-2018","factor","Race - 6 categories","AIAN, Asian, Black, Multiple, NHPI, White","mother_race_summary_code, NA",NA,NA,NA
-"chi_race_7","2003-2018","factor","Race - 7 categories","AIAN, Asian, Black, Multiple, NHPI, Oth/unk, White","mother_race_summary_code, NA",NA,NA,NA
-"chi_race_aic_aian","2003-2018","binary (integer)","Race - AIAN alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
-"chi_race_aic_asian","2003-2018","binary (integer)","Race - Asian alone or in combination","0, 1","NA",NA,NA,"complex recoding"
-"chi_race_aic_asianother","2003-2018","binary (integer)","Race - Asian - other alone or in combination","0, 1","mother_race_other_asian, NA",NA,NA,NA
-"chi_race_aic_black","2003-2018","binary (integer)","Race - Black alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
-"chi_race_aic_chinese","2003-2018","binary (integer)","Race - Chinese alone or in combination","0, 1","mother_race_chinese, NA",NA,NA,NA
-"chi_race_aic_filipino","2003-2018","binary (integer)","Race - Filipino alone or in combination","0, 1","mother_race_filipino, NA",NA,NA,NA
-"chi_race_aic_his","2003-2018","binary (integer)","Race - Hispanic alone or in combination","0, 1","mother_hispanic, NA",NA,NA,NA
-"chi_race_aic_indian","2003-2018","binary (integer)","Race - Asian Indian alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
-"chi_race_aic_japanese","2003-2018","binary (integer)","Race - Japanese alone or in combination","0, 1","mother_race_japanese, NA",NA,NA,NA
-"chi_race_aic_korean","2003-2018","binary (integer)","Race - Korean alone or in combination","0, 1","mother_race_korean, NA",NA,NA,NA
-"chi_race_aic_nhpi","2003-2018","binary (integer)","Race - NHPI alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
-"chi_race_aic_vietnamese","2003-2018","binary (integer)","Race - Vietnamese alone or in combination","0, 1","mother_race_vietnamese, NA",NA,NA,NA
-"chi_race_aic_wht","2003-2018","binary (integer)","Race - White alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
-"chi_race_eth7","2003-2018","factor","Race/ethnicity - 7 categories","AIAN, Asian, Black, Hispanic, Multiple, NHPI, White","NA",NA,NA,"complex recoding"
-"chi_race_eth8","2003-2018","factor","Race/ethnicity - 8 categories","AIAN, Asian, Black, Hispanic, Multiple, NHPI, Oth/unk, White","NA",NA,NA,"complex recoding"
-"chi_race_hisp","2003-2018","binary (integer)","Ethnicity","0, 1","mother_hispanic, NA",NA,NA,NA
-"chi_sex","2003-2018","binary (factor)","Sex of baby","Female, Male","sex, sex",NA,"sex",NA
-"chi_year","2003-2018","integer","Birth Year","2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018","date_of_birth_year, NA",NA,NA,"old_val & new_val blank to copy variable wholesale"
-"child_alive","2003-2018","factor","Child Alive at Discharge","N, T, Y","Child Alive, alive","Child Alive","alive",NA
-"child_antibiotics","2003-2018","binary (factor)","Abnormal Conditions of Newborn, Antibiotics for Newborn Sepsis","N, Y","Child Antibiotics, abcond1 - abcond6","Child Antibiotics","abcond1 - abcond6",NA
+"cervical_cerclage","2003-2019","binary (factor)","Obstetric Procedure, Cervical Cerclage","N, Y","Cervical Cerclage, obproc1 - obproc4","Cervical Cerclage","obproc1 - obproc4",NA
+"ch_priorpreg","2003-2019","binary (integer)","Prior Pregnancy","0, 1","priorprg, NA",NA,NA,"not available 2017+"
+"chi_age","2003-2019","numeric","Mother's age","E.g., 0, 12, 13, 14, 15","mother_calculated_age, NA",NA,NA,"old_val & new_val blank to copy variable wholesale"
+"chi_edu_mom_8","2003-2019","factor","Mother's education","<= 8th grade, 9th-12th grade, no diploma, Associate degree, Bachelor's degree, Doctorate or Professional degree, High school graduate or GED, Master's degree, Some college, no degree","mother_education, NA",NA,NA,NA
+"chi_geo_big_cities","2003-2019","factor","CHI geography: Big Cities","Auburn city, Bellevue city, Federal Way city, Kent city, Kirkland city, Renton city, Seattle city","NA",NA,NA,NA
+"chi_geo_coo_places","2003-2019","factor","CHI geography: COO Places","Balance of King County, Rainier Valley, SeaTac/Tukwila, White Center","NA",NA,NA,NA
+"chi_geo_hra_long","2003-2019","factor","CHI geograpny: HRA long names","E.g., Auburn-North, Auburn-South, Ballard, Beacon Hill/Georgetown/South Park, Bear Creek/Carnation/Duvall","NA",NA,NA,NA
+"chi_geo_hra_short","2003-2019","factor","CHI geograpny: HRA short names","E.g., Auburn-North, Auburn-South, Ballard, Beacon/Gtown/S.Park, Bear Creek/Carnation/Duvall","NA",NA,NA,NA
+"chi_geo_kc","2003-2019","integer","King County resident (mother)","1","mother_residence_county_wa_code, NA",NA,NA,NA
+"chi_geo_regions_4","2003-2019","factor","CHI geography: Regions","East, North, Seattle, South","NA",NA,NA,NA
+"chi_geo_seattle","2003-2019","binary (factor)","CHI geography: Seattle flag","Not Seattle, Seattle","NA",NA,NA,NA
+"chi_geo_wastate","2003-2019","integer","WA State resident (mother)","1","mother_residence_state_nchs_code, NA",NA,NA,NA
+"chi_geo_zip5","2003-2019","factor","Zip code (5 digit) of residence","E.g., 90759, 97002, 97188, 98001, 98002","NA",NA,NA,"complex recoding"
+"chi_nativity","2003-2019","binary (factor)","Nativity","Born in US, Foreign born","NA",NA,NA,"complex recoding"
+"chi_race_6","2003-2019","factor","Race - 6 categories","AIAN, Asian, Black, Multiple, NHPI, White","mother_race_summary_code, NA",NA,NA,NA
+"chi_race_7","2003-2019","factor","Race - 7 categories","AIAN, Asian, Black, Multiple, NHPI, Oth/unk, White","mother_race_summary_code, NA",NA,NA,NA
+"chi_race_aic_aian","2003-2019","binary (integer)","Race - AIAN alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
+"chi_race_aic_asian","2003-2019","binary (numeric)","Race - Asian alone or in combination","0, 1","NA",NA,NA,"complex recoding"
+"chi_race_aic_asianother","2003-2019","binary (integer)","Race - Asian - other alone or in combination","0, 1","mother_race_other_asian, NA",NA,NA,NA
+"chi_race_aic_black","2003-2019","binary (integer)","Race - Black alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
+"chi_race_aic_chinese","2003-2019","binary (integer)","Race - Chinese alone or in combination","0, 1","mother_race_chinese, NA",NA,NA,NA
+"chi_race_aic_filipino","2003-2019","binary (integer)","Race - Filipino alone or in combination","0, 1","mother_race_filipino, NA",NA,NA,NA
+"chi_race_aic_guam_or_chamorro","2003-2019","binary (integer)","Race - Guamanian or Chamorro alone or in combination","0, 1","mother_race_guam_or_chamorro, NA",NA,NA,NA
+"chi_race_aic_hawaiian","2003-2019","binary (integer)","Race - Hawaiian alone or in combination","0, 1","mother_race_hawaiian, NA",NA,NA,NA
+"chi_race_aic_his","2003-2019","binary (integer)","Race - Hispanic alone or in combination","0, 1","mother_hispanic, NA",NA,NA,NA
+"chi_race_aic_his_cuban","2003-2019","binary (integer)","Race - Cuban alone or in combination","0, 1","mother_hispanic_cuban, NA",NA,NA,NA
+"chi_race_aic_his_mexican","2003-2019","binary (integer)","Race - Mexican alone or in combination","0, 1","mother_hispanic_mexican, NA",NA,NA,NA
+"chi_race_aic_his_puerto_rican","2003-2019","binary (integer)","Race - Puerto Rican alone or in combination","0, 1","mother_hispanic_puerto_rican, NA",NA,NA,NA
+"chi_race_aic_indian","2003-2019","binary (integer)","Race - Asian Indian alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
+"chi_race_aic_japanese","2003-2019","binary (integer)","Race - Japanese alone or in combination","0, 1","mother_race_japanese, NA",NA,NA,NA
+"chi_race_aic_korean","2003-2019","binary (integer)","Race - Korean alone or in combination","0, 1","mother_race_korean, NA",NA,NA,NA
+"chi_race_aic_nhpi","2003-2019","binary (integer)","Race - NHPI alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
+"chi_race_aic_samoan","2003-2019","binary (integer)","Race - Samoan alone or in combination","0, 1","mother_race_samoan, NA",NA,NA,NA
+"chi_race_aic_vietnamese","2003-2019","binary (integer)","Race - Vietnamese alone or in combination","0, 1","mother_race_vietnamese, NA",NA,NA,NA
+"chi_race_aic_wht","2003-2019","binary (integer)","Race - White alone or in combination","0, 1","mother_race_summary_code, NA",NA,NA,NA
+"chi_race_eth7","2003-2019","factor","Race/ethnicity - 7 categories","AIAN, Asian, Black, Hispanic, Multiple, NHPI, White","NA",NA,NA,"complex recoding"
+"chi_race_eth8","2003-2019","factor","Race/ethnicity - 8 categories","AIAN, Asian, Black, Hispanic, Multiple, NHPI, Oth/unk, White","NA",NA,NA,"complex recoding"
+"chi_race_hisp","2003-2019","binary (integer)","Ethnicity","0, 1","mother_hispanic, NA",NA,NA,NA
+"chi_sex","2003-2019","binary (factor)","Sex of baby","Female, Male","sex, sex",NA,"sex",NA
+"chi_year","2003-2019","numeric","Birth Year","2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019","date_of_birth_year, NA",NA,NA,"old_val & new_val blank to copy variable wholesale"
+"child_alive","2003-2019","factor","Child Alive at Discharge","N, T, Y","Child Alive, alive","Child Alive","alive",NA
+"child_antibiotics","2003-2019","binary (factor)","Abnormal Conditions of Newborn, Antibiotics for Newborn Sepsis","N, Y","Child Antibiotics, abcond1 - abcond6","Child Antibiotics","abcond1 - abcond6",NA
 "child_calculated_ethnicity","2003-2017","integer","Infant's Calculated Ethnicity
 The ethnicity code given here is from the NCHS algorithm which uses mother's and father's Hispanic ethnicity to derive a code for the child's Hispanic ethnicity.
 
 Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see """"Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).""""","0, 1, 2, 3, 4, 5","Child Calculated Ethnicity, hispccal","Child Calculated Ethnicity","hispccal",NA
 "child_calculated_race","2003-2017","factor","Infant's Calculated Race","1, 2, 3, 4, 5, 7, A, B, C, D, E, F, G, H","Child Calculated Race, raceccal","Child Calculated Race","raceccal",NA
-"child_injury","2003-2018","binary (factor)","Abnormal Conditions of Newborn, Birth Injury","N, Y","Child Injury, abcond1 - abcond6","Child Injury","abcond1 - abcond6",NA
-"child_seizure","2003-2018","binary (factor)","Abnormal Conditions of Newborn, Seizure","N, Y","Child Seizure, abcond1 - abcond6","Child Seizure","abcond1 - abcond6",NA
-"child_transfer","2003-2018","binary (factor)","Baby Transferred to Another Facility","N, Y","Child Transfer, trnsferb","Child Transfer","trnsferb",NA
-"chlamydia","2003-2018","binary (factor)","Maternal Infections, Chlamydia","N, Y","Chlamydia, minfect1 - minfect7","Chlamydia","minfect1 - minfect7",NA
-"chorioamnionitis","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Chorioamnionitis Diagnosed","N, Y","Chorioamnionitis, labchar1 - labchar7","Chorioamnionitis","labchar1 - labchar7",NA
-"cigarettes_smoked_1st_tri","2003-2018","integer","Number Cigarettes Smoked during 1st Trimester","E.g., 0, 1, 2, 3, 4","Cigarettes Smoked 1st Tri, cigs_1st","Cigarettes Smoked 1st Tri","cigs_1st",NA
-"cigarettes_smoked_2nd_tri","2003-2018","integer","Number Cigarettes Smoked during 2nd Trimester","E.g., 0, 1, 2, 3, 4","Cigarettes Smoked 2nd Tri, cigs_2nd","Cigarettes Smoked 2nd Tri","cigs_2nd",NA
-"cigarettes_smoked_3_months_prior","2003-2018","integer","Number Cigarettes Smoked 3 Months Before Preg","E.g., 0, 1, 2, 3, 4","Cigarettes Smoked 3 Months Prior, cigs_bef","Cigarettes Smoked 3 Months Prior","cigs_bef",NA
-"cigarettes_smoked_3rd_tri","2003-2018","integer","Number Cigarettes Smoked during 3rd Trimester","E.g., 0, 1, 2, 3, 4","Cigarettes Smoked 3rd Tri, cigs_3rd","Cigarettes Smoked 3rd Tri","cigs_3rd",NA
-"cleft_lip","2003-2018","binary (factor)","Congenital Malformations, Cleft Lip","N, Y","Cleft Lip, malf1 - malf7","Cleft Lip","malf1 - malf7",NA
-"cleft_palate","2003-2018","binary (factor)","Congenital Malformations, Cleft Palate","N, Y","Cleft Palate, malf1 - malf7","Cleft Palate","malf1 - malf7",NA
-"congenital_anomaly_none","2003-2018","binary (factor)","Congenital Malformations, None of the Above","N, Y","Congenital Anomaly None, malf1 - malf7","Congenital Anomaly None","malf1 - malf7",NA
-"congenital_anomaly_unknown","2003-2018","binary (factor)","Congenital Malformations, Unknown","N, Y","Congenital Anomaly Unknown, malf1 - malf7","Congenital Anomaly Unknown","malf1 - malf7",NA
-"congenital_heart","2003-2018","binary (factor)","Congenital Malformations, Cyanotic Congenital Heart Disease","N, Y","Congenital Heart, malf1 - malf7","Congenital Heart","malf1 - malf7",NA
-"congenital_hernia","2003-2018","binary (factor)","Congenital Malformations, Congenital Diaphragmatic Hernia","N, Y","Congenital Hernia, malf1 - malf7","Congenital Hernia","malf1 - malf7",NA
-"csec_lowrisk","2003-2018","binary (integer)","Cesarean sections among low risk deliveries","0, 1","NA",NA,NA,"complex recoding"
-"date_first_prenatal_visit","2003-2018","factor","Date First Prenatal Visit","E.g., 2002-01-06, 2002-01-07, 2002-01-10, 2002-01-31, 2002-02-05","Date First Prenatal Visit, fpvmd4y","Date First Prenatal Visit","fpvmd4y",NA
-"date_last_menses","2003-2018","factor","Date of Last Normal Menses","E.g., 1999-01-15, 1999-09-02, 1999-09-09, 1999-10-02, 2000-02-19","Date Last Menses, mensmd4y","Date Last Menses","mensmd4y",NA
-"date_last_prenatal_visit","2003-2018","factor","Date Last Prenatal Visit","E.g., 2002-01-02, 2002-01-04, 2002-01-06, 2002-01-13, 2002-01-14","Date Last Prenatal Visit, lpvmd4y","Date Last Prenatal Visit","lpvmd4y",NA
-"date_of_birth_month","2003-2018","factor","Date of Birth Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 1, 10, 11, 12, 2, 3, 4, 5, 6, 7, 8, 9","Date of Birth Month, dob_mo","Date of Birth Month","dob_mo",NA
-"date_of_birth_year","2003-2018","integer","Date of Birth Year","2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018","Date of Birth Year, dob_yr","Date of Birth Year","dob_yr",NA
-"delivery_final","2003-2018","factor","Final route and method of delivery","C-section with trial labor, C-section with trial labor unknown, C-section without trial labor, Forceps, Spontaneous vaginal, Vacuum","delivery_method_final, NA",NA,NA,NA
-"delivery_method_calculation","2003-2018","integer","Delivery Method, Calculated","1, 2, 3, 4, 5, 6, 7, 9","Delivery Method Calculation, dmeth1","Delivery Method Calculation","dmeth1",NA
-"delivery_method_final","2003-2018","integer","Method of Delivery, Final Route and Method","0, 1, 2, 3, 4, 5, 6, 9","Delivery Method Final, dmethfin","Delivery Method Final","dmethfin",NA
-"diab_gest","2003-2018","binary (integer)","Diabetes-Gestational","0, 1","gestational_diabetes, NA",NA,NA,NA
-"diab_no","2003-2018","binary (integer)","Diabetes-No","0, 1","NA",NA,NA,"complex recoding"
-"diab_prepreg","2003-2018","binary (integer)","Diabetes-Pre Pregnancy","0, 1","prepreg_diabetes, NA",NA,NA,NA
-"dlp_medicaid","2003-2018","binary (integer)","Medicaid payment for delivery","0, 1","source_of_payment, NA",NA,NA,NA
-"down_confirm","2003-2018","binary (factor)","Congenital Malformations, Down Syndrome Karyotype Confirmed","N, Y","Down Confirm, malf1 - malf7, downsflg","Down Confirm","malf1 - malf7, downsflg",NA
-"down_pending","2003-2018","binary (factor)","Congenital Malformations, Down Syndrome Karyotype Pending","N, Y","Down Pending, malf1 - malf7, downsflg","Down Pending","malf1 - malf7, downsflg",NA
-"down_syndrome","2003-2018","binary (factor)","Congenital Malformations, Down Syndrome","N, Y","Down Syndrome, malf1 - malf7","Down Syndrome","malf1 - malf7",NA
-"ecv_failed","2003-2018","binary (factor)","Obstetric Procedure, External Cephalic Version, Failed","N, Y","ECV Failed, obproc1 - obproc4, cephaflg","ECV Failed","obproc1 - obproc4, cephaflg",NA
-"ecv_success","2003-2018","binary (factor)","Obstetric Procedure, External Cephalic Version, Successful","N, Y","ECV Success, obproc1 - obproc4, cephaflg","ECV Success","obproc1 - obproc4, cephaflg",NA
-"etl_batch_id","2003-2018","integer","SQL ETL batch ID (for QA)","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 46, 47","NA",NA,NA,NA
-"facility","2003-2018","integer","Facility ID Number","E.g., 0, 1, 7, 10, 20","Facility, facility","Facility","facility",NA
-"facility_type","2003-2018","integer","Facility Type for Place of Birth","1, 2, 3, 4, 5, 6, 7, 8","Facility Type, fac_type","Facility Type","fac_type",NA
-"facility_type_recode","2003-2018","factor","Facility type for place of birth","Birth center, Enroute, Home, Hospital, Other, Other medical facility","facility_type, NA",NA,NA,NA
-"father_birthplace_cntry_wa_code","2003-2018","integer","Father's Birthplace Country WA code","E.g., 0, 500, 501, 502, 503","Father Birthplace Cntry WA Code, bctrydad","Father Birthplace Cntry WA Code","bctrydad",NA
-"father_birthplace_country","2003-2018","factor","Father's Birth Country - Literal","E.g., -, AFGHANISTAN, AFRICA, ALBANIA, ALGERIA","Father Birthplace Country","Father Birthplace Country",NA,NA
-"father_birthplace_state","2017-2018","factor","Father's Birth State - Literal","E.g., ALABAMA, ALASKA, AMERICAN SAMOA, ARIZONA, ARKANSAS","Father Birthplace State","Father Birthplace State",NA,NA
-"father_birthplace_state_fips","2003-2018","factor","Father's Birthplace State FIPS code","E.g., AK, AL, AR, AS, AZ","Father Birthplace State FIPS","Father Birthplace State FIPS",NA,NA
-"father_bridge_race","2017-2018","integer","Father's NCHS Bridged Race","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24","Father Bridge Race","Father Bridge Race",NA,NA
-"father_calculated_age","2003-2018","integer","Father's Age
+"child_injury","2003-2019","binary (factor)","Abnormal Conditions of Newborn, Birth Injury","N, Y","Child Injury, abcond1 - abcond6","Child Injury","abcond1 - abcond6",NA
+"child_seizure","2003-2019","binary (factor)","Abnormal Conditions of Newborn, Seizure","N, Y","Child Seizure, abcond1 - abcond6","Child Seizure","abcond1 - abcond6",NA
+"child_transfer","2003-2019","binary (factor)","Baby Transferred to Another Facility","N, Y","Child Transfer, trnsferb","Child Transfer","trnsferb",NA
+"chlamydia","2003-2019","binary (factor)","Maternal Infections, Chlamydia","N, Y","Chlamydia, minfect1 - minfect7","Chlamydia","minfect1 - minfect7",NA
+"chorioamnionitis","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Chorioamnionitis Diagnosed","N, Y","Chorioamnionitis, labchar1 - labchar7","Chorioamnionitis","labchar1 - labchar7",NA
+"cigarettes_smoked_1st_tri","2003-2019","integer","Number Cigarettes Smoked during 1st Trimester","E.g., 0, 1, 2, 3, 4","Cigarettes Smoked 1st Tri, cigs_1st","Cigarettes Smoked 1st Tri","cigs_1st",NA
+"cigarettes_smoked_2nd_tri","2003-2019","integer","Number Cigarettes Smoked during 2nd Trimester","E.g., 0, 1, 2, 3, 4","Cigarettes Smoked 2nd Tri, cigs_2nd","Cigarettes Smoked 2nd Tri","cigs_2nd",NA
+"cigarettes_smoked_3_months_prior","2003-2019","integer","Number Cigarettes Smoked 3 Months Before Preg","E.g., 0, 1, 2, 3, 4","Cigarettes Smoked 3 Months Prior, cigs_bef","Cigarettes Smoked 3 Months Prior","cigs_bef",NA
+"cigarettes_smoked_3rd_tri","2003-2019","integer","Number Cigarettes Smoked during 3rd Trimester","E.g., 0, 1, 2, 3, 4","Cigarettes Smoked 3rd Tri, cigs_3rd","Cigarettes Smoked 3rd Tri","cigs_3rd",NA
+"cleft_lip","2003-2019","binary (factor)","Congenital Malformations, Cleft Lip","N, Y","Cleft Lip, malf1 - malf7","Cleft Lip","malf1 - malf7",NA
+"cleft_palate","2003-2019","binary (factor)","Congenital Malformations, Cleft Palate","N, Y","Cleft Palate, malf1 - malf7","Cleft Palate","malf1 - malf7",NA
+"congenital_anomaly_none","2003-2019","binary (factor)","Congenital Malformations, None of the Above","N, Y","Congenital Anomaly None, malf1 - malf7","Congenital Anomaly None","malf1 - malf7",NA
+"congenital_anomaly_unknown","2003-2019","binary (factor)","Congenital Malformations, Unknown","N, Y","Congenital Anomaly Unknown, malf1 - malf7","Congenital Anomaly Unknown","malf1 - malf7",NA
+"congenital_heart","2003-2019","binary (factor)","Congenital Malformations, Cyanotic Congenital Heart Disease","N, Y","Congenital Heart, malf1 - malf7","Congenital Heart","malf1 - malf7",NA
+"congenital_hernia","2003-2019","binary (factor)","Congenital Malformations, Congenital Diaphragmatic Hernia","N, Y","Congenital Hernia, malf1 - malf7","Congenital Hernia","malf1 - malf7",NA
+"csec_lowrisk","2003-2019","binary (numeric)","Cesarean sections among low risk deliveries","0, 1","NA",NA,NA,"complex recoding"
+"date_first_prenatal_visit","2003-2019","Date","Date First Prenatal Visit","E.g., 2002-01-06, 2002-01-07, 2002-01-10, 2002-01-31, 2002-02-05","Date First Prenatal Visit, fpvmd4y","Date First Prenatal Visit","fpvmd4y",NA
+"date_last_menses","2003-2019","Date","Date of Last Normal Menses","E.g., 1999-01-15, 1999-09-02, 1999-09-09, 1999-10-02, 2000-02-19","Date Last Menses, mensmd4y","Date Last Menses","mensmd4y",NA
+"date_last_prenatal_visit","2003-2019","Date","Date Last Prenatal Visit","E.g., 2002-01-02, 2002-01-04, 2002-01-06, 2002-01-13, 2002-01-14","Date Last Prenatal Visit, lpvmd4y","Date Last Prenatal Visit","lpvmd4y",NA
+"date_of_birth_month","2003-2019","factor","Date of Birth Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 1, 10, 11, 12, 2, 3, 4, 5, 6, 7, 8, 9","Date of Birth Month, dob_mo","Date of Birth Month","dob_mo",NA
+"date_of_birth_year","2003-2019","numeric","Date of Birth Year","2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019","Date of Birth Year, dob_yr","Date of Birth Year","dob_yr",NA
+"delivery_final","2003-2019","factor","Final route and method of delivery","C-section with trial labor, C-section with trial labor unknown, C-section without trial labor, Forceps, Spontaneous vaginal, Vacuum","delivery_method_final, NA",NA,NA,NA
+"delivery_method_calculation","2003-2019","numeric","Delivery Method, Calculated","1, 2, 3, 4, 5, 6, 7, 9","Delivery Method Calculation, dmeth1","Delivery Method Calculation","dmeth1",NA
+"delivery_method_final","2003-2019","integer","Method of Delivery, Final Route and Method","0, 1, 2, 3, 4, 5, 6, 9","Delivery Method Final, dmethfin","Delivery Method Final","dmethfin",NA
+"diab_gest","2003-2019","binary (integer)","Diabetes-Gestational","0, 1","gestational_diabetes, NA",NA,NA,NA
+"diab_no","2003-2019","binary (numeric)","Diabetes-No","0, 1","NA",NA,NA,"complex recoding"
+"diab_prepreg","2003-2019","binary (integer)","Diabetes-Pre Pregnancy","0, 1","prepreg_diabetes, NA",NA,NA,NA
+"dlp_medicaid","2003-2019","binary (integer)","Medicaid payment for delivery","0, 1","source_of_payment, NA",NA,NA,NA
+"down_confirm","2003-2019","binary (factor)","Congenital Malformations, Down Syndrome Karyotype Confirmed","N, Y","Down Confirm, malf1 - malf7, downsflg","Down Confirm","malf1 - malf7, downsflg",NA
+"down_pending","2003-2019","binary (factor)","Congenital Malformations, Down Syndrome Karyotype Pending","N, Y","Down Pending, malf1 - malf7, downsflg","Down Pending","malf1 - malf7, downsflg",NA
+"down_syndrome","2003-2019","binary (factor)","Congenital Malformations, Down Syndrome","N, Y","Down Syndrome, malf1 - malf7","Down Syndrome","malf1 - malf7",NA
+"ecv_failed","2003-2019","binary (factor)","Obstetric Procedure, External Cephalic Version, Failed","N, Y","ECV Failed, obproc1 - obproc4, cephaflg","ECV Failed","obproc1 - obproc4, cephaflg",NA
+"ecv_success","2003-2019","binary (factor)","Obstetric Procedure, External Cephalic Version, Successful","N, Y","ECV Success, obproc1 - obproc4, cephaflg","ECV Success","obproc1 - obproc4, cephaflg",NA
+"etl_batch_id","2003-2019","integer","SQL ETL batch ID (for QA)","46, 47, 48, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77","NA",NA,NA,NA
+"facility","2003-2019","numeric","Facility ID Number","E.g., 0, 1, 7, 10, 20","Facility, facility","Facility","facility",NA
+"facility_type","2003-2019","integer","Facility Type for Place of Birth","1, 2, 3, 4, 5, 6, 7, 8","Facility Type, fac_type","Facility Type","fac_type",NA
+"facility_type_recode","2003-2019","factor","Facility type for place of birth","Birth center, Enroute, Home, Hospital, Other, Other medical facility","facility_type, NA",NA,NA,NA
+"father_birthplace_cntry_wa_code","2003-2019","numeric","Father's Birthplace Country WA code","E.g., 0, 500, 501, 502, 503","Father Birthplace Cntry WA Code, bctrydad","Father Birthplace Cntry WA Code","bctrydad",NA
+"father_birthplace_country","2003-2019","factor","Father's Birth Country - Literal","E.g., -, AFGHANISTAN, AFRICA, ALBANIA, ALGERIA","Father Birthplace Country","Father Birthplace Country",NA,NA
+"father_birthplace_state","2017-2019","factor","Father's Birth State - Literal","E.g., ALABAMA, ALASKA, AMERICAN SAMOA, ARIZONA, ARKANSAS","Father Birthplace State","Father Birthplace State",NA,NA
+"father_birthplace_state_fips","2003-2019","factor","Father's Birthplace State FIPS code","E.g., AK, AL, AR, AS, AZ","Father Birthplace State FIPS","Father Birthplace State FIPS",NA,NA
+"father_bridge_race","2017-2019","integer","Father's NCHS Bridged Race","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24","Father Bridge Race","Father Bridge Race",NA,NA
+"father_calculated_age","2003-2019","integer","Father's Age
 Before using this field, see """"Data Quality Technical Notes - Age","E.g., 14, 15, 16, 17, 18","Father Calculated Age, age_dad","Father Calculated Age","age_dad",NA
-"father_date_of_birth","2017-2018","factor","Father's Date of Birth","E.g., 1938-10-14, 1948-01-01, 1949-07-18, 1949-08-14, 1950-07-25","Father Date of Birth","Father Date of Birth",NA,NA
-"father_educ_8th_grade_or_less","2003-2018","integer","Father's Education Years If LE 8th Grade","0, 1, 2, 3, 4, 5, 6, 7, 8","Father Educ 8th Grade or Less, dadle8ed","Father Educ 8th Grade or Less","dadle8ed",NA
-"father_education","2003-2018","integer","Father's Education Level
+"father_date_of_birth","2017-2019","Date","Father's Date of Birth","E.g., 1938-10-14, 1946-10-27, 1948-01-01, 1948-03-05, 1949-02-21","Father Date of Birth","Father Date of Birth",NA,NA
+"father_educ_8th_grade_or_less","2003-2019","integer","Father's Education Years If LE 8th Grade","0, 1, 2, 3, 4, 5, 6, 7, 8","Father Educ 8th Grade or Less, dadle8ed","Father Educ 8th Grade or Less","dadle8ed",NA
+"father_education","2003-2019","integer","Father's Education Level
 Highest grade completed by the father.","1, 2, 3, 4, 5, 6, 7, 8","Father Education, educ_dad","Father Education","educ_dad",NA
-"father_hispanic","2003-2018","integer","Father's Hispanic Origin
+"father_hispanic","2003-2019","integer","Father's Hispanic Origin
 Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see """"Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).""""","0, 1, 2, 3, 4, 5","Father Hispanic, hisp_dad","Father Hispanic","hisp_dad",NA
-"father_hispanic_cuban","2003-2018","factor","Father's Hispanic Origin, Cuban","H, N, Y","Father Hispanic Cuban, dadh_cub","Father Hispanic Cuban","dadh_cub",NA
-"father_hispanic_mexican","2003-2018","factor","Father's Hispanic Origin, Mexican","H, N, Y","Father Hispanic Mexican, dadh_mex","Father Hispanic Mexican","dadh_mex",NA
-"father_hispanic_nchs_ccodes","2017-2018","integer","Father's Hispanic Tabulation from Literal","100, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234, 235, 236, 237, 238, 239, 242, 250, 275, 281, 282, 289, 996, 998","Father Hispanic NCHS Ccodes","Father Hispanic NCHS Ccodes",NA,NA
-"father_hispanic_nchs_ecodes","2017-2018","integer","Father's Hispanic Tabulation from Checkboxes","100, 210, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234, 235, 236, 237, 238, 239, 242, 250, 260, 270, 275, 280, 281, 282, 289, 998","Father Hispanic NCHS Ecodes","Father Hispanic NCHS Ecodes",NA,NA
-"father_hispanic_no","2003-2018","binary (factor)","Father's Hispanic Origin, Not Hispanic","N, Y","Father Hispanic No, dadh_no","Father Hispanic No","dadh_no",NA
-"father_hispanic_other","2003-2018","factor","Father's Hispanic Origin, Other Hispanic","H, N, Y","Father Hispanic Other, dadh_oth","Father Hispanic Other","dadh_oth",NA
-"father_hispanic_other_specify","2017-2018","factor","Father's Hispanic Origin, Other Hispanic Literal","E.g., ARGENTINIAN, BELIZEAN, BOLIVIAN, BRAZILIAN, CENTRAL AMERICAN","Father Hispanic Other - Specify","Father Hispanic Other - Specify",NA,NA
-"father_hispanic_puerto_rican","2003-2018","factor","Father's Hispanic Origin, Puerto Rican","H, N, Y","Father Hispanic Puerto Rican, dadh_pr","Father Hispanic Puerto Rican","dadh_pr",NA
-"father_occupation_milham","2003-2018","integer","Father's Occupation - Milham
+"father_hispanic_cuban","2003-2019","factor","Father's Hispanic Origin, Cuban","H, N, Y","Father Hispanic Cuban, dadh_cub","Father Hispanic Cuban","dadh_cub",NA
+"father_hispanic_mexican","2003-2019","factor","Father's Hispanic Origin, Mexican","H, N, Y","Father Hispanic Mexican, dadh_mex","Father Hispanic Mexican","dadh_mex",NA
+"father_hispanic_nchs_ccodes","2017-2019","integer","Father's Hispanic Tabulation from Literal","E.g., 100, 207, 209, 213, 214","Father Hispanic NCHS Ccodes","Father Hispanic NCHS Ccodes",NA,NA
+"father_hispanic_nchs_ecodes","2017-2019","integer","Father's Hispanic Tabulation from Checkboxes","E.g., 100, 207, 209, 210, 213","Father Hispanic NCHS Ecodes","Father Hispanic NCHS Ecodes",NA,NA
+"father_hispanic_no","2003-2019","binary (factor)","Father's Hispanic Origin, Not Hispanic","N, Y","Father Hispanic No, dadh_no","Father Hispanic No","dadh_no",NA
+"father_hispanic_other","2003-2019","factor","Father's Hispanic Origin, Other Hispanic","H, N, Y","Father Hispanic Other, dadh_oth","Father Hispanic Other","dadh_oth",NA
+"father_hispanic_other_specify","2017-2019","factor","Father's Hispanic Origin, Other Hispanic Literal","E.g., AFRICAN AMERICAN, ARGENTINIAN, ASIAN, BASQUE, BELIZEAN","Father Hispanic Other Specify","Father Hispanic Other Specify",NA,NA
+"father_hispanic_puerto_rican","2003-2019","factor","Father's Hispanic Origin, Puerto Rican","H, N, Y","Father Hispanic Puerto Rican, dadh_pr","Father Hispanic Puerto Rican","dadh_pr",NA
+"father_occupation_milham","2003-2018","numeric","Father's Occupation - Milham
 Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 records. For further information please see the """"Data Quality Technical Notes - Occupation (Milham Codes - Mother, Father)."""" For code table see ASCII file """"occmil.asc"""". Note: there are codes on the file which are invalid.","E.g., 0, 7, 9, 10, 11","Father Occupation Milham, occm_dad","Father Occupation Milham","occm_dad",NA
-"father_race_amer_indian_alaskan","2003-2018","binary (factor)","Father's Race, American Indian/Alaska Native","N, Y","Father Race Amer Indian Alaskan, dadr_ami","Father Race Amer Indian Alaskan","dadr_ami",NA
-"father_race_asian_indian","2003-2018","binary (factor)","Father's Race, Asian Indian","N, Y","Father Race Asian Indian, dadr_asi","Father Race Asian Indian","dadr_asi",NA
-"father_race_black","2003-2018","binary (factor)","Father's Race, Black","N, Y","Father Race Black, dadr_blk","Father Race Black","dadr_blk",NA
-"father_race_calculation","2003-2018","factor","Father's Race Calculation
+"father_race_amer_indian_alaskan","2003-2019","binary (factor)","Father's Race, American Indian/Alaska Native","N, Y","Father Race Amer Indian Alaskan, dadr_ami","Father Race Amer Indian Alaskan","dadr_ami",NA
+"father_race_asian_indian","2003-2019","binary (factor)","Father's Race, Asian Indian","N, Y","Father Race Asian Indian, dadr_asi","Father Race Asian Indian","dadr_asi",NA
+"father_race_black","2003-2019","binary (factor)","Father's Race, Black","N, Y","Father Race Black, dadr_blk","Father Race Black","dadr_blk",NA
+"father_race_calculation","2003-2019","factor","Father's Race Calculation
 Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes for description).","1, 2, 3, 4, 5, 7, A, B, C, D, E, F, G, H","Father Race Calculation, race_dad","Father Race Calculation","race_dad",NA
-"father_race_chinese","2003-2018","binary (factor)","Father's Race, Chinese","N, Y","Father Race Chinese, dadr_chi","Father Race Chinese","dadr_chi",NA
-"father_race_filipino","2003-2018","binary (factor)","Father's Race, Filipino","N, Y","Father Race Filipino, dadr_fil","Father Race Filipino","dadr_fil",NA
-"father_race_guam_or_chamorro","2003-2018","binary (factor)","Father's Race, Guamanian or Chamorro","N, Y","Father Race Guam or Chamorro, dadr_gua","Father Race Guam or Chamorro","dadr_gua",NA
-"father_race_hawaiian","2003-2018","binary (factor)","Father's Race, Native Hawaiian","N, Y","Father Race Hawaiian, dadr_haw","Father Race Hawaiian","dadr_haw",NA
-"father_race_japanese","2003-2018","binary (factor)","Father's Race, Japanese","N, Y","Father Race Japanese, dadr_jap","Father Race Japanese","dadr_jap",NA
-"father_race_korean","2003-2018","binary (factor)","Father's Race, Korean","N, Y","Father Race Korean, dadr_kor","Father Race Korean","dadr_kor",NA
-"father_race_nchs_ccode_1","2017-2018","factor","Father's Race Tabulation from Literals, 1","E.g., 996, 998, A05, A09, A24","Father Race NCHS Ccode 1","Father Race NCHS Ccode 1",NA,NA
-"father_race_nchs_ccode_2","2017-2018","factor","Father's Race Tabulation from Literals, 2","A95, B21, C08, C66, G01, G37, K36, N48, N57","Father Race NCHS Ccode 2","Father Race NCHS Ccode 2",NA,NA
-"father_race_nchs_ccode_3","2017-2018","factor","Father's Race Tabulation from Literals, 3","E.g., 101, 102, 114, 115, 121","Father Race NCHS Ccode 3","Father Race NCHS Ccode 3",NA,NA
-"father_race_nchs_ccode_4","2017-2018","factor","Father's Race Tabulation from Literals, 4","121, 405, 442, 446, 447","Father Race NCHS Ccode 4","Father Race NCHS Ccode 4",NA,NA
-"father_race_nchs_ccode_5","2017-2018","factor","Father's Race Tabulation from Literals, 5","101, 512, 513, 514, 531, 532, 533, 535, 536, 538, 540, 542, 544, 547, 996, 998","Father Race NCHS Ccode 5","Father Race NCHS Ccode 5",NA,NA
-"father_race_nchs_ccode_6","None","factor","Father's Race Tabulation from Literals, 6","","Father Race NCHS Ccode 6","Father Race NCHS Ccode 6",NA,NA
-"father_race_nchs_ccode_7","2017-2018","factor","Father's Race Tabulation from Literals, 7","E.g., 101, 102, 104, 105, 106","Father Race NCHS Ccode 7","Father Race NCHS Ccode 7",NA,NA
-"father_race_nchs_ccode_8","2017-2018","factor","Father's Race Tabulation from Literals, 8","104, 105, 106, 107, 110, 118, 121, 126, 130, 202, 214, 215, 604, 609, 611, 612, 613, 617, 622, 625, 640, 669, 680","Father Race NCHS Ccode 8","Father Race NCHS Ccode 8",NA,NA
-"father_race_nchs_ecode_1","2017-2018","factor","Father's Race Tabulation from Checkboxes, 1","E.g., 100, 101, 102, 104, 105","Father Race NCHS Ecode 1","Father Race NCHS Ecode 1",NA,NA
-"father_race_nchs_ecode_2","2017-2018","factor","Father's Race Tabulation from Checkboxes, 2","E.g., 200, 202, 214, 300, 400","Father Race NCHS Ecode 2","Father Race NCHS Ecode 2",NA,NA
-"father_race_nchs_ecode_3","2017-2018","factor","Father's Race Tabulation from Checkboxes, 3","E.g., 300, 400, 404, 410, 420","Father Race NCHS Ecode 3","Father Race NCHS Ecode 3",NA,NA
-"father_race_nchs_ecode_4","2017-2018","factor","Father's Race Tabulation from Checkboxes, 4","400, 401, 410, 420, 430, 440, 447, 450, 500, 510, 512, 513, 520, 530, 600, 609, A45, B21, K36","Father Race NCHS Ecode 4","Father Race NCHS Ecode 4",NA,NA
-"father_race_nchs_ecode_5","2017-2018","factor","Father's Race Tabulation from Checkboxes, 5","411, 420, 422, 440, 450, 514, 600, 625, C08","Father Race NCHS Ecode 5","Father Race NCHS Ecode 5",NA,NA
-"father_race_nchs_ecode_6","2018","factor","Father's Race Tabulation from Checkboxes, 6","460","Father Race NCHS Ecode 6","Father Race NCHS Ecode 6",NA,NA
+"father_race_chinese","2003-2019","binary (factor)","Father's Race, Chinese","N, Y","Father Race Chinese, dadr_chi","Father Race Chinese","dadr_chi",NA
+"father_race_filipino","2003-2019","binary (factor)","Father's Race, Filipino","N, Y","Father Race Filipino, dadr_fil","Father Race Filipino","dadr_fil",NA
+"father_race_guam_or_chamorro","2003-2019","binary (factor)","Father's Race, Guamanian or Chamorro","N, Y","Father Race Guam or Chamorro, dadr_gua","Father Race Guam or Chamorro","dadr_gua",NA
+"father_race_hawaiian","2003-2019","binary (factor)","Father's Race, Native Hawaiian","N, Y","Father Race Hawaiian, dadr_haw","Father Race Hawaiian","dadr_haw",NA
+"father_race_japanese","2003-2019","binary (factor)","Father's Race, Japanese","N, Y","Father Race Japanese, dadr_jap","Father Race Japanese","dadr_jap",NA
+"father_race_korean","2003-2019","binary (factor)","Father's Race, Korean","N, Y","Father Race Korean, dadr_kor","Father Race Korean","dadr_kor",NA
+"father_race_nchs_ccode_1","2017-2019","factor","Father's Race Tabulation from Literals, 1","E.g., 996, 998, A05, A09, A24","Father Race NCHS Ccode 1","Father Race NCHS Ccode 1",NA,NA
+"father_race_nchs_ccode_2","2017-2019","factor","Father's Race Tabulation from Literals, 2","996, 998, A95, B21, B53, B57, B71, C08, C39, C66, G01, G37, K36, M47, N34, N48, N57, N75","Father Race NCHS Ccode 2","Father Race NCHS Ccode 2",NA,NA
+"father_race_nchs_ccode_3","2017-2019","factor","Father's Race Tabulation from Literals, 3","E.g., 101, 102, 114, 115, 117","Father Race NCHS Ccode 3","Father Race NCHS Ccode 3",NA,NA
+"father_race_nchs_ccode_4","2017-2019","factor","Father's Race Tabulation from Literals, 4","121, 405, 412, 442, 445, 446, 447, 465, 472, 475, 998","Father Race NCHS Ccode 4","Father Race NCHS Ccode 4",NA,NA
+"father_race_nchs_ccode_5","2017-2019","factor","Father's Race Tabulation from Literals, 5","101, 421, 444, 512, 513, 514, 515, 531, 532, 533, 534, 535, 536, 538, 540, 542, 544, 547, 640, 670, 996, 998","Father Race NCHS Ccode 5","Father Race NCHS Ccode 5",NA,NA
+"father_race_nchs_ccode_6","2019","factor","Father's Race Tabulation from Literals, 6","421, 513, 536, 540, 542","Father Race NCHS Ccode 6","Father Race NCHS Ccode 6",NA,NA
+"father_race_nchs_ccode_7","2017-2019","factor","Father's Race Tabulation from Literals, 7","E.g., 101, 102, 104, 105, 106","Father Race NCHS Ccode 7","Father Race NCHS Ccode 7",NA,NA
+"father_race_nchs_ccode_8","2017-2019","factor","Father's Race Tabulation from Literals, 8","E.g., 101, 102, 104, 105, 106","Father Race NCHS Ccode 8","Father Race NCHS Ccode 8",NA,NA
+"father_race_nchs_ecode_1","2017-2019","factor","Father's Race Tabulation from Checkboxes, 1","E.g., 100, 101, 102, 104, 105","Father Race NCHS Ecode 1","Father Race NCHS Ecode 1",NA,NA
+"father_race_nchs_ecode_2","2017-2019","factor","Father's Race Tabulation from Checkboxes, 2","E.g., 200, 202, 214, 300, 400","Father Race NCHS Ecode 2","Father Race NCHS Ecode 2",NA,NA
+"father_race_nchs_ecode_3","2017-2019","factor","Father's Race Tabulation from Checkboxes, 3","E.g., 300, 400, 404, 405, 410","Father Race NCHS Ecode 3","Father Race NCHS Ecode 3",NA,NA
+"father_race_nchs_ecode_4","2017-2019","factor","Father's Race Tabulation from Checkboxes, 4","400, 401, 410, 420, 430, 440, 444, 447, 450, 465, 500, 510, 512, 513, 520, 530, 600, 609, 669, A45, B21, E03, K36, L79, M41, P19","Father Race NCHS Ecode 4","Father Race NCHS Ecode 4",NA,NA
+"father_race_nchs_ecode_5","2017-2019","factor","Father's Race Tabulation from Checkboxes, 5","411, 420, 422, 440, 450, 500, 512, 514, 600, 625, B21, C08, L79, M41","Father Race NCHS Ecode 5","Father Race NCHS Ecode 5",NA,NA
+"father_race_nchs_ecode_6","2018-2019","binary (factor)","Father's Race Tabulation from Checkboxes, 6","460, C39","Father Race NCHS Ecode 6","Father Race NCHS Ecode 6",NA,NA
 "father_race_nchs_ecode_7","None","factor","Father's Race Tabulation from Checkboxes, 7","","Father Race NCHS Ecode 7","Father Race NCHS Ecode 7",NA,NA
 "father_race_nchs_ecode_8","None","factor","Father's Race Tabulation from Checkboxes, 8","","Father Race NCHS Ecode 8","Father Race NCHS Ecode 8",NA,NA
-"father_race_other","2003-2018","binary (factor)","Father's Race, Other","N, Y","Father Race Other, dadr_oth","Father Race Other","dadr_oth",NA
-"father_race_other_1","2017-2018","factor","Father's Race Literal 1, Other","E.g., AFGHAN, AFRICAN, ALBANIAN, AMERICAN, ARAB","Father Race Other 1","Father Race Other 1",NA,NA
-"father_race_other_2","2017-2018","factor","Father's Race Literal 2, Other","AFGHAN, AFRICAN, CENTRAL AMERICAN, CREOLE, CUBAN, DOMINICAN, FRENCH, GERMAN, GUATEMALAN, HAITIAN, HISPANA, HISPANIC, IRISH, ITALIAN, JAMAICAN, JEWISH, MEXICAN, PALESTINIAN, PORTUGUESE, PUERTO RICAN, RUSSIAN, SALVADORAN, SCOTTISH, SPANISH","Father Race Other 2","Father Race Other 2",NA,NA
-"father_race_other_asian","2003-2018","binary (factor)","Father's Race, Other Asian","N, Y","Father Race Other Asian, dadr_oas","Father Race Other Asian","dadr_oas",NA
-"father_race_other_asian_1","2017-2018","factor","Father's Race Literal 1, Other Asian","E.g., AFGHAN, AMERASIAN, ASIAN, AZERBAIJANI, BANGLADESHI","Father Race Other Asian 1","Father Race Other Asian 1",NA,NA
-"father_race_other_asian_2","2017-2018","factor","Father's Race Literal 2, Other Asian","AFGHAN, KHMER, LAOTIAN, SRI LANKAN, THAI","Father Race Other Asian 2","Father Race Other Asian 2",NA,NA
-"father_race_other_pi","2003-2018","binary (factor)","Father's Race, Other Pacific Islander","N, Y","Father Race Other PI, dadr_opi","Father Race Other PI","dadr_opi",NA
-"father_race_other_pi_1","2017-2018","factor","Father's Race Literal 1, Other Pacific Islander","CHUUKESE, FIJIAN, KOSRAEAN, MAORI, MARIANAS ISLANDER, MARSHALLESE, MICRONESIAN, NEW ZEALANDER, NOT STATED, PACIFIC ISLANDER, PALAUAN, PAPUAN, POLYNESIAN, SAIPANESE, TAHITIAN, TONGAN, UNKNOWN","Father Race Other PI 1","Father Race Other PI 1",NA,NA
-"father_race_other_pi_2","None","factor","Father's Race Literal 2, Other Pacific Islander","","Father Race Other PI 2","Father Race Other PI 2",NA,NA
-"father_race_samoan","2003-2018","binary (factor)","Father's Race, Samoan","N, Y","Father Race Samoan, dadr_sam","Father Race Samoan","dadr_sam",NA
-"father_race_summary_code","2003-2018","integer","Father's Summary Race","E.g., 10, 11, 12, 13, 14","Father Race Summary Code, faracsum","Father Race Summary Code","faracsum",NA
-"father_race_tribe_1","2017-2018","factor","Father's Race Literal 1, American Indian/Alaska Native","E.g., ALASKAN NATIVE, ALEUT, ALGONQUIN, AMERICAN INDIAN, APACHE","Father Race Tribe 1","Father Race Tribe 1",NA,NA
-"father_race_tribe_2","2017-2018","factor","Father's Race Literal 2, American Indian/Alaska Native","ATHABASCAN, CHEROKEE, CHOCTAW, CREEK, MAYAN, PAIUTE, SIOUX, TLINGIT, TSIMSHIAN","Father Race Tribe 2","Father Race Tribe 2",NA,NA
-"father_race_vietnamese","2003-2018","binary (factor)","Father's Race, Vietnamese","N, Y","Father Race Vietnamese, dadr_vie","Father Race Vietnamese","dadr_vie",NA
-"father_race_white","2003-2018","binary (factor)","Father's Race, White","N, Y","Father Race White, dadr_wht","Father Race White","dadr_wht",NA
-"fertility_treatment","2003-2018","binary (factor)","Medical Risk Factor, Infertility Treatments, Drugs","N, Y","Fertility Treatment, mrf1 - mrf6","Fertility Treatment","mrf1 - mrf6",NA
-"fetal_intolerance","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Fetal Intolerance of Labor","N, Y","Fetal Intolerance, labchar1 - labchar7","Fetal Intolerance","labchar1 - labchar7",NA
-"fetal_pres","2003-2018","factor","Method of Delivery, Fetal Presentation","Breech, Cephalic, Other","fetal_presentation, NA",NA,NA,"old_val & new_val blank to copy variable wholesale"
-"fetal_presentation","2003-2018","factor","Method of Delivery, Fetal Presentation","1, 2, 3, 9, B, C, O","Fetal Presentation, fet_pres","Fetal Presentation","fet_pres",NA
-"first_prenatal_visit_day","2003-2018","factor","First Prenatal Visit Day","E.g., 01, 02, 03, 04, 05","First Prenatal Visit Day, fpv_da","First Prenatal Visit Day","fpv_da",NA
-"first_prenatal_visit_month","2003-2018","factor","First Prenatal Visit Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 88","First Prenatal Visit Month, fpv_mo","First Prenatal Visit Month","fpv_mo",NA
-"first_prenatal_visit_year","2003-2018","integer","First Prenatal Visit Year","2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 8888, 9999","First Prenatal Visit Year, fpv_yr","First Prenatal Visit Year","fpv_yr",NA
-"gastroschisis","2003-2018","binary (factor)","Congenital Malformations, Gastrochisis","N, Y","Gastroschisis, malf1 - malf7","Gastroschisis","malf1 - malf7",NA
-"gestation_calculated_flag","2003-2018","integer","Gestation, Calculated Flag
+"father_race_other","2003-2019","binary (factor)","Father's Race, Other","N, Y","Father Race Other, dadr_oth","Father Race Other","dadr_oth",NA
+"father_race_other_1","2017-2019","factor","Father's Race Literal 1, Other","E.g., AFGHAN, AFRICAN, AFRICIA, AFRO LATINO, ALBANIAN","Father Race Other 1","Father Race Other 1",NA,NA
+"father_race_other_2","2017-2019","factor","Father's Race Literal 2, Other","E.g., AFGHAN, AFRICAN, AMERICAN, ARAB, ARMENIAN","Father Race Other 2","Father Race Other 2",NA,NA
+"father_race_other_asian","2003-2019","binary (factor)","Father's Race, Other Asian","N, Y","Father Race Other Asian, dadr_oas","Father Race Other Asian","dadr_oas",NA
+"father_race_other_asian_1","2017-2019","factor","Father's Race Literal 1, Other Asian","E.g., AFGHAN, AMERASIAN, ASIAN, AZERBAIJANI, BANGLADESHI","Father Race Other Asian 1","Father Race Other Asian 1",NA,NA
+"father_race_other_asian_2","2017-2019","factor","Father's Race Literal 2, Other Asian","AFGHAN, CAMBODIAN, KHMER, LAOTIAN, MIEN, MONGOLIAN, NEPALI, PAKISTANI, SRI LANKAN, TAIWANESE, THAI, UNKNOWN","Father Race Other Asian 2","Father Race Other Asian 2",NA,NA
+"father_race_other_pi","2003-2019","binary (factor)","Father's Race, Other Pacific Islander","N, Y","Father Race Other PI, dadr_opi","Father Race Other PI","dadr_opi",NA
+"father_race_other_pi_1","2017-2019","factor","Father's Race Literal 1, Other Pacific Islander","CAROLINIAN, CHUUKESE, DOMINICAN REPUBLIC, FIJIAN, FILIPINO, INDIAN, ISLANDER, KOSRAEAN, MAORI, MARIANAS ISLANDER, MARSHALLESE, MICRONESIAN, NEW ZEALANDER, NOT STATED, OKINANA, PACIFIC ISLANDER, PALAUAN, PAPUAN, POLYNESIAN, SAIPANESE, TAHITIAN, TOKELAUAN, TONGAN, UNKNOWN","Father Race Other PI 1","Father Race Other PI 1",NA,NA
+"father_race_other_pi_2","2019","factor","Father's Race Literal 2, Other Pacific Islander","CHUUKESE, FIJIAN, FILIPINO, MICRONESIAN, REFALAWASCH, TONGAN","Father Race Other PI 2","Father Race Other PI 2",NA,NA
+"father_race_samoan","2003-2019","binary (factor)","Father's Race, Samoan","N, Y","Father Race Samoan, dadr_sam","Father Race Samoan","dadr_sam",NA
+"father_race_summary_code","2003-2019","integer","Father's Summary Race","E.g., 10, 11, 12, 13, 14","Father Race Summary Code, faracsum","Father Race Summary Code","faracsum",NA
+"father_race_tribe_1","2017-2019","factor","Father's Race Literal 1, American Indian/Alaska Native","E.g., ALASKAN NATIVE, ALEUT, ALGONQUIN, AMERICAN INDIAN, APACHE","Father Race Tribe 1","Father Race Tribe 1",NA,NA
+"father_race_tribe_2","2017-2019","factor","Father's Race Literal 2, American Indian/Alaska Native","ALASKAN NATIVE, ATHABASCAN, CHEROKEE, CHICKASAW, CHINOOK, CHOCTAW, COMANCHE, CREEK, HAIDA, INUIT, MAYAN, NOT STATED, OJIBWE, OKLAHOMA, PAIUTE, SIOUX, TLINGIT, TSIMSHIAN, UNKNOWN","Father Race Tribe 2","Father Race Tribe 2",NA,NA
+"father_race_vietnamese","2003-2019","binary (factor)","Father's Race, Vietnamese","N, Y","Father Race Vietnamese, dadr_vie","Father Race Vietnamese","dadr_vie",NA
+"father_race_white","2003-2019","binary (factor)","Father's Race, White","N, Y","Father Race White, dadr_wht","Father Race White","dadr_wht",NA
+"fertility_treatment","2003-2019","binary (factor)","Medical Risk Factor, Infertility Treatments, Drugs","N, Y","Fertility Treatment, mrf1 - mrf6","Fertility Treatment","mrf1 - mrf6",NA
+"fetal_intolerance","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Fetal Intolerance of Labor","N, Y","Fetal Intolerance, labchar1 - labchar7","Fetal Intolerance","labchar1 - labchar7",NA
+"fetal_pres","2003-2019","factor","Method of Delivery, Fetal Presentation","Breech, Cephalic, Other","fetal_presentation, NA",NA,NA,"old_val & new_val blank to copy variable wholesale"
+"fetal_presentation","2003-2019","factor","Method of Delivery, Fetal Presentation","1, 2, 3, 9, B, C, O","Fetal Presentation, fet_pres","Fetal Presentation","fet_pres",NA
+"first_prenatal_visit_day","2003-2019","factor","First Prenatal Visit Day","E.g., 01, 02, 03, 04, 05","First Prenatal Visit Day, fpv_da","First Prenatal Visit Day","fpv_da",NA
+"first_prenatal_visit_month","2003-2019","factor","First Prenatal Visit Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 88","First Prenatal Visit Month, fpv_mo","First Prenatal Visit Month","fpv_mo",NA
+"first_prenatal_visit_year","2003-2019","numeric","First Prenatal Visit Year","2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 8888, 9999","First Prenatal Visit Year, fpv_yr","First Prenatal Visit Year","fpv_yr",NA
+"gastroschisis","2003-2019","binary (factor)","Congenital Malformations, Gastrochisis","N, Y","Gastroschisis, malf1 - malf7","Gastroschisis","malf1 - malf7",NA
+"gestation_calculated_flag","2003-2019","numeric","Gestation, Calculated Flag
 Indicates whether the calculated Gestation (gestcalc) field was calculated based on last menses date or estimated based on birth weight.","0, 1, 9","Gestation Calculated Flag, gestflag","Gestation Calculated Flag","gestflag",NA
-"gestation_estimate","2003-2018","integer","Gestation Estimate in Weeks
+"gestation_estimate","2003-2019","integer","Gestation Estimate in Weeks
 In weeks as estimated by the physician at the time of the delivery. Before using this field, see """"Data Quality Technical Notes - Gestational Age – Calculated and Clinical Estimate.""""","E.g., 3, 4, 7, 8, 9","Gestation Estimate, gest_est","Gestation Estimate","gest_est",NA
-"gestational_diabetes","2003-2018","binary (factor)","Medical Risk Factor, Diabetes, Gestational","N, Y","Gestational Diabetes, mrf1 - mrf6, diabetes","Gestational Diabetes","mrf1 - mrf6, diabetes",NA
-"gestational_hypertention","2003-2018","binary (factor)","Medical Risk Factor, Hypertension, Gestational","N, Y","Gestational Hypertention, mrf1 - mrf6, hyperflg","Gestational Hypertention","mrf1 - mrf6, hyperflg",NA
-"gonorrhea","2003-2018","binary (factor)","Maternal Infections, Gonorrhea","N, Y","Gonorrhea, minfect1 - minfect7","Gonorrhea","minfect1 - minfect7",NA
-"group_b_strep","2003-2018","binary (factor)","Medical Risk Factor, Group B Strep","N, Y","Group B Strep, mrf1 - mrf6","Group B Strep","mrf1 - mrf6",NA
-"head_circumference","2003-2018","integer","Child's Head Circumference, Centimeters","E.g., 13, 15, 16, 17, 18","Head Circumference, circumf","Head Circumference","circumf",NA
-"hep_b","2003-2018","binary (factor)","Maternal Infections, Hepatitis B","N, Y","Hep B, minfect1 - minfect7","Hep B","minfect1 - minfect7",NA
-"hep_c","2003-2018","binary (factor)","Maternal Infections, Hepatitis C","N, Y","Hep C, minfect1 - minfect7","Hep C","minfect1 - minfect7",NA
-"herpes","2003-2018","binary (factor)","Maternal Infections, Herpes Simplex Virus (HSV)","N, Y","Herpes, minfect1 - minfect7","Herpes","minfect1 - minfect7",NA
-"hiv","2003-2018","binary (factor)","Maternal Infections, HIV Infection","N, Y","HIV, minfect1 - minfect7","HIV","minfect1 - minfect7",NA
-"htn_gest","2003-2018","binary (integer)","Hypertension-Gestational","0, 1","gestational_hypertention, NA",NA,NA,NA
-"htn_no","2003-2018","binary (integer)","Hypertension-No","0, 1","NA",NA,NA,"complex recoding"
-"htn_prepreg","2003-2018","binary (integer)","Hypertension-Pre Pregnancy","0, 1","prepreg_hypertension, NA",NA,NA,NA
-"hypertension_eclampsia","2003-2018","binary (factor)","Medical Risk Factor, Hypertension, Eclampsia","N, Y","Hypertension Eclampsia, mrf1 - mrf6","Hypertension Eclampsia","mrf1 - mrf6",NA
-"hypospadias","2003-2018","binary (factor)","Congenital Malformations, Hypospadias","N, Y","Hypospadias, malf1 - malf7","Hypospadias","malf1 - malf7",NA
-"hysterectomy","2003-2018","binary (factor)","Maternal Morbidity, Unplanned Hysterectomy","N, Y","Hysterectomy, mmorbid1 - mmorbid5","Hysterectomy","mmorbid1 - mmorbid5",NA
-"induction","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Induction of Labor","N, Y","Induction, labchar1 - labchar7","Induction","labchar1 - labchar7",NA
-"inf_death","2003-2018","binary (integer)","Infant death flag (string)","0, 1","infant_death_flag, NA",NA,NA,"previous notes said not available for 2010 and 2012, but it is in the data and looks reasonable"
+"gestational_diabetes","2003-2019","binary (factor)","Medical Risk Factor, Diabetes, Gestational","N, Y","Gestational Diabetes, mrf1 - mrf6, diabetes","Gestational Diabetes","mrf1 - mrf6, diabetes",NA
+"gestational_hypertention","2003-2019","binary (factor)","Medical Risk Factor, Hypertension, Gestational","N, Y","Gestational Hypertention, mrf1 - mrf6, hyperflg","Gestational Hypertention","mrf1 - mrf6, hyperflg",NA
+"gonorrhea","2003-2019","binary (factor)","Maternal Infections, Gonorrhea","N, Y","Gonorrhea, minfect1 - minfect7","Gonorrhea","minfect1 - minfect7",NA
+"group_b_strep","2003-2019","binary (factor)","Medical Risk Factor, Group B Strep","N, Y","Group B Strep, mrf1 - mrf6","Group B Strep","mrf1 - mrf6",NA
+"head_circumference","2003-2019","integer","Child's Head Circumference, Centimeters","E.g., 13, 15, 16, 17, 18","Head Circumference, circumf","Head Circumference","circumf",NA
+"hep_b","2003-2019","binary (factor)","Maternal Infections, Hepatitis B","N, Y","Hep B, minfect1 - minfect7","Hep B","minfect1 - minfect7",NA
+"hep_c","2003-2019","binary (factor)","Maternal Infections, Hepatitis C","N, Y","Hep C, minfect1 - minfect7","Hep C","minfect1 - minfect7",NA
+"herpes","2003-2019","binary (factor)","Maternal Infections, Herpes Simplex Virus (HSV)","N, Y","Herpes, minfect1 - minfect7","Herpes","minfect1 - minfect7",NA
+"hiv","2003-2019","binary (factor)","Maternal Infections, HIV Infection","N, Y","HIV, minfect1 - minfect7","HIV","minfect1 - minfect7",NA
+"htn_gest","2003-2019","binary (integer)","Hypertension-Gestational","0, 1","gestational_hypertention, NA",NA,NA,NA
+"htn_no","2003-2019","binary (numeric)","Hypertension-No","0, 1","NA",NA,NA,"complex recoding"
+"htn_prepreg","2003-2019","binary (integer)","Hypertension-Pre Pregnancy","0, 1","prepreg_hypertension, NA",NA,NA,NA
+"hypertension_eclampsia","2003-2019","binary (factor)","Medical Risk Factor, Hypertension, Eclampsia","N, Y","Hypertension Eclampsia, mrf1 - mrf6","Hypertension Eclampsia","mrf1 - mrf6",NA
+"hypospadias","2003-2019","binary (factor)","Congenital Malformations, Hypospadias","N, Y","Hypospadias, malf1 - malf7","Hypospadias","malf1 - malf7",NA
+"hysterectomy","2003-2019","binary (factor)","Maternal Morbidity, Unplanned Hysterectomy","N, Y","Hysterectomy, mmorbid1 - mmorbid5","Hysterectomy","mmorbid1 - mmorbid5",NA
+"induction","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Induction of Labor","N, Y","Induction, labchar1 - labchar7","Induction","labchar1 - labchar7",NA
+"inf_death","2003-2019","binary (integer)","Infant death flag (string)","0, 1","infant_death_flag, NA",NA,NA,"previous notes said not available for 2010 and 2012, but it is in the data and looks reasonable"
 "infant_death_flag","2003-2016","factor","Indicates that the infant died by the age of 1 year. Before using this field, see Data Technical Notes - Infant Death Flag.","X","Infant Death Flag, dthflg","Infant Death Flag","dthflg",NA
-"infections_none","2003-2018","binary (factor)","Maternal Infections, None of the Above","N, Y","Infections None, minfect1 - minfect7","Infections None","minfect1 - minfect7",NA
-"infections_other","2003-2018","binary (factor)","Maternal Infections, Other","N, Y","Infections Other, minfect1 - minfect7","Infections Other","minfect1 - minfect7",NA
-"infections_other_specify","2017-2018","factor","Maternal Infections, Other Literal Specify","E.g., +TRICHOMONAS, ABCESS, ABSCESS, ABSCESS, SINUS INFECTION, ABSCESS,URI","Infections Other Specify","Infections Other Specify",NA,NA
-"infections_unknown","2003-2018","binary (factor)","Maternal Infections, Unknown","N, Y","Infections Unknown, minfect1 - minfect7","Infections Unknown","minfect1 - minfect7",NA
-"intended_facility","2003-2018","integer","Intended Facility Type","1, 3, 4, 6, 7","Intended Facility, fac_int","Intended Facility","fac_int",NA
-"intensive_care","2003-2018","binary (factor)","Maternal Morbidity, Admission to Intensive Care Unit","N, Y","Intensive Care, mmorbid1 - mmorbid5","Intensive Care","mmorbid1 - mmorbid5",NA
-"kc_occ","2003-2018","binary (integer)","King County occurence (mother)","0, 1","birthplace_county_wa_code, NA",NA,NA,NA
-"kotelchuck","2003-2018","binary (integer)","Kotelchuck-Adequate (>=80% of expected visits)","0, 1","NA",NA,NA,"complex recoding"
-"labor_onset_none","2003-2018","binary (factor)","Onset of Labor, None of the Above","N, Y","Labor Onset None, labons1 - labons3","Labor Onset None","labons1 - labons3",NA
-"labor_onset_unknown","2003-2018","binary (factor)","Onset of Labor, Unknown","N, Y","Labor Onset Unknown, labons1 - labons3","Labor Onset Unknown","labons1 - labons3",NA
-"last_live_birth_month","2003-2018","factor","Last Live Birth Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 1, 10, 11, 12, 2, 3, 4, 5, 6, 7, 8, 88, 9","Last Live Birth Month, llb_mo","Last Live Birth Month","llb_mo",NA
-"last_live_birth_year","2003-2018","integer","Last Live Birth Year","E.g., 1200, 1906, 1909, 1965, 1966","Last Live Birth Year, llb_yr","Last Live Birth Year","llb_yr",NA
-"last_menses_day","2003-2018","factor","Last Menses Day","E.g., 01, 02, 03, 04, 05","Last Menses Day, mens_da","Last Menses Day","mens_da",NA
-"last_menses_month","2003-2018","factor","Last Menses Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12","Last Menses Month, mens_mo","Last Menses Month","mens_mo",NA
-"last_menses_year","2003-2018","integer","Last Menses Year","1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 9999","Last Menses Year, mens_yr","Last Menses Year","mens_yr",NA
-"last_prenatal_visit_day","2003-2018","factor","Last Prenatal Visit Day","E.g., 01, 02, 03, 04, 05","Last Prenatal Visit Day, lpv_da","Last Prenatal Visit Day","lpv_da",NA
-"last_prenatal_visit_month","2003-2018","factor","Last Prenatal Visit Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 88","Last Prenatal Visit Month, lpv_mo","Last Prenatal Visit Month","lpv_mo",NA
-"last_prenatal_visit_year","2003-2018","integer","Last Prenatal Visit Year","2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 8888, 9999","Last Prenatal Visit Year, lpv_yr","Last Prenatal Visit Year","lpv_yr",NA
-"limb_defect","2003-2018","binary (factor)","Congenital Malformations, Limb Reduction Defect","N, Y","Limb Defect, malf1 - malf7","Limb Defect","malf1 - malf7",NA
-"marriage","2003-2018","binary (integer)","Mother's marital status","0, 1","mother_marital_status, NA",NA,NA,NA
-"mat_labor_characteristics_none","2003-2018","binary (factor)","Characteristics of Labor and Delivery, None of the Above","N, Y","Mat Labor Characteristics None, labchar1 - labchar7","Mat Labor Characteristics None","labchar1 - labchar7",NA
-"mat_labor_characteristics_unknow","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Unknown","N, Y","Mat Labor Characteristics Unknow, labchar1 - labchar7","Mat Labor Characteristics Unknow","labchar1 - labchar7",NA
-"maternal_morbidity_none","2003-2018","binary (factor)","Maternal Morbidity, None of the Above","N, Y","Maternal Morbidity None, mmorbid1 - mmorbid5","Maternal Morbidity None","mmorbid1 - mmorbid5",NA
-"maternal_morbidity_unknown","2003-2018","binary (factor)","Maternal Morbidity, Unknown","N, Y","Maternal Morbidity Unknown, mmorbid1 - mmorbid5","Maternal Morbidity Unknown","mmorbid1 - mmorbid5",NA
-"maternal_transfusion","2003-2018","binary (factor)","Maternal Morbidity, Maternal Transfusion","N, Y","Maternal Transfusion, mmorbid1 - mmorbid5","Maternal Transfusion","mmorbid1 - mmorbid5",NA
-"meconium_stain","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Meconium Staining","N, Y","Meconium Stain, labchar1 - labchar7","Meconium Stain","labchar1 - labchar7",NA
-"month_prenatal_care_began","2003-2018","integer","Month Prenatal Care Began
+"infections_none","2003-2019","binary (factor)","Maternal Infections, None of the Above","N, Y","Infections None, minfect1 - minfect7","Infections None","minfect1 - minfect7",NA
+"infections_other","2003-2019","binary (factor)","Maternal Infections, Other","N, Y","Infections Other, minfect1 - minfect7","Infections Other","minfect1 - minfect7",NA
+"infections_other_specify","2017-2019","factor","Maternal Infections, Other Literal Specify","E.g., +TRICHOMONAS, ABCESS, ABSCESS, ABSCESS, SINUS INFECTION, ABSCESS,URI","Infections Other Specify","Infections Other Specify",NA,NA
+"infections_unknown","2003-2019","binary (factor)","Maternal Infections, Unknown","N, Y","Infections Unknown, minfect1 - minfect7","Infections Unknown","minfect1 - minfect7",NA
+"intended_facility","2003-2019","integer","Intended Facility Type","1, 3, 4, 6, 7","Intended Facility, fac_int","Intended Facility","fac_int",NA
+"intensive_care","2003-2019","binary (factor)","Maternal Morbidity, Admission to Intensive Care Unit","N, Y","Intensive Care, mmorbid1 - mmorbid5","Intensive Care","mmorbid1 - mmorbid5",NA
+"kc_occ","2003-2019","binary (integer)","King County occurence (mother)","0, 1","birthplace_county_wa_code, NA",NA,NA,NA
+"kotelchuck","2003-2019","binary (numeric)","Kotelchuck-Adequate (>=80% of expected visits)","0, 1","NA",NA,NA,"complex recoding"
+"labor_onset_none","2003-2019","binary (factor)","Onset of Labor, None of the Above","N, Y","Labor Onset None, labons1 - labons3","Labor Onset None","labons1 - labons3",NA
+"labor_onset_unknown","2003-2019","binary (factor)","Onset of Labor, Unknown","N, Y","Labor Onset Unknown, labons1 - labons3","Labor Onset Unknown","labons1 - labons3",NA
+"last_live_birth_month","2003-2019","factor","Last Live Birth Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 1, 10, 11, 12, 2, 3, 4, 5, 6, 7, 8, 88, 9","Last Live Birth Month, llb_mo","Last Live Birth Month","llb_mo",NA
+"last_live_birth_year","2003-2019","numeric","Last Live Birth Year","E.g., 1200, 1906, 1909, 1965, 1966","Last Live Birth Year, llb_yr","Last Live Birth Year","llb_yr",NA
+"last_menses_day","2003-2019","factor","Last Menses Day","E.g., 01, 02, 03, 04, 05","Last Menses Day, mens_da","Last Menses Day","mens_da",NA
+"last_menses_month","2003-2019","factor","Last Menses Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12","Last Menses Month, mens_mo","Last Menses Month","mens_mo",NA
+"last_menses_year","2003-2019","numeric","Last Menses Year","1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 9999","Last Menses Year, mens_yr","Last Menses Year","mens_yr",NA
+"last_prenatal_visit_day","2003-2019","factor","Last Prenatal Visit Day","E.g., 01, 02, 03, 04, 05","Last Prenatal Visit Day, lpv_da","Last Prenatal Visit Day","lpv_da",NA
+"last_prenatal_visit_month","2003-2019","factor","Last Prenatal Visit Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 88","Last Prenatal Visit Month, lpv_mo","Last Prenatal Visit Month","lpv_mo",NA
+"last_prenatal_visit_year","2003-2019","numeric","Last Prenatal Visit Year","2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 8888, 9899, 9999","Last Prenatal Visit Year, lpv_yr","Last Prenatal Visit Year","lpv_yr",NA
+"limb_defect","2003-2019","binary (factor)","Congenital Malformations, Limb Reduction Defect","N, Y","Limb Defect, malf1 - malf7","Limb Defect","malf1 - malf7",NA
+"marriage","2003-2019","binary (integer)","Mother's marital status","0, 1","mother_marital_status, NA",NA,NA,NA
+"mat_labor_characteristics_none","2003-2019","binary (factor)","Characteristics of Labor and Delivery, None of the Above","N, Y","Mat Labor Characteristics None, labchar1 - labchar7","Mat Labor Characteristics None","labchar1 - labchar7",NA
+"mat_labor_characteristics_unknow","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Unknown","N, Y","Mat Labor Characteristics Unknow, labchar1 - labchar7","Mat Labor Characteristics Unknow","labchar1 - labchar7",NA
+"maternal_morbidity_none","2003-2019","binary (factor)","Maternal Morbidity, None of the Above","N, Y","Maternal Morbidity None, mmorbid1 - mmorbid5","Maternal Morbidity None","mmorbid1 - mmorbid5",NA
+"maternal_morbidity_unknown","2003-2019","binary (factor)","Maternal Morbidity, Unknown","N, Y","Maternal Morbidity Unknown, mmorbid1 - mmorbid5","Maternal Morbidity Unknown","mmorbid1 - mmorbid5",NA
+"maternal_transfusion","2003-2019","binary (factor)","Maternal Morbidity, Maternal Transfusion","N, Y","Maternal Transfusion, mmorbid1 - mmorbid5","Maternal Transfusion","mmorbid1 - mmorbid5",NA
+"meconium_stain","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Meconium Staining","N, Y","Meconium Stain, labchar1 - labchar7","Meconium Stain","labchar1 - labchar7",NA
+"month_prenatal_care_began","2003-2019","integer","Month Prenatal Care Began
 Indicates the month from the beginning of the pregnancy at which Mother entered prenatal care. Before using this field, see """"Data Quality Technical Notes - Month Prenatal Care Began."""" As of 
 2003, this field is calculated from date of first prenatal visit and menses date.","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10","Month Prenatal Care Began, pnatalmo","Month Prenatal Care Began","pnatalmo",NA
-"mother_birthplace_cntry_wa_code","2003-2018","integer","Mother's Birthplace Country WA Code","E.g., 0, 500, 501, 502, 503","Mother Birthplace Cntry WA Code, bctrymom","Mother Birthplace Cntry WA Code","bctrymom",NA
-"mother_birthplace_country","2003-2018","factor","Mother's Birth Country - Literal","E.g., AFGHANISTAN, AFRICA, ALBANIA, ALGERIA, AMERICAN SAMOA","Mother Birthplace Country","Mother Birthplace Country",NA,NA
-"mother_birthplace_foreign","2003-2018","binary (integer)","Place of Birth of Mother-Foreign","0, 1","NA",NA,NA,"complex recoding"
-"mother_birthplace_state","2017-2018","factor","Mother's Birth State - Literal","E.g., ALABAMA, ALASKA, AMERICAN SAMOA, ARIZONA, ARKANSAS","Mother Birthplace State","Mother Birthplace State",NA,NA
-"mother_birthplace_state_fips","2003-2018","factor","Mother's Birthplace State FIPS code","E.g., AK, AL, AR, AS, AZ","Mother Birthplace State FIPS","Mother Birthplace State FIPS",NA,NA
-"mother_birthplace_usa","2003-2018","binary (integer)","Place of Birth of Mother-USA","0, 1","NA",NA,NA,"complex recoding"
-"mother_bmi","2003-2018","numeric","Body Mass Index","E.g., 12, 13, 14, 15, 16","Mother BMI, bmi","Mother BMI","bmi",NA
-"mother_bridge_race","2017-2018","integer","Mother's NCHS Bridged Race","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24","Mother Bridge Race","Mother Bridge Race",NA,NA
-"mother_calculated_age","2003-2018","integer","Mother's Age","E.g., 0, 12, 13, 14, 15","Mother Calculated Age, age_mom","Mother Calculated Age","age_mom",NA
-"mother_date_of_birth","2017-2018","factor","Mother's Date of Birth","E.g., 1960-09-22, 1963-10-21, 1964-04-28, 1964-06-10, 1965-01-01","Mother Date of Birth","Mother Date of Birth",NA,NA
-"mother_educ_8th_grade_or_less","2003-2018","integer","Mother's Education Years If LE 8th Grade","0, 1, 2, 3, 4, 5, 6, 7, 8","Mother Educ 8th Grade or Less, momle8ed","Mother Educ 8th Grade or Less","momle8ed",NA
-"mother_education","2003-2018","integer","Mother's Education Level
+"mother_birthplace_cntry_wa_code","2003-2019","numeric","Mother's Birthplace Country WA Code","E.g., 0, 500, 501, 502, 503","Mother Birthplace Cntry WA Code, bctrymom","Mother Birthplace Cntry WA Code","bctrymom",NA
+"mother_birthplace_country","2003-2019","factor","Mother's Birth Country - Literal","E.g., AFGHANISTAN, AFRICA, ALBANIA, ALGERIA, AMERICAN SAMOA","Mother Birthplace Country","Mother Birthplace Country",NA,NA
+"mother_birthplace_foreign","2003-2019","binary (numeric)","Place of Birth of Mother-Foreign","0, 1","NA",NA,NA,"complex recoding"
+"mother_birthplace_state","2017-2019","factor","Mother's Birth State - Literal","E.g., ALABAMA, ALASKA, AMERICAN SAMOA, ARIZONA, ARKANSAS","Mother Birthplace State","Mother Birthplace State",NA,NA
+"mother_birthplace_state_fips","2003-2019","factor","Mother's Birthplace State FIPS code","E.g., AK, AL, AR, AS, AZ","Mother Birthplace State FIPS","Mother Birthplace State FIPS",NA,NA
+"mother_birthplace_usa","2003-2019","binary (numeric)","Place of Birth of Mother-USA","0, 1","NA",NA,NA,"complex recoding"
+"mother_bmi","2003-2019","numeric","Body Mass Index","E.g., 12, 13, 14, 15, 16","Mother BMI, bmi","Mother BMI","bmi",NA
+"mother_bridge_race","2017-2019","integer","Mother's NCHS Bridged Race","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24","Mother Bridge Race","Mother Bridge Race",NA,NA
+"mother_calculated_age","2003-2019","integer","Mother's Age","E.g., 0, 12, 13, 14, 15","Mother Calculated Age, age_mom","Mother Calculated Age","age_mom",NA
+"mother_date_of_birth","2017-2019","Date","Mother's Date of Birth","E.g., 1960-09-22, 1963-10-21, 1964-04-28, 1964-05-21, 1964-06-10","Mother Date of Birth","Mother Date of Birth",NA,NA
+"mother_educ_8th_grade_or_less","2003-2019","integer","Mother's Education Years If LE 8th Grade","0, 1, 2, 3, 4, 5, 6, 7, 8","Mother Educ 8th Grade or Less, momle8ed","Mother Educ 8th Grade or Less","momle8ed",NA
+"mother_education","2003-2019","integer","Mother's Education Level
 Highest grade completed by the mother.","1, 2, 3, 4, 5, 6, 7, 8","Mother Education, educ_mom","Mother Education","educ_mom",NA
-"mother_height_feet","2003-2018","integer","Mother's Height, Feet","1, 2, 3, 4, 5, 6","Mother Height Feet, ht_ft","Mother Height Feet","ht_ft",NA
-"mother_height_inches","2003-2018","integer","Mother's Height, Inches","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11","Mother Height Inches, ht_in","Mother Height Inches","ht_in",NA
-"mother_hispanic","2003-2018","integer","Mother's Hispanic Origin
+"mother_height_feet","2003-2019","integer","Mother's Height, Feet","1, 2, 3, 4, 5, 6","Mother Height Feet, ht_ft","Mother Height Feet","ht_ft",NA
+"mother_height_inches","2003-2019","integer","Mother's Height, Inches","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11","Mother Height Inches, ht_in","Mother Height Inches","ht_in",NA
+"mother_hispanic","2003-2019","integer","Mother's Hispanic Origin
 Note: Hispanic ethnicity data are not complete for 1988. Before using this field, see """"Data Quality Technical Notes - Race/Hispanic Origin (Mother, Father, Child).""""","0, 1, 2, 3, 4, 5","Mother Hispanic, hisp_mom","Mother Hispanic","hisp_mom",NA
-"mother_hispanic_cuban","2003-2018","factor","Mother's Hispanic Origin, Cuban","H, N, Y","Mother Hispanic Cuban, momh_cub","Mother Hispanic Cuban","momh_cub",NA
-"mother_hispanic_mexican","2003-2018","factor","Mother's Hispanic Origin, Mexican","H, N, Y","Mother Hispanic Mexican, momh_mex","Mother Hispanic Mexican","momh_mex",NA
-"mother_hispanic_nchs_ccodes","2017-2018","integer","Mother's Hispanic Tabulation from Literal","100, 209, 214, 216, 221, 222, 223, 224, 225, 226, 227, 231, 232, 233, 234, 235, 236, 237, 238, 239, 242, 250, 275, 281, 282, 996, 998","Mother Hispanic NCHS Ccodes","Mother Hispanic NCHS Ccodes",NA,NA
-"mother_hispanic_nchs_ecodes","2017-2018","integer","Mother's Hispanic Tabulation from Checkboxes","100, 209, 210, 214, 216, 221, 222, 223, 224, 225, 226, 227, 231, 232, 233, 234, 235, 236, 237, 238, 239, 242, 250, 260, 270, 275, 280, 281, 282, 998","Mother Hispanic NCHS Ecodes","Mother Hispanic NCHS Ecodes",NA,NA
-"mother_hispanic_no","2003-2018","binary (factor)","Mother's Hispanic Origin, Not Hispanic","N, Y","Mother Hispanic No, momh_no","Mother Hispanic No","momh_no",NA
-"mother_hispanic_other","2003-2018","factor","Mother's Hispanic Origin, Other Hispanic","H, N, Y","Mother Hispanic Other, momh_oth","Mother Hispanic Other","momh_oth",NA
-"mother_hispanic_other_specify","2017-2018","factor","Mother's Hispanic Origin, Other Hispanic Literal","E.g., ARGENTINIAN, AZTEC, BASQUE, BELIZEAN, BOLIVIAN","Mother Hispanic Other - Specify","Mother Hispanic Other - Specify",NA,NA
-"mother_hispanic_puerto_rican","2003-2018","factor","Mother's Hispanic Origin, Puerto Rican","H, N, Y","Mother Hispanic Puerto Rican, momh_pr","Mother Hispanic Puerto Rican","momh_pr",NA
-"mother_marital_status","2003-2018","factor","Marital Status of Mother","1, 2, 3, 4, 5, 6, 8, N, Y","Mother Marital Status, married","Mother Marital Status","married",NA
-"mother_months_at_residence","2003-2018","integer","Mother's Months Residence","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11","Mother Months at Residence, res_mprt","Mother Months at Residence","res_mprt",NA
-"mother_occupation_milham","2003-2018","integer","Mother's Occupation - Milham
+"mother_hispanic_cuban","2003-2019","factor","Mother's Hispanic Origin, Cuban","H, N, Y","Mother Hispanic Cuban, momh_cub","Mother Hispanic Cuban","momh_cub",NA
+"mother_hispanic_mexican","2003-2019","factor","Mother's Hispanic Origin, Mexican","H, N, Y","Mother Hispanic Mexican, momh_mex","Mother Hispanic Mexican","momh_mex",NA
+"mother_hispanic_nchs_ccodes","2017-2019","integer","Mother's Hispanic Tabulation from Literal","100, 209, 214, 216, 221, 222, 223, 224, 225, 226, 227, 231, 232, 233, 234, 235, 236, 237, 238, 239, 242, 250, 275, 281, 282, 996, 998","Mother Hispanic NCHS Ccodes","Mother Hispanic NCHS Ccodes",NA,NA
+"mother_hispanic_nchs_ecodes","2017-2019","integer","Mother's Hispanic Tabulation from Checkboxes","100, 209, 210, 214, 216, 221, 222, 223, 224, 225, 226, 227, 231, 232, 233, 234, 235, 236, 237, 238, 239, 242, 250, 260, 270, 275, 280, 281, 282, 998","Mother Hispanic NCHS Ecodes","Mother Hispanic NCHS Ecodes",NA,NA
+"mother_hispanic_no","2003-2019","binary (factor)","Mother's Hispanic Origin, Not Hispanic","N, Y","Mother Hispanic No, momh_no","Mother Hispanic No","momh_no",NA
+"mother_hispanic_other","2003-2019","factor","Mother's Hispanic Origin, Other Hispanic","H, N, Y","Mother Hispanic Other, momh_oth","Mother Hispanic Other","momh_oth",NA
+"mother_hispanic_other_specify","2017-2019","factor","Mother's Hispanic Origin, Other Hispanic Literal","E.g., ARGENTINIAN, AZTEC, BASQUE, BELIZEAN, BOLIVIAN","Mother Hispanic Other Specify","Mother Hispanic Other Specify",NA,NA
+"mother_hispanic_puerto_rican","2003-2019","factor","Mother's Hispanic Origin, Puerto Rican","H, N, Y","Mother Hispanic Puerto Rican, momh_pr","Mother Hispanic Puerto Rican","momh_pr",NA
+"mother_marital_status","2003-2019","factor","Marital Status of Mother","1, 2, 3, 4, 5, 6, 8, N, Y","Mother Marital Status, married","Mother Marital Status","married",NA
+"mother_months_at_residence","2003-2019","numeric","Mother's Months Residence","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11","Mother Months at Residence, res_mprt","Mother Months at Residence","res_mprt",NA
+"mother_occupation_milham","2003-2018","numeric","Mother's Occupation - Milham
 Sam Milham occupation codes are obtained from a computer program which uses the occupation and industry literal fields. This program coded about 93-97% of the records; the remaining 3-7% need to be hand-coded. The hand coding has not been done for 1993-present and for a portion of the 1992 cords. For further information please see the """"Data Quality Technical Notes - Occupation (Milham Codes - other, Father)."""" For code table see ASCII file """"occmil.asc"""". Note: there are codes on the file which are invalid.","E.g., 0, 7, 9, 10, 11","Mother Occupation Milham, occm_mom","Mother Occupation Milham","occm_mom",NA
-"mother_race_amer_indian_alaskan","2003-2018","binary (factor)","Mother's Race, American Indian/Alaska Native","N, Y","Mother Race Amer Indian Alaskan, momr_ami","Mother Race Amer Indian Alaskan","momr_ami",NA
-"mother_race_asian_indian","2003-2018","binary (factor)","Mother's Race, Asian Indian","N, Y","Mother Race Asian Indian, momr_asi","Mother Race Asian Indian","momr_asi",NA
-"mother_race_black","2003-2018","binary (factor)","Mother's Race, Black","N, Y","Mother Race Black, momr_blk","Mother Race Black","momr_blk",NA
-"mother_race_calculation","2003-2018","factor","Mother's Race
+"mother_race_amer_indian_alaskan","2003-2019","binary (factor)","Mother's Race, American Indian/Alaska Native","N, Y","Mother Race Amer Indian Alaskan, momr_ami","Mother Race Amer Indian Alaskan","momr_ami",NA
+"mother_race_asian_indian","2003-2019","binary (factor)","Mother's Race, Asian Indian","N, Y","Mother Race Asian Indian, momr_asi","Mother Race Asian Indian","momr_asi",NA
+"mother_race_black","2003-2019","binary (factor)","Mother's Race, Black","N, Y","Mother Race Black, momr_blk","Mother Race Black","momr_blk",NA
+"mother_race_calculation","2003-2019","factor","Mother's Race
 Uses race assigned by NCHS bridging methods (see Data Quality Technical Notes for description).","1, 2, 3, 4, 5, 7, A, B, C, D, E, F, G, H","Mother Race Calculation, race_mom","Mother Race Calculation","race_mom",NA
-"mother_race_chinese","2003-2018","binary (factor)","Mother's Race, Chinese","N, Y","Mother Race Chinese, momr_chi","Mother Race Chinese","momr_chi",NA
-"mother_race_filipino","2003-2018","binary (factor)","Mother's Race, Filipino","N, Y","Mother Race Filipino, momr_fil","Mother Race Filipino","momr_fil",NA
-"mother_race_guam_or_chamorro","2003-2018","binary (factor)","Mother's Race, Guamanian or Chamorro","N, Y","Mother Race Guam or Chamorro, momr_gua","Mother Race Guam or Chamorro","momr_gua",NA
-"mother_race_hawaiian","2003-2018","binary (factor)","Mother's Race, Native Hawaiian","N, Y","Mother Race Hawaiian, momr_haw","Mother Race Hawaiian","momr_haw",NA
-"mother_race_japanese","2003-2018","binary (factor)","Mother's Race, Japanese","N, Y","Mother Race Japanese, momr_jap","Mother Race Japanese","momr_jap",NA
-"mother_race_korean","2003-2018","binary (factor)","Mother's Race, Korean","N, Y","Mother Race Korean, momr_kor","Mother Race Korean","momr_kor",NA
-"mother_race_nchs_ccode_1","2017-2018","factor","Mother's Race Tabulation from Literals, 1","E.g., 699, 996, 998, A09, A24","Mother Race NCHS Ccode 1","Mother Race NCHS Ccode 1",NA,NA
-"mother_race_nchs_ccode_2","2017-2018","factor","Mother's Race Tabulation from Literals, 2","996, A24, A45, A94, B21, C08, C59, D61, H74, K36, K41, K97, N34, N48, N68, R04","Mother Race NCHS Ccode 2","Mother Race NCHS Ccode 2",NA,NA
-"mother_race_nchs_ccode_3","2017-2018","factor","Mother's Race Tabulation from Literals, 3","101, 102, 114, 115, 121, 402, 403, 404, 405, 412, 422, 423, 442, 443, 444, 445, 446, 447, 462, 465, 469, 472, 473, 475, 476, 522, 637, 650, 996, 998","Mother Race NCHS Ccode 3","Mother Race NCHS Ccode 3",NA,NA
-"mother_race_nchs_ccode_4","2017-2018","factor","Mother's Race Tabulation from Literals, 4","114, 121, 405, 442, 447, 475","Mother Race NCHS Ccode 4","Mother Race NCHS Ccode 4",NA,NA
-"mother_race_nchs_ccode_5","2017-2018","factor","Mother's Race Tabulation from Literals, 5","512, 513, 514, 515, 531, 532, 533, 534, 535, 536, 538, 539, 540, 542, 544, 547, 996, 998","Mother Race NCHS Ccode 5","Mother Race NCHS Ccode 5",NA,NA
-"mother_race_nchs_ccode_6","2017-2018","factor","Mother's Race Tabulation from Literals, 6","513, 514, 533","Mother Race NCHS Ccode 6","Mother Race NCHS Ccode 6",NA,NA
-"mother_race_nchs_ccode_7","2017-2018","factor","Mother's Race Tabulation from Literals, 7","E.g., 101, 102, 104, 105, 106","Mother Race NCHS Ccode 7","Mother Race NCHS Ccode 7",NA,NA
-"mother_race_nchs_ccode_8","2017-2018","factor","Mother's Race Tabulation from Literals, 8","101, 104, 105, 106, 107, 110, 121, 126, 130, 220, 611, 613, 615, 617, 619, 621, 622, 625","Mother Race NCHS Ccode 8","Mother Race NCHS Ccode 8",NA,NA
-"mother_race_nchs_ecode_1","2017-2018","factor","Mother's Race Tabulation from Checkboxes, 1","E.g., 100, 101, 102, 104, 105","Mother Race NCHS Ecode 1","Mother Race NCHS Ecode 1",NA,NA
-"mother_race_nchs_ecode_2","2017-2018","factor","Mother's Race Tabulation from Checkboxes, 2","E.g., 200, 300, 400, 405, 410","Mother Race NCHS Ecode 2","Mother Race NCHS Ecode 2",NA,NA
-"mother_race_nchs_ecode_3","2017-2018","factor","Mother's Race Tabulation from Checkboxes, 3","E.g., 300, 400, 410, 420, 423","Mother Race NCHS Ecode 3","Mother Race NCHS Ecode 3",NA,NA
-"mother_race_nchs_ecode_4","2017-2018","factor","Mother's Race Tabulation from Checkboxes, 4","400, 401, 410, 420, 430, 440, 450, 460, 500, 510, 514, 520, 530, 600, 625, 699, A45, A94, B04, B21, D61, E38, G04, H91, N48","Mother Race NCHS Ecode 4","Mother Race NCHS Ecode 4",NA,NA
-"mother_race_nchs_ecode_5","2017-2018","factor","Mother's Race Tabulation from Checkboxes, 5","410, 411, 430, 500, 510, 520, 533, 630, B21, N34","Mother Race NCHS Ecode 5","Mother Race NCHS Ecode 5",NA,NA
-"mother_race_nchs_ecode_6","2017","factor","Mother's Race Tabulation from Checkboxes, 6","440, 625, N48","Mother Race NCHS Ecode 6","Mother Race NCHS Ecode 6",NA,NA
+"mother_race_chinese","2003-2019","binary (factor)","Mother's Race, Chinese","N, Y","Mother Race Chinese, momr_chi","Mother Race Chinese","momr_chi",NA
+"mother_race_filipino","2003-2019","binary (factor)","Mother's Race, Filipino","N, Y","Mother Race Filipino, momr_fil","Mother Race Filipino","momr_fil",NA
+"mother_race_guam_or_chamorro","2003-2019","binary (factor)","Mother's Race, Guamanian or Chamorro","N, Y","Mother Race Guam or Chamorro, momr_gua","Mother Race Guam or Chamorro","momr_gua",NA
+"mother_race_hawaiian","2003-2019","binary (factor)","Mother's Race, Native Hawaiian","N, Y","Mother Race Hawaiian, momr_haw","Mother Race Hawaiian","momr_haw",NA
+"mother_race_japanese","2003-2019","binary (factor)","Mother's Race, Japanese","N, Y","Mother Race Japanese, momr_jap","Mother Race Japanese","momr_jap",NA
+"mother_race_korean","2003-2019","binary (factor)","Mother's Race, Korean","N, Y","Mother Race Korean, momr_kor","Mother Race Korean","momr_kor",NA
+"mother_race_nchs_ccode_1","2017-2019","factor","Mother's Race Tabulation from Literals, 1","E.g., 624, 670, 699, 996, 998","Mother Race NCHS Ccode 1","Mother Race NCHS Ccode 1",NA,NA
+"mother_race_nchs_ccode_2","2017-2019","factor","Mother's Race Tabulation from Literals, 2","699, 996, 998, A24, A45, A94, B21, C08, C39, C59, D61, E39, F64, G84, G96, H74, K36, K41, K97, L28, L79, N34, N48, N57, N68, R04","Mother Race NCHS Ccode 2","Mother Race NCHS Ccode 2",NA,NA
+"mother_race_nchs_ccode_3","2017-2019","factor","Mother's Race Tabulation from Literals, 3","E.g., 101, 102, 114, 115, 117","Mother Race NCHS Ccode 3","Mother Race NCHS Ccode 3",NA,NA
+"mother_race_nchs_ccode_4","2017-2019","factor","Mother's Race Tabulation from Literals, 4","114, 121, 405, 412, 423, 442, 445, 447, 465, 475, 996, 998","Mother Race NCHS Ccode 4","Mother Race NCHS Ccode 4",NA,NA
+"mother_race_nchs_ccode_5","2017-2019","factor","Mother's Race Tabulation from Literals, 5","512, 513, 514, 515, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 542, 544, 547, 670, 996, 998","Mother Race NCHS Ccode 5","Mother Race NCHS Ccode 5",NA,NA
+"mother_race_nchs_ccode_6","2017-2019","factor","Mother's Race Tabulation from Literals, 6","513, 514, 532, 533, 536, 540, 542, 996","Mother Race NCHS Ccode 6","Mother Race NCHS Ccode 6",NA,NA
+"mother_race_nchs_ccode_7","2017-2019","factor","Mother's Race Tabulation from Literals, 7","E.g., 101, 102, 104, 105, 106","Mother Race NCHS Ccode 7","Mother Race NCHS Ccode 7",NA,NA
+"mother_race_nchs_ccode_8","2017-2019","factor","Mother's Race Tabulation from Literals, 8","E.g., 101, 104, 105, 106, 107","Mother Race NCHS Ccode 8","Mother Race NCHS Ccode 8",NA,NA
+"mother_race_nchs_ecode_1","2017-2019","factor","Mother's Race Tabulation from Checkboxes, 1","E.g., 100, 101, 102, 104, 105","Mother Race NCHS Ecode 1","Mother Race NCHS Ecode 1",NA,NA
+"mother_race_nchs_ecode_2","2017-2019","factor","Mother's Race Tabulation from Checkboxes, 2","E.g., 200, 202, 300, 400, 405","Mother Race NCHS Ecode 2","Mother Race NCHS Ecode 2",NA,NA
+"mother_race_nchs_ecode_3","2017-2019","factor","Mother's Race Tabulation from Checkboxes, 3","E.g., 300, 400, 410, 420, 423","Mother Race NCHS Ecode 3","Mother Race NCHS Ecode 3",NA,NA
+"mother_race_nchs_ecode_4","2017-2019","factor","Mother's Race Tabulation from Checkboxes, 4","400, 401, 410, 420, 430, 440, 443, 450, 460, 500, 510, 514, 520, 530, 600, 625, 699, A45, A94, A97, B04, B21, D61, E38, G04, H91, K59, K81, N48","Mother Race NCHS Ecode 4","Mother Race NCHS Ecode 4",NA,NA
+"mother_race_nchs_ecode_5","2017-2019","factor","Mother's Race Tabulation from Checkboxes, 5","410, 411, 430, 500, 510, 520, 530, 533, 630, B21, N34","Mother Race NCHS Ecode 5","Mother Race NCHS Ecode 5",NA,NA
+"mother_race_nchs_ecode_6","2017, 2019","factor","Mother's Race Tabulation from Checkboxes, 6","440, 500, 625, N48","Mother Race NCHS Ecode 6","Mother Race NCHS Ecode 6",NA,NA
 "mother_race_nchs_ecode_7","None","factor","Mother's Race Tabulation from Checkboxes, 7","","Mother Race NCHS Ecode 7","Mother Race NCHS Ecode 7",NA,NA
 "mother_race_nchs_ecode_8","None","factor","Mother's Race Tabulation from Checkboxes, 8","","Mother Race NCHS Ecode 8","Mother Race NCHS Ecode 8",NA,NA
-"mother_race_other","2003-2018","binary (factor)","Mother's Race, Other","N, Y","Mother Race Other, momr_oth","Mother Race Other","momr_oth",NA
-"mother_race_other_1","2017-2018","factor","Mother's Race Literal 1, Other","E.g., AFGAN, AFGHAN, AFRICAN, ALBANIAN, AMERICAN","Mother Race Other 1","Mother Race Other 1",NA,NA
-"mother_race_other_2","2017-2018","factor","Mother's Race Literal 2, Other","AFGHAN, ENGLISH,SCOTTISH,GERMAN, FRENCH, GERMAN, HISPANIC, IRISH, ITALIAN, KENYAN, LATINA, LATINO, MEXICAN, NORWEGIAN, OROMO, PANAMANIAN, PERUVIAN, PORTUGUESE, PUERTO RICAN, RUSSIAN, SALVADORAN, SCOTTISH, SPANISH, SWEDISH","Mother Race Other 2","Mother Race Other 2",NA,NA
-"mother_race_other_asian","2003-2018","binary (factor)","Mother's Race, Other Asian","N, Y","Mother Race Other Asian, momr_oas","Mother Race Other Asian","momr_oas",NA
-"mother_race_other_asian_1","2017-2018","factor","Mother's Race Literal 1, Other Asian","E.g., AFGHAN, ASIAN, ASIAN AMERICAN, AZERBAIJANI, BANGLADESHI","Mother Race Other Asian 1","Mother Race Other Asian 1",NA,NA
-"mother_race_other_asian_2","2017-2018","factor","Mother's Race Literal 2, Other Asian","AFGHAN, CAMBODIAN, IRANIAN, LAOS, LAOTIAN, MIEN, THAI","Mother Race Other Asian 2","Mother Race Other Asian 2",NA,NA
-"mother_race_other_pi","2003-2018","binary (factor)","Mother's Race, Other Pacific Islander","N, Y","Mother Race Other PI, momr_opi","Mother Race Other PI","momr_opi",NA
-"mother_race_other_pi_1","2017-2018","factor","Mother's Race Literal 1, Other Pacific Islander","CAROLINIAN, CHUUKESE, FIJIAN, KIRIBATIAN, KOSRAEAN, MAORI, MARIANAS ISLANDER, MARSHALLESE, MICRONESIAN, NOT STATED, PACIFIC ISLANDER, PALAUAN, PAPUAN, POLYNESIAN, SAIPANESE, TAHITIAN, TOKELAUAN, TONGAN, UNKNOWN","Mother Race Other PI 1","Mother Race Other PI 1",NA,NA
-"mother_race_other_pi_2","2017-2018","factor","Mother's Race Literal 2, Other Pacific Islander","COOK ISLANDER, PALAUAN, TONGAN","Mother Race Other PI 2","Mother Race Other PI 2",NA,NA
-"mother_race_samoan","2003-2018","binary (factor)","Mother's Race, Samoan","N, Y","Mother Race Samoan, momr_sam","Mother Race Samoan","momr_sam",NA
-"mother_race_summary_code","2003-2018","integer","Mother's Summary Race","E.g., 10, 11, 12, 13, 14","Mother Race Summary Code, moracsum","Mother Race Summary Code","moracsum",NA
-"mother_race_tribe_1","2017-2018","factor","Mother's Race Literal 1, American Indian/Alaska Native","E.g., ALASKAN NATIVE, ALEUT, AMERICAN INDIAN, APACHE, ARAPAHO","Mother Race Tribe 1","Mother Race Tribe 1",NA,NA
-"mother_race_tribe_2","2017-2018","factor","Mother's Race Literal 2, American Indian/Alaska Native","ARAPAHO, BLACKFOOT, CANADIAN NATIVE, CHEROKEE, CHOCTAW, CREE, ESKIMO, GROS VENTRE, HAIDA, LAKOTA, MUCKLESHOOT, NOT STATED, SIOUX, TLINGIT, UMATILLA, YUPIK","Mother Race Tribe 2","Mother Race Tribe 2",NA,NA
-"mother_race_vietnamese","2003-2018","binary (factor)","Mother's Race, Vietnamese","N, Y","Mother Race Vietnamese, momr_vie","Mother Race Vietnamese","momr_vie",NA
-"mother_race_white","2003-2018","binary (factor)","Mother's Race, White","N, Y","Mother Race White, momr_wht","Mother Race White","momr_wht",NA
-"mother_residence_city","2017-2018","factor","Mother's City of Residence Name","E.g., ALGONA, AUBURN, BARING, BEAUX ARTS, BELLEVUE","Mother Residence City","Mother Residence City",NA,NA
-"mother_residence_city_wa_code","2003-2018","factor","Mother's Residence WA city code","E.g., 1700, 1701, 1702, 1703, 1704","Mother Residence City WA Code, city_res","Mother Residence City WA Code","city_res",NA
-"mother_residence_county","2017-2018","binary (factor)","Mother's County of Residence Name","KING, PIERCE","Mother Residence County","Mother Residence County",NA,NA
-"mother_residence_county_wa_code","2003-2018","factor","Mother's Residence County code","17","Mother Residence County WA Code, cnty_res, r_co","Mother Residence County WA Code","cnty_res, r_co",NA
-"mother_residence_state_nchs_code","2003-2018","integer","Mother's State of Residence (old NCHS code)","48","Mother Residence State NCHS Code, st_res","Mother Residence State NCHS Code","st_res",NA
-"mother_residence_zip","2003-2018","factor","Mother's ZIP Code of Residence","E.g., 90759, 97002, 97188, 98001, 98002","Mother Residence Zip, zipcode","Mother Residence Zip","zipcode",NA
-"mother_transfer","2003-2018","binary (factor)","Mother Transferred After Attempted Delivery","N, Y","Mother Transfer, trnsferm","Mother Transfer","trnsferm",NA
-"mother_weight_at_delivery","2003-2018","integer","Mother's Weight At Delivery
+"mother_race_other","2003-2019","binary (factor)","Mother's Race, Other","N, Y","Mother Race Other, momr_oth","Mother Race Other","momr_oth",NA
+"mother_race_other_1","2017-2019","factor","Mother's Race Literal 1, Other","E.g., ADOPTED UNKNOWN, AFGAN, AFGHAN, AFRICAN, ALBANIAN","Mother Race Other 1","Mother Race Other 1",NA,NA
+"mother_race_other_2","2017-2019","factor","Mother's Race Literal 2, Other","E.g., AFGHAN, AFRICAN, AMERICAN, ARMENIAN, AZERBAIJAN","Mother Race Other 2","Mother Race Other 2",NA,NA
+"mother_race_other_asian","2003-2019","binary (factor)","Mother's Race, Other Asian","N, Y","Mother Race Other Asian, momr_oas","Mother Race Other Asian","momr_oas",NA
+"mother_race_other_asian_1","2017-2019","factor","Mother's Race Literal 1, Other Asian","E.g., AFGHAN, ASIAN, ASIAN AMERICAN, AZERBAIJANI, BANGLADESHI","Mother Race Other Asian 1","Mother Race Other Asian 1",NA,NA
+"mother_race_other_asian_2","2017-2019","factor","Mother's Race Literal 2, Other Asian","AFGHAN, CAMBODIAN, INDONESIAN, IRANIAN, KHMER, LAOS, LAOTIAN, MIEN, MONGOLIAN, NOT STATED, PAKISTANI, TAIWANESE, THAI, UNKNOWN","Mother Race Other Asian 2","Mother Race Other Asian 2",NA,NA
+"mother_race_other_pi","2003-2019","binary (factor)","Mother's Race, Other Pacific Islander","N, Y","Mother Race Other PI, momr_opi","Mother Race Other PI","momr_opi",NA
+"mother_race_other_pi_1","2017-2019","factor","Mother's Race Literal 1, Other Pacific Islander","CAROLINIAN, CHUUKESE, FIJIAN, INDIAN, KIRIBATIAN, KOSRAEAN, MAORI, MARIANAS ISLANDER, MARSHALLESE, MICRONESIAN, NOT STATED, PACIFIC ISLANDER, PALAUAN, PAPUAN, POHNPEIAN, POLYNESIAN, SAIPANESE, TAHITIAN, TOKELAUAN, TONGAN, UNKNOWN","Mother Race Other PI 1","Mother Race Other PI 1",NA,NA
+"mother_race_other_pi_2","2017-2019","factor","Mother's Race Literal 2, Other Pacific Islander","CHUUKESE, COOK ISLANDER, FIJIAN, MARSHALLESE, MICRONESIAN, NOT STATED, PALAUAN, TONGAN","Mother Race Other PI 2","Mother Race Other PI 2",NA,NA
+"mother_race_samoan","2003-2019","binary (factor)","Mother's Race, Samoan","N, Y","Mother Race Samoan, momr_sam","Mother Race Samoan","momr_sam",NA
+"mother_race_summary_code","2003-2019","integer","Mother's Summary Race","E.g., 10, 11, 12, 13, 14","Mother Race Summary Code, moracsum","Mother Race Summary Code","moracsum",NA
+"mother_race_tribe_1","2017-2019","factor","Mother's Race Literal 1, American Indian/Alaska Native","E.g., ALASKAN NATIVE, ALEUT, AMERICAN INDIAN, APACHE, ARAPAHO","Mother Race Tribe 1","Mother Race Tribe 1",NA,NA
+"mother_race_tribe_2","2017-2019","factor","Mother's Race Literal 2, American Indian/Alaska Native","ARAPAHO, BLACKFOOT, CANADIAN NATIVE, CHEROKEE, CHOCTAW, COMANCHE, CREE, ESKIMO, GILA RIVER, GROS VENTRE, HAIDA, LAKOTA, LOWER ELWHA, MUCKLESHOOT, NAVAJO, NOT STATED, OTHER, PIT RIVER, SIOUX, TLINGIT, TSIMSHIAN, UMATILLA, UNKNOWN, UNSPECIFIED, VILLAGE OF KOTZ BUE, WARM SPRINGS, YAKAMA, YUPIK","Mother Race Tribe 2","Mother Race Tribe 2",NA,NA
+"mother_race_vietnamese","2003-2019","binary (factor)","Mother's Race, Vietnamese","N, Y","Mother Race Vietnamese, momr_vie","Mother Race Vietnamese","momr_vie",NA
+"mother_race_white","2003-2019","binary (factor)","Mother's Race, White","N, Y","Mother Race White, momr_wht","Mother Race White","momr_wht",NA
+"mother_residence_city","2017-2019","factor","Mother's City of Residence Name","E.g., ALGONA, AUBURN, BALLARD, BARING, BEAUX ARTS","Mother Residence City","Mother Residence City",NA,NA
+"mother_residence_city_wa_code","2003-2019","factor","Mother's Residence WA city code","E.g., 1700, 1701, 1702, 1703, 1704","Mother Residence City WA Code, city_res","Mother Residence City WA Code","city_res",NA
+"mother_residence_county","2017-2019","factor","Mother's County of Residence Name","GRANT, INDIAN TRIBAL AUTHORITY, KING, PIERCE, SNOHOMISH, UNKNOWN","Mother Residence County","Mother Residence County",NA,NA
+"mother_residence_county_wa_code","2003-2019","factor","Mother's Residence County code","17","Mother Residence County WA Code, cnty_res, r_co","Mother Residence County WA Code","cnty_res, r_co",NA
+"mother_residence_state_nchs_code","2003-2019","numeric","Mother's State of Residence (old NCHS code)","48","Mother Residence State NCHS Code, st_res","Mother Residence State NCHS Code","st_res",NA
+"mother_residence_zip","2003-2019","factor","Mother's ZIP Code of Residence","E.g., 90759, 97002, 97188, 98001, 98002","Mother Residence Zip, zipcode","Mother Residence Zip","zipcode",NA
+"mother_transfer","2003-2019","binary (factor)","Mother Transferred After Attempted Delivery","N, Y","Mother Transfer, trnsferm","Mother Transfer","trnsferm",NA
+"mother_weight_at_delivery","2003-2019","integer","Mother's Weight At Delivery
 Number of pounds Mother weighed at delivery. Only whole number is kept. Before using this field, see """"Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.""""","E.g., 0, 4, 5, 6, 8","Mother Weight at Delivery, wghtdelv","Mother Weight at Delivery","wghtdelv",NA
-"mother_weight_gain","2003-2018","integer","Weight Gain During Pregnancy
+"mother_weight_gain","2003-2019","integer","Weight Gain During Pregnancy
 Number of pounds Mother gained during pregnancy. Only whole number is kept. Before using this field, see """"Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery weight."""" 
  
 ***2003-present***
 This field is calculated from prepregnancy and delivery weights (see fields 110 and 213).
 098 – 98+ lbs for out of state occurrences only","E.g., -49, -48, -47, -46, -43","mother_weight_gain, Mother Weight Gain, wghtgain","Mother Weight Gain","wghtgain",NA
-"mother_weight_prior","2003-2018","integer","Weight Prior to Pregnancy
+"mother_weight_prior","2003-2019","integer","Weight Prior to Pregnancy
 Number of pounds Mother weighed before pregnancy. Only whole number is kept. This field was first collected in 1992. Before using this field, see """"Data Quality Technical Notes - Weight Gained During Pregnancy, Prepregnancy Weight and Delivery Weight.""""","E.g., 0, 5, 9, 10, 11","Mother Weight Prior, wghtpre","Mother Weight Prior","wghtpre",NA
-"mother_years_at_residence","2003-2018","integer","Mother's Years Residence","E.g., 0, 1, 2, 3, 4","Mother Years at Residence, res_yprt","Mother Years at Residence","res_yprt",NA
-"msb","2003-2018","binary (factor)","Congenital Malformations, Meningomyelocele/Spina Bifida","N, Y","MSB, malf1 - malf7","MSB","malf1 - malf7",NA
-"multiple","2003-2018","binary (integer)","Multiple Birth","0, 1","plurality, NA",NA,NA,NA
-"nchs_month_prenatal_care_began","2011-2018","integer","NCHS Prenatal Care
+"mother_years_at_residence","2003-2019","numeric","Mother's Years Residence","E.g., 0, 1, 2, 3, 4","Mother Years at Residence, res_yprt","Mother Years at Residence","res_yprt",NA
+"msb","2003-2019","binary (factor)","Congenital Malformations, Meningomyelocele/Spina Bifida","N, Y","MSB, malf1 - malf7","MSB","malf1 - malf7",NA
+"multiple","2003-2019","binary (integer)","Multiple Birth","0, 1","plurality, NA",NA,NA,NA
+"nchs_month_prenatal_care_began","2011-2019","integer","NCHS Prenatal Care
 NCHS method of calculation of prenatal care to file. Before using this field, see """"data Quality Technical Notes – Month Prenatal Care Began.""""","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11","NCHS Month Prenatal Care Began, pnatfed","NCHS Month Prenatal Care Began","pnatfed",NA
-"nicu_admission","2003-2018","binary (factor)","Abnormal Conditions of Newborn, NICU Admission","N, Y","NICU Admission, abcond1 - abcond6","NICU Admission","abcond1 - abcond6",NA
-"non_vertex_presentation","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Non-vertex Presentation","N, Y","Non Vertex Presentation, labchar1 - labchar7","Non Vertex Presentation","labchar1 - labchar7",NA
-"ntsv","2003-2018","binary (integer)","NTSV (nulliparous, term, singleton, vertex birth)","0, 1","NA",NA,NA,"complex recoding"
-"nullip","2003-2018","binary (integer)","No prior live births","0, 1","NA",NA,NA,"complex recoding"
-"num_prev_cesarean","2003-2018","integer","Medical Risk Factor, Number of Previous Cesarean Sections","0, 1, 2, 3, 4, 5, 6, 7, 8, 9","Num Prev Cesarean, prev_cno","Num Prev Cesarean","prev_cno",NA
-"number_prenatal_visits","2003-2018","integer","Number of Prenatal Visits
+"nicu_admission","2003-2019","binary (factor)","Abnormal Conditions of Newborn, NICU Admission","N, Y","NICU Admission, abcond1 - abcond6","NICU Admission","abcond1 - abcond6",NA
+"non_vertex_presentation","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Non-vertex Presentation","N, Y","Non Vertex Presentation, labchar1 - labchar7","Non Vertex Presentation","labchar1 - labchar7",NA
+"ntsv","2003-2019","binary (numeric)","NTSV (nulliparous, term, singleton, vertex birth)","0, 1","NA",NA,NA,"complex recoding"
+"nullip","2003-2019","binary (numeric)","No prior live births","0, 1","NA",NA,NA,"complex recoding"
+"num_prev_cesarean","2003-2019","integer","Medical Risk Factor, Number of Previous Cesarean Sections","0, 1, 2, 3, 4, 5, 6, 7, 8, 9","Num Prev Cesarean, prev_cno","Num Prev Cesarean","prev_cno",NA
+"number_prenatal_visits","2003-2019","integer","Number of Prenatal Visits
 Indicates the number of prenatal visits for the entire pregnancy. The ‘95' code was used until mid 1992.","E.g., 0, 1, 2, 3, 4","Number Prenatal Visits, pnatalvs","Number Prenatal Visits","pnatalvs",NA
-"obstet_proc_none","2003-2018","binary (factor)","Obstetric Procedure, None of the Above","N, Y","Obstet Proc None, obproc1 - obproc4","Obstet Proc None","obproc1 - obproc4",NA
-"obstet_proc_unknown","2003-2018","binary (factor)","Obstetric Procedure, Unknown","N, Y","Obstet Proc Unknown, obproc1 - obproc4","Obstet Proc Unknown","obproc1 - obproc4",NA
-"omphalocele","2003-2018","binary (factor)","Congenital Malformations, Omphalocele","N, Y","Omphalocele, malf1 - malf7","Omphalocele","malf1 - malf7",NA
-"operation","2003-2018","binary (factor)","Maternal Morbidity, Unplanned Operating Room Procedure","N, Y","Operation, mmorbid1 - mmorbid5","Operation","mmorbid1 - mmorbid5",NA
-"other_chrom","2003-2018","binary (factor)","Congenital Malformations, Chromosomal Disorder","N, Y","Other Chrom, malf1 - malf7","Other Chrom","malf1 - malf7",NA
-"other_chrom_confirm","2003, 2005-2008, 2010, 2012-2014, 2016-2018","binary (factor)","Congenital Malformations, Chromosomal Disorder Karyotype Confirmed","N, Y","Other Chrom Confirm, malf1 - malf7, chromflg","Other Chrom Confirm","malf1 - malf7, chromflg",NA
-"other_chrom_pending","2003, 2005-2008, 2010, 2012-2014, 2016-2018","binary (factor)","Congenital Malformations, Chromosomal Disorder Karyotype Pending","N, Y","Other Chrom Pending, malf1 - malf7, chromflg","Other Chrom Pending","malf1 - malf7, chromflg",NA
-"other_preg_outcomes","2003-2018","integer","Other Pregnancy Outcomes","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 22","Other Preg Outcomes, otherout","Other Preg Outcomes","otherout",NA
-"other_preg_outcomes_month","2003-2018","factor","Other Preg Outcomes Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 1, 10, 11, 12, 2, 3, 4, 5, 6, 7, 8, 88, 9","Other Preg Outcomes Month, oth_mo","Other Preg Outcomes Month","oth_mo",NA
-"other_preg_outcomes_year","2003-2018","integer","Other Preg Outcomes Year","E.g., 1975, 1977, 1978, 1979, 1980","Other Preg Outcomes Year, oth_yr","Other Preg Outcomes Year","oth_yr",NA
-"packs_smoked_1st_tri","2017-2018","integer","Packs of Cigarettes Smoked during 1st Trimester","0, 1, 2, 3, 6, 10, 20","Packs Smoked 1st Tri","Packs Smoked 1st Tri",NA,NA
-"packs_smoked_2nd_tri","2017-2018","integer","Packs of Cigarettes Smoked during 2nd Trimester","0, 1, 2, 6, 15, 20","Packs Smoked 2nd Tri","Packs Smoked 2nd Tri",NA,NA
-"packs_smoked_3_months_prior","2017-2018","integer","Packs of Cigarettes Smoked 3 Months Before Preg","0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 20","Packs Smoked 3 Months Prior","Packs Smoked 3 Months Prior",NA,NA
-"packs_smoked_3rd_tri","2017-2018","integer","Packs of Cigarettes Smoked during 3rd Trimester","0, 1, 2, 4, 5, 6","Packs Smoked 3rd Tri","Packs Smoked 3rd Tri",NA,NA
-"parity","2003-2018","integer","Parity (# pregnancies carried to a viable gestational age)","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21","NA",NA,NA,"complex recoding"
-"perineal_laceration","2003-2018","binary (factor)","Maternal Morbidity, Perineal Laceration","N, Y","Perineal Laceration, mmorbid1 - mmorbid5","Perineal Laceration","mmorbid1 - mmorbid5",NA
-"plurality","2003-2018","integer","Plurality
+"obstet_proc_none","2003-2019","binary (factor)","Obstetric Procedure, None of the Above","N, Y","Obstet Proc None, obproc1 - obproc4","Obstet Proc None","obproc1 - obproc4",NA
+"obstet_proc_unknown","2003-2019","binary (factor)","Obstetric Procedure, Unknown","N, Y","Obstet Proc Unknown, obproc1 - obproc4","Obstet Proc Unknown","obproc1 - obproc4",NA
+"omphalocele","2003-2019","binary (factor)","Congenital Malformations, Omphalocele","N, Y","Omphalocele, malf1 - malf7","Omphalocele","malf1 - malf7",NA
+"operation","2003-2019","binary (factor)","Maternal Morbidity, Unplanned Operating Room Procedure","N, Y","Operation, mmorbid1 - mmorbid5","Operation","mmorbid1 - mmorbid5",NA
+"other_chrom","2003-2019","binary (factor)","Congenital Malformations, Chromosomal Disorder","N, Y","Other Chrom, malf1 - malf7","Other Chrom","malf1 - malf7",NA
+"other_chrom_confirm","2003, 2005-2008, 2010, 2012-2014, 2016-2019","binary (factor)","Congenital Malformations, Chromosomal Disorder Karyotype Confirmed","N, Y","Other Chrom Confirm, malf1 - malf7, chromflg","Other Chrom Confirm","malf1 - malf7, chromflg",NA
+"other_chrom_pending","2003, 2005-2008, 2010, 2012-2014, 2016-2019","binary (factor)","Congenital Malformations, Chromosomal Disorder Karyotype Pending","N, Y","Other Chrom Pending, malf1 - malf7, chromflg","Other Chrom Pending","malf1 - malf7, chromflg",NA
+"other_preg_outcomes","2003-2019","integer","Other Pregnancy Outcomes","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 22","Other Preg Outcomes, otherout","Other Preg Outcomes","otherout",NA
+"other_preg_outcomes_month","2003-2019","factor","Other Preg Outcomes Month","01, 02, 03, 04, 05, 06, 07, 08, 09, 1, 10, 11, 12, 2, 3, 4, 5, 6, 7, 8, 88, 9","Other Preg Outcomes Month, oth_mo","Other Preg Outcomes Month","oth_mo",NA
+"other_preg_outcomes_year","2003-2019","numeric","Other Preg Outcomes Year","E.g., 1975, 1977, 1978, 1979, 1980","Other Preg Outcomes Year, oth_yr","Other Preg Outcomes Year","oth_yr",NA
+"packs_smoked_1st_tri","2017-2019","numeric","Packs of Cigarettes Smoked during 1st Trimester","0, 1, 2, 3, 6, 9, 10, 12, 20","Packs Smoked 1st Tri","Packs Smoked 1st Tri",NA,NA
+"packs_smoked_2nd_tri","2017-2019","numeric","Packs of Cigarettes Smoked during 2nd Trimester","0, 1, 2, 6, 9, 10, 15, 20","Packs Smoked 2nd Tri","Packs Smoked 2nd Tri",NA,NA
+"packs_smoked_3_months_prior","2017-2019","numeric","Packs of Cigarettes Smoked 3 Months Before Preg","0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 20","Packs Smoked 3 Months Prior","Packs Smoked 3 Months Prior",NA,NA
+"packs_smoked_3rd_tri","2017-2019","numeric","Packs of Cigarettes Smoked during 3rd Trimester","0, 1, 2, 4, 5, 6, 9, 10","Packs Smoked 3rd Tri","Packs Smoked 3rd Tri",NA,NA
+"parity","2003-2019","numeric","Parity (# pregnancies carried to a viable gestational age)","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21","NA",NA,NA,"complex recoding"
+"perineal_laceration","2003-2019","binary (factor)","Maternal Morbidity, Perineal Laceration","N, Y","Perineal Laceration, mmorbid1 - mmorbid5","Perineal Laceration","mmorbid1 - mmorbid5",NA
+"plurality","2003-2019","integer","Plurality
 Number of children born.","1, 2, 3, 4","plurality, Plurality, plural","Plurality","plural",NA
-"pnc_lateno","2003-2018","binary (integer)","Late or no prenatal care","0, 1","NA",NA,NA,"complex recoding"
-"pnc_tri","2003-2018","factor","Prenatal Care Initiation Trimester","No PNC, Trimester 1, Trimester 2, Trimester 3","month_prenatal_care_began, NA",NA,NA,NA
-"pnc_tri_nchs","2011-2018","factor","NCHS Prenatal Care Initiation Trimester","NCHS No PNC, NCHS Trimester 1, NCHS Trimester 2, NCHS Trimester 3","nchs_month_prenatal_care_began, NA",NA,NA,"CHAT has this data for 2003-2017. How? Orig varname pnatfed did not exist prior to 2011"
-"poor_preg_outcomes","2003-2018","binary (factor)","Medical Risk Factor, Other Previous Poor Pregnancy Outcomes","N, Y","Poor Preg Outcomes, mrf1 - mrf6","Poor Preg Outcomes","mrf1 - mrf6",NA
-"precipitous_labor","2003-2018","binary (factor)","Onset of Labor, Precipitous Labor","N, Y","Precipitous Labor, labons1 - labons3","Precipitous Labor","labons1 - labons3",NA
-"prepreg_diabetes","2003-2018","binary (factor)","Medical Risk Factor, Diabetes, Prepregnancy","N, Y","Prepreg Diabetes, mrf1 - mrf6, diabetes","Prepreg Diabetes","mrf1 - mrf6, diabetes",NA
-"prepreg_hypertension","2003-2018","binary (factor)","Medical Risk Factor, Hypertension, Prepregnancy","N, Y","Prepreg Hypertension, mrf1 - mrf6, hyperflg","Prepreg Hypertension","mrf1 - mrf6, hyperflg",NA
-"preterm","2003-2018","binary (integer)","Preterm birth (<37 weeks)","0, 1","calculated_gestation, NA",NA,NA,NA
-"preterm_births","2003-2018","binary (factor)","Medical Risk Factor, Previous Preterm Birth","N, Y","Preterm Births, mrf1 - mrf6","Preterm Births","mrf1 - mrf6",NA
-"preterm_mod","2003-2018","binary (integer)","Premature By Stage-Moderate (GE 32 and LT 37 wks)","0, 1","calculated_gestation, NA",NA,NA,NA
-"preterm_v","2003-2018","binary (integer)","Premature By Stage-Very Premature (LT 32wks)","0, 1","calculated_gestation, NA",NA,NA,NA
-"previous_cesarean","2003-2018","binary (factor)","Medical Risk Factor, Previous Cesarean Section","N, Y","Previous Cesarean, mrf1 - mrf6","Previous Cesarean","mrf1 - mrf6",NA
-"prior_live_births_deceased","2003-2018","integer","Number of Prior Live Births, Now Dead
+"pnc_lateno","2003-2019","binary (numeric)","Late or no prenatal care","0, 1","NA",NA,NA,"complex recoding"
+"pnc_tri","2003-2019","factor","Prenatal Care Initiation Trimester","No PNC, Trimester 1, Trimester 2, Trimester 3","month_prenatal_care_began, NA",NA,NA,NA
+"pnc_tri_nchs","2011-2019","factor","NCHS Prenatal Care Initiation Trimester","NCHS No PNC, NCHS Trimester 1, NCHS Trimester 2, NCHS Trimester 3","nchs_month_prenatal_care_began, NA",NA,NA,"CHAT has this data for 2003-2017. How? Orig varname pnatfed did not exist prior to 2011"
+"poor_preg_outcomes","2003-2019","binary (factor)","Medical Risk Factor, Other Previous Poor Pregnancy Outcomes","N, Y","Poor Preg Outcomes, mrf1 - mrf6","Poor Preg Outcomes","mrf1 - mrf6",NA
+"precipitous_labor","2003-2019","binary (factor)","Onset of Labor, Precipitous Labor","N, Y","Precipitous Labor, labons1 - labons3","Precipitous Labor","labons1 - labons3",NA
+"prepreg_diabetes","2003-2019","binary (factor)","Medical Risk Factor, Diabetes, Prepregnancy","N, Y","Prepreg Diabetes, mrf1 - mrf6, diabetes","Prepreg Diabetes","mrf1 - mrf6, diabetes",NA
+"prepreg_hypertension","2003-2019","binary (factor)","Medical Risk Factor, Hypertension, Prepregnancy","N, Y","Prepreg Hypertension, mrf1 - mrf6, hyperflg","Prepreg Hypertension","mrf1 - mrf6, hyperflg",NA
+"preterm","2003-2019","binary (integer)","Preterm birth (<37 weeks)","0, 1","calculated_gestation, NA",NA,NA,NA
+"preterm_births","2003-2019","binary (factor)","Medical Risk Factor, Previous Preterm Birth","N, Y","Preterm Births, mrf1 - mrf6","Preterm Births","mrf1 - mrf6",NA
+"preterm_mod","2003-2019","binary (integer)","Premature By Stage-Moderate (GE 32 and LT 37 wks)","0, 1","calculated_gestation, NA",NA,NA,NA
+"preterm_v","2003-2019","binary (integer)","Premature By Stage-Very Premature (LT 32wks)","0, 1","calculated_gestation, NA",NA,NA,NA
+"previous_cesarean","2003-2019","binary (factor)","Medical Risk Factor, Previous Cesarean Section","N, Y","Previous Cesarean, mrf1 - mrf6","Previous Cesarean","mrf1 - mrf6",NA
+"prior_live_births_deceased","2003-2019","integer","Number of Prior Live Births, Now Dead
 Before using this field, see """"Data Quality Technical Notes - Previous Pregnancy History.""""","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12","Prior Live Births Deceased, lb_nd","Prior Live Births Deceased","lb_nd",NA
-"prior_live_births_living","2003-2018","integer","Number of Prior Live Births, Now Living
+"prior_live_births_living","2003-2019","integer","Number of Prior Live Births, Now Living
 
 Before using this field, see """"Data Quality Technical Notes - Previous Pregnancy History.""""","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 20, 21","Prior Live Births Living, lb_nl","Prior Live Births Living","lb_nl",NA
 "priorprg","2003-2016","integer","Prior pregnancy","0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 29","NA",NA,NA,NA
-"prolonged_labor","2003-2018","binary (factor)","Onset of Labor, Prolonged Labor","N, Y","Prolonged Labor, labons1 - labons3","Prolonged Labor","labons1 - labons3",NA
-"race_m","2003-2018","factor","Race/ethnicity - 17 categories","Asian Indian, Black, Chinese, Filipino, Guamanian, Hawaiian, Japanese, Korean, Mexican/Chicano/Hispanic, Native American, Other Asian/Pacific Islander, Samoan, Unknown, Vietnamese, White","mother_race_calculation, NA",NA,NA,NA
-"risk_factors_none","2003-2018","binary (factor)","Medical Risk Factor, None of the Above","N, Y","Risk Factors None, mrf1 - mrf6","Risk Factors None","mrf1 - mrf6",NA
-"risk_factors_unknown","2003-2018","binary (factor)","Medical Risk Factor, Unknown","N, Y","Risk Factors Unknown, mrf1 - mrf6","Risk Factors Unknown","mrf1 - mrf6",NA
-"ruptured_membranes","2003-2018","binary (factor)","Onset of Labor, Premature Rupture of Membranes","N, Y","Ruptured Membranes, labons1 - labons3","Ruptured Membranes","labons1 - labons3",NA
-"ruptured_uterus","2003-2018","binary (factor)","Maternal Morbidity, Ruptured Uterus","N, Y","Ruptured Uterus, mmorbid1 - mmorbid5","Ruptured Uterus","mmorbid1 - mmorbid5",NA
-"sex","2003-2018","binary (factor)","Sex of Child","F, M","Sex, sex","Sex","sex",NA
-"singleton","2003-2018","binary (integer)","Singleton birth","0, 1","plurality, NA",NA,NA,NA
-"smoke1","2003-2018","binary (integer)","Smoke 1st Trimester","0, 1","cigarettes_smoked_1st_tri, NA",NA,NA,NA
-"smoke2","2003-2018","binary (integer)","Smoke 2nd Trimester","0, 1","cigarettes_smoked_2nd_tri, NA",NA,NA,NA
-"smoke3","2003-2018","binary (integer)","Smoke 3rd Trimester","0, 1","cigarettes_smoked_3rd_tri, NA",NA,NA,NA
-"smokeprior","2003-2018","binary (integer)","Smoke 1st Trimester","0, 1","cigarettes_smoked_3_months_prior, NA",NA,NA,NA
-"smoking","2003-2018","binary (integer)","Smoking (before & during pregnancy)","0, 1","NA",NA,NA,"complex recoding"
-"smoking_dur","2003-2018","binary (integer)","Smoking During Pregnancy","0, 1","NA",NA,NA,"complex recoding"
-"source_of_payment","2003-2018","integer","Delivery Source of Payment
+"prolonged_labor","2003-2019","binary (factor)","Onset of Labor, Prolonged Labor","N, Y","Prolonged Labor, labons1 - labons3","Prolonged Labor","labons1 - labons3",NA
+"race_m","2003-2019","factor","Race/ethnicity - 17 categories","Asian Indian, Black, Chinese, Filipino, Guamanian, Hawaiian, Japanese, Korean, Mexican/Chicano/Hispanic, Native American, Other Asian/Pacific Islander, Samoan, Unknown, Vietnamese, White","mother_race_calculation, NA",NA,NA,NA
+"risk_factors_none","2003-2019","binary (factor)","Medical Risk Factor, None of the Above","N, Y","Risk Factors None, mrf1 - mrf6","Risk Factors None","mrf1 - mrf6",NA
+"risk_factors_unknown","2003-2019","binary (factor)","Medical Risk Factor, Unknown","N, Y","Risk Factors Unknown, mrf1 - mrf6","Risk Factors Unknown","mrf1 - mrf6",NA
+"ruptured_membranes","2003-2019","binary (factor)","Onset of Labor, Premature Rupture of Membranes","N, Y","Ruptured Membranes, labons1 - labons3","Ruptured Membranes","labons1 - labons3",NA
+"ruptured_uterus","2003-2019","binary (factor)","Maternal Morbidity, Ruptured Uterus","N, Y","Ruptured Uterus, mmorbid1 - mmorbid5","Ruptured Uterus","mmorbid1 - mmorbid5",NA
+"sex","2003-2019","factor","Sex of Child","F, M, X","Sex, sex","Sex","sex",NA
+"singleton","2003-2019","binary (integer)","Singleton birth","0, 1","plurality, NA",NA,NA,NA
+"smoke1","2003-2019","binary (integer)","Smoke 1st Trimester","0, 1","cigarettes_smoked_1st_tri, NA",NA,NA,NA
+"smoke2","2003-2019","binary (integer)","Smoke 2nd Trimester","0, 1","cigarettes_smoked_2nd_tri, NA",NA,NA,NA
+"smoke3","2003-2019","binary (integer)","Smoke 3rd Trimester","0, 1","cigarettes_smoked_3rd_tri, NA",NA,NA,NA
+"smokeprior","2003-2019","binary (integer)","Smoke 1st Trimester","0, 1","cigarettes_smoked_3_months_prior, NA",NA,NA,NA
+"smoking","2003-2019","binary (numeric)","Smoking (before & during pregnancy)","0, 1","NA",NA,NA,"complex recoding"
+"smoking_dur","2003-2019","binary (numeric)","Smoking During Pregnancy","0, 1","NA",NA,NA,"complex recoding"
+"source_of_payment","2003-2019","integer","Delivery Source of Payment
 Indicates principal source of payment for the delivery.","1, 2, 3, 4, 5, 6, 7, 8","Source of Payment, delivpay","Source of Payment","delivpay",NA
-"steroids","2003-2018","binary (factor)","Characteristics of Labor and Delivery, Steroids for Fetal Lung","N, Y","Steroids, labchar1 - labchar7","Steroids","labchar1 - labchar7",NA
-"surfactant","2003-2018","binary (factor)","Abnormal Conditions of Newborn, Surfactant Replacement","N, Y","Surfactant, abcond1 - abcond6","Surfactant","abcond1 - abcond6",NA
-"syphilis","2003-2018","binary (factor)","Maternal Infections, Syphilis","N, Y","Syphilis, minfect1 - minfect7","Syphilis","minfect1 - minfect7",NA
-"teen1517","2003-2018","binary (integer)","Teenage birth","0, 1","chi_age, NA",NA,NA,NA
-"term","2003-2018","binary (integer)","Term birth (37-41 weeks)","0, 1","calculated_gestation, NA",NA,NA,NA
-"time_of_birth","2003-2018","factor","Time of Birth
-Time of birth in 24-hour format. Midnight has a value of '24', any time after midnight but before 1 am has a value of '00'. Prior to mid-1992, out of state occurrences were not coded.","E.g., 00, 00:01, 00:02, 00:03, 00:04","Time of Birth, birth_hr","Time of Birth","birth_hr",NA
-"tocolysis","2003-2018","binary (factor)","Obstetric Procedure, Tocolysis","N, Y","Tocolysis, obproc1 - obproc4","Tocolysis","obproc1 - obproc4",NA
-"trib_res","2003-2016","integer","Mother's Tribal Residence Reservation Code","0, 28, 34, 48, 322, 360, 362, 900, 999","NA",NA,NA,NA
-"vaginal_bleeding","2003-2018","binary (factor)","Medical Risk Factor, Vaginal Bleeding","N, Y","Vaginal Bleeding, mrf1 - mrf6","Vaginal Bleeding","mrf1 - mrf6",NA
-"vertex","2003-2018","binary (factor)","Vertex birth position","Breech/Oth, Vertex","NA",NA,NA,"complex recoding"
-"wa_occ","2003-2018","binary (integer)","WA State occurence (mother)","0, 1","birthplace_state_nchs_code, NA",NA,NA,NA
-"wic","2003-2018","binary (factor)","WIC Benefits
+"steroids","2003-2019","binary (factor)","Characteristics of Labor and Delivery, Steroids for Fetal Lung","N, Y","Steroids, labchar1 - labchar7","Steroids","labchar1 - labchar7",NA
+"surfactant","2003-2019","binary (factor)","Abnormal Conditions of Newborn, Surfactant Replacement","N, Y","Surfactant, abcond1 - abcond6","Surfactant","abcond1 - abcond6",NA
+"syphilis","2003-2019","binary (factor)","Maternal Infections, Syphilis","N, Y","Syphilis, minfect1 - minfect7","Syphilis","minfect1 - minfect7",NA
+"teen1517","2003-2019","binary (integer)","Teenage birth","0, 1","chi_age, NA",NA,NA,NA
+"term","2003-2019","binary (integer)","Term birth (37-41 weeks)","0, 1","calculated_gestation, NA",NA,NA,NA
+"time_of_birth","2003-2019","factor","Time of Birth
+Time of birth in 24-hour format. Midnight has a value of '24', any time after midnight but before 1 am has a value of '00'. Prior to mid-1992, out of state occurrences were not coded.","E.g., 00, 00:00, 00:01, 00:02, 00:03","Time of Birth, birth_hr","Time of Birth","birth_hr",NA
+"tocolysis","2003-2019","binary (factor)","Obstetric Procedure, Tocolysis","N, Y","Tocolysis, obproc1 - obproc4","Tocolysis","obproc1 - obproc4",NA
+"trib_res","2003-2016","numeric","Mother's Tribal Residence Reservation Code","0, 28, 34, 48, 322, 360, 362, 900, 999","NA",NA,NA,NA
+"vaginal_bleeding","2003-2019","binary (factor)","Medical Risk Factor, Vaginal Bleeding","N, Y","Vaginal Bleeding, mrf1 - mrf6","Vaginal Bleeding","mrf1 - mrf6",NA
+"vertex","2003-2019","binary (factor)","Vertex birth position","Breech/Oth, Vertex","NA",NA,NA,"complex recoding"
+"wa_occ","2003-2019","binary (integer)","WA State occurence (mother)","0, 1","birthplace_state_nchs_code, NA",NA,NA,NA
+"wic","2003-2019","binary (factor)","WIC Benefits
 Indicates whether the mother received WIC benefits during pregnancy. WIC (Women and Infant Children) is a free supplemental food and nutrition education program.","N, Y","WIC, wic_new","WIC","wic_new",NA
-"wtgain","2003-2018","factor","WT Gain (CHAT categories)","above recommended, below recommended, recommended","NA",NA,NA,"complex recoding"
-"wtgain_rec","2003-2018","binary (integer)","WT Gain-Recommended","0, 1","NA",NA,NA,"complex recoding"
+"wtgain","2003-2019","factor","WT Gain (CHAT categories)","above recommended, below recommended, recommended","NA",NA,NA,"complex recoding"
+"wtgain_rec","2003-2019","binary (numeric)","WT Gain-Recommended","0, 1","NA",NA,NA,"complex recoding"

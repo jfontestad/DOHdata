@@ -60,8 +60,12 @@
           # fix known duplicates
             field_name_map[field_name_apde == "mother_residence_county_wa_code" & field_name_bedrock=="cnty_res", field_name_bedrock := "cnty_res, r_co"]
             field_name_map <- field_name_map[! (field_name_apde == "mother_residence_county_wa_code" & field_name_bedrock == "r_co")]          
+            field_name_map <- field_name_map[!(field_name_apde == "father_hispanic_other_specify" & field_name_whales == "Father Hispanic Other - Specify")]
+            field_name_map <- field_name_map[!(field_name_apde == "mother_hispanic_other_specify" & field_name_whales == "Mother Hispanic Other - Specify")]
+            field_name_map <- field_name_map[!(field_name_apde == "mat_labor_characteristics_unknow" & field_name_whales == "Mat Labor Characteristics Unk")]
             
           # Identify additional unknown duplicates
+            field_name_map <- unique(field_name_map)
             if(nrow(field_name_map[duplicated(field_name_map$field_name_apde)]) > 0){
               stop(print(paste0("Deduplicate the following: ", field_name_map[duplicated(field_name_map$field_name_apde)]$field_name_apde)))
             }
