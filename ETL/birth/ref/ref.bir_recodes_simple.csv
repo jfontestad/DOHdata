@@ -119,7 +119,7 @@ demo,simple,mother_race_chinese,string,N,chi_race_aic_chinese,categorical,0,,Rac
 demo,simple,mother_race_filipino,string,Y,chi_race_aic_filipino,categorical,1,,Race - Filipino alone or in combination,2003,2019,
 demo,simple,mother_race_filipino,string,N,chi_race_aic_filipino,categorical,0,,Race - Filipino alone or in combination,2003,2019,
 demo,simple,mother_race_guam_or_chamorro,string,Y,chi_race_aic_guam_or_chamorro,categorical,1,,Race - Guamanian or Chamorro alone or in combination,2003,2019,
-demo,simple,mother_race_guam_or_chamorro,string,N,chi_race_aic_guam_or_chamorro,categorical,0,,Race - Guamanians or Chamorro alone or in combination,2003,2019,
+demo,simple,mother_race_guam_or_chamorro,string,N,chi_race_aic_guam_or_chamorro,categorical,0,,Race - Guamanian or Chamorro alone or in combination,2003,2019,
 demo,binning,mother_hispanic,categorical,"[0, 0]",chi_race_aic_his,categorical,0,,Race - Hispanic alone or in combination,2003,2019,
 demo,binning,mother_hispanic,categorical,"[1, 5]",chi_race_aic_his,categorical,1,,Race - Hispanic alone or in combination,2003,2019,
 demo,simple,mother_hispanic_cuban,string,H,chi_race_aic_his_cuban,categorical,1,,Race - Cuban alone or in combination,2003,2019,
