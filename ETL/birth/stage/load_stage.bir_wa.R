@@ -824,7 +824,7 @@ bir_combined <- setDT(bind_rows(bir_2017_20xx, bir_2003_2016))
     bir_combined[, .N, (chi_nativity)]
 
   # parity ----
-    bir_combined[ , parity :=rowSums(.SD, na.rm = TRUE), .SDcols = c("prior_live_births_living", "prior_live_births_deceased")]
+    bir_combined[ , parity := prior_live_births_living + prior_live_births_deceased] # intentionally code this way so if either prior_live is NA, then parity is NA
     bir_combined[, .N, (parity)]
 
   # pnc_lateno (Late or no prenatal care) ----
