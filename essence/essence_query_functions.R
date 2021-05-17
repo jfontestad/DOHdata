@@ -731,15 +731,23 @@ essence_recode <- function(df) {
   recodes <- read.csv("https://raw.githubusercontent.com/PHSKC-APDE/DOHdata/master/essence/essence_recodes.csv", 
                       stringsAsFactors = F)
   
-  zips <- read.csv("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/zip_to_region.csv",
-                   stringsAsFactors = F)
-  zips <- zips %>% mutate(zip = as.character(zip),
-                          cc_region = case_when(
-                            cc_region == 'east' ~ "East",
-                            cc_region == 'north' ~ "North",
-                            cc_region == 'seattle' ~ "Seattle",
-                            cc_region == 'south' ~ "South",
-                            TRUE ~ "Non-King County"))
+  zips <- data.table::fread("https://raw.githubusercontent.com/PHSKC-APDE/reference-data/master/spatial_data/zip_city_region_scc.csv")
+  zips <- zips %>% mutate(geo_zip = as.character(geo_zip),
+                          geo_region = case_when(
+                            geo_region == 'east' ~ "East",
+                            geo_region == 'north' ~ "North",
+                            geo_region == 'seattle' ~ "Seattle",
+                            geo_region == 'south' ~ "South",
+                            TRUE ~ geo_region
+                          ))
+  
+  
+  
+  zips <- zips %>% 
+    rename(
+      cc_region = geo_region,
+      zip = geo_zip
+    ) 
   
   output <- df %>%
     left_join(., filter(recodes, category == "Smoking_Status_Code") %>% dplyr::select(code, value_display),
